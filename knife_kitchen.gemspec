@@ -10,6 +10,8 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'mocha'
 
+  s.add_dependency 'chef', '~> 0.10.0'
+
   s.files = Dir['lib/**/*']
 
   s.rubyforge_project = 'nowarning'
