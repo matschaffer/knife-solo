@@ -7,7 +7,12 @@ class Chef
         require 'net/ssh'
       end
 
-      banner "knife prepare FQDN (options)"
+      banner "knife prepare [user@]hostname (options)"
+
+      option :ssh_password,
+        :short => "-P PASSWORD",
+        :long => "--ssh-password PASSWORD",
+        :description => "The ssh password"
 
       option :ssh_password,
         :short => "-P PASSWORD",
@@ -47,7 +52,7 @@ class Chef
 
         if @password.nil?
           begin
-            @authentication = { :keys => identities }
+            @authentication = {}
             try_connection(@authentication)
           rescue Errno::ETIMEDOUT
             raise "Unable to connect to #{host}"
