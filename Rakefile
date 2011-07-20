@@ -1,5 +1,12 @@
 require 'rubygems/package_task'
+require 'rake/testtask'
 require './virtualbox_ext'
+
+Rake::TestTask.new do |t|
+  t.libs << "test"
+  t.test_files = FileList['test/*_test.rb']
+end
+task :default => :test
 
 spec = Gem::Specification.load(Dir['*.gemspec'].first)
 gem = Gem::PackageTask.new(spec)
