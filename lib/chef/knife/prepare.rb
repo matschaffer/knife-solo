@@ -19,13 +19,36 @@ class Chef
         :long => "--ssh-password PASSWORD",
         :description => "The ssh password"
 
-      class ConnectionError < StandardError; end
-
-      attr_reader :host, :authentication
-
       def run
-        setup_authentication
         p run_command("sudo grep a b")
+      end
+
+      def host_descriptor
+        return @host_descriptor if @host_descriptor
+        parts = @name_args.first.split('@')
+        @host_descriptor = {
+          :host => parts.pop,
+          :user => parts.pop
+        }
+      end
+
+      def user
+        host_descriptor[:user] || ENV['USER']
+      end
+
+      def host
+        host_descriptor[:host]
+      end
+
+      def ask_password
+        @password ||= ui.ask("Enter the password for #{user}@#{host}: ") do |q|
+          q.echo = false
+        end
+      end
+
+      def password
+        return @password if @password
+        @password = config[:ssh_password] || ask_password
       end
 
       def try_connection(options = {})
@@ -34,45 +57,23 @@ class Chef
         end
       end
 
-      def identities
-        Dir["#{ENV['HOME']}/.ssh/{id_rsa,id_dsa,identity}"]
-      end
-
-      def password
-        @password ||= ui.ask("Enter the password for #{user}@#{host}: ") do |q|
-          q.echo = false
+      def authentication_method
+        return @authentication_method if @authentication_method
+        begin
+          @authentication_method = {}
+          try_connection(@authentication_method)
+        rescue Errno::ETIMEDOUT
+          raise "Unable to connect to #{host}"
+        rescue Net::SSH::AuthenticationFailed
+          @authentication_method = { :password => password }
         end
-      end
-
-      def setup_authentication
-        host_descriptor = @name_args.first.split('@')
-        @host = host_descriptor.pop
-        @user = host_descriptor.pop
-        @password = config[:ssh_password]
-
-        if @password.nil?
-          begin
-            @authentication = {}
-            try_connection(@authentication)
-          rescue Errno::ETIMEDOUT
-            raise "Unable to connect to #{host}"
-          rescue Net::SSH::AuthenticationFailed
-            ui.msg("Unable to login using default keys.")
-            @authentication = { :password => password }
-          end
-        else
-          @authentication = { :password => @password }
-        end
-      end
-
-      def user
-        @user || ENV['USER']
+        @authentication_method
       end
 
       def run_command(command)
         result = { :stdout => "", :stderr => "", :code => nil }
         command = command.sub(/^sudo/, 'sudo -p \'knife sudo password: \'')
-        Net::SSH.start(host, user, authentication) do |ssh|
+        Net::SSH.start(host, user, authentication_method) do |ssh|
           ssh.open_channel do |channel|
             channel.request_pty
             channel.exec(command) do |ch, success|
