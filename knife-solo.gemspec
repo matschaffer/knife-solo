@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name    = 'knife_kitchen'
+  s.name    = 'knife-solo'
   s.version = '0.0.1'
   s.summary = 'A collection of knife plugins for dealing with chef solo'
   s.description = 'Handles bootstrapping, running chef solo, rsyncing cookbooks etc'
