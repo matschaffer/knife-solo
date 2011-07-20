@@ -1,3 +1,3 @@
-module KnifeKitchen
+module KnifeSolo
   VERSION = '0.0.1'
 end
