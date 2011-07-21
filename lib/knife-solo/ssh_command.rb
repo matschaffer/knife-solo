@@ -5,6 +5,7 @@ module KnifeSolo
         deps do
           require 'net/ssh'
         end
+
         banner "knife prepare [user@]hostname (options)"
 
         option :ssh_config,
@@ -16,7 +17,6 @@ module KnifeSolo
           :short => "-P PASSWORD",
           :long => "--ssh-password PASSWORD",
           :description => "The ssh password"
-
       end
     end
 
