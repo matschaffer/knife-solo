@@ -3,6 +3,8 @@ require 'knife-solo/ssh_command'
 
 class Chef
   class Knife
+    # Approach ported from littlechef (https://github.com/tobami/littlechef)
+    # Copyright 2010, 2011, Miquel Torres <tobami@googlemail.com>
     class Prepare < Knife
       include KnifeSolo::SshCommand
 
@@ -67,8 +69,6 @@ class Chef
         run_command("cat /etc/issue")[:stdout]
       end
 
-      # Detection method from https://github.com/tobami/littlechef
-      #   Copyright 2010, 2011, Miquel Torres <tobami@googlemail.com>
       def distro
         @distro ||= case issue
         when %r{Debian GNU/Linux 5}
