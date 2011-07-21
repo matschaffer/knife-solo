@@ -27,8 +27,18 @@ class PrepareTest < TestCase
 
   def test_uses_default_keys_if_conncetion_succeeds
     prep = prepare("10.0.0.1")
-    prep.expects(:try_connection).raises(Net::SSH::AuthenticationFailed)
-    assert_equal {}, prep.authentication_method
+    prep.expects(:try_connection)
+    assert_equal({}, prep.authentication_method)
+  end
+
+  def test_uses_ssh_config_if_matched
+    ssh_config = Pathname.new(__FILE__).dirname.join('support', 'ssh_config')
+    prep = prepare("10.0.0.1", "--ssh-config-file=#{ssh_config}")
+    prep.expects(:try_connection)
+
+    assert_equal "bob", prep.authentication_method[:user]
+    assert_equal "id_rsa_bob", prep.authentication_method[:keys].first
+    assert_equal "bob", prep.user
   end
 
   def prepare(*args)

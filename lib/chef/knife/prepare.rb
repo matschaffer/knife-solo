@@ -9,10 +9,10 @@ class Chef
 
       banner "knife prepare [user@]hostname (options)"
 
-      option :ssh_password,
-        :short => "-P PASSWORD",
-        :long => "--ssh-password PASSWORD",
-        :description => "The ssh password"
+      option :ssh_config,
+        :short => "-F configfile",
+        :long => "--ssh-config-file configfile",
+        :description => "Alternate location for ssh config file"
 
       option :ssh_password,
         :short => "-P PASSWORD",
@@ -33,7 +33,7 @@ class Chef
       end
 
       def user
-        host_descriptor[:user] || ENV['USER']
+        host_descriptor[:user] || config_file_options[:user] || ENV['USER']
       end
 
       def host
@@ -57,10 +57,18 @@ class Chef
         end
       end
 
+      def config_file_options
+        Net::SSH::Config.for(host, config_files)
+      end
+
+      def config_files
+        Array(config[:ssh_config] || Net::SSH::Config.default_files)
+      end
+
       def authentication_method
         return @authentication_method if @authentication_method
         begin
-          @authentication_method = {}
+          @authentication_method = config_file_options
           try_connection(@authentication_method)
         rescue Errno::ETIMEDOUT
           raise "Unable to connect to #{host}"
