@@ -15,11 +15,14 @@ class Chef
       def run
         super
         rsync_kitchen
+
         # TODO (mat): syntax check cookbooks and json
-        # TODO (mat): set log level based on -V
+
+        logging_arg = "-l debug" if config[:verbosity] > 0
         stream_command <<-BASH
           sudo chef-solo -c #{chef_path}/solo.rb \
-                         -j #{chef_path}/#{node_config}
+                         -j #{chef_path}/#{node_config} \
+                         #{logging_arg}
         BASH
       end
 
