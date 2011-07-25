@@ -1,3 +1,5 @@
+require 'pathname'
+
 require 'chef/knife'
 require 'chef/config'
 
@@ -19,7 +21,11 @@ class Chef
 
         check_syntax
 
+        Chef::Config.from_file('solo.rb')
+
         rsync_kitchen
+
+        add_patches
 
         logging_arg = "-l debug" if config[:verbosity] > 0
         stream_command <<-BASH
@@ -51,12 +57,23 @@ class Chef
       end
 
       def chef_path
-        Chef::Config.from_file('solo.rb')
         Chef::Config.file_cache_path
       end
 
+      def patch_path
+        Array(Chef::Config.cookbook_path).first + "/chef_solo_patches/libraries"
+      end
+
+      # TODO (mat): Let rsync write to /var/chef-solo with sudo somehow
       def rsync_kitchen
         system %Q{rsync -rlP --rsh="ssh #{ssh_args}" --delete --exclude '.*' ./ :#{chef_path}}
+      end
+
+      def add_patches
+        run_command "mkdir -p #{patch_path}"
+        Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb")].each do |patch|
+          system %Q{rsync -rlP --rsh="ssh #{ssh_args}" #{patch} :#{patch_path}}
+        end
       end
     end
   end

@@ -14,10 +14,7 @@ class CookTest < TestCase
   end
 
   def test_gets_destination_path_from_chef_config
-    # See from_file method in mixlib/config.rb if expectation fails
-    IO.expects(:read).returns <<-CONFIG
-      file_cache_path "/tmp/chef-solo"
-    CONFIG
+    Chef::Config.file_cache_path "/tmp/chef-solo"
     assert_equal "/tmp/chef-solo", command.chef_path
   end
 
