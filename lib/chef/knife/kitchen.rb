@@ -17,8 +17,8 @@ class Chef
         mkdir name + "/cookbooks"
         File.open(name + "/solo.rb", 'w') do |f|
           f << <<-RUBY.gsub(/^\s+/, '')
-            file_cache_path "/var/chef-solo"
-            cookbook_path "/var/chef-solo/cookbooks"
+            file_cache_path "/tmp/chef-solo"
+            cookbook_path "/tmp/chef-solo/cookbooks"
           RUBY
         end
       end
