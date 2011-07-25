@@ -124,7 +124,7 @@ module KnifeSolo
       detect_authentication_method
 
       result = ExecResult.new
-      command = command.sub(/^sudo/, 'sudo -p \'knife sudo password: \'')
+      command = command.sub(/^\s*sudo/, 'sudo -p \'knife sudo password: \'')
       Net::SSH.start(host, user, connection_options) do |ssh|
         ssh.open_channel do |channel|
           channel.request_pty
