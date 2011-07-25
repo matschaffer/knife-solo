@@ -12,11 +12,14 @@ class Chef
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
 
+      banner "knife prepare [user@]hostname [json] (options)"
+
       def run
         super
-        rsync_kitchen
 
-        # TODO (mat): syntax check cookbooks and json
+        check_syntax
+
+        rsync_kitchen
 
         logging_arg = "-l debug" if config[:verbosity] > 0
         stream_command <<-BASH
@@ -24,6 +27,23 @@ class Chef
                          -j #{chef_path}/#{node_config} \
                          #{logging_arg}
         BASH
+      end
+
+      def check_syntax
+        Dir["**/*.rb"].each do |recipe|
+          ok = system "ruby -c #{recipe} >/dev/null 2>&1"
+          raise "Syntax error in #{recipe}" if not ok
+        end
+
+        Dir["**/*.json"].each do |json|
+          begin
+            require 'json'
+            # parse without instantiating Chef classes
+            JSON.parse File.read(json), :create_additions => false
+          rescue => error
+            raise "Syntax error in #{json}: #{error.message}"
+          end
+        end
       end
 
       def node_config
