@@ -32,6 +32,10 @@ VirtualBox.define_rake_tasks(
   :image => "#{ENV['HOME']}/Desktop/Not Backed Up/OS/VBox Images/Ubuntu64Base.ova"
 )
 
+task :start => 'virtualbox:start'
+task :stop => 'virtualbox:stop'
+task :info => 'virtualbox:info'
+
 desc 'Prepares the VMs for chef'
 task :prepare => 'virtualbox:start' do
   hosts.each do |type, host|
