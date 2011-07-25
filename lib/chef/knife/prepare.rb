@@ -8,6 +8,8 @@ class Chef
     class Prepare < Knife
       include KnifeSolo::SshCommand
 
+      banner "knife prepare [user@]hostname (options)"
+
       def run
         send("#{distro[:type]}_gem_install")
       end

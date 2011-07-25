@@ -6,8 +6,6 @@ module KnifeSolo
           require 'net/ssh'
         end
 
-        banner "knife prepare [user@]hostname (options)"
-
         option :ssh_config,
           :short => "-F configfile",
           :long => "--ssh-config-file configfile",
