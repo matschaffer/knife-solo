@@ -27,30 +27,32 @@ class SshCommandTest < TestCase
   def test_falls_back_to_password_authentication_after_keys
     cmd = command("10.0.0.1", "--ssh-password=test")
     cmd.expects(:try_connection).raises(Net::SSH::AuthenticationFailed)
-    assert_equal "test", cmd.authentication_method[:password]
+    cmd.detect_authentication_method
+    assert_equal "test", cmd.connection_options[:password]
   end
 
   def test_uses_default_keys_if_conncetion_succeeds
     cmd = command("10.0.0.1")
-    cmd.expects(:try_connection)
-    assert_equal({}, cmd.authentication_method)
+    assert_equal({}, cmd.connection_options)
   end
 
   def test_uses_ssh_config_if_matched
     ssh_config = Pathname.new(__FILE__).dirname.join('support', 'ssh_config')
     cmd = command("10.0.0.1", "--ssh-config-file=#{ssh_config}")
-    cmd.expects(:try_connection)
 
-    assert_equal "bob", cmd.authentication_method[:user]
-    assert_equal "id_rsa_bob", cmd.authentication_method[:keys].first
+    assert_equal "bob", cmd.connection_options[:user]
+    assert_equal "id_rsa_bob", cmd.connection_options[:keys].first
     assert_equal "bob", cmd.user
   end
 
   def test_handles_port_specification
-    #TODO (mat): allow port specification on cli
+    cmd = command("10.0.0.1", "-p", "2222")
+    assert_equal "2222", cmd.connection_options[:port]
   end
 
   def test_builds_cli_ssh_args
+    DummySshCommand.any_instance.stubs(:try_connection)
+
     cmd = command("10.0.0.1")
     assert_equal "#{ENV['USER']}@10.0.0.1", cmd.ssh_args
 
@@ -67,9 +69,17 @@ class SshCommandTest < TestCase
     assert_equal "usertest@10.0.0.1 -p 222", cmd.ssh_args
   end
 
+  def test_prompts_for_password_when_building_cli_args
+    cmd = command("usertest@10.0.0.1")
+
+    cmd.ui.expects(:ask).returns("testpassword")
+    cmd.expects(:try_connection).raises(Net::SSH::AuthenticationFailed)
+
+    assert_equal "usertest@10.0.0.1 -P testpassword", cmd.ssh_args
+  end
+
   def command(*args)
     DummySshCommand.load_deps
     DummySshCommand.new(args)
   end
-
 end

@@ -48,18 +48,17 @@ module KnifeSolo
     end
 
     def ask_password
-      @password ||= ui.ask("Enter the password for #{user}@#{host}: ") do |q|
+      ui.ask("Enter the password for #{user}@#{host}: ") do |q|
         q.echo = false
       end
     end
 
     def password
-      return @password if @password
-      @password = config[:ssh_password] || ask_password
+      config[:ssh_password] ||= ask_password
     end
 
-    def try_connection(options = {})
-      Net::SSH.start(host, user, options) do |ssh|
+    def try_connection
+      Net::SSH.start(host, user, connection_options) do |ssh|
         ssh.exec!("true")
       end
     end
@@ -68,24 +67,33 @@ module KnifeSolo
       Net::SSH::Config.for(host, config_files)
     end
 
+    def connection_options
+      options = config_file_options
+      options[:port] = config[:ssh_port] if config[:ssh_port]
+      options[:password] = config[:ssh_password] if config[:ssh_password]
+      options
+    end
+
     def config_files
       Array(config[:ssh_config] || Net::SSH::Config.default_files)
     end
 
-    def authentication_method
-      return @authentication_method if @authentication_method
+    def detect_authentication_method
+      return @detected if @detected
       begin
-        @authentication_method = config_file_options
-        try_connection(@authentication_method)
+        try_connection
       rescue Errno::ETIMEDOUT
         raise "Unable to connect to #{host}"
       rescue Net::SSH::AuthenticationFailed
-        @authentication_method = { :password => password }
+        # Ensure the password is set or ask for it immediately
+        password
       end
-      @authentication_method
+      @detected = true
     end
 
     def ssh_args
+      detect_authentication_method
+
       host_arg = [user, host].compact.join('@')
       config_arg = "-F #{config[:ssh_config]}" if config[:ssh_config]
       password_arg = "-P #{config[:ssh_password]}" if config[:ssh_password]
@@ -96,9 +104,11 @@ module KnifeSolo
     end
 
     def run_command(command)
+      detect_authentication_method
+
       result = { :stdout => "", :stderr => "", :code => nil }
       command = command.sub(/^sudo/, 'sudo -p \'knife sudo password: \'')
-      Net::SSH.start(host, user, authentication_method) do |ssh|
+      Net::SSH.start(host, user, connection_options) do |ssh|
         ssh.open_channel do |channel|
           channel.request_pty
           channel.exec(command) do |ch, success|
