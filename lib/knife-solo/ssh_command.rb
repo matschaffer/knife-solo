@@ -17,6 +17,16 @@ module KnifeSolo
           :short => "-P PASSWORD",
           :long => "--ssh-password PASSWORD",
           :description => "The ssh password"
+
+        option :ssh_identity,
+          :short => "-i FILE",
+          :long => "--ssh-identity FILE",
+          :description => "The ssh identity file"
+
+        option :ssh_port,
+          :short => "-p FILE",
+          :long => "--ssh-port FILE",
+          :description => "The ssh port"
       end
     end
 
@@ -73,6 +83,16 @@ module KnifeSolo
         @authentication_method = { :password => password }
       end
       @authentication_method
+    end
+
+    def ssh_args
+      host_arg = [user, host].compact.join('@')
+      config_arg = "-F #{config[:ssh_config]}" if config[:ssh_config]
+      password_arg = "-P #{config[:ssh_password]}" if config[:ssh_password]
+      ident_arg = "-i #{config[:ssh_identity]}" if config[:ssh_identity]
+      port_arg = "-p #{config[:ssh_port]}" if config[:ssh_port]
+
+      [host_arg, config_arg, password_arg, ident_arg, port_arg].compact.join(' ')
     end
 
     def run_command(command)

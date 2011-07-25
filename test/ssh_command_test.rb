@@ -1,6 +1,8 @@
 require 'test_helper'
 
+require 'knife-solo/ssh_command'
 require 'chef/knife'
+
 class DummySshCommand < Chef::Knife
   include KnifeSolo::SshCommand
 end
@@ -42,6 +44,27 @@ class SshCommandTest < TestCase
     assert_equal "bob", cmd.authentication_method[:user]
     assert_equal "id_rsa_bob", cmd.authentication_method[:keys].first
     assert_equal "bob", cmd.user
+  end
+
+  def test_handles_port_specification
+    #TODO (mat): allow port specification on cli
+  end
+
+  def test_builds_cli_ssh_args
+    cmd = command("10.0.0.1")
+    assert_equal "#{ENV['USER']}@10.0.0.1", cmd.ssh_args
+
+    cmd = command("usertest@10.0.0.1", "--ssh-config-file=myconfig")
+    assert_equal "usertest@10.0.0.1 -F myconfig", cmd.ssh_args
+
+    cmd = command("usertest@10.0.0.1", "--ssh-password=pwtest")
+    assert_equal "usertest@10.0.0.1 -P pwtest", cmd.ssh_args
+
+    cmd = command("usertest@10.0.0.1", "--ssh-identity=my_rsa")
+    assert_equal "usertest@10.0.0.1 -i my_rsa", cmd.ssh_args
+
+    cmd = command("usertest@10.0.0.1", "--ssh-port=222")
+    assert_equal "usertest@10.0.0.1 -p 222", cmd.ssh_args
   end
 
   def command(*args)
