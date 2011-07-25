@@ -23,17 +23,13 @@ class Chef
         repo_path = "/pub/epel/5/i386/epel-release-5-4.noarch.rpm"
         result = run_command("sudo rpm -Uvh #{repo_url}#{repo_path}")
         installed = "package epel-release-5-4.noarch is already installed"
-        # TODO error checking
-        #    if output.failed and installed not in output:
-        #        abort(output)
+        raise result.stderr unless result.success? || result.stdout.match(installed)
 
         repo_url = "http://download.elff.bravenet.com"
         repo_path = "/5/i386/elff-release-5-3.noarch.rpm"
         result = run_command("sudo rpm -Uvh #{repo_url}#{repo_path}")
         installed = "package elff-release-5-3.noarch is already installed"
-        # TODO error checking
-        #    if output.failed and installed not in output:
-        #        abort(output)
+        raise result.stderr unless result.success? || result.stdout.match(installed)
       end
 
       def rpm_gem_install
@@ -66,7 +62,7 @@ class Chef
       end
 
       def issue
-        run_command("cat /etc/issue")[:stdout]
+        run_command("cat /etc/issue").stdout
       end
 
       def distro
@@ -78,7 +74,7 @@ class Chef
         when %r{Debian GNU/Linux wheezy}
           {:type => "debian", :version => "wheezy"}
         when %r{Ubuntu}
-          version = run_command("lsb_release -cs")[:stdout].strip
+          version = run_command("lsb_release -cs").stdout.strip
           {:type => "debian", :version => version}
         when %r{CentOS}
           {:type => "rpm", :version => "CentOS"}

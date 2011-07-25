@@ -103,10 +103,27 @@ module KnifeSolo
       [host_arg, config_arg, password_arg, ident_arg, port_arg].compact.join(' ')
     end
 
-    def run_command(command)
+    class ExecResult
+      attr_accessor :stdout, :stderr, :exit_code
+
+      def initialize
+        @stdout = ""
+        @stderr = ""
+      end
+
+      def success?
+        exit_code == 0
+      end
+    end
+
+    def stream_command(command)
+      run_command(command, :streaming => true)
+    end
+
+    def run_command(command, options={})
       detect_authentication_method
 
-      result = { :stdout => "", :stderr => "", :code => nil }
+      result = ExecResult.new
       command = command.sub(/^sudo/, 'sudo -p \'knife sudo password: \'')
       Net::SSH.start(host, user, connection_options) do |ssh|
         ssh.open_channel do |channel|
@@ -118,17 +135,19 @@ module KnifeSolo
               if data =~ /^knife sudo password: /
                 ch.send_data("#{password}\n")
               else
-                result[:stdout] << data
+                ui.stdout << data if options[:streaming]
+                result.stdout << data
               end
             end
 
             channel.on_extended_data do |ch, type, data|
               next unless type == 1
-              result[:stderr] << data
+              ui.stderr << data if options[:streaming]
+              result.stderr << data
             end
 
             channel.on_request("exit-status") do |ch, data|
-              result[:code] = data.read_long
+              result.exit_code = data.read_long
             end
 
           end
