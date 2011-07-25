@@ -65,6 +65,7 @@ class Chef
       end
 
       # TODO (mat): Let rsync write to /var/chef-solo with sudo somehow
+      # TODO (mat): This works with key-based auth. Fails on prompted password.
       def rsync_kitchen
         system %Q{rsync -rlP --rsh="ssh #{ssh_args}" --delete --exclude '.*' ./ :#{chef_path}}
       end
