@@ -14,6 +14,11 @@ class Chef
         send("#{distro[:type]}_gem_install")
       end
 
+      def package_list
+        @packages.join(' ')
+      end
+
+      # TODO (mat): integration test this, not a gem install
       def emerge_gem_install
         ui.msg("Installing required packages...")
         run_command("sudo USE='-test' ACCEPT_KEYWORDS='~amd64' emerge -u chef")
@@ -34,20 +39,25 @@ class Chef
         raise result.stderr unless result.success? || result.stdout.match(installed)
       end
 
+      # TODO (mat): integration test this, will probably break without sudo
       def rpm_gem_install
         ui.msg("Installing required packages...")
-        packages = %w(ruby ruby-shadow gcc gcc-c++ ruby-devel wget)
-        run_command("sudo yum -y install #{packages.join(' ')}")
+        @packages = %w(ruby ruby-shadow gcc gcc-c++ ruby-devel wget rsync)
+        run_command("sudo yum -y install #{package_list}")
         gem_install
       end
 
       def debian_gem_install
-        packages = %w(ruby ruby-dev libopenssl-ruby irb
-                      build-essential wget ssl-cert)
         ui.msg "Updating apt caches..."
         run_command("sudo apt-get update")
+
         ui.msg "Installing required packages..."
-        run_command("sudo DEBIAN_FRONTEND=noninteractive apt-get --yes install #{packages.join(' ')}")
+        @packages = %w(ruby ruby-dev libopenssl-ruby irb
+                       build-essential wget ssl-cert rsync)
+        run_command <<-BASH
+          sudo DEBIAN_FRONTEND=noninteractive apt-get --yes install #{package_list}
+        BASH
+
         gem_install
       end
 
