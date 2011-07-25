@@ -39,7 +39,7 @@ task :info => 'virtualbox:info'
 desc 'Prepares the VMs for chef'
 task :prepare => 'virtualbox:start' do
   hosts.each do |type, host|
-    sh "knife", "prepare", "ubuntu@" + host[:vm].ip_address, "--password=ubuntu"
+    sh "knife", "prepare", "ubuntu@" + host[:vm].ip_address, "--ssh-password=ubuntu"
   end
 end
 
