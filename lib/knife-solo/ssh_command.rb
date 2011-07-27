@@ -90,15 +90,12 @@ module KnifeSolo
     end
 
     def ssh_args
-      detect_authentication_method
-
       host_arg = [user, host].compact.join('@')
       config_arg = "-F #{config[:ssh_config]}" if config[:ssh_config]
-      password_arg = "-P #{config[:ssh_password]}" if config[:ssh_password]
       ident_arg = "-i #{config[:ssh_identity]}" if config[:ssh_identity]
       port_arg = "-p #{config[:ssh_port]}" if config[:ssh_port]
 
-      [host_arg, config_arg, password_arg, ident_arg, port_arg].compact.join(' ')
+      [host_arg, config_arg, ident_arg, port_arg].compact.join(' ')
     end
 
     class ExecResult

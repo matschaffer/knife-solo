@@ -59,23 +59,11 @@ class SshCommandTest < TestCase
     cmd = command("usertest@10.0.0.1", "--ssh-config-file=myconfig")
     assert_equal "usertest@10.0.0.1 -F myconfig", cmd.ssh_args
 
-    cmd = command("usertest@10.0.0.1", "--ssh-password=pwtest")
-    assert_equal "usertest@10.0.0.1 -P pwtest", cmd.ssh_args
-
     cmd = command("usertest@10.0.0.1", "--ssh-identity=my_rsa")
     assert_equal "usertest@10.0.0.1 -i my_rsa", cmd.ssh_args
 
     cmd = command("usertest@10.0.0.1", "--ssh-port=222")
     assert_equal "usertest@10.0.0.1 -p 222", cmd.ssh_args
-  end
-
-  def test_prompts_for_password_when_building_cli_args
-    cmd = command("usertest@10.0.0.1")
-
-    cmd.ui.expects(:ask).returns("testpassword")
-    cmd.expects(:try_connection).raises(Net::SSH::AuthenticationFailed)
-
-    assert_equal "usertest@10.0.0.1 -P testpassword", cmd.ssh_args
   end
 
   def command(*args)
