@@ -1,5 +1,6 @@
 require 'chef/knife'
 require 'knife-solo/ssh_command'
+require 'knife-solo/kitchen_command'
 
 class Chef
   class Knife
@@ -7,11 +8,21 @@ class Chef
     # Copyright 2010, 2011, Miquel Torres <tobami@googlemail.com>
     class Prepare < Knife
       include KnifeSolo::SshCommand
+      include KnifeSolo::KitchenCommand
 
       banner "knife prepare [user@]hostname (options)"
 
       def run
+        super
         send("#{distro[:type]}_gem_install")
+      end
+
+      def generate_node_config
+        File.open(node_config, 'w') do |f|
+          f.print <<-JSON.gsub(/^\s+/, '')
+            { "run_list": [] }
+          JSON
+        end unless node_config.exist?
       end
 
       def package_list
