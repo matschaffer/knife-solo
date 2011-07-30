@@ -53,7 +53,7 @@ class Chef
       end
 
       def node_config
-        @name_args[1] || "nodes/#{host}.json"
+        @name_args[1] || super
       end
 
       def chef_path

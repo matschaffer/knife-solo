@@ -1,3 +1,5 @@
+require 'pathname'
+
 module KnifeSolo
   module SshCommand
     def self.included(other)
@@ -26,6 +28,10 @@ module KnifeSolo
           :long => "--ssh-port FILE",
           :description => "The ssh port"
       end
+    end
+
+    def node_config
+      Pathname.new("nodes/#{host}.json")
     end
 
     def host_descriptor
