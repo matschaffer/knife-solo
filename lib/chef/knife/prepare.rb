@@ -15,6 +15,7 @@ class Chef
       def run
         super
         send("#{distro[:type]}_gem_install")
+        generate_node_config
       end
 
       def generate_node_config
