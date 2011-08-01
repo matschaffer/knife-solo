@@ -10,7 +10,7 @@ class CookTest < TestCase
 
   def test_defaults_to_host_name
     cmd = command("host")
-    assert_equal "nodes/host.json", cmd.node_config
+    assert_equal "nodes/host.json", cmd.node_config.to_s
   end
 
   def test_gets_destination_path_from_chef_config
