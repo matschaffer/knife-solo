@@ -10,5 +10,6 @@ group :test do
 end
 
 group :development, :test do
-  gem 'ruby-debug19'
+  gem 'ruby-debug19', :platforms => :mri_19
+  gem 'ruby-debug', :platforms => :mri_18
 end
