@@ -1,6 +1,6 @@
 = knife-solo
 
-{Build Status}[https://secure.travis-ci.org/matschaffer/knife-solo.png]
+{Build Status}[http://travis-ci.org/matschaffer/knife-solo.png]
 
 == DESCRIPTION:
 
