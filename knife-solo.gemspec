@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'lib', 'knife-solo', 'info')
 
 Gem::Specification.new do |s|
   s.name    = 'knife-solo'
-  s.version = KnifeSolo::VERSION
+  s.version = KnifeSolo.version
   s.summary = 'A collection of knife plugins for dealing with chef solo'
   s.description = 'Handles bootstrapping, running chef solo, rsyncing cookbooks etc'
 
