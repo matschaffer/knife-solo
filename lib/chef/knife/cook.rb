@@ -64,7 +64,6 @@ class Chef
         Array(Chef::Config.cookbook_path).first + "/chef_solo_patches/libraries"
       end
 
-      # TODO (mat): Let rsync write to /var/chef-solo with sudo somehow
       def rsync_kitchen
         system %Q{rsync -rlP --rsh="ssh #{ssh_args}" --delete --exclude '.*' ./ :#{chef_path}}
       end

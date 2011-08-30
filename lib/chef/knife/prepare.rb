@@ -30,7 +30,6 @@ class Chef
         @packages.join(' ')
       end
 
-      # TODO (mat): integration test this, not a gem install
       def emerge_gem_install
         ui.msg("Installing required packages...")
         run_command("sudo USE='-test' ACCEPT_KEYWORDS='~amd64' emerge -u chef")
@@ -51,7 +50,6 @@ class Chef
         raise result.stderr unless result.success? || result.stdout.match(installed)
       end
 
-      # TODO (mat): integration test this, will probably break without sudo
       def rpm_gem_install
         ui.msg("Installing required packages...")
         @packages = %w(ruby ruby-shadow gcc gcc-c++ ruby-devel wget rsync)
