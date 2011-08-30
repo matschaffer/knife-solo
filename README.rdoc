@@ -1,5 +1,7 @@
 = knife-solo
 
+{Build Status}[http://travis-ci.org/matschaffer/knife-solo.png]
+
 == DESCRIPTION:
 
 Knife-solo is a gem plugin for Chef's knife utility. It currently adds 3 subcommands to knife: kitchen, prepare and cook
