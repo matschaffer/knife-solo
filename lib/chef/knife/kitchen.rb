@@ -16,11 +16,12 @@ class Chef
         mkdir name + "/site-cookbooks"
         mkdir name + "/cookbooks"
         File.open(name + "/solo.rb", 'w') do |f|
-          f << <<-RUBY.gsub(/^\s+/, '')
+          f << <<-RUBY.gsub(/^ {12}/, '')
             file_cache_path "/tmp/chef-solo"
             data_bag_path   "/tmp/chef-solo/data_bags"
             cookbook_path   [ "/tmp/chef-solo/site-cookbooks",
                               "/tmp/chef-solo/cookbooks" ]
+            role_path "/tmp/roles"
           RUBY
         end
       end
