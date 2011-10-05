@@ -10,16 +10,18 @@ task :default => :test
 
 spec = Gem::Specification.load(Dir['*.gemspec'].first)
 gem = Gem::PackageTask.new(spec)
+gem_file = File.basename(gem.gem_spec.cache_file)
+gem_path = File.join(gem.package_dir, gem_file)
 gem.define
 
 desc "Push gem to rubygems.org"
 task :push => :gem do
-  sh "gem push #{gem.package_dir}/#{gem.gem_file}"
+  sh "gem push #{gem_path}"
 end
 
 desc "Install the gem"
 task :install => :gem do
-  sh "gem install #{gem.package_dir}/#{gem.gem_file}"
+  sh "gem install #{gem_path}"
 end
 
 login_options = ["--ssh-user=ubuntu", "--identity-file=#{ENV['HOME']}/.ssh/id_rsa.pub"]
