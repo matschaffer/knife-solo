@@ -27,6 +27,8 @@ class Chef
 
         add_patches
 
+        check_chef_version
+
         logging_arg = "-l debug" if config[:verbosity] > 0
         stream_command <<-BASH
           sudo chef-solo -c #{chef_path}/solo.rb \
@@ -73,6 +75,14 @@ class Chef
         Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb")].each do |patch|
           system %Q{rsync -rlP --rsh="ssh #{ssh_args}" #{patch} :#{patch_path}}
         end
+      end
+
+      def check_chef_version
+        constraint = "~>0.10.4"
+        result = run_command <<-BASH
+          ruby -rubygems -e "gem 'chef', '#{constraint}'"
+        BASH
+        raise "The chef gem on #{host} is out of date. Please run `#{$0} prepare #{ssh_args}` to upgrade Chef to #{constraint}." unless result.success?
       end
     end
   end
