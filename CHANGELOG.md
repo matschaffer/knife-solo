@@ -1,3 +1,5 @@
+# 0.0.5: In progress
+
 # 0.0.4: Oct 7, 2011
 
 * Chef 0.10.4 based databag and search method (a800880e6d)
