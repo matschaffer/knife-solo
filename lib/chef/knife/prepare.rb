@@ -30,12 +30,18 @@ class Chef
         @packages.join(' ')
       end
 
+      def zypper_gem_install
+        ui.msg("Installing required packages...")
+        run_command("sudo zypper --non-interactive install ruby-devel make gcc rsync")
+        gem_install
+      end
+
       def emerge_gem_install
         ui.msg("Installing required packages...")
         run_command("sudo USE='-test' ACCEPT_KEYWORDS='~amd64' emerge -u chef")
       end
 
-      def add_rpm_repos
+      def add_yum_repos
         ui.message("Adding EPEL and ELFF...")
         repo_url = "http://download.fedora.redhat.com"
         repo_path = "/pub/epel/5/i386/epel-release-5-4.noarch.rpm"
@@ -50,7 +56,7 @@ class Chef
         raise result.stderr unless result.success? || result.stdout.match(installed)
       end
 
-      def rpm_gem_install
+      def yum_gem_install
         ui.msg("Installing required packages...")
         @packages = %w(ruby ruby-shadow gcc gcc-c++ ruby-devel wget rsync)
         run_command("sudo yum -y install #{package_list}")
@@ -99,15 +105,17 @@ class Chef
           version = run_command("lsb_release -cs").stdout.strip
           {:type => "debian", :version => version}
         when %r{CentOS}
-          {:type => "rpm", :version => "CentOS"}
+          {:type => "yum", :version => "CentOS"}
         when %r{Red Hat Enterprise Linux}
-          {:type => "rpm", :version => "Red Hat"}
+          {:type => "yum", :version => "Red Hat"}
         when %r{Scientific Linux SL}
-          {:type => "rpm", :version => "Scientific Linux"}
+          {:type => "yum", :version => "Scientific Linux"}
+        when %r{openSUSE 11.4}
+          {:type => "zypper", :version => "openSUSE"}
         when %r{This is \\n\.\\O (\\s \\m \\r) \\t}
           {:type => "gentoo", :version => "Gentoo"}
         else
-          raise "Contents of /etc/issue not recognized, please fork https://github.com/matschaffer/knife-solo and add support for your distro."
+          raise "Distro not recognized from looking at /etc/issue. Please fork https://github.com/matschaffer/knife-solo and add support for your distro."
         end
       end
     end
