@@ -1,5 +1,7 @@
 # 0.0.5: In progress
 
+* Add openSuSE support. Installation via zypper. (64ff2edf42)
+
 # 0.0.4: Oct 7, 2011
 
 * Chef 0.10.4 based databag and search method (a800880e6d)
