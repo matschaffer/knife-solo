@@ -1,5 +1,8 @@
 require 'rubygems/package_task'
 require 'rake/testtask'
+
+load File.dirname(__FILE__) + '/test/integration/tasks.rake'
+
 require './virtualbox_ext'
 
 Rake::TestTask.new do |t|
