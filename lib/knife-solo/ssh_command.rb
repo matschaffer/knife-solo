@@ -75,6 +75,7 @@ module KnifeSolo
       options = config_file_options
       options[:port] = config[:ssh_port] if config[:ssh_port]
       options[:password] = config[:ssh_password] if config[:ssh_password]
+      options[:keys] = [config[:ssh_identity]] if config[:ssh_identity]
       options
     end
 
