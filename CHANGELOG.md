@@ -1,5 +1,6 @@
 # 0.0.5: In progress
 
+* Started on integration testing via EC2
 * Add openSuSE support. Installation via zypper. (64ff2edf42)
 
 # 0.0.4: Oct 7, 2011
