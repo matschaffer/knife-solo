@@ -15,13 +15,22 @@ namespace :test do
                         :image_id => 'ami-6936fb00' }
   }
 
-  desc "Create a test kitchen"
   file KITCHEN do
     system "knife kitchen #{KITCHEN}"
   end
 
+  namespace :integration do
+    task :preflight do
+      message = StringIO.new
+      message.puts " - AWS_ACCESS_KEY environment variable must be set to your AWS access key" unless ENV['AWS_ACCESS_KEY']
+      message.puts " - AWS_SECRET_KEY environment variable must be set to your AWS secret key" unless ENV['AWS_SECRET_KEY']
+      message.puts " - Create an EC2 keypair called knife-solo and place the private key at #{KEY_FILE}" unless File.exist?(KEY_FILE)
+      raise message.string unless message.string.empty?
+    end
+  end
+
   desc "Run integration tests (requires EC2)"
-  task :integration => 'test/integration/kitchen' do
+  task :integration => ['integration:preflight', 'test/integration/kitchen'] do
     require 'bundler'
     Bundler.require(:test)
     require 'socket'
