@@ -79,7 +79,7 @@ class Chef
 
       def gem_install
         ui.msg "Installing rubygems from source..."
-        release = "rubygems-1.7.2"
+        release = "rubygems-1.8.10"
         file = "#{release}.tgz"
         url = "http://production.cf.rubygems.org/rubygems/#{file}"
         run_command("wget #{url}")
