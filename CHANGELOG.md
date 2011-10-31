@@ -1,3 +1,5 @@
+# 0.0.6: In progress
+
 # 0.0.5: Oct 31, 2011
 
 * Started on integration testing via EC2
