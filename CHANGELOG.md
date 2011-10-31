@@ -1,7 +1,8 @@
-# 0.0.5: In progress
+# 0.0.5: Oct 31, 2011
 
 * Started on integration testing via EC2
 * Add openSuSE support. Installation via zypper. (64ff2edf42)
+* Upgraded Rubygems to 1.8.10 (8ac1f4d43a)
 
 # 0.0.4: Oct 7, 2011
 
