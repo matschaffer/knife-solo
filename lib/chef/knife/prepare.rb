@@ -86,7 +86,7 @@ class Chef
         run_command("tar zxf #{file}")
         run_command("cd #{release} && sudo ruby setup.rb --no-format-executable")
         run_command("sudo rm -rf #{release} #{file}")
-        run_command("sudo gem install --no-rdoc --no-ri chef")
+        run_command("sudo gem install --no-rdoc --no-ri ruby-shadow chef")
       end
 
       def issue
