@@ -55,6 +55,9 @@ namespace :test do
           `nc #{server.public_ip_address} 22 -w 1 -q 0 </dev/null`
           $?.success?
         }
+        puts "Sleeping 10s to avoid Net::SSH locking up by connecting too early..."
+        puts "  (if you know a better way, please send me a note at https://github.com/matschaffer/knife-solo)"
+        sleep 10
         Dir.chdir KITCHEN do
           prepare(info[:user], server)
           cook(info[:user], server)
