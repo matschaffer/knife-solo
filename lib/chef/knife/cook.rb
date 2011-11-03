@@ -14,7 +14,7 @@ class Chef
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
 
-      banner "knife prepare [user@]hostname [json] (options)"
+      banner "knife cook [user@]hostname [json] (options)"
 
       def run
         super
