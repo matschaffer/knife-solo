@@ -14,7 +14,7 @@ class Chef
 
       def run
         super
-        send("#{distro[:type]}_gem_install")
+        send("#{distro[:type]}_install")
         generate_node_config
       end
 
@@ -42,25 +42,22 @@ class Chef
       end
 
       def add_yum_repos
-        ui.message("Adding EPEL and ELFF...")
-        repo_url = "http://download.fedora.redhat.com"
-        repo_path = "/pub/epel/5/i386/epel-release-5-4.noarch.rpm"
+        repo_url = "http://rbel.co/"
+        if distro[:version] == "RHEL5"
+          repo_path = "/rbel5"
+        else
+          repo_path = "/rbel6"
+        end
+        installed = "is already installed"
         result = run_command("sudo rpm -Uvh #{repo_url}#{repo_path}")
-        installed = "package epel-release-5-4.noarch is already installed"
-        raise result.stderr unless result.success? || result.stdout.match(installed)
-
-        repo_url = "http://download.elff.bravenet.com"
-        repo_path = "/5/i386/elff-release-5-3.noarch.rpm"
-        result = run_command("sudo rpm -Uvh #{repo_url}#{repo_path}")
-        installed = "package elff-release-5-3.noarch is already installed"
         raise result.stderr unless result.success? || result.stdout.match(installed)
       end
 
-      def yum_gem_install
+      def yum_install
         ui.msg("Installing required packages...")
-        @packages = %w(ruby ruby-shadow gcc gcc-c++ ruby-devel wget rsync)
+        add_yum_repos
+        @packages = %w(rubygem-chef)
         run_command("sudo yum -y install #{package_list}")
-        gem_install
       end
 
       def debian_gem_install
@@ -96,24 +93,30 @@ class Chef
       def distro
         @distro ||= case issue
         when %r{Debian GNU/Linux 5}
-          {:type => "debian", :version => "lenny"}
+          {:type => "debian_gem", :version => "lenny"}
         when %r{Debian GNU/Linux 6}
-          {:type => "debian", :version => "squeeze"}
+          {:type => "debian_gem", :version => "squeeze"}
         when %r{Debian GNU/Linux wheezy}
-          {:type => "debian", :version => "wheezy"}
+          {:type => "debian_gem", :version => "wheezy"}
         when %r{Ubuntu}
           version = run_command("lsb_release -cs").stdout.strip
-          {:type => "debian", :version => version}
-        when %r{CentOS}
-          {:type => "yum", :version => "CentOS"}
-        when %r{Red Hat Enterprise Linux}
-          {:type => "yum", :version => "Red Hat"}
-        when %r{Scientific Linux SL}
-          {:type => "yum", :version => "Scientific Linux"}
+          {:type => "debian_gem", :version => version}
+        when %r{CentOS.*? 5}
+          {:type => "yum", :version => "RHEL5"}
+        when %r{CentOS.*? 6}
+          {:type => "yum", :version => "RHEL6"}
+        when %r{Red Hat Enterprise.*? 5}
+          {:type => "yum", :version => "RHEL5"}
+        when %r{Red Hat Enterprise.*? 6}
+          {:type => "yum", :version => "RHEL6"}
+        when %r{Scientific Linux.*? 5}
+          {:type => "yum", :version => "RHEL5"}
+        when %r{Scientific Linux.*? 6}
+          {:type => "yum", :version => "RHEL6"}
         when %r{openSUSE 11.4}
-          {:type => "zypper", :version => "openSUSE"}
+          {:type => "zypper_gem", :version => "openSUSE"}
         when %r{This is \\n\.\\O (\\s \\m \\r) \\t}
-          {:type => "gentoo", :version => "Gentoo"}
+          {:type => "gentoo_gem", :version => "Gentoo"}
         else
           raise "Distro not recognized from looking at /etc/issue. Please fork https://github.com/matschaffer/knife-solo and add support for your distro."
         end
