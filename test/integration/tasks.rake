@@ -33,18 +33,18 @@ class ServerIntegrationTest
   end
 
   def run
-        puts "Starting test run for #{name}..."
-        server.wait_for { ready? }
-        puts "Server reported ready, trying to connect to ssh..."
-        server.wait_for {
-          `nc #{server.public_ip_address} 22 -w 1 -q 0 </dev/null`
-          $?.success?
-        }
-        puts "Sleeping 10s to avoid Net::SSH locking up by connecting too early..."
-        puts "  (if you know a better way, please send me a note at https://github.com/matschaffer/knife-solo)"
-        sleep 10
-        prepare
-        cook
+    puts "Starting test run for #{name}..."
+    server.wait_for { ready? }
+    puts "Server reported ready, trying to connect to ssh..."
+    server.wait_for {
+      `nc #{public_ip_address} 22 -w 1 -q 0 </dev/null`
+      $?.success?
+    }
+    puts "Sleeping 10s to avoid Net::SSH locking up by connecting too early..."
+    puts "  (if you know a better way, please send me a note at https://github.com/matschaffer/knife-solo)"
+    sleep 10
+    prepare
+    cook
   end
 
   def prepare
