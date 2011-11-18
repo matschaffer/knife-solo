@@ -127,7 +127,7 @@ module KnifeSolo
 
     def sudo
       return @sudo if @sudo
-      if run_command("which sudo").success?
+      if run_command("sudo -V").success?
         @sudo = "sudo"
       else
         Chef::Log.debug("`sudo` not available on #{host}")
