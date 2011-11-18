@@ -91,7 +91,8 @@ class Chef
       end
 
       def distro
-        @distro ||= case issue
+        return @distro if @distro
+        @distro = case issue
         when %r{Debian GNU/Linux 5}
           {:type => "debian_gem", :version => "lenny"}
         when %r{Debian GNU/Linux 6}
@@ -120,6 +121,8 @@ class Chef
         else
           raise "Distro not recognized from looking at /etc/issue. Please fork https://github.com/matschaffer/knife-solo and add support for your distro."
         end
+        Chef::Log.debug("Distro detection yielded: #{@distro}")
+        @distro
       end
     end
   end
