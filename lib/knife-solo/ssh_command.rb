@@ -125,6 +125,16 @@ module KnifeSolo
       end
     end
 
+    def sudo
+      return @sudo if @sudo
+      if run_command("which sudo").success?
+        @sudo = "sudo"
+      else
+        Chef::Log.debug("`sudo` not available on #{host}")
+        @sudo = ""
+      end
+    end
+
     def stream_command(command)
       run_command(command, :streaming => true)
     end
