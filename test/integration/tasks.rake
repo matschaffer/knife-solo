@@ -10,6 +10,7 @@ end
 
 namespace :test do
   KITCHEN = "test/integration/kitchen"
+  # TODO (mat): include AMI that uses root login and omits sudo (ala Centos 5.5 minimal install)
   AMIS = {
     'Ubuntu 10.04' => { :user => 'ubuntu',
                         :image_id => 'ami-6936fb00' }
