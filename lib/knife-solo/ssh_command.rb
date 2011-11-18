@@ -116,6 +116,13 @@ module KnifeSolo
       def success?
         exit_code == 0
       end
+
+      # Helper to use when raising exceptions since some operations
+      # (e.g., command not found) error on stdout
+      def stderr_or_stdout
+        return stderr unless stderr.empty?
+        stdout
+      end
     end
 
     def stream_command(command)

@@ -50,7 +50,7 @@ class Chef
         end
         installed = "is already installed"
         result = run_command("sudo rpm -Uvh #{repo_url}#{repo_path}")
-        raise result.stderr unless result.success? || result.stdout.match(installed)
+        raise result.stderr_or_stdout unless result.success? || result.stdout.match(installed)
       end
 
       def yum_install
