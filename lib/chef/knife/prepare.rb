@@ -114,6 +114,8 @@ class Chef
           {:type => "yum", :version => "RHEL5"}
         when %r{Scientific Linux.*? 6}
           {:type => "yum", :version => "RHEL6"}
+        when %r{SUSE Linux Enterprise Server 11 SP1}
+          {:type => "zypper_gem", :version => "SLES11"}
         when %r{openSUSE 11.4}
           {:type => "zypper_gem", :version => "openSUSE"}
         when %r{This is \\n\.\\O (\\s \\m \\r) \\t}
