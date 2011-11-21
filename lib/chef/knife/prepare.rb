@@ -56,7 +56,7 @@ class Chef
       def yum_install
         ui.msg("Installing required packages...")
         add_yum_repos
-        @packages = %w(rubygem-chef)
+        @packages = %w(rubygem-chef rsync)
         run_command("#{sudo} yum -y install #{package_list}")
       end
 
