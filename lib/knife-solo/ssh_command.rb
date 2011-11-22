@@ -142,6 +142,7 @@ module KnifeSolo
     def run_command(command, options={})
       detect_authentication_method
 
+      Chef::Log.debug("Running command #{command}")
       result = ExecResult.new
       command = command.sub(/^\s*sudo/, 'sudo -p \'knife sudo password: \'')
       Net::SSH.start(host, user, connection_options) do |ssh|
@@ -154,6 +155,7 @@ module KnifeSolo
               if data =~ /^knife sudo password: /
                 ch.send_data("#{password}\n")
               else
+                Chef::Log.debug("#{command} stdout: #{data}")
                 ui.stdout << data if options[:streaming]
                 result.stdout << data
               end
@@ -161,6 +163,7 @@ module KnifeSolo
 
             channel.on_extended_data do |ch, type, data|
               next unless type == 1
+              Chef::Log.debug("#{command} stderr: #{data}")
               ui.stderr << data if options[:streaming]
               result.stderr << data
             end
