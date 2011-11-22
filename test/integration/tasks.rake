@@ -40,7 +40,7 @@ class EC2IntegrationTest
         cook(info[:user], server)
       end
     ensure
-      if server
+      if server && ENV['SKIP_DESTROY'] != "true"
         puts "Destroying #{server}"
         server.destroy
       end
