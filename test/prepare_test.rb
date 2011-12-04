@@ -30,6 +30,33 @@ class PrepareTest < TestCase
     end
   end
 
+  def test_run_raises_if_operating_system_is_not_supported
+    Dir.chdir("/tmp") do
+      FileUtils.mkdir("nodes")
+      run_command = command("somehost")
+      run_command.stubs(:required_files_present?).returns(true)
+      run_command.stubs(:operating_system).returns('MythicalOS')
+      assert_raise KnifeSolo::Bootstraps::OperatingSystemNotImplementedError do
+        run_command.run
+      end
+    end
+  end
+
+  def test_run_calls_bootstrap
+    Dir.chdir("/tmp") do
+      FileUtils.mkdir("nodes")
+      run_command = command("somehost")
+      bootstrap_instance = mock('mock OS bootstrap instance')
+      run_command.stubs(:required_files_present?).returns(true)
+      run_command.stubs(:operating_system).returns('MythicalOS')
+      run_command.stubs(:bootstrap).returns(bootstrap_instance)
+
+      bootstrap_instance.expects(:bootstrap!)
+
+      run_command.run
+    end
+  end
+
   def teardown
     FileUtils.rm_r("/tmp/nodes")
   end
