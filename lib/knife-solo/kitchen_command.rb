@@ -11,8 +11,11 @@ module KnifeSolo
     end
 
     def run
-      all_present  = required_files.inject(true) { |m, f| m && File.exists?(f) }
-      raise OutOfKitchenError.new unless all_present
+      raise OutOfKitchenError.new unless required_files_present?
+    end
+
+    def required_files_present?
+      required_files.inject(true) { |m, f| m && File.exists?(f) }
     end
   end
 end
