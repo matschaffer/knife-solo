@@ -1,6 +1,8 @@
-# 0.0.6: In progress
+# 0.0.6: Dec 8, 2011
 
-* Dynamic sudo detection for yum-based systems
+* natlownes: Support for Mac OS 10.5 and 10.6 (00921ebd1b93)
+* Parallel integration testing and SLES (167360d447..167360d447)
+* Dynamic sudo detection for yum-based systems (5282fc36ac3..256f27658a06cb)
 
 # 0.0.5: Oct 31, 2011
 
@@ -10,7 +12,7 @@
 
 # 0.0.4: Oct 7, 2011
 
-* Chef 0.10.4 based databag and search method (a800880e6d)
+* retr0h: Chef 0.10.4 based databag and search method (a800880e6d)
 * Proper path for roles (b143ae290a)
 * Test fixes for CI compatibility (ccf4247125..62b8bd498d)
 
