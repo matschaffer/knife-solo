@@ -1,3 +1,5 @@
+# 0.0.7: In progress
+
 # 0.0.6: Dec 8, 2011
 
 * natlownes: Support for Mac OS 10.5 and 10.6 (00921ebd1b93)
