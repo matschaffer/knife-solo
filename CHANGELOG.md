@@ -2,6 +2,7 @@
 
 * BUG #9: Fix intelligent sudo handling for OSes that don't have it
 * Move integration tests into proper test cases
+* CentOS 5.6 integration test
 
 # 0.0.6: Dec 8, 2011
 
