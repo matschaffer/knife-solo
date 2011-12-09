@@ -65,7 +65,8 @@ class IntegrationTest < MiniTest::Unit::TestCase
     end
 
     def run_subcommand(subcommand)
-      system "knife #{subcommand} -i #{key_file} #{user}@#{server.public_ip_address}"
+      verbose = ENV['VERBOSE'] && "-VV"
+      system "knife #{subcommand} -i #{key_file} #{user}@#{server.public_ip_address} #{verbose}"
     end
 
     def test_prepare_and_cook
