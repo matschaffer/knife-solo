@@ -1,5 +1,8 @@
 # 0.0.7: In progress
 
+* BUG #9: Fix intelligent sudo handling for OSes that don't have it
+* Move integration tests into proper test cases
+
 # 0.0.6: Dec 8, 2011
 
 * natlownes: Support for Mac OS 10.5 and 10.6 (00921ebd1b93)
