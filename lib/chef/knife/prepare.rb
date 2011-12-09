@@ -32,13 +32,8 @@ class Chef
       end
 
       def operating_system
-        @operating_system ||= begin
-                                run_command('uname -s').stdout.strip
-                              rescue
-                                ""
-                              end
+        @operating_system ||= run_command('uname -s').stdout.strip
       end
-
     end
   end
 end
