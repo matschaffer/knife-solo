@@ -18,23 +18,12 @@ class Chef
 
       def run
         super
-
         check_syntax
-
         Chef::Config.from_file('solo.rb')
-
-        rsync_kitchen
-
-        add_patches
-
         check_chef_version
-
-        logging_arg = "-l debug" if config[:verbosity] > 0
-        stream_command <<-BASH
-          sudo chef-solo -c #{chef_path}/solo.rb \
-                         -j #{chef_path}/#{node_config} \
-                         #{logging_arg}
-        BASH
+        rsync_kitchen
+        add_patches
+        cook
       end
 
       def check_syntax
@@ -84,6 +73,15 @@ class Chef
           ruby -rubygems -e "gem 'chef', '#{constraint}'"
         BASH
         raise "The chef gem on #{host} is out of date. Please run `#{$0} prepare #{ssh_args}` to upgrade Chef to #{constraint}." unless result.success?
+      end
+
+      def cook
+        logging_arg = "-l debug" if config[:verbosity] > 0
+        stream_command <<-BASH
+          sudo chef-solo -c #{chef_path}/solo.rb \
+                         -j #{chef_path}/#{node_config} \
+                         #{logging_arg}
+        BASH
       end
     end
   end
