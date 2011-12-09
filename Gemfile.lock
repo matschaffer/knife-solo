@@ -82,6 +82,7 @@ GEM
       ruby_core_source (>= 0.1.4)
     methodfinder (1.2.3)
     mime-types (1.17.2)
+    minitest (2.9.0)
     mixlib-authentication (1.1.4)
       mixlib-log
     mixlib-cli (1.2.2)
@@ -150,6 +151,7 @@ DEPENDENCIES
   fog
   irbtools
   knife-solo!
+  minitest
   mocha
   rake
   ruby-debug
