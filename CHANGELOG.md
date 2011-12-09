@@ -1,4 +1,6 @@
-# 0.0.7: In progress
+# 0.0.8: In progress
+
+# 0.0.7: Dec 9, 2011
 
 * BUG #9: Fix intelligent sudo handling for OSes that don't have it
 * Move integration tests into proper test cases
