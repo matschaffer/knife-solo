@@ -126,14 +126,16 @@ module KnifeSolo
     end
 
     def sudo_available?
-      @sudo_available ||= run_command('sudo -V', :process_sudo => false).success?
+      return @sudo_available unless @sudo_available.nil?
+      @sudo_available = run_command('sudo -V', :process_sudo => false).success?
+      Chef::Log.debug("`sudo` not available on #{host}") unless @sudo_available
+      @sudo_available
     end
 
     def process_sudo(command)
       if sudo_available?
         replacement = 'sudo -p \'knife sudo password: \''
       else
-        Chef::Log.debug("`sudo` not available on #{host}")
         replacement = ''
       end
       command.sub(/^\s*sudo/, replacement)
@@ -143,7 +145,10 @@ module KnifeSolo
       run_command(command, :streaming => true)
     end
 
-    def run_command(command, options={:process_sudo => true})
+    def run_command(command, options={})
+      defaults = {:process_sudo => true}
+      options = defaults.merge(options)
+
       detect_authentication_method
 
       Chef::Log.debug("Running command #{command}")
