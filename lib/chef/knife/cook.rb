@@ -38,6 +38,7 @@ class Chef
       end
 
       def check_syntax
+        ui.msg('Checking cookbook syntax...')
         Dir["**/*.rb"].each do |recipe|
           ok = system "ruby -c #{recipe} >/dev/null 2>&1"
           raise "Syntax error in #{recipe}" if not ok
