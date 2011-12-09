@@ -36,7 +36,7 @@ module KnifeSolo::Bootstraps
         repo_path = "/rbel6"
       end
       installed = "is already installed"
-      result = run_command("#{sudo} rpm -Uvh #{repo_url}#{repo_path}")
+      result = run_command("sudo rpm -Uvh #{repo_url}#{repo_path}")
       raise result.stderr_or_stdout unless result.success? || result.stdout.match(installed)
     end
 
@@ -44,7 +44,7 @@ module KnifeSolo::Bootstraps
       ui.msg("Installing required packages...")
       add_yum_repos
       @packages = %w(rubygem-chef rsync)
-      run_command("#{sudo} yum -y install #{package_list}")
+      run_command("sudo yum -y install #{package_list}")
     end
 
     def debian_gem_install

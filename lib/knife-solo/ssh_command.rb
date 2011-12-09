@@ -125,26 +125,30 @@ module KnifeSolo
       end
     end
 
-    def sudo
-      return @sudo if @sudo
-      if run_command("sudo -V").success?
-        @sudo = "sudo"
+    def sudo_available?
+      @sudo_available ||= run_command('sudo -V', :process_sudo => false).success?
+    end
+
+    def process_sudo(command)
+      if sudo_available?
+        replacement = 'sudo -p \'knife sudo password: \''
       else
         Chef::Log.debug("`sudo` not available on #{host}")
-        @sudo = ""
+        replacement = ''
       end
+      command.sub(/^\s*sudo/, replacement)
     end
 
     def stream_command(command)
       run_command(command, :streaming => true)
     end
 
-    def run_command(command, options={})
+    def run_command(command, options={:process_sudo => true})
       detect_authentication_method
 
       Chef::Log.debug("Running command #{command}")
       result = ExecResult.new
-      command = command.sub(/^\s*sudo/, 'sudo -p \'knife sudo password: \'')
+      command = process_sudo(command) if options[:process_sudo]
       Net::SSH.start(host, user, connection_options) do |ssh|
         ssh.open_channel do |channel|
           channel.request_pty
