@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [[ -z "$1" ]]; then
+  echo "Usage: $0 test/unit/some_test.rb"
+  exit 1
+fi
+
+ruby -Itest "$@"
