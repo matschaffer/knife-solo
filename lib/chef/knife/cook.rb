@@ -16,11 +16,16 @@ class Chef
 
       banner "knife cook [user@]hostname [json] (options)"
 
+      option :skip_chef_check,
+        :long => '--skip-chef-check',
+        :boolean => true,
+        :description => "Skip the version check on the Chef gem"
+
       def run
         super
         check_syntax
         Chef::Config.from_file('solo.rb')
-        check_chef_version
+        check_chef_version unless config[:skip_chef_check]
         rsync_kitchen
         add_patches
         cook
