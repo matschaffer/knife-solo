@@ -10,6 +10,13 @@ class KitchenTest < TestCase
     end
   end
 
+  def test_produces_gitkeep_in_folders
+    Dir.chdir("/tmp") do
+      command("testkitchen").run
+      assert File.exist?("testkitchen/nodes/.gitkeep")
+    end
+  end
+
   def teardown
     FileUtils.rm_r("/tmp/testkitchen")
   end

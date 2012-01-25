@@ -10,11 +10,10 @@ class Chef
       def run
         name = @name_args.first
         mkdir name
-        mkdir name + "/nodes"
-        mkdir name + "/roles"
-        mkdir name + "/data_bags"
-        mkdir name + "/site-cookbooks"
-        mkdir name + "/cookbooks"
+        %w(nodes roles data_bags site-cookbooks cookbooks).each do |dir|
+          mkdir name + "/#{dir}"
+          touch name + "/#{dir}/.gitkeep"
+        end
         File.open(name + "/solo.rb", 'w') do |f|
           f << <<-RUBY.gsub(/^ {12}/, '')
             file_cache_path "/tmp/chef-solo"

@@ -6,8 +6,16 @@ module KnifeSolo
       end
     end
 
-    def required_files
-      %w(nodes roles cookbooks data_bags solo.rb)
+    def self.required_directories
+      %w(nodes roles cookbooks data_bags site-cookbooks)
+    end
+
+    def self.required_files
+      %w(solo.rb)
+    end
+
+    def self.all_requirements
+      required_files + required_directories
     end
 
     def run
@@ -15,7 +23,7 @@ module KnifeSolo
     end
 
     def required_files_present?
-      required_files.inject(true) { |m, f| m && File.exists?(f) }
+      KitchenCommand.all_requirements.inject(true) { |m, f| m && File.exists?(f) }
     end
   end
 end
