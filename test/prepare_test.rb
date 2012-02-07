@@ -36,7 +36,7 @@ class PrepareTest < TestCase
       run_command = command("somehost")
       run_command.stubs(:required_files_present?).returns(true)
       run_command.stubs(:operating_system).returns('MythicalOS')
-      assert_raise KnifeSolo::Bootstraps::OperatingSystemNotImplementedError do
+      assert_raises KnifeSolo::Bootstraps::OperatingSystemNotImplementedError do
         run_command.run
       end
     end

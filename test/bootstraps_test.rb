@@ -8,8 +8,8 @@ end
 class KnifeSolo::Bootstraps::StubOS2 < KnifeSolo::Bootstraps::Base
   def gem_packages ; ['chef'] ; end
   def distro ; {:type => 'gem', :version => 'Fanny Faker'} ; end
-  def gem_install 
-    # dont' actually install anything 
+  def gem_install
+    # dont' actually install anything
   end
 end
 
@@ -21,17 +21,17 @@ class BootstrapsTest < TestCase
   end
 
   def test_distro_raises_if_not_implemented
-    bootstrap = bootstrap_instance() 
+    bootstrap = bootstrap_instance()
 
-    assert_raise RuntimeError do
+    assert_raises RuntimeError do
       bootstrap.distro()
     end
   end
 
   def test_gem_packages_raises_if_not_implemented
-    bootstrap = bootstrap_instance() 
+    bootstrap = bootstrap_instance()
 
-    assert_raise RuntimeError do
+    assert_raises RuntimeError do
       bootstrap.gem_packages()
     end
   end
@@ -67,7 +67,7 @@ class BootstrapsTest < TestCase
 
     bootstrap.expects(:has_xcode_installed?).returns(false)
 
-    assert_raise RuntimeError do
+    assert_raises RuntimeError do
       bootstrap.bootstrap!
     end
   end
