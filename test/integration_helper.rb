@@ -1,19 +1,22 @@
 require 'test_helper'
+require 'pathname'
+require 'logger'
 
-MiniTest::Parallel.processor_count = [Dir['test/integration/*_test.rb'].size, 5].min
+MiniTest::Parallel.processor_count = 5
 
 class IntegrationTest < TestCase
-  def self.servers
-    @servers ||= []
+  def setup
+    log_file = Pathname.new(__FILE__).dirname.join('..', 'log', "#{self.class}-integration.log")
+    log_file.dirname.mkpath
+    @logger = Logger.new(log_file)
   end
 
-  def self.cleanup_servers
+  attr_accessor :logger
+
+  def cleanup_server
     return if ENV['SKIP_DESTROY']
-    puts "Cleaning up #{servers.length} servers..."
-    servers.each do |server|
-      puts "Destroying #{server} (#{server.public_ip_address})..."
-      server.destroy
-    end
+    logger.info "Destroying #{self.class} (#{server.public_ip_address})..."
+    server.destroy
   end
 
   def key_name
@@ -36,31 +39,32 @@ class IntegrationTest < TestCase
 
   def server
     return @server if @server
-    puts "Starting server for #{self.class}..."
+    logger.info "Starting server for #{self.class}..."
     @server = compute.servers.create(:image_id  => image_id,
                                      :flavor_id => flavor_id,
                                      :key_name  => key_name)
-    IntegrationTest.servers << @server
     @server.wait_for { ready? }
-    puts "Server reported ready, trying to connect to ssh..."
+    logger.info "Server reported ready, trying to connect to ssh..."
     @server.wait_for do
       `nc #{public_ip_address} 22 -w 1 -q 0 </dev/null`
       $?.success?
     end
-    puts "Sleeping 10s to avoid Net::SSH locking up by connecting too early..."
-    puts "  (if you know a better way, please send me a note at https://github.com/matschaffer/knife-solo)"
+    logger.info "Sleeping 10s to avoid Net::SSH locking up by connecting too early..."
+    logger.info "  (if you know a better way, please send me a note at https://github.com/matschaffer/knife-solo)"
     sleep 10
     @server
   end
 
   module BasicPrepareAndCook
     def setup
+      super
       @kitchen = Pathname.new(__FILE__).dirname.join('kitchens', self.class.to_s)
       system "knife kitchen #{@kitchen}"
     end
 
     def teardown
       FileUtils.remove_entry_secure(@kitchen)
+      cleanup_server
     end
 
     def run_subcommand(subcommand)
@@ -78,5 +82,3 @@ class IntegrationTest < TestCase
     end
   end
 end
-
-MiniTest::Unit.after_tests { IntegrationTest.cleanup_servers }
