@@ -6,8 +6,8 @@ group :development do
 end
 
 group :test do
-  gem 'mocha'
   gem 'parallel'
+  gem 'mocha', :require => false
   gem 'minitest', :require => false
 end
 
