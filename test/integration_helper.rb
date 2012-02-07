@@ -72,7 +72,9 @@ class IntegrationTest < MiniTest::Unit::TestCase
     def test_prepare_and_cook
       Dir.chdir(@kitchen) do
         run_subcommand("prepare")
+        assert $?.success?
         run_subcommand("cook")
+        assert $?.success?
       end
     end
   end
