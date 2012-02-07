@@ -7,7 +7,8 @@ end
 
 group :test do
   gem 'mocha'
-  gem 'minitest', :require => 'minitest/autorun'
+  gem 'parallel'
+  gem 'minitest', :require => false
 end
 
 group :development, :test do

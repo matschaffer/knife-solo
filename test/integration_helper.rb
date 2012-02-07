@@ -1,9 +1,8 @@
-require 'rubygems'
-require 'bundler/setup'
-Bundler.require(:default, :test)
-require 'pathname'
+require 'test_helper'
 
-class IntegrationTest < MiniTest::Unit::TestCase
+MiniTest::Parallel.processor_count = [Dir['test/integration/*_test.rb'].size, 5].min
+
+class IntegrationTest < TestCase
   def self.servers
     @servers ||= []
   end

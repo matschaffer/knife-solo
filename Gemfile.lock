@@ -107,6 +107,7 @@ GEM
       systemu (~> 2.2.0)
       yajl-ruby
     ori (0.1.0)
+    parallel (0.5.14)
     polyglot (0.3.3)
     rake (0.9.2)
     rbx-require-relative (0.0.5)
@@ -153,6 +154,7 @@ DEPENDENCIES
   knife-solo!
   minitest
   mocha
+  parallel
   rake
   ruby-debug
   ruby-debug19
