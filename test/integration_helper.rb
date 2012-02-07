@@ -6,12 +6,12 @@ MiniTest::Parallel.processor_count = 5
 
 class IntegrationTest < TestCase
   def setup
-    log_file = Pathname.new(__FILE__).dirname.join('..', 'log', "#{self.class}-integration.log")
-    log_file.dirname.mkpath
+    @log_file = Pathname.new(__FILE__).dirname.join('..', 'log', "#{self.class}-integration.log")
+    @log_file.dirname.mkpath
     @logger = Logger.new(log_file)
   end
 
-  attr_accessor :logger
+  attr_accessor :log_file, :logger
 
   def cleanup_server
     return if ENV['SKIP_DESTROY']
@@ -59,7 +59,7 @@ class IntegrationTest < TestCase
     def setup
       super
       @kitchen = Pathname.new(__FILE__).dirname.join('kitchens', self.class.to_s)
-      system "knife kitchen #{@kitchen}"
+      system "knife kitchen #{@kitchen} >> #{log_file}"
     end
 
     def teardown
@@ -69,7 +69,7 @@ class IntegrationTest < TestCase
 
     def run_subcommand(subcommand)
       verbose = ENV['VERBOSE'] && "-VV"
-      system "knife #{subcommand} -i #{key_file} #{user}@#{server.public_ip_address} #{verbose}"
+      system "knife #{subcommand} -i #{key_file} #{user}@#{server.public_ip_address} #{verbose} >> #{log_file}"
     end
 
     def test_prepare_and_cook
