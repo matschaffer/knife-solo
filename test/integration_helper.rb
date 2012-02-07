@@ -4,6 +4,10 @@ require 'logger'
 
 MiniTest::Parallel.processor_count = 5
 
+$stderr.puts
+$stderr.puts "==> NOTE: Tests are running in parallel. Please make sure to clean up EC2 instances if you interrupt (Ctrl-c) the test."
+$stderr.puts
+
 class IntegrationTest < TestCase
   def setup
     @log_file = Pathname.new(__FILE__).dirname.join('..', 'log', "#{self.class}-integration.log")
