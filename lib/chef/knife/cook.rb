@@ -21,6 +21,11 @@ class Chef
         :boolean => true,
         :description => "Skip the version check on the Chef gem"
 
+      option :windows_compat,
+        :long => '--windows-compat',
+        :description => 'Windows compatibility mode (enable, disable, auto)',
+        :default => 'auto'
+
       def run
         super
         check_syntax
@@ -30,6 +35,21 @@ class Chef
         add_patches
         cook
       end
+
+      # todo - move this to SshCommand?
+      def is_windows_node?
+        run_command("ver").stdout =~ /Windows/i
+      end
+
+      def windows_compat?
+        # TODO - use a cleaner construct (proper option with choices?)
+        @windows_compat ||= case config[:windows_compat]
+          when 'enable'; true
+          when 'disable'; false
+          when 'auto'; is_windows_node?
+          else raise "Unsupported windows compatiblity mode"
+        end
+      end          
 
       def check_syntax
         ui.msg('Checking cookbook syntax...')
@@ -57,18 +77,29 @@ class Chef
         Chef::Config.file_cache_path
       end
 
+      # cygwin rsync path must be adjusted to work
+      def adjust_rsync_path(path)
+        return path unless windows_compat?
+        path.gsub(/^(\w):/) { "/cygdrive/#{$1}" }
+      end
+
       def patch_path
         Array(Chef::Config.cookbook_path).first + "/chef_solo_patches/libraries"
       end
 
       def rsync_kitchen
-        system %Q{rsync -rlP --rsh="ssh #{ssh_args}" --delete --exclude '.*' ./ :#{chef_path}}
+        system %Q{rsync -rlP --rsh="ssh #{ssh_args}" --delete --exclude '.*' ./ :#{adjust_rsync_path(chef_path)}}
       end
 
       def add_patches
-        run_command "mkdir -p #{patch_path}"
+        if windows_compat?
+          # no mkdir -p here; this should be abstracted out
+          run_command %Q{ruby -e "require 'fileutils'; FileUtils.mkdir_p('#{patch_path}')"}
+        else
+          run_command "mkdir -p #{patch_path}"
+        end
         Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb")].each do |patch|
-          system %Q{rsync -rlP --rsh="ssh #{ssh_args}" #{patch} :#{patch_path}}
+          system %Q{rsync -rlP --rsh="ssh #{ssh_args}" #{patch} :#{adjust_rsync_path(patch_path)}}
         end
       end
 
@@ -82,11 +113,16 @@ class Chef
 
       def cook
         logging_arg = "-l debug" if config[:verbosity] > 0
-        stream_command <<-BASH
-          sudo chef-solo -c #{chef_path}/solo.rb \
+
+        command = []
+        command << "sudo" unless windows_compat?
+        command << <<-BASH
+          chef-solo -c #{chef_path}/solo.rb \
                          -j #{chef_path}/#{node_config} \
                          #{logging_arg}
         BASH
+        command = command.join(' ')
+        stream_command command
       end
     end
   end

@@ -12,6 +12,8 @@ The +prepare+ command installs Ruby, RubyGems and \Chef on a given host. It's st
 
 The +cook+ command uploads the current kitchen (chef repo) to the target host and runs chef-solo on that host.
 
+Preliminary Windows support for +cook+ is available (see below).
+
 == USAGE:
 
 Installation is a normal gem installation.
@@ -51,6 +53,26 @@ The cook command also takes an ssh-style host argument:
 The cook command uploads the current kitchen to the server and runs chef-solo on that server. If you only specify one argument it will look for a node config in +nodes/<hostname>.json+. Or if you want to specify a node config you can pass the path to the file as the second argument.
 
 This uploads all of your cookbooks in addition to a patch that allows you to use data_bags in a read-only fashion from the +data_bags+ folder.
+
+=== Windows support
+
+The cook command will work on Windows node if you meet the following howto:
+
+==== Kitchen then tweak
+
+- run `knife kitchen` then edit solo.rb to use Windows path-naming (see https://gist.github.com/1773854)
+
+==== Prepare the node manually
+
+- install a SSH server (eg: WinSSHd)
+- install rsync on the node (see https://github.com/thbar/rsync-windows)
+- add rsync to the user PATH
+- install http://www.opscode.com/chef/install.msi
+- add nodes/hostname.json and put `{ "run_list": [] }` in it
+
+==== Cook
+
+- cook should work as expected automatically, if you use cygwin rsync
 
 == DEVELOPMENT
 
