@@ -158,7 +158,7 @@ module KnifeSolo
       run_command(command, :streaming => true)
     end
 
-    def processed_command(command, options)
+    def processed_command(command, options = {})
       command = process_sudo(command) if options[:process_sudo]
       command = process_startup_file(command) if startup_script
       command
@@ -175,7 +175,7 @@ module KnifeSolo
 
       command = processed_command(command, options)
       Chef::Log.debug("Running processed command #{command}")
-      
+
       Net::SSH.start(host, user, connection_options) do |ssh|
         ssh.open_channel do |channel|
           channel.request_pty
