@@ -79,7 +79,7 @@ class Chef
 
       # cygwin rsync path must be adjusted to work
       def adjust_rsync_path(path)
-        return path unless windows_compat?
+        return path unless windows_node?
         path.gsub(/^(\w):/) { "/cygdrive/#{$1}" }
       end
 

@@ -125,6 +125,13 @@ module KnifeSolo
       end
     end
 
+    def windows_node?
+      return @windows_node unless @windows_node.nil?
+      @windows_node = run_command('ver', :process_sudo => false).stdout =~ /Windows/i
+      Chef::Log.debug("Windows node detected") if @windows_node
+      @windows_node
+    end
+
     def sudo_available?
       return @sudo_available unless @sudo_available.nil?
       @sudo_available = run_command('sudo -V', :process_sudo => false).success?
