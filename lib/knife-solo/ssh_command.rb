@@ -187,5 +187,18 @@ module KnifeSolo
       end
       result
     end
+
+    # TODO:
+    # - move this to a dedicated "portability" module?
+    # - use ruby in all cases instead?
+    def run_portable_mkdir_p(folder)
+      if windows_node?
+        # no mkdir -p on windows - fake it
+        run_command %Q{ruby -e "require 'fileutils'; FileUtils.mkdir_p('#{folder}')"}
+      else
+        run_command "mkdir -p #{folder}"
+      end
+    end
+
   end
 end

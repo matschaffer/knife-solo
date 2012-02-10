@@ -92,12 +92,7 @@ class Chef
       end
 
       def add_patches
-        if windows_compat?
-          # no mkdir -p here; this should be abstracted out
-          run_command %Q{ruby -e "require 'fileutils'; FileUtils.mkdir_p('#{patch_path}')"}
-        else
-          run_command "mkdir -p #{patch_path}"
-        end
+        run_portable_mkdir_p(patch_path)
         Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb")].each do |patch|
           system %Q{rsync -rlP --rsh="ssh #{ssh_args}" #{patch} :#{adjust_rsync_path(patch_path)}}
         end
