@@ -1,18 +1,22 @@
 # 0.0.8: In progress
 
+* Add --startup-script which gets sourced before any command to setup env vars (e.g., ~/.bashrc) (d1489f94)
+* Use curl + rpm rather than rpm against direct URL for better proxy support (51ad9c51)
 * Integration harness improvements (1ac5cce..4be36c2)
-* Create .gitkeep's to avoid errors on sparse kitchens (074b4e0a)
+* BUG #10: Create .gitkeep's to avoid errors on sparse kitchens (074b4e0a)
 * Add --skip-chef-check knife option (a1a66ae)
 
 ## Thanks to our contributors!
 
+* [Cyril Ledru][patatepartie]
 * [Fletcher Nichol][fnichol]
 * [Jason Garber][jgarber]
 * [Greg Sterndale][gsterndale]
 
-[gsterndale]: https://github.com/gsterndale
-[jgarber]: https://github.com/jgarber
+[patatepartie]: https://github.com/patatepartie
 [fnichol]: https://github.com/fnichol
+[jgarber]: https://github.com/jgarber
+[gsterndale]: https://github.com/gsterndale
 
 # 0.0.7: Dec 9, 2011
 
