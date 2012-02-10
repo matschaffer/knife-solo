@@ -21,11 +21,6 @@ class Chef
         :boolean => true,
         :description => "Skip the version check on the Chef gem"
 
-      option :windows_compat,
-        :long => '--windows-compat',
-        :description => 'Windows compatibility mode (enable, disable, auto)',
-        :default => 'auto'
-
       def run
         super
         check_syntax
@@ -35,21 +30,6 @@ class Chef
         add_patches
         cook
       end
-
-      # todo - move this to SshCommand?
-      def is_windows_node?
-        run_command("ver").stdout =~ /Windows/i
-      end
-
-      def windows_compat?
-        # TODO - use a cleaner construct (proper option with choices?)
-        @windows_compat ||= case config[:windows_compat]
-          when 'enable'; true
-          when 'disable'; false
-          when 'auto'; is_windows_node?
-          else raise "Unsupported windows compatiblity mode"
-        end
-      end          
 
       def check_syntax
         ui.msg('Checking cookbook syntax...')
