@@ -30,10 +30,12 @@ module KnifeSolo::Bootstraps
 
     def add_yum_repos(repo_path)
       repo_url = "http://rbel.co/"
-      
+
       tmp_file = "/tmp/rbel"
       installed = "is already installed"
-      result = run_command("curl #{repo_url}#{repo_path} -o #{tmp_file} && sudo rpm -Uvh #{tmp_file} && rm #{tmp_file}")
+      run_command("sudo yum -y install curl")
+      run_command("curl #{repo_url}#{repo_path} -o #{tmp_file}")
+      result = run_command("sudo rpm -Uvh #{tmp_file} && rm #{tmp_file}")
       raise result.stderr_or_stdout unless result.success? || result.stdout.match(installed)
     end
 
