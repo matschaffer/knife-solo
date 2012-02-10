@@ -28,23 +28,27 @@ module KnifeSolo::Bootstraps
       run_command("sudo USE='-test' ACCEPT_KEYWORDS='~amd64' emerge -u chef")
     end
 
-    def add_yum_repos
+    def add_yum_repos(repo_path)
       repo_url = "http://rbel.co/"
-      if distro[:version] == "RHEL5"
-        repo_path = "/rbel5"
-      else
-        repo_path = "/rbel6"
-      end
+      
+      tmp_file = "/tmp/rbel"
       installed = "is already installed"
-      result = run_command("sudo rpm -Uvh #{repo_url}#{repo_path}")
+      result = run_command("curl #{repo_url}#{repo_path} -o #{tmp_file} && sudo rpm -Uvh #{tmp_file} && rm #{tmp_file}")
       raise result.stderr_or_stdout unless result.success? || result.stdout.match(installed)
     end
 
     def yum_install
       ui.msg("Installing required packages...")
-      add_yum_repos
+
+      if distro[:version] == "RHEL5"
+        repo_path = "rbel5"
+      else
+        repo_path = "rbel6"
+      end
+
+      add_yum_repos(repo_path)
       @packages = %w(rubygem-chef rsync)
-      run_command("sudo yum -y install #{package_list}")
+      run_command("sudo yum -y --disablerepo=* --enablerepo=#{repo_path} install #{package_list}")
     end
 
     def debian_gem_install

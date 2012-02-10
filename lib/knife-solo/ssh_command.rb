@@ -27,6 +27,11 @@ module KnifeSolo
           :short => "-p FILE",
           :long => "--ssh-port FILE",
           :description => "The ssh port"
+
+        option :startup_script,
+          :short => "-s FILE",
+          :long => "--startup-script FILE",
+          :description => "The startup script on the remote server containing variable definitions"
       end
     end
 
@@ -105,6 +110,10 @@ module KnifeSolo
       [host_arg, config_arg, ident_arg, port_arg].compact.join(' ')
     end
 
+    def startup_script
+      config[:startup_script]
+    end
+
     class ExecResult
       attr_accessor :stdout, :stderr, :exit_code
 
@@ -141,8 +150,18 @@ module KnifeSolo
       command.sub(/^\s*sudo/, replacement)
     end
 
+    def process_startup_file(command)
+      command.insert(0, "source #{startup_script} && ")
+    end
+
     def stream_command(command)
       run_command(command, :streaming => true)
+    end
+
+    def processed_command(command, options)
+      command = process_sudo(command) if options[:process_sudo]
+      command = process_startup_file(command) if startup_script
+      command
     end
 
     def run_command(command, options={})
@@ -151,9 +170,12 @@ module KnifeSolo
 
       detect_authentication_method
 
-      Chef::Log.debug("Running command #{command}")
+      Chef::Log.debug("Initial command #{command}")
       result = ExecResult.new
-      command = process_sudo(command) if options[:process_sudo]
+
+      command = processed_command(command, options)
+      Chef::Log.debug("Running processed command #{command}")
+      
       Net::SSH.start(host, user, connection_options) do |ssh|
         ssh.open_channel do |channel|
           channel.request_pty
