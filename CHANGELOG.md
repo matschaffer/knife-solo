@@ -22,9 +22,17 @@
 
 # 0.0.6: Dec 8, 2011
 
-* natlownes: Support for Mac OS 10.5 and 10.6 (00921ebd1b93)
+* Support for Mac OS 10.5 and 10.6 (00921ebd1b93)
 * Parallel integration testing and SLES (167360d447..167360d447)
 * Dynamic sudo detection for yum-based systems (5282fc36ac3..256f27658a06cb)
+
+## Thanks to our contributors!
+
+* [Sergio Rubio][rubiojr]
+* [Nat Lownes][natlownes]
+
+[rubiojr]: https://github.com/rubiojr
+[natlownes]: https://github.com/natlownes
 
 # 0.0.5: Oct 31, 2011
 
@@ -34,9 +42,15 @@
 
 # 0.0.4: Oct 7, 2011
 
-* retr0h: Chef 0.10.4 based databag and search method (a800880e6d)
+* Chef 0.10.4 based databag and search method (a800880e6d)
 * Proper path for roles (b143ae290a)
 * Test fixes for CI compatibility (ccf4247125..62b8bd498d)
+
+## Thanks to our contributors!
+
+* [John Dewey][retr0h]
+
+[retr0h]: https://github.com/retr0h
 
 # 0.0.3: July 31, 2011
 
