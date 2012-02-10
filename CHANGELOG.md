@@ -1,5 +1,15 @@
 # 0.0.8: In progress
 
+* Integration harness improvements (1ac5cce..4be36c2)
+* Create .gitkeep's to avoid errors on sparse kitchens (074b4e0a)
+* Add --skip-chef-check knife option (a1a66ae)
+
+## Contributors
+
+* @fnichol
+* @jgarber
+* @gsterndale
+
 # 0.0.7: Dec 9, 2011
 
 * BUG #9: Fix intelligent sudo handling for OSes that don't have it
