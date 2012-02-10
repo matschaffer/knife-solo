@@ -1,4 +1,11 @@
-# 0.0.8: In progress
+# 0.1.0: In progress
+
+## Goals
+
+* Finish support and integration testing for remaining key OSes (Issues #2 and #15)
+* Include recipes in integration testing (Issue #17)
+
+# 0.0.8: February 10, 2012
 
 * Add --startup-script which gets sourced before any command to setup env vars (e.g., ~/.bashrc) (d1489f94)
 * Use curl + rpm rather than rpm against direct URL for better proxy support (51ad9c51)
