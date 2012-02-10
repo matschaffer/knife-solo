@@ -109,15 +109,11 @@ class Chef
       def cook
         logging_arg = "-l debug" if config[:verbosity] > 0
 
-        command = []
-        command << "sudo" unless windows_compat?
-        command << <<-BASH
+        stream_command <<-BASH
           chef-solo -c #{chef_path}/solo.rb \
                          -j #{chef_path}/#{node_config} \
                          #{logging_arg}
         BASH
-        command = command.join(' ')
-        stream_command command
       end
     end
   end
