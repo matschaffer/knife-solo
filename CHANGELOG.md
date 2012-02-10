@@ -4,11 +4,15 @@
 * Create .gitkeep's to avoid errors on sparse kitchens (074b4e0a)
 * Add --skip-chef-check knife option (a1a66ae)
 
-## Contributors
+## Thanks to our contributors!
 
-* @fnichol
-* @jgarber
-* @gsterndale
+* [Fletcher Nichol][fnichol]
+* [Jason Garber][jgarber]
+* [Greg Sterndale][gsterndale]
+
+[gsterndale]: https://github.com/gsterndale
+[jgarber]: https://github.com/jgarber
+[fnichol]: https://github.com/fnichol
 
 # 0.0.7: Dec 9, 2011
 
