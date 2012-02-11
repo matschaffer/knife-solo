@@ -21,6 +21,7 @@ class IntegrationTest < TestCase
     @log_file = base_dir.join('..', 'log', "#{self.class}-integration.log")
     @log_file.dirname.mkpath
     @logger = Logger.new(log_file)
+    # TODO: move this to a helper before the parallel tests happen
     create_key_pair
   end
 
