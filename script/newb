@@ -14,7 +14,7 @@ Use rake to run the tests and rake -T to see the options.
 
 If you want to run integration testing grab your AWS keys from https://aws-portal.amazon.com/gp/aws/securityCredentials and enter them in test/support/config.yml
 
-The integration tests will try to create a key pair called knife-solo. If you've already created a key pair with that name please store it in test/support/knife-solo.pem.
+The integration tests will try to create a key pair called knife-solo. If you've already created a key pair with that name please store it in test/support/knife-solo.pem. If you need to use a different key name you can set it in test/support/config.yml
 TXT
 }
 

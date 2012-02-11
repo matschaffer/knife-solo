@@ -27,7 +27,7 @@ class IntegrationTest < TestCase
     end
 
     def key_name
-      'knife-solo'
+      config['aws']['key_name']
     end
 
     def key_file
@@ -39,7 +39,7 @@ class IntegrationTest < TestCase
     end
 
     def config
-      YAML.load_file(config_file)
+      @config ||= YAML.load_file(config_file)
     end
 
     def compute
