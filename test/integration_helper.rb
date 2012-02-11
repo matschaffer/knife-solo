@@ -1,21 +1,38 @@
 require 'test_helper'
 require 'pathname'
 require 'logger'
+require 'yaml'
 
 MiniTest::Parallel.processor_count = 5
 
-$stderr.puts
-$stderr.puts "==> NOTE: Tests are running in parallel. Please make sure to clean up EC2 instances if you interrupt (Ctrl-c) the test."
-$stderr.puts
+$stderr.puts <<-TXT
+==> NOTE: Integration tests run in parallel.
+          Please make sure to clean up EC2 instances if you interrupt (Ctrl-c) the test.
+TXT
 
 class IntegrationTest < TestCase
-  def setup
-    @log_file = Pathname.new(__FILE__).dirname.join('..', 'log', "#{self.class}-integration.log")
-    @log_file.dirname.mkpath
-    @logger = Logger.new(log_file)
+  attr_accessor :log_file, :logger
+
+  def base_dir
+    Pathname.new(__FILE__).dirname
   end
 
-  attr_accessor :log_file, :logger
+  def setup
+    @log_file = base_dir.join('..', 'log', "#{self.class}-integration.log")
+    @log_file.dirname.mkpath
+    @logger = Logger.new(log_file)
+    create_key_pair
+  end
+
+  def create_key_pair
+    return if key_file.exist?
+    begin
+      key = compute.key_pairs.create(:name => key_name)
+      key.write(key_file)
+    rescue Fog::Compute::AWS::Error => e
+      raise "Unable to create KeyPair 'knife-solo', please create the keypair and save it to #{key_file}"
+    end
+  end
 
   def cleanup_server
     return if ENV['SKIP_DESTROY']
@@ -28,7 +45,15 @@ class IntegrationTest < TestCase
   end
 
   def key_file
-    "#{ENV['HOME']}/.ssh/#{key_name}.pem"
+    base_dir.join('support', "#{key_name}.pem")
+  end
+
+  def config_file
+    base_dir.join('support', 'config.yml')
+  end
+
+  def config
+    YAML.load_file(config_file)
   end
 
   def flavor_id
@@ -37,8 +62,8 @@ class IntegrationTest < TestCase
 
   def compute
     @compute ||= Fog::Compute.new({:provider              => 'AWS',
-                                   :aws_access_key_id     => ENV['AWS_ACCESS_KEY'],
-                                   :aws_secret_access_key => ENV['AWS_SECRET_KEY']})
+                                   :aws_access_key_id     => config['aws']['access_key'],
+                                   :aws_secret_access_key => config['aws']['secret']})
   end
 
   def server
