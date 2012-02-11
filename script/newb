@@ -3,16 +3,19 @@
 set -e
 
 help() {
-  echo
-  echo === Thanks for helping with Knife-Solo! ===
-  echo
-  echo The b folder contains bundler bin-stubs. These will let you test your changes more easily.
-  echo
-  echo Just run:  $(cd `dirname $0`/.. && pwd )/b/knife
-  echo
-  echo If you want to run integration testing grab your AWS keys from https://aws-portal.amazon.com/gp/aws/securityCredentials and enter them in test/support/config.yml
-  echo
-  echo Then generate a keypair called knife-solo at 'https://console.aws.amazon.com/ec2/home?region=us-east-1&#s=KeyPairs' and place this key in test/support/knife-solo.pem
+  cat <<TXT
+=== Thanks for helping with Knife-Solo! ===
+
+The b folder contains bundler bin-stubs. These will let you test your changes more easily.
+
+Just run:  $(cd `dirname $0`/.. && pwd )/b/knife
+
+Use rake to run the tests and rake -T to see the options.
+
+If you want to run integration testing grab your AWS keys from https://aws-portal.amazon.com/gp/aws/securityCredentials and enter them in test/support/config.yml
+
+The integration tests will try to create a key pair called knife-solo. If you've already created a key pair with that name please store it in test/support/knife-solo.pem.
+TXT
 }
 
 setup() {
