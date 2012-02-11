@@ -60,14 +60,14 @@ To run tests, run +rake+ after running +bundle+.
 
 To run integration tests run +rake test:integration+. There is some setup to do first though:
 
-* Put `export AWS_ACCESS_KEY=yourAWSkey` and `export AWS_SECRET_KEY=yourAWSsecret` in your shell profile
-* On EC2 create a keypair called knife-solo and copy the key to ~/.ssh/knife-solo.pem on your machine
-* Make sure you have netcat installed (`which nc` to test)
+* Put +export AWS_ACCESS_KEY=yourAWSkey+ and +export AWS_SECRET_KEY=yourAWSsecret+ in your shell profile
+* On EC2 create a keypair called knife-solo and copy the key to +~/.ssh/knife-solo.pem+ on your machine
+* Make sure you have netcat installed (+which nc+ to test)
 
 When running integration tests you can specify VERBOSE=true as an environment variable to enable verbose output. All integration testing output is sent to the log directory into a file that matches matches the test case name.
 
 You can also specify SKIP_DESTROY=true to leave the EC2 instances running after test completion. Note that this is for debugging purposes and re-running the test will not re-use old instances. Please clean them up manually if you cancel the test or specify SKIP_DESTROY.
 
-To make an integration test, create a file in the `test/integration` directory and a test class that inherits from `IntegrationTest` and includes `IntegrationTest::BasicPrepareAndCook`. You can override methods as necessary, but generally you only need to override `user` and `image_id` to specify the user name and AMI ID.
+To make an integration test, create a file in the +test/integration+ directory and a test class that inherits from +IntegrationTest+ and includes +IntegrationTest::BasicPrepareAndCook+. You can override methods as necessary, but generally you only need to override +user+ and +image_id+ to specify the user name and AMI ID.
 
 If you're interested in contributing, contact me via github or have a look at the {github issues page}[https://github.com/matschaffer/knife-solo/issues].
