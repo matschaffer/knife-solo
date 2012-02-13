@@ -5,6 +5,7 @@ require 'chef/config'
 
 require 'knife-solo/ssh_command'
 require 'knife-solo/kitchen_command'
+require 'knife-solo/tools'
 
 class Chef
   class Knife
@@ -13,6 +14,7 @@ class Chef
     class Cook < Knife
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
+      include KnifeSolo::Tools
 
       banner "knife cook [user@]hostname [json] (options)"
 
@@ -73,13 +75,13 @@ class Chef
       end
 
       def rsync_kitchen
-        system %Q{rsync -rlP --rsh="ssh #{ssh_args}" --delete --exclude '.*' ./ :#{adjust_rsync_path(chef_path)}}
+        system! %Q{rsync -rlP --rsh="ssh #{ssh_args}" --delete --exclude '.*' ./ :#{adjust_rsync_path(chef_path)}}
       end
 
       def add_patches
         run_portable_mkdir_p(patch_path)
         Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb")].each do |patch|
-          system %Q{rsync -rlP --rsh="ssh #{ssh_args}" #{patch} :#{adjust_rsync_path(patch_path)}}
+          system! %Q{rsync -rlP --rsh="ssh #{ssh_args}" #{patch} :#{adjust_rsync_path(patch_path)}}
         end
       end
 
