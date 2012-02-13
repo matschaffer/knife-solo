@@ -5,6 +5,7 @@ require 'chef/config'
 
 require 'knife-solo/ssh_command'
 require 'knife-solo/kitchen_command'
+require 'knife-solo/tools'
 
 class Chef
   class Knife
@@ -13,6 +14,7 @@ class Chef
     class Cook < Knife
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
+      include KnifeSolo::Tools
 
       banner "knife cook [user@]hostname [json] (options)"
 
@@ -21,6 +23,11 @@ class Chef
         :boolean => true,
         :description => "Skip the version check on the Chef gem"
 
+      option :sync_only,
+        :long => '--sync-only',
+        :boolean => false,
+        :description => "Only sync the cookbook - do not run Chef"
+
       def run
         super
         check_syntax
@@ -28,7 +35,7 @@ class Chef
         check_chef_version unless config[:skip_chef_check]
         rsync_kitchen
         add_patches
-        cook
+        cook unless config[:sync_only]
       end
 
       def check_syntax
@@ -57,18 +64,24 @@ class Chef
         Chef::Config.file_cache_path
       end
 
+      # cygwin rsync path must be adjusted to work
+      def adjust_rsync_path(path)
+        return path unless windows_node?
+        path.gsub(/^(\w):/) { "/cygdrive/#{$1}" }
+      end
+
       def patch_path
         Array(Chef::Config.cookbook_path).first + "/chef_solo_patches/libraries"
       end
 
       def rsync_kitchen
-        system %Q{rsync -rlP --rsh="ssh #{ssh_args}" --delete --exclude '.*' ./ :#{chef_path}}
+        system! %Q{rsync -rlP --rsh="ssh #{ssh_args}" --delete --exclude '.*' ./ :#{adjust_rsync_path(chef_path)}}
       end
 
       def add_patches
-        run_command "mkdir -p #{patch_path}"
+        run_portable_mkdir_p(patch_path)
         Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb")].each do |patch|
-          system %Q{rsync -rlP --rsh="ssh #{ssh_args}" #{patch} :#{patch_path}}
+          system! %Q{rsync -rlP --rsh="ssh #{ssh_args}" #{patch} :#{adjust_rsync_path(patch_path)}}
         end
       end
 
@@ -82,8 +95,9 @@ class Chef
 
       def cook
         logging_arg = "-l debug" if config[:verbosity] > 0
+
         stream_command <<-BASH
-          sudo chef-solo -c #{chef_path}/solo.rb \
+          chef-solo -c #{chef_path}/solo.rb \
                          -j #{chef_path}/#{node_config} \
                          #{logging_arg}
         BASH
