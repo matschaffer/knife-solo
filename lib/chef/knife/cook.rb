@@ -21,6 +21,11 @@ class Chef
         :boolean => true,
         :description => "Skip the version check on the Chef gem"
 
+      option :sync_only,
+        :long => '--sync-only',
+        :boolean => false,
+        :description => "Only sync the cookbook - do not run Chef"
+
       def run
         super
         check_syntax
@@ -28,7 +33,7 @@ class Chef
         check_chef_version unless config[:skip_chef_check]
         rsync_kitchen
         add_patches
-        cook
+        cook unless config[:sync_only]
       end
 
       def check_syntax
