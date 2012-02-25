@@ -62,13 +62,13 @@ class Chef
       end
 
       def rsync_kitchen
-        system %Q{rsync -rlP --rsh="ssh #{ssh_args}" --delete --exclude '.*' ./ :#{chef_path}}
+        system %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete --exclude '.*' ./ :#{chef_path}}
       end
 
       def add_patches
         run_command "mkdir -p #{patch_path}"
         Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb")].each do |patch|
-          system %Q{rsync -rlP --rsh="ssh #{ssh_args}" #{patch} :#{patch_path}}
+          system %Q{rsync -rl --rsh="ssh #{ssh_args}" #{patch} :#{patch_path}}
         end
       end
 
