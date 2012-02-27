@@ -21,9 +21,14 @@ class Chef
         :boolean => true,
         :description => "Skip the version check on the Chef gem"
 
+      option :skip_syntax_check,
+        :long => '--skip-syntax-check',
+        :boolean => true,
+        :description => "Skip Ruby syntax checks"
+
       def run
         super
-        check_syntax
+        check_syntax unless config[:skip_syntax_check]
         Chef::Config.from_file('solo.rb')
         check_chef_version unless config[:skip_chef_check]
         rsync_kitchen
