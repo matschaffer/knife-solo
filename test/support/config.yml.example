@@ -2,3 +2,4 @@ aws:
   key_name: knife-solo
   access_key: YOUR_ACCESS_KEY
   secret: YOUR_SECRET
+  windows_password: xa2GMqJZ7&z
