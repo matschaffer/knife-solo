@@ -80,7 +80,7 @@ class Chef
       end
 
       def rsync_kitchen
-        system! %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete --exclude '.*' ./ :#{adjust_rsync_path(chef_path)}}
+        system! %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete --exclude revision-deploys --exclude tmp --exclude '.*' ./ :#{adjust_rsync_path(chef_path)}}
       end
 
       def add_patches
