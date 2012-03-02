@@ -15,12 +15,12 @@ GEM
       alias (>= 0.2.2)
       hirb (>= 0.3.5)
     builder (3.0.0)
-    bunny (0.7.8)
-    chef (0.10.4)
+    bunny (0.7.9)
+    chef (0.10.8)
       bunny (>= 0.6.0)
       erubis
       highline
-      json (>= 1.4.4, <= 1.5.2)
+      json (>= 1.4.4, <= 1.6.1)
       mixlib-authentication (>= 1.1.0)
       mixlib-cli (>= 1.1.0)
       mixlib-config (>= 1.1.2)
@@ -55,7 +55,7 @@ GEM
     formatador (0.2.1)
     g (1.4.0)
       ruby-growl (>= 1.0.1)
-    highline (1.6.2)
+    highline (1.6.11)
     hirb (0.4.5)
     interactive_editor (0.0.8)
       spoon (>= 0.0.1)
@@ -75,7 +75,7 @@ GEM
       sketches
       wirb (>= 0.3.0)
       zucker (>= 11)
-    json (1.5.2)
+    json (1.6.1)
     linecache (0.46)
       rbx-require-relative (> 0.0.4)
     linecache19 (0.5.12)
@@ -153,7 +153,7 @@ GEM
     virtualbox (0.8.6)
       ffi (~> 1.0)
     wirb (0.3.0)
-    yajl-ruby (1.0.0)
+    yajl-ruby (1.1.0)
     zucker (11)
 
 PLATFORMS
