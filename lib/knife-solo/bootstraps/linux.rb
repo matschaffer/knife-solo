@@ -23,7 +23,7 @@ module KnifeSolo::Bootstraps
       gem_install
     end
 
-    def emerge_gem_install
+    def emerge_install
       ui.msg("Installing required packages...")
       run_command("sudo USE='-test' ACCEPT_KEYWORDS='~amd64' emerge -u chef")
     end
@@ -95,8 +95,8 @@ module KnifeSolo::Bootstraps
         {:type => "zypper_gem", :version => "SLES11"}
       when %r{openSUSE 11.4}
         {:type => "zypper_gem", :version => "openSUSE"}
-      when %r{This is \\n\.\\O (\\s \\m \\r) \\t}
-        {:type => "gentoo_gem", :version => "Gentoo"}
+      when %r{This is \\n\.\\O \(\\s \\m \\r\) \\t}
+        {:type => "emerge", :version => "Gentoo"}
       else
         raise "Distro not recognized from looking at /etc/issue. Please fork https://github.com/matschaffer/knife-solo and add support for your distro."
       end
