@@ -1,6 +1,9 @@
-pkg
-b
-.bundle
-mykitchen
-doc
+/pkg
+/b
+/.bundle
+/mykitchen
+/doc
 /log
+/test/support/config.yml
+/test/support/knife-solo.pem
+/test/support/kitchens

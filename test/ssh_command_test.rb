@@ -50,6 +50,11 @@ class SshCommandTest < TestCase
     assert_equal "2222", cmd.connection_options[:port]
   end
 
+  def test_handle_startup_script
+    cmd = command("10.0.0.1", "--startup-script=~/.bashrc")
+    assert_equal "source ~/.bashrc && echo $TEST_PROP",  cmd.processed_command("echo $TEST_PROP")
+  end
+
   def test_builds_cli_ssh_args
     DummySshCommand.any_instance.stubs(:try_connection)
 

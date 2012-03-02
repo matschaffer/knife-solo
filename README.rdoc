@@ -76,8 +76,12 @@ The cook command will work on Windows node if you meet the following howto:
 
 == DEVELOPMENT
 
-I recommend using Bundler for development. It's also useful to specify binstubs. The +.gitignore+ file contains an entry for the +b+ directory intended for binstubs. This way you can run +./b/knife+ to do full integration testing on knife-solo commands.
+Get set up by running +./script/newb+ this will do some of the steps and guide you through the rest. If it doesn't run for you, feel free to {file an issue}[https://github.com/matschaffer/knife-solo/issues].
 
-To run tests, run +rake+ after running +bundle+.
+When running integration tests you can specify VERBOSE=true as an environment variable to enable verbose output. All integration testing output is sent to the log directory into a file that matches matches the test case name.
 
-If you're interested in contributing, contact me via github or have a look at the {github issues page}[https://github.com/matschaffer/knife-solo/issues].
+You can also specify SKIP_DESTROY=true to leave the EC2 instances running after test completion. Note that this is for debugging purposes and re-running the test will not re-use old instances. Please clean them up manually if you cancel the test or specify SKIP_DESTROY.
+
+To make an integration test, create a file in the +test/integration+ directory and a test class that inherits from +IntegrationTest+ and includes +IntegrationTest::BasicPrepareAndCook+ or other test cases. You can override methods as necessary, but generally you only need to override +user+ and +image_id+ to specify the user name and AMI ID.
+
+If you're interested in contributing, contact me via GitHub or have a look at the {GitHub issues page}[https://github.com/matschaffer/knife-solo/issues].
