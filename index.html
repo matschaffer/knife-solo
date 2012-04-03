@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Knife-solo by matschaffer</title>
+    
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Knife-solo</h1>
+        <p>Concepts from spatula and littlechef implemented as a knife plugin</p>
+        <p class="view"><a href="https://github.com/matschaffer/knife-solo">View the Project on GitHub <small>matschaffer/knife-solo</small></a></p>
+        <ul>
+          <li><a href="https://github.com/matschaffer/knife-solo/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/matschaffer/knife-solo/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/matschaffer/knife-solo">Fork On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>knife-solo</h1>
+
+<h2>DESCRIPTION:</h2>
+
+<p>Knife-solo is a gem plugin for Chef's knife utility. It currently adds 3 subcommands to knife: kitchen, prepare and cook</p>
+
+<p>The <code>kitchen</code> command is used to create a new directory structure that fits with chef's standard structure and can be used to build and store recipes.</p>
+
+<p>The <code>prepare</code> command installs Ruby, RubyGems and \Chef on a given host. It's structured to auto-detect the target OS and change the installation process accordingly.</p>
+
+<p>The <code>cook</code> command uploads the current kitchen (chef repo) to the target host and runs chef-solo on that host.</p>
+
+<p>Preliminary Windows support for <code>cook</code> is available (see below).</p>
+
+<h2>USAGE:</h2>
+
+<p>Installation is a normal gem installation.</p>
+
+<pre><code>gem install knife-solo
+</code></pre>
+
+<h3>Kitchen command</h3>
+
+<p>The kitchen command simply takes a name of the directory to store the kitchen structure.</p>
+
+<pre><code>knife kitchen mychefrepo
+</code></pre>
+
+<p>Currently the directory structure looks like this, but could change as development continues.</p>
+
+<pre><code>mykitchen/
+├── cookbooks
+├── data_bags
+├── nodes
+├── roles
+├── site-cookbooks
+└── solo.rb
+</code></pre>
+
+<h3>Prepare command</h3>
+
+<p>The prepare command takes an ssh-style host argument as follows:</p>
+
+<pre><code>knife prepare ubuntu@10.0.0.201
+</code></pre>
+
+<p>It will look up SSH information from <code>~/.ssh/config</code> or in the file specified by <code>-F</code>. You can also pass port information (<code>-p</code>), identity information (<code>-i</code>), or a password (<code>-P</code>). It will use sudo to run some of these commands and will prompt you for the password if it's not supplied on the command line.</p>
+
+<h3>Cook command</h3>
+
+<p>The cook command also takes an ssh-style host argument:</p>
+
+<pre><code>knife cook ubuntu@10.0.0.201
+</code></pre>
+
+<p>The cook command uploads the current kitchen to the server and runs chef-solo on that server. If you only specify one argument it will look for a node config in <code>nodes/&lt;hostname&gt;.json</code>. Or if you want to specify a node config you can pass the path to the file as the second argument.</p>
+
+<p>This uploads all of your cookbooks in addition to a patch that allows you to use data_bags in a read-only fashion from the <code>data_bags</code> folder.</p>
+
+<h3>Windows support</h3>
+
+<p>The cook command will work on Windows node if you meet the following howto:</p>
+
+<h4>Kitchen then tweak</h4>
+
+<ul>
+<li>run <code>knife kitchen</code> then edit solo.rb to use Windows path-naming (see <a href="https://gist.github.com/1773854">https://gist.github.com/1773854</a>)</li>
+</ul><h4>Prepare the node manually</h4>
+
+<ul>
+<li>install a SSH server (eg: WinSSHd)</li>
+<li>install rsync on the node (see <a href="https://github.com/thbar/rsync-windows">https://github.com/thbar/rsync-windows</a>)</li>
+<li>add rsync to the user PATH</li>
+<li>install <a href="http://www.opscode.com/chef/install.msi">http://www.opscode.com/chef/install.msi</a></li>
+<li>add nodes/hostname.json and put <code>{ "run_list": [] }</code> in it</li>
+</ul><h4>Cook</h4>
+
+<ul>
+<li>cook should work as expected automatically, if you use cygwin rsync</li>
+</ul><h2>DEVELOPMENT</h2>
+
+<p>Get set up by running <code>./script/newb</code> this will do some of the steps and guide you through the rest. If it doesn't run for you, feel free to <a href="https://github.com/matschaffer/knife-solo/issues">file an issue</a>.</p>
+
+<p>When running integration tests you can specify VERBOSE=true as an environment variable to enable verbose output. All integration testing output is sent to the log directory into a file that matches matches the test case name.</p>
+
+<p>You can also specify SKIP_DESTROY=true to leave the EC2 instances running after test completion. Note that this is for debugging purposes and re-running the test will not re-use old instances. Please clean them up manually if you cancel the test or specify SKIP_DESTROY.</p>
+
+<p>To make an integration test, create a file in the <code>test/integration</code> directory and a test class that inherits from <code>IntegrationTest</code> and includes <code>IntegrationTest::BasicPrepareAndCook</code> or other test cases. You can override methods as necessary, but generally you only need to override <code>user</code> and <code>image_id</code> to specify the user name and AMI ID.</p>
+
+<p>If you're interested in contributing, contact me via GitHub or have a look at the <a href="https://github.com/matschaffer/knife-solo/issues">GitHub issues page</a>.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/matschaffer">matschaffer</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>
