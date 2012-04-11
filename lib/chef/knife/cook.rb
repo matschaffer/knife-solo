@@ -2,6 +2,7 @@ require 'pathname'
 
 require 'chef/knife'
 require 'chef/config'
+require 'chef/cookbook/chefignore'
 
 require 'knife-solo/ssh_command'
 require 'knife-solo/kitchen_command'
@@ -45,12 +46,12 @@ class Chef
 
       def check_syntax
         ui.msg('Checking cookbook syntax...')
-        Dir["**/*.rb"].each do |recipe|
+        chefignore.remove_ignores_from(Dir["**/*.rb"]).each do |recipe|
           ok = system "ruby -c #{recipe} >/dev/null 2>&1"
           raise "Syntax error in #{recipe}" if not ok
         end
 
-        Dir["**/*.json"].each do |json|
+        chefignore.remove_ignores_from(Dir["**/*.json"]).each do |json|
           begin
             require 'json'
             # parse without instantiating Chef classes
@@ -68,6 +69,10 @@ class Chef
       def chef_path
         Chef::Config.file_cache_path
       end
+      
+      def chefignore
+        @chefignore ||= ::Chef::Cookbook::Chefignore.new("./")
+      end
 
       # cygwin rsync path must be adjusted to work
       def adjust_rsync_path(path)
@@ -80,7 +85,8 @@ class Chef
       end
 
       def rsync_kitchen
-        system! %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete --exclude revision-deploys --exclude tmp --exclude '.*' ./ :#{adjust_rsync_path(chef_path)}}
+        excludes = (%w{revision-deploys tmp '.*'} + chefignore.ignores).uniq.collect{ |ignore| "--exclude #{ignore} " }.join
+        system! %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{excludes} ./ :#{adjust_rsync_path(chef_path)}}
       end
 
       def add_patches
