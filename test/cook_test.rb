@@ -25,7 +25,6 @@ class CookTest < TestCase
   end
   
   def test_check_syntax_ignores_files_in_chefignore
-    
     Dir.chdir("/tmp/cook_kitchen_test") do
       assert File.exist?("syntax_error.rb")
       assert !check_syntax('syntax_error.rb')
@@ -37,10 +36,19 @@ class CookTest < TestCase
       File.open("chefignore", 'w') do |f|
         f << "syntax_error.rb"
       end
-      
+
       command.check_syntax
     end
-      
+  end
+  
+  def test_rsync_exclude_sources_chefignore
+    Dir.chdir("/tmp/cook_kitchen_test") do
+      assert File.exist?("syntax_error.rb")
+      File.open("chefignore", 'w') do |f|
+        f << "syntax_error.rb"
+      end
+      assert command.rsync_exclude.include?("syntax_error.rb")
+    end    
   end
   
   def setup

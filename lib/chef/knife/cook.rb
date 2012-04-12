@@ -84,9 +84,12 @@ class Chef
         Array(Chef::Config.cookbook_path).first + "/chef_solo_patches/libraries"
       end
 
+      def rsync_exclude
+        (%w{revision-deploys tmp '.*'} + chefignore.ignores).uniq
+      end
+      
       def rsync_kitchen
-        excludes = (%w{revision-deploys tmp '.*'} + chefignore.ignores).uniq.collect{ |ignore| "--exclude #{ignore} " }.join
-        system! %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{excludes} ./ :#{adjust_rsync_path(chef_path)}}
+        system! %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
       end
 
       def add_patches
