@@ -20,6 +20,16 @@ class CookTest < TestCase
     assert_equal "/tmp/chef-solo", command.chef_path
   end
 
+  def test_check_syntax_raises_error
+    Dir.chdir("/tmp/cook_kitchen_test") do
+      assert File.exist?("syntax_error.rb")
+      assert !check_syntax('syntax_error.rb')
+      assert_raises RuntimeError do
+        command.check_syntax
+      end
+    end
+  end
+
   def test_chefignore_is_valid_object
     assert_instance_of Chef::Cookbook::Chefignore, command.chefignore
   end
