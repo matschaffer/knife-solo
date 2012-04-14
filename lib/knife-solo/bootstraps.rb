@@ -55,6 +55,11 @@ module KnifeSolo
         "wget #{url}"
       end
 
+      def omnibus_install
+        run_command(http_client_get_url("http://opscode.com/chef/install.sh"))
+        run_command("sudo bash install.sh")
+      end
+
       def gem_install
         ui.msg "Installing rubygems from source..."
         release = "rubygems-1.8.10"
