@@ -72,6 +72,15 @@ class BootstrapsTest < TestCase
     end
   end
 
+  def test_omnibus_install_methdod
+    bootstrap = KnifeSolo::Bootstraps::StubOS2.new(mock)
+    bootstrap.stubs(:distro).returns({:type => "omnibus"})
+
+    bootstrap.expects(:omnibus_install)
+
+    bootstrap.bootstrap!
+  end
+
   # ***
 
   def bootstrap_instance
