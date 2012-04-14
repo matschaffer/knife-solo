@@ -4,7 +4,7 @@ require 'chef/knife/cook'
 require 'chef/knife/kitchen'
 
 class CookTest < TestCase
-  
+
   def test_takes_config_as_second_arg
     cmd = command("host", "nodes/myhost.json")
     assert_equal "nodes/myhost.json", cmd.node_config
@@ -33,16 +33,16 @@ class CookTest < TestCase
   def test_chefignore_is_valid_object
     assert_instance_of Chef::Cookbook::Chefignore, command.chefignore
   end
-  
+
   def test_check_syntax_ignores_files_in_chefignore
     Dir.chdir("/tmp/cook_kitchen_test") do
       assert File.exist?("syntax_error.rb")
       assert !check_syntax('syntax_error.rb')
-      
+
       assert_raises RuntimeError do
         command.check_syntax
       end
-      
+
       File.open("chefignore", 'w') do |f|
         f << "syntax_error.rb"
       end
@@ -50,7 +50,7 @@ class CookTest < TestCase
       command.check_syntax
     end
   end
-  
+
   def test_rsync_exclude_sources_chefignore
     Dir.chdir("/tmp/cook_kitchen_test") do
       assert File.exist?("syntax_error.rb")
@@ -58,9 +58,9 @@ class CookTest < TestCase
         f << "syntax_error.rb"
       end
       assert command.rsync_exclude.include?("syntax_error.rb")
-    end    
+    end
   end
-  
+
   def setup
     Dir.chdir("/tmp") do
       kitchen("cook_kitchen_test").run
@@ -71,23 +71,25 @@ class CookTest < TestCase
       end
     end
   end
-  
+
   def teardown
     FileUtils.rm_r("/tmp/cook_kitchen_test")
   end
 
   def command(*args)
-    Chef::Knife::Cook.new(args)
+    command = Chef::Knife::Cook.new(args)
+    command.ui.stubs(:msg)
+    command
   end
-  
+
   def kitchen(*args)
     Chef::Knife::Kitchen.load_deps
     Chef::Knife::Kitchen.new(args)
   end
-  
+
   def check_syntax(file)
     `ruby -c #{file} >/dev/null 2>&1 && echo 'true'`.strip == 'true'
   end
-  
-  
+
+
 end
