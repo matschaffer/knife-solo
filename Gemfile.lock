@@ -9,7 +9,6 @@ GEM
   remote: http://rubygems.org/
   specs:
     alias (0.2.2)
-    archive-tar-minitar (0.5.2)
     awesome_print (0.4.0)
     boson (0.3.3)
       alias (>= 0.2.2)
@@ -35,6 +34,13 @@ GEM
     clipboard (0.9.8)
     coderay (0.9.8)
     columnize (0.3.2)
+    debugger (1.1.1)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.1)
+      debugger-ruby_core_source (~> 1.1)
+    debugger-linecache (1.1.1)
+      debugger-ruby_core_source (>= 1.1.1)
+    debugger-ruby_core_source (1.1.1)
     erubis (2.7.0)
     every_day_irb (1.0.4)
     excon (0.7.6)
@@ -78,8 +84,6 @@ GEM
     json (1.6.1)
     linecache (0.46)
       rbx-require-relative (> 0.0.4)
-    linecache19 (0.5.12)
-      ruby_core_source (>= 0.1.4)
     method_source (0.6.7)
       ruby_parser (>= 2.3.1)
     methodfinder (1.2.3)
@@ -125,18 +129,8 @@ GEM
       ruby-debug-base (~> 0.10.4.0)
     ruby-debug-base (0.10.4)
       linecache (>= 0.3)
-    ruby-debug-base19 (0.11.25)
-      columnize (>= 0.3.1)
-      linecache19 (>= 0.5.11)
-      ruby_core_source (>= 0.1.4)
-    ruby-debug19 (0.11.6)
-      columnize (>= 0.3.1)
-      linecache19 (>= 0.5.11)
-      ruby-debug-base19 (>= 0.11.19)
     ruby-growl (3.0)
     ruby-hmac (0.4.0)
-    ruby_core_source (0.1.5)
-      archive-tar-minitar (>= 0.5.2)
     ruby_parser (2.3.1)
       sexp_processor (~> 3.0)
     rvm_loader (1.0.0)
@@ -160,6 +154,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  debugger
   fog
   irbtools
   knife-solo!
@@ -169,5 +164,4 @@ DEPENDENCIES
   pry
   rake
   ruby-debug
-  ruby-debug19
   virtualbox
