@@ -47,7 +47,6 @@ GEM
     fancy_irb (0.6.5)
       unicode-display_width (>= 0.1.1)
       wirb (>= 0.2.4)
-    ffi (1.0.9)
     fog (1.0.0)
       builder
       excon (~> 0.7.3)
@@ -144,8 +143,6 @@ GEM
       polyglot (>= 0.3.1)
     unicode-display_width (0.1.1)
     uuidtools (2.1.2)
-    virtualbox (0.8.6)
-      ffi (~> 1.0)
     wirb (0.3.0)
     yajl-ruby (1.1.0)
     zucker (11)
@@ -164,4 +161,3 @@ DEPENDENCIES
   pry
   rake
   ruby-debug
-  virtualbox
