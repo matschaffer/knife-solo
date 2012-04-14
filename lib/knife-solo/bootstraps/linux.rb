@@ -72,29 +72,29 @@ module KnifeSolo::Bootstraps
       return @distro if @distro
       @distro = case issue
       when %r{Debian GNU/Linux 5}
-        {:type => "debian_gem", :version => "lenny"}
+        {:type => "omnibus", :version => "lenny"}
       when %r{Debian GNU/Linux 6}
-        {:type => "debian_gem", :version => "squeeze"}
+        {:type => "omnibus", :version => "squeeze"}
       when %r{Debian GNU/Linux wheezy}
         {:type => "debian_gem", :version => "wheezy"}
       when %r{Ubuntu}
         version = run_command("lsb_release -cs").stdout.strip
-        {:type => "debian_gem", :version => version}
+        {:type => "omnibus", :version => version}
       when %r{Linaro}
         version = run_command("lsb_release -cs").stdout.strip
         {:type => "debian_gem", :version => version}
       when %r{CentOS.*? 5}
-        {:type => "yum", :version => "RHEL5"}
+        {:type => "omnibus", :version => "RHEL5"}
       when %r{CentOS.*? 6}
-        {:type => "yum", :version => "RHEL6"}
+        {:type => "omnibus", :version => "RHEL6"}
       when %r{Red Hat Enterprise.*? 5}
-        {:type => "yum", :version => "RHEL5"}
+        {:type => "omnibus", :version => "RHEL5"}
       when %r{Red Hat Enterprise.*? 6}
-        {:type => "yum", :version => "RHEL6"}
+        {:type => "omnibus", :version => "RHEL6"}
       when %r{Scientific Linux.*? 5}
-        {:type => "yum", :version => "RHEL5"}
+        {:type => "omnibus", :version => "RHEL5"}
       when %r{Scientific Linux.*? 6}
-        {:type => "yum", :version => "RHEL6"}
+        {:type => "omnibus", :version => "RHEL6"}
       when %r{SUSE Linux Enterprise Server 11 SP1}
         {:type => "zypper_gem", :version => "SLES11"}
       when %r{openSUSE 11.4}
