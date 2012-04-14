@@ -69,7 +69,7 @@ class Chef
       def chef_path
         Chef::Config.file_cache_path
       end
-      
+
       def chefignore
         @chefignore ||= ::Chef::Cookbook::Chefignore.new("./")
       end
@@ -87,7 +87,7 @@ class Chef
       def rsync_exclude
         (%w{revision-deploys tmp '.*'} + chefignore.ignores).uniq
       end
-      
+
       def rsync_kitchen
         system! %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
       end
@@ -102,7 +102,16 @@ class Chef
       def check_chef_version
         constraint = "~>0.10.4"
         result = run_command <<-BASH
-          ruby -rubygems -e "gem 'chef', '#{constraint}'"
+          opscode_ruby="/opt/opscode/embedded/bin/ruby"
+
+          if command -v $opscode_ruby &>/dev/null
+          then
+            ruby_bin=$opscode_ruby
+          else
+            ruby_bin="ruby"
+          fi
+
+          $ruby_bin -rubygems -e "gem 'chef', '#{constraint}'"
         BASH
         raise "The chef gem on #{host} is out of date. Please run `#{$0} prepare #{ssh_args}` to upgrade Chef to #{constraint}." unless result.success?
       end
