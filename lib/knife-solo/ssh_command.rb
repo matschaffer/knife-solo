@@ -9,8 +9,8 @@ module KnifeSolo
         end
 
         option :ssh_config,
-          :short => "-F configfile",
-          :long => "--ssh-config-file configfile",
+          :short => "-F CONFIG_FILE",
+          :long => "--ssh-config-file CONFIG_FILE",
           :description => "Alternate location for ssh config file"
 
         option :ssh_password,
@@ -24,8 +24,8 @@ module KnifeSolo
           :description => "The ssh identity file"
 
         option :ssh_port,
-          :short => "-p FILE",
-          :long => "--ssh-port FILE",
+          :short => "-p PORT",
+          :long => "--ssh-port PORT",
           :description => "The ssh port"
 
         option :startup_script,
