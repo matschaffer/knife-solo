@@ -2,7 +2,7 @@ module KnifeSolo::Bootstraps
   class Linux < Base
 
     def issue
-      prepare.run_command("cat /etc/issue").stdout.strip
+      prepare.run_command("cat /etc/issue").stdout.strip || perepare.run_command("lsb_release -d -s").stdout.strip
     end
 
     def package_list
@@ -78,6 +78,9 @@ module KnifeSolo::Bootstraps
       when %r{Debian GNU/Linux wheezy}
         {:type => "debian_gem", :version => "wheezy"}
       when %r{Ubuntu}
+        version = run_command("lsb_release -cs").stdout.strip
+        {:type => "debian_gem", :version => version}
+      when %r{Linaro}
         version = run_command("lsb_release -cs").stdout.strip
         {:type => "debian_gem", :version => version}
       when %r{CentOS.*? 5}
