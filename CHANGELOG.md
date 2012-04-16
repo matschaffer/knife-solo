@@ -2,8 +2,22 @@
 
 ## Goals
 
-* Finish support and integration testing for remaining key OSes (Issues #2 and #15)
 * Include recipes in integration testing (Issue #17)
+
+## Completed (as of 637d5fd)
+
+* Finished support and integration testing for remaining key OSes (Issues #2 and #15)
+* Use Omnibus installer for Linux distros (a811793..637d5fd0d)
+* Added support for 'chefignore' (e4bcbd1..4b578cf9)
+* Use `lsb_release` to detect OSes where possible (c976cc119..a31d8234b)
+* Ignore `tmp` and `deploy_revision` to rsync exclusion (7d252ff2b)
+
+## Thanks to our contributors!
+
+* [Hector Castro][hectcastro]
+* [Amos Lanka][amoslanka]
+* [Roland Moriz][rmoriz]
+* [Tyler Rick][TylerRick]
 
 # 0.0.8: February 10, 2012
 
@@ -19,11 +33,6 @@
 * [Fletcher Nichol][fnichol]
 * [Jason Garber][jgarber]
 * [Greg Sterndale][gsterndale]
-
-[patatepartie]: https://github.com/patatepartie
-[fnichol]: https://github.com/fnichol
-[jgarber]: https://github.com/jgarber
-[gsterndale]: https://github.com/gsterndale
 
 # 0.0.7: Dec 9, 2011
 
@@ -42,9 +51,6 @@
 * [Sergio Rubio][rubiojr]
 * [Nat Lownes][natlownes]
 
-[rubiojr]: https://github.com/rubiojr
-[natlownes]: https://github.com/natlownes
-
 # 0.0.5: Oct 31, 2011
 
 * Started on integration testing via EC2
@@ -61,11 +67,21 @@
 
 * [John Dewey][retr0h]
 
-[retr0h]: https://github.com/retr0h
-
 # 0.0.3: July 31, 2011
 
 * Kitchen directory generation
 * Prepare tested on ubuntu
 * Generate node config on prepare
 * Cook via rsync
+
+[rubiojr]: https://github.com/rubiojr
+[natlownes]: https://github.com/natlownes
+[retr0h]: https://github.com/retr0h
+[hectcastro]: https://github.com/hectcastro
+[patatepartie]: https://github.com/patatepartie
+[fnichol]: https://github.com/fnichol
+[jgarber]: https://github.com/jgarber
+[gsterndale]: https://github.com/gsterndale
+[amoslanka]: https://github.com/amoslanka
+[rmoriz]: http://github.com/rmoriz
+[TylerRick]: http://github.com/TylerRick
