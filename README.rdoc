@@ -44,6 +44,17 @@ The prepare command takes an ssh-style host argument as follows:
 
 It will look up SSH information from <tt>~/.ssh/config</tt> or in the file specified by +-F+. You can also pass port information (+-p+), identity information (+-i+), or a password (+-P+). It will use sudo to run some of these commands and will prompt you for the password if it's not supplied on the command line.
 
+This command will make a best-effort to detect and install Chef-solo on your target operating system. We use the {Opscode Installer}[http://www.opscode.com/chef/install/] wherever possible.
+
+If you need specific behavior you can fallback to a knife bootstrap command with an empty runlist using the following:
+
+    knife bootstrap --template-file bootstrap.centos.erb -u root 172.16.144.132
+    echo '{"run_list":[]}' > nodes/172.16.144.132.json
+
+Bootstrap templates are quite simple, as shown in {this gist for bootstrap.centos.erb}[https://gist.github.com/2402433].
+
+Or if your modifications provide some general benefit, consider sending a pull request to {this project}[https://github.com/matschaffer/knife-solo] or {the omnibus installer}[https://github.com/opscode/omnibus].
+
 === Cook command
 
 The cook command also takes an ssh-style host argument:
