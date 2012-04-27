@@ -120,7 +120,7 @@ class Chef
         logging_arg = "-l debug" if config[:verbosity] > 0
 
         stream_command <<-BASH
-          chef-solo -c #{chef_path}/solo.rb \
+          sudo chef-solo -c #{chef_path}/solo.rb \
                          -j #{chef_path}/#{node_config} \
                          #{logging_arg}
         BASH
