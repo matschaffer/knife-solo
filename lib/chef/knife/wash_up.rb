@@ -4,11 +4,11 @@ require 'knife-solo/kitchen_command'
 
 class Chef
   class Knife
-    class Clean < Knife
+    class WashUp < Knife
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
 
-      banner "knife clean [user@]hostname"
+      banner "knife wash_up [user@]hostname"
 
       def run
         super
