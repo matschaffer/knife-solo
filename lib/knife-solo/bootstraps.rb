@@ -2,7 +2,7 @@ class OperatingSystemNotSupportedError < StandardError ; end
 
 module KnifeSolo
   module Bootstraps
-    class OperatingSystemNotImplementedError < StandardError 
+    class OperatingSystemNotImplementedError < StandardError
     end
 
     def self.class_exists_for?(os_name)
@@ -86,7 +86,7 @@ module KnifeSolo
       # run right before we run #{distro[:type]}_install method
       # barf out here if need be
     end
-    
+
   end # Bootstraps
 end
 
