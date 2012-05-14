@@ -159,7 +159,7 @@ class IntegrationTest < TestCase
         assert_subcommand "prepare"
         write_nodefile
         assert_subcommand "cook"
-        assert_match http_response, 'It works!'
+        assert_match /It works!/, http_response
       end
     end
   end
