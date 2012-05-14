@@ -1,5 +1,5 @@
 module KnifeSolo
   def self.version
-    '0.1.0'
+    '0.0.9'
   end
 end

@@ -4,10 +4,10 @@
 
 * Include recipes in integration testing (Issue #17)
 
-## Completed (as of 637d5fd)
+# 0.0.9: May 13th, 2012
 
+* Chef 0.10.10 compatibility (b0fa50e9)
 * Finished support and integration testing for remaining key OSes (Issues #2 and #15)
-* Use Omnibus installer for Linux distros (a811793..637d5fd0d)
 * Added support for 'chefignore' (e4bcbd1..4b578cf9)
 * Use `lsb_release` to detect OSes where possible (c976cc119..a31d8234b)
 * Ignore `tmp` and `deploy_revision` to rsync exclusion (7d252ff2b)
@@ -18,6 +18,7 @@
 * [Amos Lanka][amoslanka]
 * [Roland Moriz][rmoriz]
 * [Tyler Rick][TylerRick]
+* [Motiejus Jakštys][Motiejus]
 
 # 0.0.8: February 10, 2012
 
@@ -85,3 +86,4 @@
 [amoslanka]: https://github.com/amoslanka
 [rmoriz]: http://github.com/rmoriz
 [TylerRick]: http://github.com/TylerRick
+[Motiejus]: http://github.com/Motiejus
