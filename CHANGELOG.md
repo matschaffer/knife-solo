@@ -4,6 +4,8 @@
 
 * Include recipes in integration testing (Issue #17)
 
+## Thanks to our contributors!
+
 # 0.0.9: May 13th, 2012
 
 * Chef 0.10.10 compatibility (b0fa50e9)
