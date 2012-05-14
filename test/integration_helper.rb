@@ -2,6 +2,7 @@ require 'test_helper'
 require 'pathname'
 require 'logger'
 require 'yaml'
+require 'net/http'
 
 MiniTest::Parallel.processor_count = 5
 
@@ -113,17 +114,52 @@ class IntegrationTest < TestCase
       super
     end
 
-    def run_subcommand(subcommand)
+    def assert_subcommand(subcommand)
       verbose = ENV['VERBOSE'] && "-VV"
       system "knife #{subcommand} -i #{key_file} #{user}@#{server.public_ip_address} #{verbose} >> #{log_file}"
+      assert $?.success?
     end
 
     def test_prepare_and_cook
       Dir.chdir(@kitchen) do
-        run_subcommand("prepare")
-        assert $?.success?
-        run_subcommand("cook")
-        assert $?.success?
+        assert_subcommand "prepare"
+        assert_subcommand "cook"
+      end
+    end
+  end
+
+  module CookApache2
+    include BasicPrepareAndCook
+
+    def write_cheffile
+      File.open('Cheffile', 'w') do |f|
+        f.print <<-CHEF
+            site 'http://community.opscode.com/api/v1'
+            cookbook 'apache2'
+        CHEF
+      end
+    end
+
+    def write_nodefile
+      File.open("nodes/#{server.public_ip_address}.json", 'w') do |f|
+        f.print <<-JSON
+          { "run_list": ["recipe[apache2]"] }
+        JSON
+      end
+    end
+
+    def http_response
+      Net::HTTP.get(URI.parse("http://"+server.public_ip_address))
+    end
+
+    def test_apache2
+      Dir.chdir(@kitchen) do
+        write_cheffile
+        system "librarian-chef install >> #{log_file}"
+        assert_subcommand "prepare"
+        write_nodefile
+        assert_subcommand "cook"
+        assert_match http_response, 'It works!'
       end
     end
   end
