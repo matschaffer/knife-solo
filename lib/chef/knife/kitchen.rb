@@ -5,11 +5,11 @@ class Chef
     class Kitchen < Knife
       include FileUtils
 
-      banner "knife kitchen NAME"
+      banner "knife kitchen NAME or initialize current directory with '.'"
 
       def run
         name = @name_args.first
-        mkdir name
+        mkdir name if name != '.'
         %w(nodes roles data_bags site-cookbooks cookbooks).each do |dir|
           mkdir name + "/#{dir}"
           touch name + "/#{dir}/.gitkeep"
