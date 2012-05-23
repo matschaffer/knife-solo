@@ -4,7 +4,6 @@ require 'logger'
 require 'yaml'
 require 'net/http'
 
-MiniTest::Parallel.processor_count = 5
 
 $stderr.puts <<-TXT
 ==> NOTE: Integration tests run in parallel.

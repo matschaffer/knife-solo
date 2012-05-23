@@ -4,7 +4,6 @@ require 'bundler'
 Bundler.require
 Bundler.require(:test)
 
-require 'minitest/parallel'
 require 'minitest/autorun'
 require 'mocha'
 
