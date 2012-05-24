@@ -100,7 +100,7 @@ class Chef
       end
 
       def check_chef_version
-        constraint = ">=0.10.4"
+        constraint = "~>0.10.4"
         result = run_command <<-BASH
           opscode_ruby="/opt/opscode/embedded/bin/ruby"
 
