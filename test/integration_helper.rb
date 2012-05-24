@@ -116,10 +116,21 @@ class EC2Runner < MiniTest::Unit
 
   def initialize
     super
-    # puts <<-TXT.gsub(/^      /, '')
-    #   ==> Integration tests run in parallel.
-    #   ==> Please make sure to clean up EC2 instances if you interrupt (Ctrl-c) the test.
-    # TXT
+    puts <<-TXT.gsub(/^      /, '') unless skip_destroy?
+      ==> WARNING: All EC2 instances tagged with
+      ==>          knife_solo_integration_user == #{user}
+      ==>          will be destroyed after the tests complete.
+      ==> Please cancel (Control-c) NOW and re-run with SKIP_DESTROY=true
+      ==> if you want to leave EC2 instances running.
+    TXT
+  end
+
+  def skip_destroy?
+    ENV['SKIP_DESTROY']
+  end
+
+  def user
+    ENV['USER']
   end
 
   # Gets a server for the given tests
@@ -160,9 +171,9 @@ class EC2Runner < MiniTest::Unit
   # running for inspection or reuse.
   def run_ec2_cleanup
     servers = compute.servers.all("tag-key"             => "knife_solo_integration_user",
-                                  "tag-value"           => ENV['USER'],
+                                  "tag-value"           => user,
                                   "instance-state-name" => "running").first
-    if ENV['SKIP_DESTROY']
+    if skip_destroy?
       puts "\nSKIP_DESTROY specified, leaving #{servers.size} instances running"
     else
       servers.each do |server|
