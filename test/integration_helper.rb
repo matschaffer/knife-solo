@@ -44,18 +44,20 @@ class IntegrationTest < TestCase
     "m1.small"
   end
 
+  # Sets up a kitchen directory to work in
   def setup
     @kitchen = $base_dir.join('support', 'kitchens', self.class.to_s)
     @kitchen.dirname.mkpath
     system "knife kitchen #{@kitchen} >> #{log_file}"
-    assert_subcommand "prepare"
   end
 
+  # Removes the test kitchen
   def teardown
     FileUtils.remove_entry_secure(@kitchen)
     super
   end
 
+  # Asserts that a prepare or cook command is successful
   def assert_subcommand(subcommand)
     verbose = ENV['VERBOSE'] && "-VV"
     key_file = MiniTest::Unit.runner.key_file
@@ -67,11 +69,14 @@ class IntegrationTest < TestCase
   module EmptyCook
     def test_empty_cook
       Dir.chdir(@kitchen) do
+        assert_subcommand "prepare"
         assert_subcommand "cook"
       end
     end
   end
 
+  # Tries to cook with apache2 cookbook and
+  # verifies the "It Works!" page is present.
   module Apache2Cook
     def write_cheffile
       File.open('Cheffile', 'w') do |f|
@@ -98,6 +103,7 @@ class IntegrationTest < TestCase
       Dir.chdir(@kitchen) do
         write_cheffile
         system "librarian-chef install >> #{log_file}"
+        assert_subcommand "prepare"
         write_nodefile
         assert_subcommand "cook"
         assert_match /It works!/, http_response

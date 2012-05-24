@@ -9,5 +9,6 @@ class Ubuntu10_04Test < IntegrationTest
     "ami-6936fb00"
   end
 
-  include IntegrationTest::CookApache2
+  include EmptyCook
+  include Apache2Cook
 end

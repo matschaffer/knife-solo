@@ -12,5 +12,6 @@ class Gentoo2011Test < IntegrationTest
   # `emerge chef` takes a very long time (~ 50 minutes) on an m1.small
   # Uncoment this if you need to verify Gentoo operation
 
-  # include IntegrationTest::BasicPrepareAndCook
+  # include EmptyCook
+  # include Apache2Cook
 end
