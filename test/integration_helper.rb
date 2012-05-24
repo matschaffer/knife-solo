@@ -18,7 +18,7 @@ module Loggable
 
   # The logger object so you can say logger.info to log messages
   def logger
-    @logger ||= Logger.new(STDOUT)
+    @logger ||= Logger.new(log_file)
   end
 end
 
@@ -117,21 +117,28 @@ class EC2Runner < MiniTest::Unit
   def initialize
     super
     @servers = []
-    puts <<-TXT.gsub(/^      /, '')
-
-      ==> NOTE: Integration tests run in parallel.
-                Please make sure to clean up EC2 instances if you interrupt (Ctrl-c) the test.
-    TXT
+    # FIXME: parallel testing is great but we can't use this shared @servers
+    #        state if we do. Thinking maybe we need to tag and search for servers
+    #        during cleanup. So AWS would become our shared state.
+    # puts <<-TXT.gsub(/^      /, '')
+    #   ==> Integration tests run in parallel.
+    #   ==> Please make sure to clean up EC2 instances if you interrupt (Ctrl-c) the test.
+    # TXT
   end
 
   # Gets a server for the given tests
-  # TODO: reuse server if one is already running with a matching name
+  # See http://bit.ly/MJRpfQ for information on what filters can be specified.
   def get_server(test)
-    logger.info "Starting server for #{test.class}..."
-    server = compute.servers.create(:tags => { :name => test.server_name },
-                                    :image_id => test.image_id,
-                                    :flavor_id => test.flavor_id,
-                                    :key_name => key_name)
+    server = compute.servers.all("tag-key" => "name", "tag-value" => test.server_name, "instance-state-name" => "running").first
+    if server
+      logger.info "Reusing active server tagged #{test.server_name}"
+    else
+      logger.info "Starting server for #{test.class}..."
+      server = compute.servers.create(:tags => { :name => test.server_name },
+                                      :image_id => test.image_id,
+                                      :flavor_id => test.flavor_id,
+                                      :key_name => key_name)
+    end
     server.wait_for { ready? }
     logger.info "Server reported ready, trying to connect to ssh..."
     server.wait_for do
