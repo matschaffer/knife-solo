@@ -112,11 +112,8 @@ end
 class EC2Runner < MiniTest::Unit
   include Loggable
 
-  attr_accessor :servers
-
   def initialize
     super
-    @servers = []
     # FIXME: parallel testing is great but we can't use this shared @servers
     #        state if we do. Thinking maybe we need to tag and search for servers
     #        during cleanup. So AWS would become our shared state.
@@ -129,12 +126,17 @@ class EC2Runner < MiniTest::Unit
   # Gets a server for the given tests
   # See http://bit.ly/MJRpfQ for information on what filters can be specified.
   def get_server(test)
-    server = compute.servers.all("tag-key" => "name", "tag-value" => test.server_name, "instance-state-name" => "running").first
+    server = compute.servers.all("tag-key"             => "name",
+                                 "tag-value"           => test.server_name,
+                                 "instance-state-name" => "running").first
     if server
       logger.info "Reusing active server tagged #{test.server_name}"
     else
       logger.info "Starting server for #{test.class}..."
-      server = compute.servers.create(:tags => { :name => test.server_name },
+      server = compute.servers.create(:tags => {
+                                        :name => test.server_name,
+                                        :knife_solo_integration_user => ENV['USER']
+                                      },
                                       :image_id => test.image_id,
                                       :flavor_id => test.flavor_id,
                                       :key_name => key_name)
@@ -151,14 +153,16 @@ class EC2Runner < MiniTest::Unit
     # http://rubydoc.info/gems/fog/Fog/Compute/AWS/Server:setup
     # http://rubydoc.info/gems/knife-ec2/Chef/Knife/Ec2ServerCreate:tcp_test_ssh
     sleep 10
-    servers << server
     server
   end
 
-  # Cleans up all the servers this runner is aware of
+  # Cleans up all the servers tagged as knife solo servers for this user.
   # Specify SKIP_DESTROY environment variable to skip this step and leave servers
   # running for inspection or reuse.
   def run_ec2_cleanup
+    servers = compute.servers.all("tag-key"             => "knife_solo_integration_user",
+                                  "tag-value"           => ENV['USER'],
+                                  "instance-state-name" => "running").first
     if ENV['SKIP_DESTROY']
       puts "\nSKIP_DESTROY specified, leaving #{servers.size} instances running"
     else
