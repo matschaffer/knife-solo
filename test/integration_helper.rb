@@ -44,38 +44,35 @@ class IntegrationTest < TestCase
     "m1.small"
   end
 
-  # Tries to run prepare and cook on the box
-  module BasicPrepareAndCook
-    def setup
-      @kitchen = $base_dir.join('support', 'kitchens', self.class.to_s)
-      @kitchen.dirname.mkpath
-      system "knife kitchen #{@kitchen} >> #{log_file}"
-    end
+  def setup
+    @kitchen = $base_dir.join('support', 'kitchens', self.class.to_s)
+    @kitchen.dirname.mkpath
+    system "knife kitchen #{@kitchen} >> #{log_file}"
+    assert_subcommand "prepare"
+  end
 
-    def teardown
-      FileUtils.remove_entry_secure(@kitchen)
-      super
-    end
+  def teardown
+    FileUtils.remove_entry_secure(@kitchen)
+    super
+  end
 
-    def assert_subcommand(subcommand)
-      verbose = ENV['VERBOSE'] && "-VV"
-      key_file = MiniTest::Unit.runner.key_file
-      system "knife #{subcommand} -i #{key_file} #{user}@#{server.public_ip_address} #{verbose} >> #{log_file}"
-      assert $?.success?
-    end
+  def assert_subcommand(subcommand)
+    verbose = ENV['VERBOSE'] && "-VV"
+    key_file = MiniTest::Unit.runner.key_file
+    system "knife #{subcommand} -i #{key_file} #{user}@#{server.public_ip_address} #{verbose} >> #{log_file}"
+    assert $?.success?
+  end
 
-    def test_prepare_and_cook
+  # Tries to run cook on the box
+  module EmptyCook
+    def test_empty_cook
       Dir.chdir(@kitchen) do
-        assert server.public_ip_address
-        # assert_subcommand "prepare"
-        # assert_subcommand "cook"
+        assert_subcommand "cook"
       end
     end
   end
 
-  module CookApache2
-    include BasicPrepareAndCook
-
+  module Apache2Cook
     def write_cheffile
       File.open('Cheffile', 'w') do |f|
         f.print <<-CHEF
@@ -101,7 +98,6 @@ class IntegrationTest < TestCase
       Dir.chdir(@kitchen) do
         write_cheffile
         system "librarian-chef install >> #{log_file}"
-        assert_subcommand "prepare"
         write_nodefile
         assert_subcommand "cook"
         assert_match /It works!/, http_response
