@@ -116,12 +116,14 @@ class EC2Runner < MiniTest::Unit
 
   def initialize
     super
-    puts <<-TXT.gsub(/^      /, '') unless skip_destroy?
+    puts <<-TXT.gsub(/^\s*/, '') unless skip_destroy?
       ==> WARNING: All EC2 instances tagged with
       ==>          knife_solo_integration_user == #{user}
       ==>          will be destroyed after the tests complete.
-      ==> Please cancel (Control-c) NOW and re-run with SKIP_DESTROY=true
-      ==> if you want to leave EC2 instances running.
+      ==>
+      ==> Please cancel (Control-c) NOW and re-run with
+      ==> SKIP_DESTROY=true if you want to leave EC2
+      ==> instances running.
     TXT
   end
 
