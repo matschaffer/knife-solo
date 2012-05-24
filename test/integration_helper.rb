@@ -6,6 +6,8 @@ require 'net/http'
 
 $base_dir = Pathname.new(__FILE__).dirname
 
+MiniTest::Parallel.processor_count = 5
+
 # A module that provides logger and log_file attached to an integration log file
 module Loggable
   # The file that logs will go do, using the class name as a differentiator
@@ -114,9 +116,6 @@ class EC2Runner < MiniTest::Unit
 
   def initialize
     super
-    # FIXME: parallel testing is great but we can't use this shared @servers
-    #        state if we do. Thinking maybe we need to tag and search for servers
-    #        during cleanup. So AWS would become our shared state.
     # puts <<-TXT.gsub(/^      /, '')
     #   ==> Integration tests run in parallel.
     #   ==> Please make sure to clean up EC2 instances if you interrupt (Ctrl-c) the test.
