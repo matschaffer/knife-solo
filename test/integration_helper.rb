@@ -156,7 +156,7 @@ class EC2Runner < MiniTest::Unit
                                       :key_name => key_name)
     end
     server.wait_for { ready? }
-    logger.info "Server reported ready, trying to connect to ssh..."
+    logger.info "#{test.class} server (#{server.dns_name}) reported ready, trying to connect to ssh..."
     server.wait_for do
       `nc #{public_ip_address} 22 -w 1 -q 0 </dev/null`
       $?.success?
