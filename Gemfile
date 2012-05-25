@@ -1,14 +1,10 @@
 source :rubygems
 gemspec
 
-group :development do
-  gem 'irbtools'
-end
-
 group :test do
   gem 'parallel'
-  gem 'mocha', :require => false
-  gem 'minitest', :require => false
+  gem 'minitest', :require => 'minitest/autorun'
+  gem 'mocha'
 end
 
 group :development, :test do

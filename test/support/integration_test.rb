@@ -1,6 +1,8 @@
 require 'json'
 require 'net/http'
 
+require 'support/test_case'
+
 # Base class for EC2 integration tests
 class IntegrationTest < TestCase
   include Loggable
