@@ -9,5 +9,5 @@ class Sles11_Test < IntegrationTest
     "ami-e0a35789"
   end
 
-  include IntegrationTest::BasicPrepareAndCook
+  include EmptyCook
 end

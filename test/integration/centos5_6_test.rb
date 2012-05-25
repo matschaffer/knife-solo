@@ -9,5 +9,10 @@ class Centos5_6Test < IntegrationTest
     "ami-3fe42456"
   end
 
-  include IntegrationTest::BasicPrepareAndCook
+  def default_apache_message
+    /Apache 2 Test Page/
+  end
+
+  include EmptyCook
+  include Apache2Cook
 end
