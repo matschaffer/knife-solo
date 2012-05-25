@@ -4,13 +4,15 @@
 
 == DESCRIPTION:
 
-Knife-solo is a gem plugin for Chef's knife utility. It currently adds 3 subcommands to knife: kitchen, prepare and cook
+Knife-solo is a gem plugin for Chef's knife utility. It currently adds 4 subcommands to knife: kitchen, prepare, cook and wash_up
 
 The +kitchen+ command is used to create a new directory structure that fits with chef's standard structure and can be used to build and store recipes.
 
 The +prepare+ command installs Ruby, RubyGems and \Chef on a given host. It's structured to auto-detect the target OS and change the installation process accordingly.
 
 The +cook+ command uploads the current kitchen (chef repo) to the target host and runs chef-solo on that host.
+
+The +wash_up+ command removes the uploaded kitchen from the target host.
 
 Preliminary Windows support for +cook+ is available (see below).
 
@@ -64,6 +66,15 @@ The cook command also takes an ssh-style host argument:
 The cook command uploads the current kitchen to the server and runs chef-solo on that server. If you only specify one argument it will look for a node config in +nodes/<hostname>.json+. Or if you want to specify a node config you can pass the path to the file as the second argument.
 
 This uploads all of your cookbooks in addition to a patch that allows you to use data_bags in a read-only fashion from the +data_bags+ folder.
+
+=== WashUp command
+
+The wash_up command takes the same arguments like prepare and cook:
+
+    knife wash_up ubuntu@10.0.0.201
+
+The wash_up command removes an uploaded kitchen completely from the target host.
+This improves security because passwords etc. are not left behind on that host.
 
 === Windows support
 
