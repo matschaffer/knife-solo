@@ -130,6 +130,11 @@ end
 class EC2Runner < MiniTest::Unit
   include Loggable
 
+  def initialize
+    super
+    create_key_pair
+  end
+
   def skip_destroy?
     ENV['SKIP_DESTROY']
   end
@@ -243,4 +248,3 @@ class EC2Runner < MiniTest::Unit
 end
 
 MiniTest::Unit.runner = EC2Runner.new
-MiniTest::Unit.runner.create_key_pair
