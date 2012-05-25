@@ -125,19 +125,6 @@ end
 class EC2Runner < MiniTest::Unit
   include Loggable
 
-  def initialize
-    super
-    puts <<-TXT.gsub(/^\s*/, '') unless skip_destroy?
-      ==> WARNING: All EC2 instances tagged with
-      ==>          knife_solo_integration_user == #{user}
-      ==>          will be destroyed after the tests complete.
-      ==>
-      ==> Please cancel (Control-c) NOW and re-run with
-      ==> SKIP_DESTROY=true if you want to leave EC2
-      ==> instances running.
-    TXT
-  end
-
   def skip_destroy?
     ENV['SKIP_DESTROY']
   end
@@ -196,6 +183,15 @@ class EC2Runner < MiniTest::Unit
     if skip_destroy?
       puts "\nSKIP_DESTROY specified, leaving #{servers.size} instances running"
     else
+      puts <<-TXT
+          About to terminate the following instances. Please cancel (Control-C)
+          NOW if you want to leave them running. Use SKIP_DESTROY=true to
+          skip this step.
+      TXT
+      servers.each do |server|
+        puts " - #{server.id}"
+      end
+      sleep 20
       servers.each do |server|
         logger.info "Destroying #{server.public_ip_address}..."
         server.destroy
