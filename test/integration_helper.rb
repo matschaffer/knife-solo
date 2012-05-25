@@ -33,10 +33,15 @@ class IntegrationTest < TestCase
     "knife_solo-#{image_id}"
   end
 
+  # Shortcut to access the test runner
+  def runner
+    MiniTest::Unit.runner
+  end
+
   # Returns the server for this test, retrieved from the test runner
   def server
     return @server if @server
-    @server = MiniTest::Unit.runner.get_server(self)
+    @server = runner.get_server(self)
   end
 
   # The flavor to run this test on
@@ -49,12 +54,22 @@ class IntegrationTest < TestCase
     @kitchen = $base_dir.join('support', 'kitchens', self.class.to_s)
     @kitchen.dirname.mkpath
     system "knife kitchen #{@kitchen} >> #{log_file}"
+    @start_dir = Dir.pwd
+    Dir.chdir(@kitchen)
+    prepare_server
   end
 
   # Removes the test kitchen
   def teardown
+    Dir.chdir(@start_dir)
     FileUtils.remove_entry_secure(@kitchen)
-    super
+  end
+
+  # Prepares the server unless it has already been marked as such
+  def prepare_server
+    return if server.tags["knife_solo_prepared"]
+    assert_subcommand "prepare"
+    runner.tag_as_prepared(server)
   end
 
   # Asserts that a prepare or cook command is successful
@@ -68,10 +83,7 @@ class IntegrationTest < TestCase
   # Tries to run cook on the box
   module EmptyCook
     def test_empty_cook
-      Dir.chdir(@kitchen) do
-        assert_subcommand "prepare"
-        assert_subcommand "cook"
-      end
+      assert_subcommand "cook"
     end
   end
 
@@ -100,14 +112,11 @@ class IntegrationTest < TestCase
     end
 
     def test_apache2
-      Dir.chdir(@kitchen) do
-        write_cheffile
-        system "librarian-chef install >> #{log_file}"
-        assert_subcommand "prepare"
-        write_nodefile
-        assert_subcommand "cook"
-        assert_match /It works!/, http_response
-      end
+      write_cheffile
+      system "librarian-chef install >> #{log_file}"
+      write_nodefile
+      assert_subcommand "cook"
+      assert_match /It works!/, http_response
     end
   end
 end
@@ -170,13 +179,20 @@ class EC2Runner < MiniTest::Unit
     server
   end
 
+  # Adds a knife_solo_prepared tag to the server so we can know not to re-prepare it
+  def tag_as_prepared(server)
+    compute.tags.create(resource_id: server.identity,
+                        key:         :knife_solo_prepared,
+                        value:       true)
+  end
+
   # Cleans up all the servers tagged as knife solo servers for this user.
   # Specify SKIP_DESTROY environment variable to skip this step and leave servers
   # running for inspection or reuse.
   def run_ec2_cleanup
     servers = compute.servers.all("tag-key"             => "knife_solo_integration_user",
                                   "tag-value"           => user,
-                                  "instance-state-name" => "running").first
+                                  "instance-state-name" => "running")
     if skip_destroy?
       puts "\nSKIP_DESTROY specified, leaving #{servers.size} instances running"
     else
