@@ -2,6 +2,7 @@ require 'test_helper'
 require 'pathname'
 require 'logger'
 require 'yaml'
+require 'json'
 require 'net/http'
 
 $base_dir = Pathname.new(__FILE__).dirname
@@ -65,6 +66,13 @@ class IntegrationTest < TestCase
     FileUtils.remove_entry_secure(@kitchen)
   end
 
+  # Writes out the given node hash as a json file
+  def write_nodefile(node)
+    File.open("nodes/#{server.public_ip_address}.json", 'w') do |f|
+      f.print node.to_json
+    end
+  end
+
   # Prepares the server unless it has already been marked as such
   def prepare_server
     return if server.tags["knife_solo_prepared"]
@@ -83,6 +91,7 @@ class IntegrationTest < TestCase
   # Tries to run cook on the box
   module EmptyCook
     def test_empty_cook
+      write_nodefile(run_list: [])
       assert_subcommand "cook"
     end
   end
@@ -99,14 +108,6 @@ class IntegrationTest < TestCase
       end
     end
 
-    def write_nodefile
-      File.open("nodes/#{server.public_ip_address}.json", 'w') do |f|
-        f.print <<-JSON
-          { "run_list": ["recipe[apache2]"] }
-        JSON
-      end
-    end
-
     def http_response
       Net::HTTP.get(URI.parse("http://"+server.public_ip_address))
     end
@@ -118,7 +119,7 @@ class IntegrationTest < TestCase
     def test_apache2
       write_cheffile
       system "librarian-chef install >> #{log_file}"
-      write_nodefile
+      write_nodefile(run_list: ["recipe[apache2]"])
       assert_subcommand "cook"
       assert_match default_apache_message, http_response
     end
