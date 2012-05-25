@@ -154,7 +154,7 @@ module KnifeSolo
       else
         replacement = ''
       end
-      command.sub(/^\s*sudo/, replacement)
+      command.gsub(/sudo/, replacement)
     end
 
     def process_startup_file(command)
