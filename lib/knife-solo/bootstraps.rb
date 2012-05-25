@@ -67,7 +67,8 @@ module KnifeSolo
         url = "http://production.cf.rubygems.org/rubygems/#{file}"
         run_command(http_client_get_url(url))
         run_command("tar zxf #{file}")
-        run_command("cd #{release} && sudo ruby setup.rb --no-format-executable")
+        run_command("cd #{release}")
+        run_command("sudo ruby setup.rb --no-format-executable")
         run_command("sudo rm -rf #{release} #{file}")
         run_command("sudo gem install --no-rdoc --no-ri #{gem_packages().join(' ')}")
       end
