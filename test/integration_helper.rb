@@ -187,13 +187,14 @@ class EC2Runner < MiniTest::Unit
     if skip_destroy?
       puts "\nSKIP_DESTROY specified, leaving #{servers.size} instances running"
     else
-      puts <<-TXT
+      puts <<-TXT.gsub(/^\s*/, '')
+          ===
           About to terminate the following instances. Please cancel (Control-C)
           NOW if you want to leave them running. Use SKIP_DESTROY=true to
           skip this step.
       TXT
       servers.each do |server|
-        puts " - #{server.id}"
+        puts "  * #{server.id}"
       end
       sleep 20
       servers.each do |server|
