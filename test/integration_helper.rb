@@ -111,12 +111,16 @@ class IntegrationTest < TestCase
       Net::HTTP.get(URI.parse("http://"+server.public_ip_address))
     end
 
+    def default_apache_message
+      /It works!/
+    end
+
     def test_apache2
       write_cheffile
       system "librarian-chef install >> #{log_file}"
       write_nodefile
       assert_subcommand "cook"
-      assert_match /It works!/, http_response
+      assert_match default_apache_message, http_response
     end
   end
 end
