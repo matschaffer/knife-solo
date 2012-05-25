@@ -10,5 +10,4 @@ class Sles11_Test < IntegrationTest
   end
 
   include EmptyCook
-  include Apache2Cook
 end
