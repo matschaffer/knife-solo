@@ -61,9 +61,8 @@ class IntegrationTest < TestCase
 
   # Asserts that a prepare or cook command is successful
   def assert_subcommand(subcommand)
-    verbose = ENV['VERBOSE'] && "-VV"
     key_file = MiniTest::Unit.runner.key_file
-    system "knife #{subcommand} -i #{key_file} #{user}@#{server.public_ip_address} #{verbose} >> #{log_file}"
+    system "knife #{subcommand} -i #{key_file} #{user}@#{server.public_ip_address} -VV >> #{log_file}"
     assert $?.success?
   end
 
