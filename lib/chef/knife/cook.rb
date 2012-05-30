@@ -113,7 +113,7 @@ class Chef
 
           $ruby_bin -rubygems -e "gem 'chef', '#{constraint}'"
         BASH
-        raise "The chef gem on #{host} is out of date. Please run `#{$0} prepare #{ssh_args}` to upgrade Chef to #{constraint}." unless result.success?
+        raise "Couldn't find Chef #{constraint} on #{host}. Please run `#{$0} prepare #{ssh_args}` to ensure Chef is installed and up to date." unless result.success?
       end
 
       def cook
