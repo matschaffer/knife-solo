@@ -2,9 +2,22 @@
 
 ## Goals
 
-* Include recipes in integration testing (Issue #17)
+* Solid windows support :)
+
+# 0.0.10: May 30th, 2012
+
+* Include apache recipe during integration testing (#17)
+* Use omnibus installer on Ubuntu and RedHat (#40, #45, #58)
+* `knife wash_up` command for removing uploaded resources (#48)
+* Cleaner sudo pre-processing (#59)
+* Support `knife kitchen .` to init an existing kitchen (#54)
 
 ## Thanks to our contributors!
+
+* [Hector Castro][hectcastro]
+* [Nix-wie-weg][Nix-wie-weg]
+* [Justin Grevich][jgrevich]
+* [Ross Timson][rosstimson]
 
 # 0.0.9: May 13th, 2012
 
@@ -89,3 +102,6 @@
 [rmoriz]: http://github.com/rmoriz
 [TylerRick]: http://github.com/TylerRick
 [Motiejus]: http://github.com/Motiejus
+[Nix-wie-weg]: https://github.com/Nix-wie-weg
+[jgrevich]: https://github.com/jgrevich
+[rosstimson]: https://github.com/rosstimson
