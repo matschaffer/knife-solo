@@ -57,7 +57,13 @@ module KnifeSolo
 
       def omnibus_install
         run_command(http_client_get_url("http://opscode.com/chef/install.sh"))
-        run_command("sudo bash install.sh")
+
+        # `release_version` within install.sh will be installed if
+        # `omnibus_version` is not provided.
+        install_command = "sudo bash install.sh"
+        install_command << " -v #{prepare.config[:omnibus_version]}" if prepare.config[:omnibus_version]
+
+        run_command(install_command)
       end
 
       def ubuntu_omnibus_install

@@ -13,6 +13,10 @@ class Chef
 
       banner "knife prepare [user@]hostname (options)"
 
+      option :omnibus_version,
+        :long => "--omnibus-version VERSION",
+        :description => "The version of Omnibus to install"
+
       def run
         super
         bootstrap.bootstrap!
