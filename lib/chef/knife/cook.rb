@@ -13,6 +13,9 @@ class Chef
     # Approach ported from spatula (https://github.com/trotter/spatula)
     # Copyright 2009, Trotter Cashion
     class Cook < Knife
+      OMNIBUS_EMBEDDED_PATH   = "/opt/opscode/embedded"
+      CHEF_VERSION_CONSTRAINT = "~>0.10.4"
+
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
       include KnifeSolo::Tools
@@ -100,9 +103,8 @@ class Chef
       end
 
       def check_chef_version
-        constraint = "~>0.10.4"
         result = run_command <<-BASH
-          opscode_ruby="/opt/opscode/embedded/bin/ruby"
+          opscode_ruby="#{File.join(OMNIBUS_EMBEDDED_PATH, "bin", "ruby")}"
 
           if command -v $opscode_ruby &>/dev/null
           then
@@ -111,9 +113,9 @@ class Chef
             ruby_bin="ruby"
           fi
 
-          $ruby_bin -rubygems -e "gem 'chef', '#{constraint}'"
+          $ruby_bin -rubygems -e "gem 'chef', '#{CHEF_VERSION_CONSTRAINT}'"
         BASH
-        raise "Couldn't find Chef #{constraint} on #{host}. Please run `#{$0} prepare #{ssh_args}` to ensure Chef is installed and up to date." unless result.success?
+        raise "Couldn't find Chef #{CHEF_VERSION_CONSTRAINT} on #{host}. Please run `#{$0} prepare #{ssh_args}` to ensure Chef is installed and up to date." unless result.success?
       end
 
       def cook
