@@ -30,6 +30,14 @@ class PrepareTest < TestCase
     end
   end
 
+  def test_will_specify_omnibus_version
+    Dir.chdir("/tmp") do
+      FileUtils.mkdir("nodes")
+      run_command = command("somehost", "--omnibus-version", "'0.10.8-3'")
+      assert_match "0.10.8-3", run_command.config[:omnibus_version]
+    end
+  end
+
   def test_run_raises_if_operating_system_is_not_supported
     Dir.chdir("/tmp") do
       FileUtils.mkdir("nodes")
