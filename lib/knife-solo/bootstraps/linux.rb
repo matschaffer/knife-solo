@@ -77,7 +77,7 @@ module KnifeSolo::Bootstraps
         {:type => "omnibus", :version => "squeeze"}
       when %r{Debian GNU/Linux wheezy}
         {:type => "debian_gem", :version => "wheezy"}
-      when %r{Ubuntu}
+      when %r{Ubuntu}i
         version = run_command("lsb_release -cs").stdout.strip
         {:type => "ubuntu_omnibus", :version => version}
       when %r{Linaro}
