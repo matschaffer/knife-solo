@@ -11,4 +11,5 @@ class Ubuntu10_04Test < IntegrationTest
 
   include EmptyCook
   include Apache2Cook
+  include EncryptedDataBag
 end

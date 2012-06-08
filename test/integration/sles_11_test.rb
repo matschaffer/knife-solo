@@ -10,4 +10,5 @@ class Sles11_Test < IntegrationTest
   end
 
   include EmptyCook
+  include EncryptedDataBag
 end

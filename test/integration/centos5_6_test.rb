@@ -15,4 +15,5 @@ class Centos5_6Test < IntegrationTest
 
   include EmptyCook
   include Apache2Cook
+  include EncryptedDataBag
 end
