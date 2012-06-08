@@ -67,6 +67,10 @@ The cook command uploads the current kitchen to the server and runs chef-solo on
 
 This uploads all of your cookbooks in addition to a patch that allows you to use data_bags in a read-only fashion from the +data_bags+ folder.
 
+This also supports encrypted data bags. To use them, place your key in +data_bag_key+ in the root of your kitchen (or if you move it make sure to update +solo.rb+ to reflect the new path).
+
+The knife command for creating data bags doesn't work well in solo mode, so use this gist as an example on how to create encrypted data bag items: https://gist.github.com/2896172
+
 === WashUp command
 
 The wash_up command takes the same arguments like prepare and cook:
