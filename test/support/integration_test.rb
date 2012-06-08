@@ -70,9 +70,13 @@ class IntegrationTest < TestCase
     "prepare"
   end
 
+  # Provides the path to the runner's key file
+  def key_file
+    runner.key_file
+  end
+
   # Asserts that a prepare or cook command is successful
   def assert_subcommand(subcommand)
-    key_file = MiniTest::Unit.runner.key_file
     system "knife #{subcommand} -i #{key_file} #{user}@#{server.public_ip_address} -VV >> #{log_file}"
     assert $?.success?
   end
