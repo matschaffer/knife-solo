@@ -14,4 +14,5 @@ class Gentoo2011Test < IntegrationTest
 
   # include EmptyCook
   # include Apache2Cook
+  # include EncryptedDataBag
 end
