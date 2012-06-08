@@ -16,6 +16,8 @@ module EncryptedDataBag
     write_json_file('data_bags/dev/passwords.json', encrypted_data)
   end
 
+  # Test that we can read an encrypted data bag value
+  # NOTE: This shells out to ssh, so may not be windows-compatible
   def test_reading_encrypted_data_bag
     write_nodefile(run_list: ["recipe[secret_cookbook]"])
     assert_subcommand "cook"
