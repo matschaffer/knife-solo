@@ -19,7 +19,7 @@ module EncryptedDataBag
   def test_reading_encrypted_data_bag
     write_nodefile(run_list: ["recipe[secret_cookbook]"])
     assert_subcommand "cook"
-    actual = `ssh -i #{key_file} #{user}@#{server.public_ip_address} cat /etc/admin_password`
+    actual = `ssh #{connection_string} cat /etc/admin_password`
     assert_equal @password, actual
   end
 end

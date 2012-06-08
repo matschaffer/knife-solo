@@ -80,9 +80,14 @@ class IntegrationTest < TestCase
     runner.key_file
   end
 
+  # The ssh-style connection string used to connect to the current node
+  def connection_string
+    "-i #{key_file} #{user}@#{server.public_ip_address}"
+  end
+
   # Asserts that a prepare or cook command is successful
   def assert_subcommand(subcommand)
-    system "knife #{subcommand} -i #{key_file} #{user}@#{server.public_ip_address} -VV >> #{log_file}"
+    system "knife #{subcommand} #{connection_string} -VV >> #{log_file}"
     assert $?.success?
   end
 
