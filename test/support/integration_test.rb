@@ -55,8 +55,13 @@ class IntegrationTest < TestCase
   # Prepares the server unless it has already been marked as such
   def prepare_server
     return if server.tags["knife_solo_prepared"]
-    assert_subcommand "prepare"
+    assert_subcommand prepare_command
     runner.tag_as_prepared(server)
+  end
+
+  # The prepare command to use on this server
+  def prepare_command
+    "prepare"
   end
 
   # Asserts that a prepare or cook command is successful
