@@ -47,8 +47,14 @@ class IntegrationTest < TestCase
 
   # Writes out the given node hash as a json file
   def write_nodefile(node)
-    File.open("nodes/#{server.public_ip_address}.json", 'w') do |f|
-      f.print node.to_json
+    write_json_file("nodes/#{server.public_ip_address}.json", node)
+  end
+
+  # Writes out an object to the given file as JSON
+  def write_json_file(file, data)
+    FileUtils.mkpath(File.dirname(file))
+    File.open(file, 'w') do |f|
+      f.print data.to_json
     end
   end
 
