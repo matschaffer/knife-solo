@@ -3,6 +3,11 @@ require 'net/http'
 
 require 'support/test_case'
 
+case_pattern = $base_dir.join('integration', 'cases', '*.rb')
+Dir[case_pattern].each do |use_case|
+  require use_case
+end
+
 # Base class for EC2 integration tests
 class IntegrationTest < TestCase
   include Loggable
