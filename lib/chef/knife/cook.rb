@@ -14,7 +14,7 @@ class Chef
     # Copyright 2009, Trotter Cashion
     class Cook < Knife
       OMNIBUS_EMBEDDED_PATH   = "/opt/opscode/embedded"
-      CHEF_VERSION_CONSTRAINT = "~>0.10.4"
+      CHEF_VERSION_CONSTRAINT = ">=0.10.4"
 
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
