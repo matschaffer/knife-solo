@@ -4,6 +4,10 @@
 
 * Solid windows support :)
 
+## Features
+
+* Encrypted data bag support (#22)
+
 # 0.0.10: May 30th, 2012
 
 * Include apache recipe during integration testing (#17)
