@@ -4,9 +4,17 @@
 
 * Solid windows support :)
 
-## Features
+# 0.0.11: June 16th, 2012
 
 * Encrypted data bag support (#22)
+* Updated dependency version (#63, #64)
+* Joyent Ubuntu detection (#62)
+* Omnibus version selection (#61)
+
+## Thanks to our contributors!
+
+* [Hector Castro][hectcastro]
+* [Sean Porter][portertech]
 
 # 0.0.10: May 30th, 2012
 
