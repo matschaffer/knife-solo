@@ -13,7 +13,7 @@ class Chef
     # Approach ported from spatula (https://github.com/trotter/spatula)
     # Copyright 2009, Trotter Cashion
     class Cook < Knife
-      OMNIBUS_EMBEDDED_PATH   = "/opt/opscode/embedded"
+      OMNIBUS_EMBEDDED_PATHS  = ["/opt/chef/embedded/bin", "/opt/opscode/embedded/bin"]
       CHEF_VERSION_CONSTRAINT = ">=0.10.4"
 
       include KnifeSolo::SshCommand
@@ -104,16 +104,8 @@ class Chef
 
       def check_chef_version
         result = run_command <<-BASH
-          opscode_ruby="#{File.join(OMNIBUS_EMBEDDED_PATH, "bin", "ruby")}"
-
-          if command -v $opscode_ruby &>/dev/null
-          then
-            ruby_bin=$opscode_ruby
-          else
-            ruby_bin="ruby"
-          fi
-
-          $ruby_bin -rubygems -e "gem 'chef', '#{CHEF_VERSION_CONSTRAINT}'"
+          export PATH="#{OMNIBUS_EMBEDDED_PATHS.join(":")}:$PATH"
+          ruby -rubygems -e "gem 'chef', '#{CHEF_VERSION_CONSTRAINT}'"
         BASH
         raise "Couldn't find Chef #{CHEF_VERSION_CONSTRAINT} on #{host}. Please run `#{$0} prepare #{ssh_args}` to ensure Chef is installed and up to date." unless result.success?
       end
