@@ -37,6 +37,7 @@ class IntegrationTest < TestCase
   # Sets up a kitchen directory to work in
   def setup
     @kitchen = $base_dir.join('support', 'kitchens', self.class.to_s)
+    FileUtils.remove_entry_secure(@kitchen, true)
     @kitchen.dirname.mkpath
     system "knife kitchen #{@kitchen} >> #{log_file}"
     @start_dir = Dir.pwd
@@ -44,10 +45,9 @@ class IntegrationTest < TestCase
     prepare_server
   end
 
-  # Removes the test kitchen
+  # Gets back to the start dir
   def teardown
     Dir.chdir(@start_dir)
-    FileUtils.remove_entry_secure(@kitchen)
   end
 
   # Writes out the given node hash as a json file
