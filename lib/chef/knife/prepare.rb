@@ -2,6 +2,7 @@ require 'chef/knife'
 require 'knife-solo/ssh_command'
 require 'knife-solo/kitchen_command'
 require 'knife-solo/bootstraps'
+require 'knife-solo/knife_solo_error'
 
 class Chef
   class Knife
@@ -11,7 +12,7 @@ class Chef
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
 
-      class WrongPrepareError < OutOfKitchenError
+      class WrongPrepareError < KnifeSolo::KnifeSoloError
         alias :message :to_s
       end
       
@@ -45,7 +46,7 @@ class Chef
       end
 
       def validate_params!
-        unless @name_args.length >= 1 && @name_args.first =~ /\A.+\@.+\z/
+        unless @name_args.first =~ /\A.+\@.+\z/
           raise WrongPrepareError.new "need to pass a [user@]hostname as the first argument"
         end
       end

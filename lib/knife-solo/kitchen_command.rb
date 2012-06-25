@@ -1,6 +1,8 @@
+require 'knife-solo/knife_solo_error'
+
 module KnifeSolo
   module KitchenCommand
-    class OutOfKitchenError < StandardError
+    class OutOfKitchenError < KnifeSoloError
       def message
         "This command must be run inside a Chef solo kitchen."
       end
@@ -24,9 +26,12 @@ module KnifeSolo
 
     def required_files_present?
       KitchenCommand.all_requirements.inject(true) do |m, f|
-        m && File.exists?(f).tap {|x|
-          Chef::Log.warn "#{f} is a required file/directory" unless x
-        }
+        if File.exists?(f)
+          m && true
+        else
+          Chef::Log.warn "#{f} is a required file/directory"
+          m && false
+        end
       end
     end
   end
