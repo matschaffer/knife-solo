@@ -22,6 +22,10 @@ Installation is a normal gem installation.
 
     gem install knife-solo
 
+If you need to install from git run:
+
+    rake install
+
 === Kitchen command
 
 The kitchen command simply takes a name of the directory to store the kitchen structure.
