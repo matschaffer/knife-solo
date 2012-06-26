@@ -13,14 +13,6 @@ class DummyKitchenCommand < Chef::Knife
   end
 end
 
-module KnifeSolo
-  module KitchenCommand
-    def warn_for_required_file(file)
-      # noop
-    end
-  end
-end
-
 class KitchenCommandTest < TestCase
   def setup
     @kitchen = 'testkitchen'
@@ -32,8 +24,12 @@ class KitchenCommandTest < TestCase
   end
 
   def test_barks_outside_of_the_kitchen
+    dummy_kitchen = DummyKitchenCommand.new
+    # silenced as this warning is expected
+    dummy_kitchen.stubs(:warn_for_required_file).returns('noop')
+    
     assert_raises KnifeSolo::KitchenCommand::OutOfKitchenError, /joe/ do
-      DummyKitchenCommand.new.run
+      dummy_kitchen.run
     end
   end
 
