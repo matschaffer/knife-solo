@@ -2,6 +2,7 @@ require 'chef/knife'
 require 'knife-solo/ssh_command'
 require 'knife-solo/kitchen_command'
 require 'knife-solo/bootstraps'
+require 'knife-solo/knife_solo_error'
 
 class Chef
   class Knife
@@ -11,6 +12,10 @@ class Chef
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
 
+      class WrongPrepareError < KnifeSolo::KnifeSoloError
+        alias :message :to_s
+      end
+      
       banner "knife prepare [user@]hostname (options)"
 
       option :omnibus_version,
@@ -18,6 +23,7 @@ class Chef
         :description => "The version of Omnibus to install"
 
       def run
+        validate_params!
         super
         bootstrap.bootstrap!
         generate_node_config
@@ -37,6 +43,12 @@ class Chef
 
       def operating_system
         @operating_system ||= run_command('uname -s').stdout.strip
+      end
+
+      def validate_params!
+        unless @name_args.first =~ /\A.+\@.+\z/
+          raise WrongPrepareError.new "need to pass a [user@]hostname as the first argument"
+        end
       end
     end
   end
