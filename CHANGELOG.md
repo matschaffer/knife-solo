@@ -4,6 +4,19 @@
 
 * Solid windows support :)
 
+# 0.0.12: June 25th, 2012
+
+* Better validation on CLI args (#68, #70)
+* Switch from wget to curl (#66)
+* Initial fedora support (not under integration) (#67)
+* Support new omnibus path (/opt/chef)
+
+## Thanks to our contributors!
+
+* [brynary][Bryan Helmkamp]
+* [gregf][Greg Fitzgerald]
+* [deepak][Deepak Kannan]
+
 # 0.0.11: June 16th, 2012
 
 * Encrypted data bag support (#22)
