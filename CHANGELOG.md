@@ -130,3 +130,6 @@
 [Nix-wie-weg]: https://github.com/Nix-wie-weg
 [jgrevich]: https://github.com/jgrevich
 [rosstimson]: https://github.com/rosstimson
+[brynary]: https://github.com/brynary
+[gregf]: https://github.com/gregf
+[deepak]: https://github.com/deepak
