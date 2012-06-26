@@ -27,9 +27,13 @@ module KnifeSolo
     def required_files_present?
       KitchenCommand.all_requirements.inject(true) do |m, f|
         check = File.exists?(f)
-        Chef::Log.warn "#{f} is a required file/directory" unless check
+        warn_for_required_file(f) unless check
         m && check
       end
+    end
+
+    def warn_for_required_file(file)
+      Chef::Log.warn "#{file} is a required file/directory"
     end
   end
 end
