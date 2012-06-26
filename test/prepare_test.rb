@@ -3,11 +3,15 @@ require 'test_helper'
 require 'chef/knife/prepare'
 
 class PrepareTest < TestCase
+  def setup
+    @host = 'somehost@somedomain.com'
+  end
+  
   def test_generates_a_node_config
     Dir.chdir("/tmp") do
       FileUtils.mkdir("nodes")
 
-      cmd = command("somehost")
+      cmd = command(@host)
       cmd.generate_node_config
 
       assert cmd.node_config.exist?
@@ -18,7 +22,7 @@ class PrepareTest < TestCase
     Dir.chdir("/tmp") do
       FileUtils.mkdir("nodes")
 
-      cmd = command("somehost")
+      cmd = command(@host)
 
       File.open(cmd.node_config, "w") do |f|
         f << "testdata"
@@ -33,7 +37,7 @@ class PrepareTest < TestCase
   def test_will_specify_omnibus_version
     Dir.chdir("/tmp") do
       FileUtils.mkdir("nodes")
-      run_command = command("somehost", "--omnibus-version", "'0.10.8-3'")
+      run_command = command(@host, "--omnibus-version", "'0.10.8-3'")
       assert_match "0.10.8-3", run_command.config[:omnibus_version]
     end
   end
@@ -41,7 +45,7 @@ class PrepareTest < TestCase
   def test_run_raises_if_operating_system_is_not_supported
     Dir.chdir("/tmp") do
       FileUtils.mkdir("nodes")
-      run_command = command("somehost")
+      run_command = command(@host)
       run_command.stubs(:required_files_present?).returns(true)
       run_command.stubs(:operating_system).returns('MythicalOS')
       assert_raises KnifeSolo::Bootstraps::OperatingSystemNotImplementedError do
@@ -53,7 +57,7 @@ class PrepareTest < TestCase
   def test_run_calls_bootstrap
     Dir.chdir("/tmp") do
       FileUtils.mkdir("nodes")
-      run_command = command("somehost")
+      run_command = command(@host)
       bootstrap_instance = mock('mock OS bootstrap instance')
       run_command.stubs(:required_files_present?).returns(true)
       run_command.stubs(:operating_system).returns('MythicalOS')
