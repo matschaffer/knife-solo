@@ -46,10 +46,9 @@ class Chef
       end
 
       def validate_params!
-        unless @name_args.first =~ /\A.+\@.+\z/
-          raise WrongPrepareError.new "need to pass a [user@]hostname as the first argument"
-        end
+        validate_first_cli_arg_is_a_hostname!(WrongPrepareError)
       end
+      
     end
   end
 end

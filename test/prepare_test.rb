@@ -69,6 +69,23 @@ class PrepareTest < TestCase
     end
   end
 
+  def test_barks_without_atleast_a_hostname
+    @kitchen = '/tmp/nodes'
+    Chef::Knife::Kitchen.new([@kitchen]).run
+    
+    Dir.chdir(@kitchen) do
+      run_command = command
+
+      assert_raises Chef::Knife::Prepare::WrongPrepareError do
+        run_command.run
+      end
+
+      `knife prepare`
+      exit_status = $?
+      assert exit_status != 0, "exit status #{exit_status} should be non-zero for failure"
+    end
+  end
+
   def teardown
     FileUtils.rm_r("/tmp/nodes")
   end
