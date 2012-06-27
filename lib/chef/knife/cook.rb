@@ -91,7 +91,10 @@ class Chef
       end
 
       def patch_path
-        Array(Chef::Config.cookbook_path).first + "/chef_solo_patches/libraries"
+        cookbook_path_configured = Array(Chef::Config.cookbook_path).first
+        pwd = Dir.pwd
+        cookbook_dir = cookbook_path_configured.gsub("#{pwd}/", '')
+        adjust_rsync_path(chef_path) + "/#{cookbook_dir}" + "/chef_solo_patches/libraries"
       end
 
       def rsync_exclude
