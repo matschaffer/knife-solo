@@ -20,6 +20,11 @@ class CookTest < TestCase
     assert_equal "/tmp/chef-solo", command.chef_path
   end
 
+  def test_gets_patch_path_from_chef_config
+    Chef::Config.cookbook_path ["/tmp/chef-solo/cookbooks"]
+    assert_equal "/tmp/chef-solo/cookbooks/chef_solo_patches/libraries", command.patch_path
+  end
+
   def test_check_syntax_raises_error
     Dir.chdir("/tmp/cook_kitchen_test") do
       assert File.exist?("syntax_error.rb")
