@@ -37,9 +37,15 @@ class Chef
         :boolean => true,
         :description => "Skip Ruby syntax checks"
 
+      option :syntax_check_only,
+        :long => '--syntax-check-only',
+        :boolean => true,
+        :description => "Only run syntax checks - do not run Chef"
+      
       def run
         super
         check_syntax unless config[:skip_syntax_check]
+        return if config[:syntax_check_only]
         Chef::Config.from_file('solo.rb')
         check_chef_version unless config[:skip_chef_check]
         rsync_kitchen
@@ -63,6 +69,7 @@ class Chef
             raise "Syntax error in #{json}: #{error.message}"
           end
         end
+        Chef::Log.info "cookbook and json syntax is ok"
       end
 
       def node_config
