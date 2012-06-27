@@ -20,9 +20,7 @@ class Chef
       include KnifeSolo::KitchenCommand
       include KnifeSolo::Tools
 
-      class WrongCookError < KnifeSolo::KnifeSoloError
-        alias :message :to_s
-      end
+      class WrongCookError < KnifeSolo::KnifeSoloError; end
 
       banner "knife cook [user@]hostname [json] (options)"
 
