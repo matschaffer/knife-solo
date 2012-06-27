@@ -70,10 +70,28 @@ class CookTest < TestCase
         f << "this is a blatant ruby syntax error."
       end
     end
+    @clean_kitchen = '/tmp/kitchen'
+  end
+
+  def test_barks_without_atleast_a_hostname
+    kitchen(@clean_kitchen).run
+    
+    Dir.chdir(@clean_kitchen) do
+      run_command = command
+
+      assert_raises Chef::Knife::Cook::WrongCookError do
+        run_command.run
+      end
+
+      `knife cook`
+      exit_status = $?
+      assert exit_status != 0, "exit status #{exit_status} should be non-zero for failure"
+    end
   end
 
   def teardown
     FileUtils.rm_r("/tmp/cook_kitchen_test")
+    FileUtils.rm_rf(@clean_kitchen)
   end
 
   def command(*args)

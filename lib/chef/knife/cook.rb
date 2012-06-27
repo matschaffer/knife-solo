@@ -20,6 +20,10 @@ class Chef
       include KnifeSolo::KitchenCommand
       include KnifeSolo::Tools
 
+      class WrongCookError < KnifeSolo::KnifeSoloError
+        alias :message :to_s
+      end
+
       banner "knife cook [user@]hostname [json] (options)"
 
       option :skip_chef_check,
@@ -38,6 +42,7 @@ class Chef
         :description => "Skip Ruby syntax checks"
 
       def run
+        validate_params!
         super
         check_syntax unless config[:skip_syntax_check]
         Chef::Config.from_file('solo.rb')
@@ -109,7 +114,7 @@ class Chef
         BASH
         raise "Couldn't find Chef #{CHEF_VERSION_CONSTRAINT} on #{host}. Please run `#{$0} prepare #{ssh_args}` to ensure Chef is installed and up to date." unless result.success?
       end
-
+      
       def cook
         logging_arg = "-l debug" if config[:verbosity] > 0
 
@@ -119,6 +124,11 @@ class Chef
                          #{logging_arg}
         BASH
       end
+
+      def validate_params!
+        validate_first_cli_arg_is_a_hostname!(WrongCookError)
+      end
+      
     end
   end
 end
