@@ -43,6 +43,11 @@ class Chef
         :long => '--syntax-check-only',
         :boolean => true,
         :description => "Only run syntax checks - do not run Chef"
+
+      def run_pre_run_checks
+        # run right before we run rsync_kitchen and cook
+        # barf out here if need be
+      end
       
       def run
         validate_params!
@@ -51,11 +56,12 @@ class Chef
         return if config[:syntax_check_only]
         Chef::Config.from_file('solo.rb')
         check_chef_version unless config[:skip_chef_check]
+        run_pre_run_checks
         rsync_kitchen
         add_patches
         cook unless config[:sync_only]
       end
-
+      
       def check_syntax
         ui.msg('Checking cookbook syntax...')
         chefignore.remove_ignores_from(Dir["**/*.rb"]).each do |recipe|
