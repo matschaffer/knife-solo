@@ -1,6 +1,7 @@
 = knife-solo
 
 {Build Status}[http://travis-ci.org/matschaffer/knife-solo.png]
+{<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/matschaffer/knife-solo]
 
 == DESCRIPTION:
 
