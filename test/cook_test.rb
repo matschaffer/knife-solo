@@ -94,6 +94,21 @@ class CookTest < TestCase
     end
   end
 
+  def test_cook_calls_run_pre_run_checks
+    kitchen(@clean_kitchen).run
+    
+    Dir.chdir(@clean_kitchen) do
+      cook = command("user@host.com")
+      
+      [:check_syntax, :check_chef_version,
+       :rsync_kitchen, :add_patches, :cook].each {|x| cook.stubs(x) }
+
+      cook.expects(:run_pre_run_checks)
+      
+      cook.run
+    end
+  end
+
   def teardown
     FileUtils.rm_r("/tmp/cook_kitchen_test")
     FileUtils.rm_rf(@clean_kitchen)
