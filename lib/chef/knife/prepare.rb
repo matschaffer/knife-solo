@@ -15,7 +15,7 @@ class Chef
       class WrongPrepareError < KnifeSolo::KnifeSoloError
         alias :message :to_s
       end
-      
+
       banner "knife prepare [user@]hostname (options)"
 
       option :omnibus_version,
@@ -48,7 +48,6 @@ class Chef
       def validate_params!
         validate_first_cli_arg_is_a_hostname!(WrongPrepareError)
       end
-      
     end
   end
 end

@@ -80,17 +80,13 @@ class CookTest < TestCase
 
   def test_barks_without_atleast_a_hostname
     kitchen(@clean_kitchen).run
-    
+
     Dir.chdir(@clean_kitchen) do
-      run_command = command
-
-      assert_raises Chef::Knife::Cook::WrongCookError do
-        run_command.run
+      suppress_knife_error_output do
+        assert_raises Chef::Knife::Cook::WrongCookError do
+          command.run
+        end
       end
-
-      `knife cook`
-      exit_status = $?
-      assert exit_status != 0, "exit status #{exit_status} should be non-zero for failure"
     end
   end
 

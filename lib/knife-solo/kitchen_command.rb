@@ -42,10 +42,10 @@ module KnifeSolo
 
     def validate_first_cli_arg_is_a_hostname!(error_class)
       unless first_cli_arg_is_a_hostname?
-        puts opt_parser.help
+        ui.msg opt_parser.help
         raise error_class.new "need to pass atleast a [user@]hostname as the first argument"
       end
     end
-    
+
   end
 end
