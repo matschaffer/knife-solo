@@ -84,6 +84,12 @@ module KnifeSolo
         # Make sure we have rsync on builds that don't include it by default
         # (observed on linode's ubuntu 10.04 images)
         run_command("sudo apt-get install rsync")
+
+        # Install Ruby
+        debian_gem_install
+
+        # Install Rubygem
+        gem_install        
       end
 
       def gem_install
