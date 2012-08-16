@@ -14,8 +14,8 @@
 
 ## Thanks to our contributors!
 
-* [deepak][Deepak Kannan]
-* [funglaub][Florian Unglaub]
+* [Deepak Kannan][deepak]
+* [Florian Unglaub][funglaub]
 
 # 0.0.12: June 25th, 2012
 
@@ -26,9 +26,9 @@
 
 ## Thanks to our contributors!
 
-* [brynary][Bryan Helmkamp]
-* [gregf][Greg Fitzgerald]
-* [deepak][Deepak Kannan]
+* [Bryan Helmkamp][brynary]
+* [Greg Fitzgerald][gregf]
+* [Deepak Kannan][deepak]
 
 # 0.0.11: June 16th, 2012
 
@@ -146,3 +146,4 @@
 [brynary]: https://github.com/brynary
 [gregf]: https://github.com/gregf
 [deepak]: https://github.com/deepak
+[funglaub]: https://github/funglaub
