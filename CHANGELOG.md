@@ -4,6 +4,19 @@
 
 * Solid windows support :)
 
+# 0.0.13: August 16th, 2012
+
+* Less agressive in-kitchen check (36a14161a1c)
+* New curl/wget selection during omnibus install (#84)
+* FreeBSD 9.0 support (#78)
+* Syntax-check-only switch (#74)
+* Validate CLI user/host args (#73)
+
+## Thanks to our contributors!
+
+* [deepak][Deepak Kannan]
+* [funglaub][Florian Unglaub]
+
 # 0.0.12: June 25th, 2012
 
 * Better validation on CLI args (#68, #70)
