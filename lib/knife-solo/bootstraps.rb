@@ -23,6 +23,10 @@ module KnifeSolo
     end
 
     module Delegates
+      def stream_command(cmd)
+        prepare.stream_command(cmd)
+      end
+
       def run_command(cmd)
         prepare.run_command(cmd)
       end
@@ -52,18 +56,25 @@ module KnifeSolo
       end
 
       def http_client_get_url(url)
-        "wget #{url}"
+        file = File.basename(url)
+        stream_command <<-BASH
+          if which curl 2>/dev/null; then
+            curl -L -o #{file} #{url}
+          else
+            wget -O #{file} #{url}
+          fi
+        BASH
       end
 
       def omnibus_install
-        run_command(http_client_get_url("http://opscode.com/chef/install.sh"))
+        http_client_get_url("http://opscode.com/chef/install.sh")
 
         # `release_version` within install.sh will be installed if
         # `omnibus_version` is not provided.
         install_command = "sudo bash install.sh"
         install_command << " -v #{prepare.config[:omnibus_version]}" if prepare.config[:omnibus_version]
 
-        run_command(install_command)
+        stream_command(install_command)
       end
 
       def ubuntu_omnibus_install
@@ -80,7 +91,7 @@ module KnifeSolo
         release = "rubygems-1.8.10"
         file = "#{release}.tgz"
         url = "http://production.cf.rubygems.org/rubygems/#{file}"
-        run_command(http_client_get_url(url))
+        http_client_get_url(url)
         run_command("tar zxf #{file}")
         run_command("cd #{release} && sudo ruby setup.rb --no-format-executable")
         run_command("sudo rm -rf #{release} #{file}")

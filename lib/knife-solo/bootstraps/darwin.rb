@@ -8,7 +8,7 @@ module KnifeSolo::Bootstraps
     def gem_packages
       ['chef']
     end
-    
+
     def distro
       case issue
       when %r{10.5}
@@ -23,11 +23,6 @@ module KnifeSolo::Bootstraps
     def has_xcode_installed?
       result = run_command("xcodebuild -version")
       result.success?
-    end
-
-    def http_client_get_url(url)
-      filename = url.split("/").last
-      "curl '#{url}' >> #{filename}"
     end
 
     def run_pre_bootstrap_checks

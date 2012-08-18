@@ -6,7 +6,7 @@ class PrepareTest < TestCase
   def setup
     @host = 'somehost@somedomain.com'
   end
-  
+
   def test_generates_a_node_config
     Dir.chdir("/tmp") do
       FileUtils.mkdir("nodes")
@@ -72,17 +72,13 @@ class PrepareTest < TestCase
   def test_barks_without_atleast_a_hostname
     @kitchen = '/tmp/nodes'
     Chef::Knife::Kitchen.new([@kitchen]).run
-    
+
     Dir.chdir(@kitchen) do
-      run_command = command
-
       assert_raises Chef::Knife::Prepare::WrongPrepareError do
-        run_command.run
+        suppress_knife_error_output do
+          command.run
+        end
       end
-
-      `knife prepare`
-      exit_status = $?
-      assert exit_status != 0, "exit status #{exit_status} should be non-zero for failure"
     end
   end
 
@@ -92,6 +88,9 @@ class PrepareTest < TestCase
 
   def command(*args)
     Chef::Knife::Prepare.load_deps
-    Chef::Knife::Prepare.new(args)
+    command = Chef::Knife::Prepare.new(args)
+    command.ui.stubs(:msg)
+    command.ui.stubs(:error)
+    command
   end
 end

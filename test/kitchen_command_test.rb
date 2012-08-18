@@ -24,14 +24,11 @@ class KitchenCommandTest < TestCase
   end
 
   def test_barks_outside_of_the_kitchen
-    old_level = Chef::Log.level
-    Chef::Log.level = :error
-
-    assert_raises KnifeSolo::KitchenCommand::OutOfKitchenError do
-      DummyKitchenCommand.new.run
+    suppress_knife_error_output do
+      assert_raises KnifeSolo::KitchenCommand::OutOfKitchenError do
+        DummyKitchenCommand.new.run
+      end
     end
-  ensure
-    Chef::Log.level = old_level
   end
 
   def test_runs_when_in_a_kitchen

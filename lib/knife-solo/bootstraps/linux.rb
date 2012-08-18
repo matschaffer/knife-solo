@@ -18,10 +18,6 @@ module KnifeSolo::Bootstraps
       ['ruby-shadow','chef']
     end
 
-    def http_client_get_url(url)
-      "curl -LO #{url}"
-    end
-
     def zypper_gem_install
       ui.msg("Installing required packages...")
       run_command("sudo zypper --non-interactive install ruby-devel make gcc rsync")
