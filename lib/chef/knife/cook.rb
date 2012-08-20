@@ -57,14 +57,10 @@ class Chef
         cook unless config[:sync_only]
       end
 
-      def windows_client?
-        RbConfig::CONFIG['host_os'] =~ /mswin|mingw/
-      end
-
       def check_syntax
         ui.msg('Checking cookbook syntax...')
         chefignore.remove_ignores_from(Dir["**/*.rb"]).each do |recipe|
-          ok = system "ruby -c #{recipe} #{windows_client? ? '>NUL' : '>/dev/null'} 2>&1"
+          ok = quiet_system "ruby -c #{recipe}"
           raise "Syntax error in #{recipe}" if not ok
         end
 
@@ -107,28 +103,32 @@ class Chef
         adjust_rsync_path(path)
       end
 
+      # see http://stackoverflow.com/questions/5798807/rsync-permission-denied-created-directories-have-no-permissions
       def rsync_permissions
-        # see http://stackoverflow.com/questions/5798807/rsync-permission-denied-created-directories-have-no-permissions
-        windows_client? ? '--chmod=ugo=rwX' : ''
+        '--chmod=ugo=rwX' if windows_client?
       end
 
       def patch_path
         Array(Chef::Config.cookbook_path).first + "/chef_solo_patches/libraries"
       end
 
-      def rsync_exclude
+      def rsync_excludes
         (%w{revision-deploys tmp '.*'} + chefignore.ignores).uniq
       end
 
       def rsync_kitchen
-        system! %Q{rsync -rl #{rsync_permissions} --rsh="ssh #{ssh_args}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path_on_node(chef_path)}}
+        rsync('./', chef_path, '--delete')
       end
 
       def add_patches
         run_portable_mkdir_p(patch_path)
         Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb")].each do |patch|
-          system! %Q{rsync -rl #{rsync_permissions} --rsh="ssh #{ssh_args}" #{adjust_rsync_path_on_client(patch)} :#{adjust_rsync_path_on_node(patch_path)}}
+          rsync(patch, patch_path)
         end
+      end
+
+      def rsync(source_path, target_path, extra_opts = '')
+        system! %Q{rsync -rl #{rsync_permissions} --rsh="ssh #{ssh_args}" #{extra_opts} #{rsync_excludes.collect{ |ignore| "--exclude #{ignore} " }.join} #{adjust_rsync_path_on_client(source_path)} :#{adjust_rsync_path_on_node(target_path)}}
       end
 
       def check_chef_version
