@@ -1,4 +1,5 @@
 require 'pathname'
+require 'rbconfig'
 
 require 'chef/knife'
 require 'chef/config'
@@ -56,10 +57,14 @@ class Chef
         cook unless config[:sync_only]
       end
 
+      def windows?
+        RbConfig::CONFIG['host_os'] =~ /mswin|mingw/
+      end
+
       def check_syntax
         ui.msg('Checking cookbook syntax...')
         chefignore.remove_ignores_from(Dir["**/*.rb"]).each do |recipe|
-          ok = system "ruby -c #{recipe} >/dev/null 2>&1"
+          ok = system "ruby -c #{recipe} #{windows? ? '>NUL' : '>/dev/null'} 2>&1"
           raise "Syntax error in #{recipe}" if not ok
         end
 
