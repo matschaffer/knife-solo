@@ -57,14 +57,14 @@ class Chef
         cook unless config[:sync_only]
       end
 
-      def windows?
+      def windows_client?
         RbConfig::CONFIG['host_os'] =~ /mswin|mingw/
       end
 
       def check_syntax
         ui.msg('Checking cookbook syntax...')
         chefignore.remove_ignores_from(Dir["**/*.rb"]).each do |recipe|
-          ok = system "ruby -c #{recipe} #{windows? ? '>NUL' : '>/dev/null'} 2>&1"
+          ok = system "ruby -c #{recipe} #{windows_client? ? '>NUL' : '>/dev/null'} 2>&1"
           raise "Syntax error in #{recipe}" if not ok
         end
 
@@ -94,8 +94,22 @@ class Chef
 
       # cygwin rsync path must be adjusted to work
       def adjust_rsync_path(path)
-        return path unless windows_node?
         path.gsub(/^(\w):/) { "/cygdrive/#{$1}" }
+      end
+
+      def adjust_rsync_path_on_node(path)
+        return path unless windows_node?
+        adjust_rsync_path(path)
+      end
+
+      def adjust_rsync_path_on_client(path)
+        return path unless windows_client?
+        adjust_rsync_path(path)
+      end
+
+      def rsync_permissions
+        # see http://stackoverflow.com/questions/5798807/rsync-permission-denied-created-directories-have-no-permissions
+        windows_client? ? '--chmod=ugo=rwX' : ''
       end
 
       def patch_path
@@ -107,13 +121,13 @@ class Chef
       end
 
       def rsync_kitchen
-        system! %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
+        system! %Q{rsync -rl #{rsync_permissions} --rsh="ssh #{ssh_args}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path_on_node(chef_path)}}
       end
 
       def add_patches
         run_portable_mkdir_p(patch_path)
         Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb")].each do |patch|
-          system! %Q{rsync -rl --rsh="ssh #{ssh_args}" #{patch} :#{adjust_rsync_path(patch_path)}}
+          system! %Q{rsync -rl #{rsync_permissions} --rsh="ssh #{ssh_args}" #{adjust_rsync_path_on_client(patch)} :#{adjust_rsync_path_on_node(patch_path)}}
         end
       end
 
