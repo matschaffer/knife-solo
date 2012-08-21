@@ -9,7 +9,9 @@ module KnifeSolo
     end
 
     def quiet_system(command)
-      system "#{command} #{if windows_client? then '>NUL' else '>/dev/null' end} 2>&1"
+      redirect_output = '>/def/null 2>&1'
+      redirect_output = '>NUL 2>&1' if windows_client?
+      system "#{command} #{redirect_output}"
     end
   end
 end
