@@ -21,7 +21,7 @@ TXT
 setup() {
   gem install bundler
   bundle --binstubs=b
-  rake
+  bundle exec rake
   if [[ ! -e test/support/config.yml ]]; then
     cp test/support/config.yml{.example,}
   fi
