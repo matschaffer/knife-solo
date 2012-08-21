@@ -45,15 +45,17 @@ class Chef
         :description => "Only run syntax checks - do not run Chef"
       
       def run
-        validate_params!
-        super
-        check_syntax unless config[:skip_syntax_check]
-        return if config[:syntax_check_only]
-        Chef::Config.from_file('solo.rb')
-        check_chef_version unless config[:skip_chef_check]
-        rsync_kitchen
-        add_patches
-        cook unless config[:sync_only]
+        time('Run') do
+          validate_params!
+          super
+          check_syntax unless config[:skip_syntax_check]
+          return if config[:syntax_check_only]
+          Chef::Config.from_file('solo.rb')
+          check_chef_version unless config[:skip_chef_check]
+          rsync_kitchen
+          add_patches
+          cook unless config[:sync_only]
+        end
       end
 
       def check_syntax
@@ -101,18 +103,34 @@ class Chef
         (%w{revision-deploys tmp '.*'} + chefignore.ignores).uniq
       end
 
+      # Time a command
+      def time(msg)
+        return yield if config[:verbosity] == 0
+        puts "Starting #{msg}"
+        start = Time.now
+        yield
+        puts "#{msg} finished in #{Time.now - start} seconds"
+      end
+
       def rsync_kitchen
-        system! %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
+        time('Rsync kitchen') do
+          cmd = %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
+          puts cmd unless config[:verbosity] == 0
+          system! cmd
+        end
       end
 
       def add_patches
         run_portable_mkdir_p(patch_path)
         Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb")].each do |patch|
-          system! %Q{rsync -rl --rsh="ssh #{ssh_args}" #{patch} :#{adjust_rsync_path(patch_path)}}
+          time(patch) do
+            system! %Q{rsync -rl --rsh="ssh #{ssh_args}" #{patch} :#{adjust_rsync_path(patch_path)}}
+          end
         end
       end
 
       def check_chef_version
+        ui.msg('Checking Chef version')
         result = run_command <<-BASH
           export PATH="#{OMNIBUS_EMBEDDED_PATHS.join(":")}:$PATH"
           ruby -rubygems -e "gem 'chef', '#{CHEF_VERSION_CONSTRAINT}'"
