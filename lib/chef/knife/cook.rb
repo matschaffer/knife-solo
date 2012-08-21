@@ -53,8 +53,8 @@ class Chef
           Chef::Config.from_file('solo.rb')
           check_chef_version unless config[:skip_chef_check]
           rsync_kitchen
-          # add_patches
-          # cook unless config[:sync_only]
+          add_patches
+          cook unless config[:sync_only]
         end
       end
 
