@@ -15,10 +15,13 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'minitest'
   gem.add_development_dependency 'mocha'
-  gem.add_development_dependency 'librarian', '~> 0.0.20'
+  gem.add_development_dependency 'librarian'
 
+  gem.add_development_dependency 'rspec', '~> 2.11'
+  gem.add_development_dependency 'vagrant', '~> 1.0'
+
+  gem.add_dependency 'net-ssh', '~> 2.2'
   gem.add_dependency 'chef',    '>= 0.10.10'
-  gem.add_dependency 'net-ssh', '>= 2.1.3', '< 2.3.0'
 
   gem.files         = Dir['**/*'].select{|f| File.file?(f)}
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
