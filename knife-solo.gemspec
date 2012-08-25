@@ -13,6 +13,7 @@ Gem::Specification.new do |gem|
   gem.homepage    = 'https://github.com/matschaffer/knife-solo'
 
   gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'minitest'
   gem.add_development_dependency 'mocha'
   gem.add_development_dependency 'librarian', '~> 0.0.20'
 

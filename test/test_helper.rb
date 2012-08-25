@@ -1,7 +1,7 @@
 require 'rubygems'
-require 'bundler'
+require 'bundler/setup'
 
-Bundler.require
-Bundler.require(:test)
+require 'minitest/autorun'
+require 'mocha'
 
 require 'support/test_case'
