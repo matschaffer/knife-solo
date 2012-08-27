@@ -73,8 +73,7 @@ module KnifeSolo
         # `omnibus_version` is not provided.
         install_command = "sudo bash #{file}"
         install_command << " -v #{prepare.config[:omnibus_version]}" if prepare.config[:omnibus_version]
-        install_command << " -r" if prepare.config[:omnibus_source] == "CF"
-        install_command << " -a" if prepare.config[:omnibus_source] == "S3"
+        install_command << " #{prepare.config[:options]}" if prepare.config[:options]
 
         stream_command(install_command)
       end
