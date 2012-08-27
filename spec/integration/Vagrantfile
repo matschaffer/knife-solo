@@ -1,13 +1,15 @@
+require_relative 'support/knife_solo_provisioner'
+
 Vagrant::Config.run do |config|
   config.vm.define :ubuntu12 do |c|
     c.vm.box       = "opscode-ubuntu-12.04"
     c.vm.box_url   = "https://opscode-vm.s3.amazonaws.com/vagrant/boxes/opscode-ubuntu-12.04.box"
     c.vm.network :hostonly, "10.0.3.4"
-    c.vm.provision :chef_solo do |chef|
-      chef.log_level = :debug
-      chef.cookbooks_path = [ 'cookbooks' ]
-      chef.add_recipe 'minitest-handler'
-      chef.add_recipe 'cube'
+    c.vm.provision KnifeSoloProvisioner do |p|
+      # p.log_level = :debug
+      # p.cookbooks_path = [ 'cookbooks' ]
+      # p.add_recipe 'minitest-handler'
+      # p.add_recipe 'cube'
     end
   end
 end
