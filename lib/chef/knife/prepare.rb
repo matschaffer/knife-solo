@@ -22,6 +22,15 @@ class Chef
         :long => "--omnibus-version VERSION",
         :description => "The version of Omnibus to install"
 
+      option :omnibus_url,
+        :long => "--omnibus-url URL",
+        :description => "URL to download install.sh from"
+
+      option :omnibus_source,
+        :long => "--omnibus-source CF|S3",
+        :description => "Use Amazon S3 or Rackspace CloudFiles to download"
+
+
       def run
         validate_params!
         super
