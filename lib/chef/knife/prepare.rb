@@ -26,7 +26,7 @@ class Chef
         :long => "--omnibus-url URL",
         :description => "URL to download install.sh from"
 
-      option :options,
+      option :omnibus_options,
         :long => "--options \"-r -n\"",
         :description => "Pass options to the install.sh script"
 
