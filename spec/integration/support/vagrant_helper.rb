@@ -7,7 +7,8 @@ module VagrantHelper
   end
 
   def vagrant(command, vm)
-    system "vagrant", command, vm
+    log_file = [ "#{subject}.vagrant.log", "a" ]
+    system "vagrant", command, vm, out: log_file, err: log_file
     $?.success?
   end
 
