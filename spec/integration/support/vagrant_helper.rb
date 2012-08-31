@@ -15,10 +15,14 @@ module VagrantHelper
     File.expand_path("../../#{subject}.json", __FILE__)
   end
 
-  def provision(config)
+  def write_config(config)
     File.open(config_file, 'w') do |f|
       f.print(config.to_json)
     end
+  end
+
+  def provision(config)
+    write_config config
     vagrant "provision", subject
   end
 end
@@ -29,6 +33,7 @@ RSpec.configure do |c|
   c.before(:all) do
     Dir.chdir(vagrant_cwd)
     system "librarian-chef install"
+    write_config run_list: []
     vagrant "up", subject
   end
 
