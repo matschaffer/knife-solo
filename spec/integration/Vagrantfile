@@ -6,10 +6,7 @@ Vagrant::Config.run do |config|
     c.vm.box_url   = "https://opscode-vm.s3.amazonaws.com/vagrant/boxes/opscode-ubuntu-12.04.box"
     c.vm.network :hostonly, "10.0.3.4"
     c.vm.provision KnifeSoloProvisioner do |p|
-      # p.log_level = :debug
-      # p.cookbooks_path = [ 'cookbooks' ]
-      # p.add_recipe 'minitest-handler'
-      # p.add_recipe 'cube'
+      p.node_config = "ubuntu12.json"
     end
   end
 end

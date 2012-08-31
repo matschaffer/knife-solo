@@ -22,6 +22,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'net-ssh', '~> 2.2'
   gem.add_dependency 'chef',    '>= 0.10.10'
+  gem.add_dependency 'json'
 
   gem.files         = Dir['**/*'].select{|f| File.file?(f)}
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

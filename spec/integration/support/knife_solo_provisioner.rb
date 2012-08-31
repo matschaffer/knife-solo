@@ -1,4 +1,12 @@
 class KnifeSoloProvisioner < Vagrant::Provisioners::Base
+  class Config < Vagrant::Config::Base
+    attr_accessor :node_config
+  end
+
+  def self.config_class
+    Config
+  end
+
   def ssh_info
     env[:vm].ssh.info
   end
@@ -9,19 +17,28 @@ class KnifeSoloProvisioner < Vagrant::Provisioners::Base
       "-i", ssh_info[:private_key_path] ]
   end
 
-  def knife(command)
-    arguments = ["knife", command] + connection_arguments
+  def knife(*args)
+    arguments = ["knife", args.shift] + connection_arguments + args
     system *arguments
   end
 
-  def kitchen
-    File.expand_path("../..", __FILE__)
+  def vm
+    env[:vm]
+  end
+
+  def install_chef
+    knife "prepare"
+    vm.env.local_data["prepared"] ||= {}
+    vm.env.local_data["prepared"][vm.name] = vm.uuid
+    vm.env.local_data.commit
+  end
+
+  def prepared?
+    vm.env.local_data["prepared"] && vm.env.local_data["prepared"][vm.name.to_s] == vm.uuid
   end
 
   def provision!
-    Dir.chdir(kitchen) do
-      knife "prepare"
-      knife "cook"
-    end
+    install_chef unless prepared?
+    knife "cook", config.node_config
   end
 end

@@ -8,4 +8,8 @@
 /test/support/config.yml
 /test/support/knife-solo.pem
 /test/support/kitchens
-spec/integration/.vagrant
+
+/spec/integration/.vagrant
+/spec/integration/tmp
+/spec/integration/cookbooks
+/spec/integration/nodes
