@@ -1,3 +1,4 @@
 site "http://community.opscode.com/api/v1"
 
-cookbook "apache2"
+cookbook "minitest-handler"
+cookbook "apache2", git: 'https://github.com/matschaffer/apache2.git', ref: 'bug/minitest-helpers'

@@ -137,21 +137,23 @@ class Chef
         BASH
         raise "Couldn't find Chef #{CHEF_VERSION_CONSTRAINT} on #{host}. Please run `#{$0} prepare #{ssh_args}` to ensure Chef is installed and up to date." unless result.success?
       end
-      
+
       def cook
         logging_arg = "-l debug" if config[:verbosity] > 0
 
-        stream_command <<-BASH
+        result = stream_command <<-BASH
           sudo chef-solo -c #{chef_path}/solo.rb \
                          -j #{chef_path}/#{node_config} \
                          #{logging_arg}
         BASH
+
+        raise "chef-solo failed. See output above." unless result.success?
       end
 
       def validate_params!
         validate_first_cli_arg_is_a_hostname!(WrongCookError)
       end
-      
+
     end
   end
 end

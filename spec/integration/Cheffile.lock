@@ -1,8 +1,18 @@
 SITE
   remote: http://community.opscode.com/api/v1
   specs:
-    apache2 (1.1.12)
+    chef_handler (1.0.6)
+    minitest-handler (0.1.1)
+      chef_handler (>= 0.0.0)
+
+GIT
+  remote: https://github.com/matschaffer/apache2.git
+  ref: bug/minitest-helpers
+  sha: 8ebe954dd1cb2c4103b372eaab3437242d0fad5f
+  specs:
+    apache2 (1.1.13)
 
 DEPENDENCIES
   apache2 (>= 0)
+  minitest-handler (>= 0)
 

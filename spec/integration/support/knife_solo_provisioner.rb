@@ -20,6 +20,7 @@ class KnifeSoloProvisioner < Vagrant::Provisioners::Base
   def knife(*args)
     arguments = ["knife", args.shift] + connection_arguments + args
     system *arguments
+    raise "Failed knife command: #{args}" unless $?.success?
   end
 
   def vm
