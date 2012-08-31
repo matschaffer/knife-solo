@@ -40,6 +40,6 @@ class KnifeSoloProvisioner < Vagrant::Provisioners::Base
 
   def provision!
     install_chef unless prepared?
-    knife "cook", config.node_config
+    knife "cook", config.node_config, "--skip-syntax-check"
   end
 end
