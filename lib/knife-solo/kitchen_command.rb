@@ -29,7 +29,7 @@ module KnifeSolo
     end
 
     def first_cli_arg_is_a_hostname?
-      @name_args.first =~ /\A.+\@.+\z/
+      @name_args.first =~ /\A[.+\@]?.+\z/
     end
 
     def validate_first_cli_arg_is_a_hostname!(error_class)
