@@ -55,8 +55,7 @@ module KnifeSolo
         raise "implement gem packages for #{self.class.name}"
       end
 
-      def http_client_get_url(url)
-        file = File.basename(url)
+      def http_client_get_url(url, file)
         stream_command <<-BASH
           if which curl 2>/dev/null; then
             curl -L -o #{file} #{url}
@@ -67,12 +66,14 @@ module KnifeSolo
       end
 
       def omnibus_install
-        http_client_get_url("http://opscode.com/chef/install.sh")
-
+        url = prepare.config[:omnibus_url] || "http://opscode.com/chef/install.sh"
+        file = File.basename(url)
+        http_client_get_url(url, file)
         # `release_version` within install.sh will be installed if
         # `omnibus_version` is not provided.
-        install_command = "sudo bash install.sh"
+        install_command = "sudo bash #{file}"
         install_command << " -v #{prepare.config[:omnibus_version]}" if prepare.config[:omnibus_version]
+        install_command << " #{prepare.config[:options]}" if prepare.config[:options]
 
         stream_command(install_command)
       end
