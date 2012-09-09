@@ -13,6 +13,6 @@ namespace :test do
   end
 end
 
-desc "Alias for test:units"
-task :test => ['test:units']
-task :default => :test
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec)
+task :default => :spec
