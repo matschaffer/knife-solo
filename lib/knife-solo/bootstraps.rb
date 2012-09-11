@@ -92,7 +92,7 @@ module KnifeSolo
         release = "rubygems-1.8.10"
         file = "#{release}.tgz"
         url = "http://production.cf.rubygems.org/rubygems/#{file}"
-        http_client_get_url(url)
+        http_client_get_url(url, file)
         run_command("tar zxf #{file}")
         run_command("cd #{release} && sudo ruby setup.rb --no-format-executable")
         run_command("sudo rm -rf #{release} #{file}")
