@@ -10,7 +10,7 @@ class Ubuntu12_04Test < IntegrationTest
   end
 
   def prepare_command
-    "prepare --omnibus-version '0.10.10-1'"
+    "prepare"
   end
 
   include EmptyCook
