@@ -13,5 +13,4 @@
 /spec/integration/tmp
 /spec/integration/cookbooks
 /spec/integration/nodes
-/spec/integration/.gem_path
 *.vagrant.log
