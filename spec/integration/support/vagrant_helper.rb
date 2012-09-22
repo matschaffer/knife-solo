@@ -22,6 +22,19 @@ module VagrantHelper
     end
   end
 
+  def gem_path_file
+    File.expand_path('../../.gem_path', __FILE__)
+  end
+
+  # Store our GEM_PATH for later retrieval
+  # The package-install of vagrant overrides this so we'll store it here so
+  # we can load it back in via our Vagranfile
+  def write_gem_path
+    File.open(gem_path_file, 'w') do |f|
+      f.print ENV['GEM_PATH']
+    end
+  end
+
   def provision(config)
     write_config config
     vagrant "provision", subject
@@ -35,6 +48,7 @@ RSpec.configure do |c|
     Dir.chdir(vagrant_cwd)
     system "librarian-chef install"
     write_config run_list: []
+    write_gem_path
     vagrant "up", subject
   end
 

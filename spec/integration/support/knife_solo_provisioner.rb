@@ -2,6 +2,7 @@ class KnifeSoloProvisioner < Vagrant::Provisioners::Base
   class Config < Vagrant::Config::Base
     attr_accessor :node_config
     attr_accessor :options
+    attr_accessor :knife_env
 
     attr_writer :knife_path
     def knife_path
@@ -25,7 +26,8 @@ class KnifeSoloProvisioner < Vagrant::Provisioners::Base
 
   def knife(*args)
     arguments = [config.knife_path, args.shift] + connection_arguments + args
-    system *arguments
+    arguments.unshift(config.knife_env) if config.knife_env
+    system(*arguments)
     raise "Failed knife command: #{arguments.join(' ')}" unless $?.success?
   end
 
