@@ -43,7 +43,7 @@ class Chef
         :long => '--syntax-check-only',
         :boolean => true,
         :description => "Only run syntax checks - do not run Chef"
-      
+
       def run
         time('Run') do
           validate_params!
@@ -78,7 +78,7 @@ class Chef
       end
 
       def node_config
-        @name_args[1] || super
+        generate_node_config(Pathname.new(@name_args[1] || "nodes/#{host}.json"))
       end
 
       def chef_path
@@ -154,6 +154,17 @@ class Chef
         validate_first_cli_arg_is_a_hostname!(WrongCookError)
       end
 
+      private
+
+      def generate_node_config(file)
+        file.dirname.mkpath
+        File.open(file, 'w') do |f|
+          f.print <<-JSON.gsub(/^\s+/, '')
+            { "run_list": [] }
+          JSON
+        end unless file.exist?
+        file
+      end
     end
   end
 end

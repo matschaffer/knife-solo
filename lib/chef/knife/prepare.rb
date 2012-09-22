@@ -26,19 +26,10 @@ class Chef
         validate_params!
         super
         bootstrap.bootstrap!
-        generate_node_config
       end
 
       def bootstrap
         KnifeSolo::Bootstraps.class_for_operating_system(operating_system()).new(self)
-      end
-
-      def generate_node_config
-        File.open(node_config, 'w') do |f|
-          f.print <<-JSON.gsub(/^\s+/, '')
-            { "run_list": [] }
-          JSON
-        end unless node_config.exist?
       end
 
       def operating_system

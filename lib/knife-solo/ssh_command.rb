@@ -35,10 +35,6 @@ module KnifeSolo
       end
     end
 
-    def node_config
-      Pathname.new("nodes/#{host}.json")
-    end
-
     def host_descriptor
       return @host_descriptor if @host_descriptor
       parts = @name_args.first.split('@')
