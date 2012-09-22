@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    knife-solo (0.0.13)
+    knife-solo (0.0.14)
       chef (>= 0.10.10)
       librarian (~> 0.0.20)
       net-ssh (>= 2.1.3, < 2.3.0)
@@ -11,13 +11,13 @@ GEM
   specs:
     archive-tar-minitar (0.5.2)
     builder (3.0.0)
-    bunny (0.8.0)
-    chef (10.12.0)
-      bunny (>= 0.6.0)
+    bunny (0.7.9)
+    chef (10.14.2)
+      bunny (>= 0.6.0, < 0.8.0)
       erubis
       highline (>= 1.6.9)
       json (>= 1.4.4, <= 1.6.1)
-      mixlib-authentication (>= 1.1.0)
+      mixlib-authentication (>= 1.3.0)
       mixlib-cli (>= 1.1.0)
       mixlib-config (>= 1.1.2)
       mixlib-log (>= 1.3.0)
@@ -52,7 +52,7 @@ GEM
       nokogiri (~> 1.5.0)
       ruby-hmac
     formatador (0.2.3)
-    highline (1.6.13)
+    highline (1.6.15)
     ipaddress (0.8.0)
     json (1.6.1)
     librarian (0.0.24)
