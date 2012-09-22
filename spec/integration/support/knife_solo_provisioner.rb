@@ -1,6 +1,12 @@
 class KnifeSoloProvisioner < Vagrant::Provisioners::Base
   class Config < Vagrant::Config::Base
     attr_accessor :node_config
+    attr_accessor :options
+
+    attr_writer :knife_path
+    def knife_path
+      @knife_path || 'knife'
+    end
   end
 
   def self.config_class
@@ -18,7 +24,7 @@ class KnifeSoloProvisioner < Vagrant::Provisioners::Base
   end
 
   def knife(*args)
-    arguments = ["knife", args.shift] + connection_arguments + args
+    arguments = [config.knife_path, args.shift] + connection_arguments + args
     system *arguments
     raise "Failed knife command: #{arguments.join(' ')}" unless $?.success?
   end
@@ -28,7 +34,7 @@ class KnifeSoloProvisioner < Vagrant::Provisioners::Base
   end
 
   def install_chef
-    knife "prepare"
+    knife "prepare", config.options
     vm.env.local_data["prepared"] ||= {}
     vm.env.local_data["prepared"][vm.name] = vm.uuid
     vm.env.local_data.commit
@@ -40,6 +46,6 @@ class KnifeSoloProvisioner < Vagrant::Provisioners::Base
 
   def provision!
     install_chef unless prepared?
-    knife "cook", config.node_config, "--skip-syntax-check"
+    knife "cook", config.node_config, "--skip-syntax-check", config.options
   end
 end

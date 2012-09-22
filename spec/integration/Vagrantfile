@@ -6,7 +6,9 @@ Vagrant::Config.run do |config|
     c.vm.box_url   = "https://opscode-vm.s3.amazonaws.com/vagrant/boxes/opscode-ubuntu-12.04.box"
     c.vm.network :hostonly, "10.0.3.4"
     c.vm.provision KnifeSoloProvisioner do |p|
+      p.knife_path  = File.expand_path('../../../b/knife', __FILE__)
       p.node_config = "ubuntu12.json"
+      p.options     = "-VV"
     end
   end
 end
