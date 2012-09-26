@@ -62,7 +62,7 @@ class CookTest < TestCase
       File.open("chefignore", 'w') do |f|
         f << "syntax_error.rb"
       end
-      assert command.rsync_exclude.include?("syntax_error.rb")
+      assert command.rsync_excludes.include?("syntax_error.rb")
     end
   end
 
