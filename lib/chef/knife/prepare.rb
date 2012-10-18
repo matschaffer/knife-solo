@@ -30,6 +30,11 @@ class Chef
         :long => "--omnibus-options \"-r -n\"",
         :description => "Pass options to the install.sh script"
 
+      option :chef_node_name,
+        :short => "-N NAME",
+        :long => "--node-name NAME",
+        :description => "The Chef node name for your new node"
+
       def run
         validate_params!
         super

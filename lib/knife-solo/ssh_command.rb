@@ -36,7 +36,7 @@ module KnifeSolo
     end
 
     def node_config
-      Pathname.new("nodes/#{host}.json")
+      Pathname.new("nodes/#{config[:chef_node_name] || host}.json")
     end
 
     def host_descriptor

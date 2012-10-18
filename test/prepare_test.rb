@@ -4,7 +4,7 @@ require 'chef/knife/prepare'
 
 class PrepareTest < TestCase
   def setup
-    @host = 'somehost@somedomain.com'
+    @host = 'someuser@somehost.domain.com'
   end
 
   def test_generates_a_node_config
@@ -23,14 +23,25 @@ class PrepareTest < TestCase
       FileUtils.mkdir("nodes")
 
       cmd = command(@host)
-
       File.open(cmd.node_config, "w") do |f|
         f << "testdata"
       end
-
       cmd.generate_node_config
 
       assert_match "testdata", cmd.node_config.read
+    end
+  end
+
+  def test_generates_a_node_config_from_name_option
+    Dir.chdir("/tmp") do
+      FileUtils.mkdir("nodes")
+
+      cmd = command(@host)
+      cmd.config[:chef_node_name] = "mynode"
+      cmd.generate_node_config
+
+      assert_equal "nodes/mynode.json", cmd.node_config.to_s
+      assert cmd.node_config.exist?
     end
   end
 
