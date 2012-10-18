@@ -15,6 +15,7 @@ class PrepareTest < TestCase
       cmd.generate_node_config
 
       assert cmd.node_config.exist?
+      assert_match '{"run_list":[]}', cmd.node_config.read
     end
   end
 
@@ -42,6 +43,45 @@ class PrepareTest < TestCase
 
       assert_equal "nodes/mynode.json", cmd.node_config.to_s
       assert cmd.node_config.exist?
+    end
+  end
+
+  def test_generates_a_node_config_with_specified_run_list
+    Dir.chdir("/tmp") do
+      FileUtils.mkdir("nodes")
+
+      cmd = command(@host)
+      cmd.config[:run_list] = %w{ role[base] recipe[foo] }
+      cmd.generate_node_config
+
+      assert_match '{"run_list":["role[base]","recipe[foo]"]}', cmd.node_config.read
+    end
+  end
+
+  def test_generates_a_node_config_with_specified_attributes
+    Dir.chdir("/tmp") do
+      FileUtils.mkdir("nodes")
+
+      cmd = command(@host)
+      cmd.config[:first_boot_attributes] = {
+        "foo" => { "bar" => [ 1, 2 ], "baz" => "x" }
+      }
+      cmd.generate_node_config
+
+      assert_match '{"foo":{"bar":[1,2],"baz":"x"},"run_list":[]}', cmd.node_config.read
+    end
+  end
+
+  def test_generates_a_node_config_with_specified_run_list_and_attributes
+    Dir.chdir("/tmp") do
+      FileUtils.mkdir("nodes")
+
+      cmd = command(@host)
+      cmd.config[:first_boot_attributes] = { "foo" => "bar" }
+      cmd.config[:run_list] = %w{ recipe[baz] }
+      cmd.generate_node_config
+
+      assert_match '{"foo":"bar","run_list":["recipe[baz]"]}', cmd.node_config.read
     end
   end
 
