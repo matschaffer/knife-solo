@@ -32,6 +32,19 @@ class PrepareTest < TestCase
     end
   end
 
+  def test_generates_a_node_config_from_name_option
+    Dir.chdir("/tmp") do
+      FileUtils.mkdir("nodes")
+
+      cmd = command(@host)
+      cmd.config[:chef_node_name] = "mynode"
+      cmd.generate_node_config
+
+      assert_equal "nodes/mynode.json", cmd.node_config.to_s
+      assert cmd.node_config.exist?
+    end
+  end
+
   def test_will_specify_omnibus_version
     Dir.chdir("/tmp") do
       FileUtils.mkdir("nodes")
