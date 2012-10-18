@@ -25,7 +25,7 @@ module KnifeSolo
     end
 
     def warn_for_required_file(file)
-      Chef::Log.warn "#{file} is a required file/directory"
+      ui.error "#{file} is a required file/directory"
     end
 
     def first_cli_arg_is_a_hostname?

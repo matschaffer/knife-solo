@@ -43,6 +43,7 @@ class Chef
       end
 
       def bootstrap
+        ui.msg "Bootstrapping Chef..."
         KnifeSolo::Bootstraps.class_for_operating_system(operating_system()).new(self)
       end
 

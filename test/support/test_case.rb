@@ -3,11 +3,7 @@ class TestCase < MiniTest::Unit::TestCase
     super unless self.class == TestCase
   end
 
-  def suppress_knife_error_output
-    old_level = Chef::Log.level
-    Chef::Log.level = :error
-    yield
-  ensure
-    Chef::Log.level = old_level
+  def suppress_knife_error_output(knife_command)
+    knife_command.ui.stderr.reopen("/dev/null")
   end
 end
