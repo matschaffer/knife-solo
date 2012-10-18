@@ -43,7 +43,12 @@ class Chef
         :long => '--syntax-check-only',
         :boolean => true,
         :description => "Only run syntax checks - do not run Chef"
-      
+
+      option :chef_node_name,
+        :short => "-N NAME",
+        :long => "--node-name NAME",
+        :description => "The Chef node name for your new node"
+
       def run
         time('Run') do
           validate_params!
