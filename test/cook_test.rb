@@ -5,14 +5,14 @@ require 'chef/knife/kitchen'
 
 class CookTest < TestCase
 
-  def test_takes_config_as_second_arg
-    cmd = command("host", "nodes/myhost.json")
-    assert_equal "nodes/myhost.json", cmd.node_config
+  def test_node_config_defaults_to_host_name
+    cmd = command("someuser@somehost.domain.com")
+    assert_equal "nodes/somehost.domain.com.json", cmd.node_config.to_s
   end
 
-  def test_defaults_to_host_name
-    cmd = command("host")
-    assert_equal "nodes/host.json", cmd.node_config.to_s
+  def test_takes_node_config_as_second_arg
+    cmd = command("someuser@somehost.domain.com", "nodes/myhost.json")
+    assert_equal "nodes/myhost.json", cmd.node_config
   end
 
   def test_gets_destination_path_from_chef_config
@@ -66,18 +66,6 @@ class CookTest < TestCase
     end
   end
 
-  def setup
-    Dir.chdir("/tmp") do
-      kitchen("cook_kitchen_test").run
-    end
-    Dir.chdir("/tmp/cook_kitchen_test") do
-      File.open("syntax_error.rb", 'w') do |f|
-        f << "this is a blatant ruby syntax error."
-      end
-    end
-    @clean_kitchen = '/tmp/kitchen'
-  end
-
   def test_barks_without_atleast_a_hostname
     kitchen(@clean_kitchen).run
 
@@ -88,6 +76,18 @@ class CookTest < TestCase
         end
       end
     end
+  end
+
+  def setup
+    Dir.chdir("/tmp") do
+      kitchen("cook_kitchen_test").run
+    end
+    Dir.chdir("/tmp/cook_kitchen_test") do
+      File.open("syntax_error.rb", 'w') do |f|
+        f << "this is a blatant ruby syntax error."
+      end
+    end
+    @clean_kitchen = '/tmp/kitchen'
   end
 
   def teardown
