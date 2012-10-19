@@ -37,7 +37,7 @@ class Chef
       option :skip_syntax_check,
         :long => '--skip-syntax-check',
         :boolean => true,
-        :description => "Skip Ruby syntax checks"
+        :description => "Skip Ruby and JSON syntax checks"
 
       option :syntax_check_only,
         :long => '--syntax-check-only',
@@ -64,7 +64,7 @@ class Chef
       end
 
       def check_syntax
-        ui.msg('Checking cookbook syntax...')
+        ui.msg "Checking cookbook syntax..."
         chefignore.remove_ignores_from(Dir["**/*.rb"]).each do |recipe|
           ok = system "ruby -c #{recipe} >/dev/null 2>&1"
           raise "Syntax error in #{recipe}" if not ok
@@ -79,7 +79,7 @@ class Chef
             raise "Syntax error in #{json}: #{error.message}"
           end
         end
-        Chef::Log.info "cookbook and json syntax is ok"
+        ui.msg "Cookbook and JSON syntaxes are OK"
       end
 
       def node_config
@@ -111,16 +111,16 @@ class Chef
       # Time a command
       def time(msg)
         return yield if config[:verbosity] == 0
-        puts "Starting #{msg}"
+        ui.msg "Starting '#{msg}'"
         start = Time.now
         yield
-        puts "#{msg} finished in #{Time.now - start} seconds"
+        ui.msg "#{msg} finished in #{Time.now - start} seconds"
       end
 
       def rsync_kitchen
         time('Rsync kitchen') do
           cmd = %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
-          puts cmd unless config[:verbosity] == 0
+          ui.msg cmd unless config[:verbosity] == 0
           system! cmd
         end
       end
@@ -135,14 +135,14 @@ class Chef
       end
 
       def check_chef_version
-        ui.msg('Checking Chef version')
+        ui.msg "Checking Chef version..."
         result = run_command <<-BASH
           export PATH="#{OMNIBUS_EMBEDDED_PATHS.join(":")}:$PATH"
           ruby -rubygems -e "gem 'chef', '#{CHEF_VERSION_CONSTRAINT}'"
         BASH
         raise "Couldn't find Chef #{CHEF_VERSION_CONSTRAINT} on #{host}. Please run `#{$0} prepare #{ssh_args}` to ensure Chef is installed and up to date." unless result.success?
       end
-      
+
       def cook
         logging_arg = "-l debug" if config[:verbosity] > 0
 
@@ -156,7 +156,7 @@ class Chef
       def validate_params!
         validate_first_cli_arg_is_a_hostname!(WrongCookError)
       end
-      
+
     end
   end
 end

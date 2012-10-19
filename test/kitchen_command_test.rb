@@ -24,10 +24,10 @@ class KitchenCommandTest < TestCase
   end
 
   def test_barks_outside_of_the_kitchen
-    suppress_knife_error_output do
-      assert_raises KnifeSolo::KitchenCommand::OutOfKitchenError do
-        DummyKitchenCommand.new.run
-      end
+    assert_raises KnifeSolo::KitchenCommand::OutOfKitchenError do
+      cmd = DummyKitchenCommand.new
+      suppress_knife_error_output cmd
+      cmd.run
     end
   end
 

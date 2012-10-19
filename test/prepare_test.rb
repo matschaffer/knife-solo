@@ -86,9 +86,7 @@ class PrepareTest < TestCase
 
     Dir.chdir(@kitchen) do
       assert_raises Chef::Knife::Prepare::WrongPrepareError do
-        suppress_knife_error_output do
-          command.run
-        end
+        command.run
       end
     end
   end

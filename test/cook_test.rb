@@ -82,10 +82,8 @@ class CookTest < TestCase
     kitchen(@clean_kitchen).run
 
     Dir.chdir(@clean_kitchen) do
-      suppress_knife_error_output do
-        assert_raises Chef::Knife::Cook::WrongCookError do
-          command.run
-        end
+      assert_raises Chef::Knife::Cook::WrongCookError do
+        command.run
       end
     end
   end
