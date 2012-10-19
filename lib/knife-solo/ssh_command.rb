@@ -1,12 +1,26 @@
-require 'pathname'
-
 module KnifeSolo
   module SshCommand
+
+    def self.load_deps
+      require 'net/ssh'
+      require 'pathname'
+    end
+
     def self.included(other)
-      other.instance_eval do
-        deps do
-          require 'net/ssh'
-        end
+      other.class_eval do
+        # Lazy load our dependencies if the including class did not call
+        # Knife#deps yet. Later calls to #deps override previous ones, so if
+        # the outer class calls it, it should also call our #load_deps, i.e:
+        #
+        #   Include KnifeSolo::SshCommand
+        #
+        #   dep do
+        #     require 'foo'
+        #     require 'bar'
+        #     KnifeSolo::SshCommand.load_deps
+        #   end
+        #
+        deps { KnifeSolo::SshCommand.load_deps } unless @dependency_loader
 
         option :ssh_config,
           :short => "-F CONFIG_FILE",

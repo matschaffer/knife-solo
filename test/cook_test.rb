@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'chef/cookbook/chefignore'
 require 'chef/knife'
 require 'chef/knife/cook'
 require 'chef/knife/kitchen'
@@ -106,6 +107,7 @@ class CookTest < TestCase
   end
 
   def command(*args)
+    Chef::Knife::Cook.load_deps
     command = Chef::Knife::Cook.new(args)
     command.ui.stubs(:msg)
     command
