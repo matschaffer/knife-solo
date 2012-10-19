@@ -1,10 +1,22 @@
 require_relative 'support/knife_solo_provisioner'
 
 Vagrant::Config.run do |config|
+  config.vm.define :ubuntu10 do |c|
+    c.vm.box       = "opscode-ubuntu-10.04"
+    c.vm.box_url   = "https://opscode-vm.s3.amazonaws.com/vagrant/boxes/opscode-ubuntu-10.04.box"
+    c.vm.network :hostonly, "10.0.3.4"
+    c.vm.provision KnifeSoloProvisioner do |p|
+      p.knife_env   = {"GEM_PATH" => ENV["PRE_VAGRANT_GEM_PATH"]}
+      p.knife_path  = File.expand_path('../../../b/knife', __FILE__)
+      p.node_config = "ubuntu10.json"
+      p.options     = "-VV"
+    end
+  end
+
   config.vm.define :ubuntu12 do |c|
     c.vm.box       = "opscode-ubuntu-12.04"
     c.vm.box_url   = "https://opscode-vm.s3.amazonaws.com/vagrant/boxes/opscode-ubuntu-12.04.box"
-    c.vm.network :hostonly, "10.0.3.4"
+    c.vm.network :hostonly, "10.0.3.5"
     c.vm.provision KnifeSoloProvisioner do |p|
       p.knife_env   = {"GEM_PATH" => ENV["PRE_VAGRANT_GEM_PATH"]}
       p.knife_path  = File.expand_path('../../../b/knife', __FILE__)
