@@ -1,5 +1,6 @@
 require 'test_helper'
 
+require 'chef/knife/kitchen'
 require 'chef/knife/prepare'
 
 class PrepareTest < TestCase
