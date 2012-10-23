@@ -1,11 +1,8 @@
-require 'pathname'
-
 require 'chef/knife'
-require 'chef/config'
-require 'chef/cookbook/chefignore'
 
 require 'knife-solo/ssh_command'
 require 'knife-solo/kitchen_command'
+require 'knife-solo/knife_solo_error'
 require 'knife-solo/tools'
 
 class Chef
@@ -19,6 +16,12 @@ class Chef
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
       include KnifeSolo::Tools
+
+      deps do
+        require 'chef/cookbook/chefignore'
+        require 'pathname'
+        KnifeSolo::SshCommand.load_deps
+      end
 
       class WrongCookError < KnifeSolo::KnifeSoloError; end
 
@@ -72,7 +75,6 @@ class Chef
 
         chefignore.remove_ignores_from(Dir["**/*.json"]).each do |json|
           begin
-            require 'json'
             # parse without instantiating Chef classes
             JSON.parse File.read(json), :create_additions => false
           rescue => error
