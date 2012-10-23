@@ -84,7 +84,7 @@ module KnifeSolo
         run_command("sudo apt-get update")
         # Make sure we have rsync on builds that don't include it by default
         # (observed on linode's ubuntu 10.04 images)
-        run_command("sudo apt-get install rsync")
+        run_command("sudo apt-get -y install rsync")
       end
 
       def gem_install
