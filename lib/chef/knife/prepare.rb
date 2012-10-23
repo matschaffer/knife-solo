@@ -1,7 +1,6 @@
 require 'chef/knife'
 require 'knife-solo/ssh_command'
 require 'knife-solo/kitchen_command'
-require 'knife-solo/bootstraps'
 require 'knife-solo/knife_solo_error'
 
 class Chef
@@ -11,6 +10,11 @@ class Chef
     class Prepare < Knife
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
+
+      deps do
+        require 'knife-solo/bootstraps'
+        KnifeSolo::SshCommand.load_deps
+      end
 
       class WrongPrepareError < KnifeSolo::KnifeSoloError
         alias :message :to_s
