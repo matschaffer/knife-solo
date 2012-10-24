@@ -83,10 +83,6 @@ class Chef
         ui.msg "Cookbook and JSON syntaxes are OK"
       end
 
-      def node_config
-        @name_args[1] || super
-      end
-
       def chef_path
         Chef::Config.file_cache_path
       end

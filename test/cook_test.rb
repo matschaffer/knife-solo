@@ -6,28 +6,6 @@ require 'chef/knife/kitchen'
 
 class CookTest < TestCase
 
-  def test_node_config_defaults_to_host_name
-    cmd = command("someuser@somehost.domain.com")
-    assert_equal "nodes/somehost.domain.com.json", cmd.node_config.to_s
-  end
-
-  def test_takes_node_config_as_second_arg
-    cmd = command("someuser@somehost.domain.com", "nodes/myhost.json")
-    assert_equal "nodes/myhost.json", cmd.node_config
-  end
-
-  def test_takes_node_config_from_option
-    cmd = command("someuser@somehost.domain.com")
-    cmd.config[:chef_node_name] = "mynode"
-    assert_equal "nodes/mynode.json", cmd.node_config.to_s
-  end
-
-  def test_takes_node_config_as_second_arg_even_with_name_option
-    cmd = command("someuser@somehost.domain.com", "nodes/myhost.json")
-    cmd.config[:chef_node_name] = "mynode"
-    assert_equal "nodes/myhost.json", cmd.node_config
-  end
-
   def test_gets_destination_path_from_chef_config
     Chef::Config.file_cache_path "/tmp/chef-solo"
     assert_equal "/tmp/chef-solo", command.chef_path

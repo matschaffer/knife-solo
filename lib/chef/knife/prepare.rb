@@ -23,7 +23,7 @@ class Chef
         alias :message :to_s
       end
 
-      banner "knife prepare [user@]hostname (options)"
+      banner "knife prepare [user@]hostname [json] (options)"
 
       option :omnibus_version,
         :long => "--omnibus-version VERSION",

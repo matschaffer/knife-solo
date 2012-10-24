@@ -20,7 +20,7 @@ module KnifeSolo
 
     def node_config
       # host method must be defined by the including class
-      Pathname.new("nodes/#{config[:chef_node_name] || host}.json")
+      Pathname.new(@name_args[1] || "nodes/#{config[:chef_node_name] || host}.json")
     end
 
     def generate_node_config
