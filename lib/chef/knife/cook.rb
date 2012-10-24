@@ -142,11 +142,12 @@ class Chef
 
       def cook
         logging_arg = "-l debug" if config[:verbosity] > 0
+        node_name_arg = "-N #{config[:chef_node_name]}" if config[:chef_node_name]
 
         stream_command <<-BASH
           sudo chef-solo -c #{chef_path}/solo.rb \
                          -j #{chef_path}/#{node_config} \
-                         #{logging_arg}
+                         #{logging_arg} #{node_name_arg}
         BASH
       end
 
