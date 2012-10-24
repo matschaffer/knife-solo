@@ -1,6 +1,7 @@
 require 'chef/knife'
 require 'knife-solo/ssh_command'
 require 'knife-solo/kitchen_command'
+require 'knife-solo/node_config_command'
 require 'knife-solo/knife_solo_error'
 
 class Chef
@@ -10,10 +11,12 @@ class Chef
     class Prepare < Knife
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
+      include KnifeSolo::NodeConfigCommand
 
       deps do
         require 'knife-solo/bootstraps'
         KnifeSolo::SshCommand.load_deps
+        KnifeSolo::NodeConfigCommand.load_deps
       end
 
       class WrongPrepareError < KnifeSolo::KnifeSoloError
@@ -34,11 +37,6 @@ class Chef
         :long => "--omnibus-options \"-r -n\"",
         :description => "Pass options to the install.sh script"
 
-      option :chef_node_name,
-        :short => "-N NAME",
-        :long => "--node-name NAME",
-        :description => "The Chef node name for your new node"
-
       def run
         validate_params!
         super
@@ -49,14 +47,6 @@ class Chef
       def bootstrap
         ui.msg "Bootstrapping Chef..."
         KnifeSolo::Bootstraps.class_for_operating_system(operating_system()).new(self)
-      end
-
-      def generate_node_config
-        File.open(node_config, 'w') do |f|
-          f.print <<-JSON.gsub(/^\s+/, '')
-            { "run_list": [] }
-          JSON
-        end unless node_config.exist?
       end
 
       def operating_system
