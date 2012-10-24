@@ -129,7 +129,7 @@ class Chef
 
       def add_patches
         run_portable_mkdir_p(patch_path)
-        Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb")].each do |patch|
+        Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb").to_s()].each do |patch|
           time(patch) do
             system! %Q{rsync -rl --rsh="ssh #{ssh_args}" #{patch} :#{adjust_rsync_path(patch_path)}}
           end
