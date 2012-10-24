@@ -3,7 +3,6 @@ module KnifeSolo
 
     def self.load_deps
       require 'net/ssh'
-      require 'pathname'
     end
 
     def self.included(other)
@@ -47,10 +46,6 @@ module KnifeSolo
           :long => "--startup-script FILE",
           :description => "The startup script on the remote server containing variable definitions"
       end
-    end
-
-    def node_config
-      Pathname.new("nodes/#{config[:chef_node_name] || host}.json")
     end
 
     def host_descriptor

@@ -2,6 +2,7 @@ require 'chef/knife'
 
 require 'knife-solo/ssh_command'
 require 'knife-solo/kitchen_command'
+require 'knife-solo/node_config_command'
 require 'knife-solo/knife_solo_error'
 require 'knife-solo/tools'
 
@@ -15,12 +16,14 @@ class Chef
 
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
+      include KnifeSolo::NodeConfigCommand
       include KnifeSolo::Tools
 
       deps do
         require 'chef/cookbook/chefignore'
         require 'pathname'
         KnifeSolo::SshCommand.load_deps
+        KnifeSolo::NodeConfigCommand.load_deps
       end
 
       class WrongCookError < KnifeSolo::KnifeSoloError; end
@@ -46,11 +49,6 @@ class Chef
         :long => '--syntax-check-only',
         :boolean => true,
         :description => "Only run syntax checks - do not run Chef"
-
-      option :chef_node_name,
-        :short => "-N NAME",
-        :long => "--node-name NAME",
-        :description => "The Chef node name for your new node"
 
       def run
         time('Run') do
