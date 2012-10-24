@@ -58,6 +58,7 @@ class Chef
           return if config[:syntax_check_only]
           Chef::Config.from_file('solo.rb')
           check_chef_version unless config[:skip_chef_check]
+          generate_node_config
           rsync_kitchen
           add_patches
           cook unless config[:sync_only]
