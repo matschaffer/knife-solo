@@ -39,6 +39,20 @@ class Chef
         :long => "--node-name NAME",
         :description => "The Chef node name for your new node"
 
+      option :run_list,
+        :short => "-r RUN_LIST",
+        :long => "--run-list RUN_LIST",
+        :description => "Comma separated list of roles/recipes to add to node config",
+        :proc => lambda { |o| o.split(/[\s,]+/) },
+        :default => []
+
+      option :first_boot_attributes,
+        :short => "-j JSON_ATTRIBS",
+        :long => "--json-attributes",
+        :description => "A JSON string to be added to node config",
+        :proc => lambda { |o| JSON.parse(o) },
+        :default => {}
+
       def run
         validate_params!
         super
@@ -52,11 +66,16 @@ class Chef
       end
 
       def generate_node_config
-        File.open(node_config, 'w') do |f|
-          f.print <<-JSON.gsub(/^\s+/, '')
-            { "run_list": [] }
-          JSON
-        end unless node_config.exist?
+        if node_config.exist?
+          ui.msg "Node config '#{node_config}' already exists"
+        else
+          ui.msg "Generating node config '#{node_config}'..."
+          File.open(node_config, 'w') do |f|
+            attributes = config[:first_boot_attributes] || {}
+            run_list = { :run_list => config[:run_list] || [] }
+            f.print attributes.merge(run_list).to_json
+          end
+        end
       end
 
       def operating_system
