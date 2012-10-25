@@ -2,7 +2,6 @@ require 'chef/knife'
 require 'knife-solo/ssh_command'
 require 'knife-solo/kitchen_command'
 require 'knife-solo/node_config_command'
-require 'knife-solo/knife_solo_error'
 
 class Chef
   class Knife
@@ -17,10 +16,6 @@ class Chef
         require 'knife-solo/bootstraps'
         KnifeSolo::SshCommand.load_deps
         KnifeSolo::NodeConfigCommand.load_deps
-      end
-
-      class WrongPrepareError < KnifeSolo::KnifeSoloError
-        alias :message :to_s
       end
 
       banner "knife prepare [user@]hostname [json] (options)"
@@ -54,7 +49,7 @@ class Chef
       end
 
       def validate_params!
-        validate_first_cli_arg_is_a_hostname!(WrongPrepareError)
+        validate_first_cli_arg_is_a_hostname!
       end
     end
   end

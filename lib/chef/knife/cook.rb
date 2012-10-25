@@ -3,7 +3,6 @@ require 'chef/knife'
 require 'knife-solo/ssh_command'
 require 'knife-solo/kitchen_command'
 require 'knife-solo/node_config_command'
-require 'knife-solo/knife_solo_error'
 require 'knife-solo/tools'
 
 class Chef
@@ -25,8 +24,6 @@ class Chef
         KnifeSolo::SshCommand.load_deps
         KnifeSolo::NodeConfigCommand.load_deps
       end
-
-      class WrongCookError < KnifeSolo::KnifeSoloError; end
 
       banner "knife cook [user@]hostname [json] (options)"
 
@@ -152,7 +149,7 @@ class Chef
       end
 
       def validate_params!
-        validate_first_cli_arg_is_a_hostname!(WrongCookError)
+        validate_first_cli_arg_is_a_hostname!
       end
 
     end

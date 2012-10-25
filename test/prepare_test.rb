@@ -2,6 +2,7 @@ require 'test_helper'
 
 require 'chef/knife/kitchen'
 require 'chef/knife/prepare'
+require 'knife-solo/knife_solo_error'
 
 class PrepareTest < TestCase
   def setup
@@ -48,7 +49,7 @@ class PrepareTest < TestCase
     Chef::Knife::Kitchen.new([@kitchen]).run
 
     Dir.chdir(@kitchen) do
-      assert_raises Chef::Knife::Prepare::WrongPrepareError do
+      assert_raises KnifeSolo::KnifeSoloError do
         command.run
       end
     end

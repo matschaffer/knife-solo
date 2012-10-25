@@ -3,6 +3,7 @@ require 'chef/cookbook/chefignore'
 require 'chef/knife'
 require 'chef/knife/cook'
 require 'chef/knife/kitchen'
+require 'knife-solo/knife_solo_error'
 
 class CookTest < TestCase
 
@@ -61,7 +62,7 @@ class CookTest < TestCase
     kitchen(@clean_kitchen).run
 
     Dir.chdir(@clean_kitchen) do
-      assert_raises Chef::Knife::Cook::WrongCookError do
+      assert_raises KnifeSolo::KnifeSoloError do
         command.run
       end
     end
