@@ -5,10 +5,14 @@ class Chef
     class Kitchen < Knife
       include FileUtils
 
+      deps do
+        require 'knife-solo/knife_solo_error'
+      end
+
       banner "knife kitchen NAME or initialize current directory with '.'"
 
       def run
-        raise banner unless base = @name_args.first
+        raise KnifeSolo::KnifeSoloError.new(banner) unless base = @name_args.first
 
         create_kitchen base
         create_cupboards base, %w(nodes roles data_bags site-cookbooks cookbooks)

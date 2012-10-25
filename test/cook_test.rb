@@ -3,30 +3,9 @@ require 'chef/cookbook/chefignore'
 require 'chef/knife'
 require 'chef/knife/cook'
 require 'chef/knife/kitchen'
+require 'knife-solo/knife_solo_error'
 
 class CookTest < TestCase
-
-  def test_node_config_defaults_to_host_name
-    cmd = command("someuser@somehost.domain.com")
-    assert_equal "nodes/somehost.domain.com.json", cmd.node_config.to_s
-  end
-
-  def test_takes_node_config_as_second_arg
-    cmd = command("someuser@somehost.domain.com", "nodes/myhost.json")
-    assert_equal "nodes/myhost.json", cmd.node_config
-  end
-
-  def test_takes_node_config_from_option
-    cmd = command("someuser@somehost.domain.com")
-    cmd.config[:chef_node_name] = "mynode"
-    assert_equal "nodes/mynode.json", cmd.node_config.to_s
-  end
-
-  def test_takes_node_config_as_second_arg_even_with_name_option
-    cmd = command("someuser@somehost.domain.com", "nodes/myhost.json")
-    cmd.config[:chef_node_name] = "mynode"
-    assert_equal "nodes/myhost.json", cmd.node_config
-  end
 
   def test_gets_destination_path_from_chef_config
     Chef::Config.file_cache_path "/tmp/chef-solo"
@@ -83,7 +62,7 @@ class CookTest < TestCase
     kitchen(@clean_kitchen).run
 
     Dir.chdir(@clean_kitchen) do
-      assert_raises Chef::Knife::Cook::WrongCookError do
+      assert_raises KnifeSolo::KnifeSoloError do
         command.run
       end
     end
