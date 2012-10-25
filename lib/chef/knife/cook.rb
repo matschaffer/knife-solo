@@ -2,7 +2,7 @@ require 'chef/knife'
 
 require 'knife-solo/ssh_command'
 require 'knife-solo/kitchen_command'
-require 'knife-solo/knife_solo_error'
+require 'knife-solo/node_config_command'
 require 'knife-solo/tools'
 
 class Chef
@@ -15,15 +15,15 @@ class Chef
 
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
+      include KnifeSolo::NodeConfigCommand
       include KnifeSolo::Tools
 
       deps do
         require 'chef/cookbook/chefignore'
         require 'pathname'
         KnifeSolo::SshCommand.load_deps
+        KnifeSolo::NodeConfigCommand.load_deps
       end
-
-      class WrongCookError < KnifeSolo::KnifeSoloError; end
 
       banner "knife cook [user@]hostname [json] (options)"
 
@@ -47,11 +47,6 @@ class Chef
         :boolean => true,
         :description => "Only run syntax checks - do not run Chef"
 
-      option :chef_node_name,
-        :short => "-N NAME",
-        :long => "--node-name NAME",
-        :description => "The Chef node name for your new node"
-
       def run
         time('Run') do
           validate_params!
@@ -60,6 +55,7 @@ class Chef
           return if config[:syntax_check_only]
           Chef::Config.from_file('solo.rb')
           check_chef_version unless config[:skip_chef_check]
+          generate_node_config
           rsync_kitchen
           add_patches
           cook unless config[:sync_only]
@@ -82,10 +78,6 @@ class Chef
           end
         end
         ui.msg "Cookbook and JSON syntaxes are OK"
-      end
-
-      def node_config
-        @name_args[1] || super
       end
 
       def chef_path
@@ -147,16 +139,17 @@ class Chef
 
       def cook
         logging_arg = "-l debug" if config[:verbosity] > 0
+        node_name_arg = "-N #{config[:chef_node_name]}" if config[:chef_node_name]
 
         stream_command <<-BASH
           sudo chef-solo -c #{chef_path}/solo.rb \
                          -j #{chef_path}/#{node_config} \
-                         #{logging_arg}
+                         #{logging_arg} #{node_name_arg}
         BASH
       end
 
       def validate_params!
-        validate_first_cli_arg_is_a_hostname!(WrongCookError)
+        validate_first_cli_arg_is_a_hostname!
       end
 
     end
