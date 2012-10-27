@@ -2,6 +2,7 @@ require 'test_helper'
 
 require 'knife-solo/ssh_command'
 require 'chef/knife'
+require 'net/ssh'
 
 class DummySshCommand < Chef::Knife
   include KnifeSolo::SshCommand
@@ -86,6 +87,7 @@ class SshCommandTest < TestCase
   end
 
   def command(*args)
+    Net::SSH::Config.stubs(:default_files)
     DummySshCommand.load_deps
     DummySshCommand.new(args)
   end
