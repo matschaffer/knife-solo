@@ -3,7 +3,11 @@ class TestCase < MiniTest::Unit::TestCase
     super unless self.class == TestCase
   end
 
-  def suppress_knife_error_output(knife_command)
-    knife_command.ui.stderr.reopen("/dev/null")
+  def knife_command(cmd_class, *args)
+    cmd_class.load_deps
+    command = cmd_class.new(args)
+    command.ui.stubs(:msg)
+    command.ui.stubs(:err)
+    command
   end
 end
