@@ -31,14 +31,12 @@ class NodeConfigCommandTest < TestCase
   end
 
   def test_takes_node_config_from_option
-    cmd = command(@host)
-    cmd.config[:chef_node_name] = "mynode"
+    cmd = command(@host, "--node-name=mynode")
     assert_equal "nodes/mynode.json", cmd.node_config.to_s
   end
 
   def test_takes_node_config_as_second_arg_even_with_name_option
-    cmd = command(@host, "nodes/myhost.json")
-    cmd.config[:chef_node_name] = "mynode"
+    cmd = command(@host, "nodes/myhost.json", "--node-name=mynode")
     assert_equal "nodes/myhost.json", cmd.node_config.to_s
   end
 
@@ -63,8 +61,7 @@ class NodeConfigCommandTest < TestCase
 
   def test_generates_a_node_config_from_name_option
     in_kitchen do
-      cmd = command(@host)
-      cmd.config[:chef_node_name] = "mynode"
+      cmd = command(@host, "--node-name=mynode")
       cmd.generate_node_config
       assert cmd.node_config.exist?
     end
