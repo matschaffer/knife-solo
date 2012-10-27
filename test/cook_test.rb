@@ -86,15 +86,11 @@ class CookTest < TestCase
   end
 
   def command(*args)
-    Chef::Knife::Cook.load_deps
-    command = Chef::Knife::Cook.new(args)
-    command.ui.stubs(:msg)
-    command
+    knife_command(Chef::Knife::Cook, *args)
   end
 
   def kitchen(*args)
-    Chef::Knife::Kitchen.load_deps
-    Chef::Knife::Kitchen.new(args)
+    knife_command(Chef::Knife::Kitchen, *args)
   end
 
   def check_syntax(file)

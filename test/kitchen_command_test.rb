@@ -7,16 +7,12 @@ require 'chef/knife/kitchen'
 
 class DummyKitchenCommand < Chef::Knife
   include KnifeSolo::KitchenCommand
-
-  def run
-    super
-  end
 end
 
 class KitchenCommandTest < TestCase
   def setup
     @kitchen = 'testkitchen'
-    Chef::Knife::Kitchen.new([@kitchen]).run
+    knife_command(Chef::Knife::Kitchen, @kitchen).run
   end
 
   def teardown
@@ -25,15 +21,17 @@ class KitchenCommandTest < TestCase
 
   def test_barks_outside_of_the_kitchen
     assert_raises KnifeSolo::KitchenCommand::OutOfKitchenError do
-      cmd = DummyKitchenCommand.new
-      suppress_knife_error_output cmd
-      cmd.run
+      command.run
     end
   end
 
   def test_runs_when_in_a_kitchen
     Dir.chdir(@kitchen) do
-      DummyKitchenCommand.new.run
+      command.run
     end
+  end
+
+  def command(*args)
+    knife_command(DummyKitchenCommand, *args)
   end
 end

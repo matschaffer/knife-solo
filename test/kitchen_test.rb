@@ -22,7 +22,6 @@ class KitchenTest < TestCase
   end
 
   def command(*args)
-    Chef::Knife::Kitchen.load_deps
-    Chef::Knife::Kitchen.new(args)
+    knife_command(Chef::Knife::Kitchen, *args)
   end
 end

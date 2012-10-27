@@ -88,7 +88,6 @@ class SshCommandTest < TestCase
 
   def command(*args)
     Net::SSH::Config.stubs(:default_files)
-    DummySshCommand.load_deps
-    DummySshCommand.new(args)
+    knife_command(DummySshCommand, *args)
   end
 end

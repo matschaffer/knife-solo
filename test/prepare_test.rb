@@ -46,7 +46,7 @@ class PrepareTest < TestCase
 
   def test_barks_without_atleast_a_hostname
     @kitchen = '/tmp/nodes'
-    Chef::Knife::Kitchen.new([@kitchen]).run
+    knife_command(Chef::Knife::Kitchen, @kitchen).run
 
     Dir.chdir(@kitchen) do
       assert_raises KnifeSolo::KnifeSoloError do
@@ -60,10 +60,6 @@ class PrepareTest < TestCase
   end
 
   def command(*args)
-    Chef::Knife::Prepare.load_deps
-    command = Chef::Knife::Prepare.new(args)
-    command.ui.stubs(:msg)
-    command.ui.stubs(:error)
-    command
+    knife_command(Chef::Knife::Prepare, *args)
   end
 end

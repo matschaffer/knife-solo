@@ -81,9 +81,6 @@ class NodeConfigCommandTest < TestCase
   end
 
   def command(*args)
-    DummyNodeConfigCommand.load_deps
-    command = DummyNodeConfigCommand.new(args)
-    command.ui.stubs(:msg)
-    command
+    knife_command(DummyNodeConfigCommand, *args)
   end
 end
