@@ -27,17 +27,5 @@ module KnifeSolo
     def warn_for_required_file(file)
       ui.error "#{file} is a required file/directory"
     end
-
-    def first_cli_arg_is_a_hostname?
-      @name_args.first =~ /\A([^@]+(?>@)[^@]+|[^@]+?(?!@))\z/
-    end
-
-    def validate_first_cli_arg_is_a_hostname!
-      unless first_cli_arg_is_a_hostname?
-        ui.msg opt_parser.help
-        raise KnifeSoloError.new "need to pass atleast a [user@]hostname as the first argument"
-      end
-    end
-
   end
 end

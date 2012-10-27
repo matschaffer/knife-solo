@@ -2,6 +2,7 @@ module KnifeSolo
   module SshCommand
 
     def self.load_deps
+      require 'knife-solo/knife_solo_error'
       require 'net/ssh'
     end
 
@@ -45,6 +46,17 @@ module KnifeSolo
           :short => "-s FILE",
           :long => "--startup-script FILE",
           :description => "The startup script on the remote server containing variable definitions"
+      end
+    end
+
+    def first_cli_arg_is_a_hostname?
+      @name_args.first =~ /\A([^@]+(?>@)[^@]+|[^@]+?(?!@))\z/
+    end
+
+    def validate_first_cli_arg_is_a_hostname!
+      unless first_cli_arg_is_a_hostname?
+        ui.msg opt_parser.help
+        raise KnifeSoloError.new "need to pass atleast a [user@]hostname as the first argument"
       end
     end
 

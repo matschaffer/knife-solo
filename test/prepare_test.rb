@@ -55,34 +55,6 @@ class PrepareTest < TestCase
     end
   end
 
-  def test_host_regex_rejects_invalid_hostnames
-    Dir.chdir("/tmp") do
-      FileUtils.mkdir("nodes")
-      clean_room = Class.new(Object) do
-        include KnifeSolo::KitchenCommand
-      end
-      kitchen_command = clean_room.new
-      %w[@name @@name.com name@@ joe@@example.com].each do |invalid|
-        kitchen_command.instance_variable_set(:@name_args, [invalid])
-        refute kitchen_command.first_cli_arg_is_a_hostname?, "#{invalid} should have been rejected"
-      end
-    end
-  end
-
-  def test_host_regex_accpets_valid_hostnames
-    Dir.chdir("/tmp") do
-      FileUtils.mkdir("nodes")
-      clean_room = Class.new(Object) do
-        include KnifeSolo::KitchenCommand
-      end
-      kitchen_command = clean_room.new
-      %w[name.com name joe@example.com].each do |valid|
-        kitchen_command.instance_variable_set(:@name_args, [valid])
-        assert kitchen_command.first_cli_arg_is_a_hostname?, "#{valid} should have been accepted"
-      end
-    end
-  end
-
   def teardown
     FileUtils.rm_r("/tmp/nodes")
   end

@@ -18,6 +18,20 @@ class SshCommandTest < TestCase
     assert_equal "test", command("10.0.0.1").user
   end
 
+  def test_host_regex_rejects_invalid_hostnames
+    %w[@name @@name.com name@ name@@ joe@@example.com joe@name@example.com].each do |invalid|
+      cmd = command(invalid)
+      refute cmd.first_cli_arg_is_a_hostname?, "#{invalid} should have been rejected"
+    end
+  end
+
+  def test_host_regex_accpets_valid_hostnames
+    %w[name.com name joe@example.com].each do |valid|
+      cmd = command(valid)
+      assert cmd.first_cli_arg_is_a_hostname?, "#{valid} should have been accepted"
+    end
+  end
+
   def test_prompts_for_password_if_not_provided
     cmd = command("10.0.0.1")
     cmd.ui.expects(:ask).returns("testpassword")
