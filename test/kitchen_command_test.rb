@@ -1,32 +1,26 @@
 require 'test_helper'
-
-require 'knife-solo/kitchen_command'
+require 'support/kitchen_helper'
 
 require 'chef/knife'
-require 'chef/knife/kitchen'
+require 'knife-solo/kitchen_command'
 
 class DummyKitchenCommand < Chef::Knife
   include KnifeSolo::KitchenCommand
 end
 
 class KitchenCommandTest < TestCase
-  def setup
-    @kitchen = 'testkitchen'
-    knife_command(Chef::Knife::Kitchen, @kitchen).run
-  end
-
-  def teardown
-    FileUtils.rm_rf(@kitchen)
-  end
+  include KitchenHelper
 
   def test_barks_outside_of_the_kitchen
-    assert_raises KnifeSolo::KitchenCommand::OutOfKitchenError do
-      command.run
+    outside_kitchen do
+      assert_raises KnifeSolo::KitchenCommand::OutOfKitchenError do
+        command.run
+      end
     end
   end
 
   def test_runs_when_in_a_kitchen
-    Dir.chdir(@kitchen) do
+    in_kitchen do
       command.run
     end
   end
