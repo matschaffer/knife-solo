@@ -45,12 +45,13 @@ class NodeConfigCommandTest < TestCase
       cmd = command(@host)
       cmd.generate_node_config
       assert cmd.node_config.exist?
+      assert_match '{"run_list":[]}', cmd.node_config.read
     end
   end
 
   def test_wont_overwrite_node_config
     in_kitchen do
-      cmd = command(@host)
+      cmd = command(@host, "--run-list=role[myrole]")
       File.open(cmd.node_config, "w") do |f|
         f << "testdata"
       end
@@ -64,6 +65,33 @@ class NodeConfigCommandTest < TestCase
       cmd = command(@host, "--node-name=mynode")
       cmd.generate_node_config
       assert cmd.node_config.exist?
+    end
+  end
+
+  def test_generates_a_node_config_with_specified_run_list
+    in_kitchen do
+      cmd = command(@host, "--run-list=role[base],recipe[foo]")
+      cmd.generate_node_config
+      assert_match '{"run_list":["role[base]","recipe[foo]"]}', cmd.node_config.read
+    end
+  end
+
+  def test_generates_a_node_config_with_specified_attributes
+    in_kitchen do
+      foo_json = '"foo":{"bar":[1,2],"baz":"x"}'
+      cmd = command(@host, "--json-attributes={#{foo_json}}")
+      cmd.generate_node_config
+      assert_match "{#{foo_json},\"run_list\":[]}", cmd.node_config.read
+    end
+  end
+
+  def test_generates_a_node_config_with_specified_run_list_and_attributes
+    in_kitchen do
+      foo_json = '"foo":"bar"'
+      run_list = 'recipe[baz]'
+      cmd = command(@host, "--run-list=#{run_list}", "--json-attributes={#{foo_json}}")
+      cmd.generate_node_config
+      assert_match "{#{foo_json},\"run_list\":[\"#{run_list}\"]}", cmd.node_config.read
     end
   end
 
