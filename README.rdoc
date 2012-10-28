@@ -5,13 +5,15 @@
 
 == DESCRIPTION:
 
-Knife-solo is a gem plugin for Chef's knife utility. It currently adds 4 subcommands to knife: kitchen, prepare, cook and wash_up
+Knife-solo is a gem plugin for Chef's knife utility. It currently adds 5 subcommands to knife: +kitchen+, +prepare+, +cook+, <tt>solo bootstrap</tt> and +wash_up+.
 
 The +kitchen+ command is used to create a new directory structure that fits with chef's standard structure and can be used to build and store recipes.
 
 The +prepare+ command installs Ruby, RubyGems and Chef on a given host. It's structured to auto-detect the target OS and change the installation process accordingly.
 
 The +cook+ command uploads the current kitchen (chef repo) to the target host and runs chef-solo on that host.
+
+The <tt>solo bootstrap</tt> command combines the two previous ones (prepare and cook).
 
 The +wash_up+ command removes the uploaded kitchen from the target host.
 
@@ -75,6 +77,14 @@ This uploads all of your cookbooks in addition to a patch that allows you to use
 This also supports encrypted data bags. To use them, place your key in +data_bag_key+ in the root of your kitchen (or if you move it make sure to update +solo.rb+ to reflect the new path).
 
 The knife command for creating encrypted data bags doesn't work well without a Chef server, so use {this gist}[https://gist.github.com/2896172] as an example on how to create encrypted data bag items on your local file system.
+
+=== Solo Bootstrap command
+
+The solo_bootstrap command takes the same arguments and most of the options as prepare and cook:
+
+    knife solo bootstrap ubuntu@10.0.0.201
+
+Under the hood it first calls +knife prepare+ and then +knife cook+ with the specified arguments and options.
 
 === WashUp command
 
