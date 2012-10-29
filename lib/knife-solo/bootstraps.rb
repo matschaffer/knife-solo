@@ -112,7 +112,7 @@ module KnifeSolo
       include KnifeSolo::Bootstraps::InstallCommands
 
       def initialize(prepare)
-        # instance of Chef::Knife::Prepare
+        # instance of Chef::Knife::SoloPrepare
         @prepare = prepare
       end
 

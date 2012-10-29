@@ -39,7 +39,7 @@ class IntegrationTest < TestCase
     @kitchen = $base_dir.join('support', 'kitchens', self.class.to_s)
     FileUtils.remove_entry_secure(@kitchen, true)
     @kitchen.dirname.mkpath
-    system "knife kitchen #{@kitchen} >> #{log_file}"
+    system "knife solo kitchen #{@kitchen} >> #{log_file}"
     @start_dir = Dir.pwd
     Dir.chdir(@kitchen)
     prepare_server
@@ -87,7 +87,7 @@ class IntegrationTest < TestCase
 
   # Asserts that a prepare or cook command is successful
   def assert_subcommand(subcommand)
-    system "knife #{subcommand} #{connection_string} -VV >> #{log_file}"
+    system "knife solo #{subcommand} #{connection_string} -VV >> #{log_file}"
     assert $?.success?
   end
 end

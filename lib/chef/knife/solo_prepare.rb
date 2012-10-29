@@ -7,7 +7,7 @@ class Chef
   class Knife
     # Approach ported from littlechef (https://github.com/tobami/littlechef)
     # Copyright 2010, 2011, Miquel Torres <tobami@googlemail.com>
-    class Prepare < Knife
+    class SoloPrepare < Knife
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
       include KnifeSolo::NodeConfigCommand
@@ -18,7 +18,7 @@ class Chef
         KnifeSolo::NodeConfigCommand.load_deps
       end
 
-      banner "knife prepare [user@]hostname [json] (options)"
+      banner "knife solo prepare [user@]hostname [json] (options)"
 
       option :omnibus_version,
         :long => "--omnibus-version VERSION",

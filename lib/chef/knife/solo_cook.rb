@@ -9,7 +9,7 @@ class Chef
   class Knife
     # Approach ported from spatula (https://github.com/trotter/spatula)
     # Copyright 2009, Trotter Cashion
-    class Cook < Knife
+    class SoloCook < Knife
       OMNIBUS_EMBEDDED_PATHS     ||= ["/opt/chef/embedded/bin", "/opt/opscode/embedded/bin"]
       OMNIBUS_EMBEDDED_GEM_PATHS ||= ["/opt/chef/embedded/lib/ruby/gems/1.9.1", "/opt/opscode/embedded/lib/ruby/gems/1.9.1"]
       CHEF_VERSION_CONSTRAINT    ||= ">=0.10.4"
@@ -26,7 +26,7 @@ class Chef
         KnifeSolo::NodeConfigCommand.load_deps
       end
 
-      banner "knife cook [user@]hostname [json] (options)"
+      banner "knife solo cook [user@]hostname [json] (options)"
 
       option :skip_chef_check,
         :long => '--skip-chef-check',
