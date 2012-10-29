@@ -6,7 +6,7 @@ class Ubuntu12_04Test < IntegrationTest
   end
 
   def image_id
-    "ami-098f5760"
+    "ami-9a873ff3"
   end
 
   def prepare_command
