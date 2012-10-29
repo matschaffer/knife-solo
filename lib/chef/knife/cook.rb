@@ -37,22 +37,10 @@ class Chef
         :boolean => false,
         :description => "Only sync the cookbook - do not run Chef"
 
-      option :skip_syntax_check,
-        :long => '--skip-syntax-check',
-        :boolean => true,
-        :description => "Skip Ruby and JSON syntax checks"
-
-      option :syntax_check_only,
-        :long => '--syntax-check-only',
-        :boolean => true,
-        :description => "Only run syntax checks - do not run Chef"
-
       def run
         time('Run') do
           validate_params!
           super
-          check_syntax unless config[:skip_syntax_check]
-          return if config[:syntax_check_only]
           Chef::Config.from_file('solo.rb')
           check_chef_version unless config[:skip_chef_check]
           generate_node_config
@@ -60,24 +48,6 @@ class Chef
           add_patches
           cook unless config[:sync_only]
         end
-      end
-
-      def check_syntax
-        ui.msg "Checking cookbook syntax..."
-        chefignore.remove_ignores_from(Dir["**/*.rb"]).each do |recipe|
-          ok = system "ruby -c #{recipe} >/dev/null 2>&1"
-          raise "Syntax error in #{recipe}" if not ok
-        end
-
-        chefignore.remove_ignores_from(Dir["**/*.json"]).each do |json|
-          begin
-            # parse without instantiating Chef classes
-            JSON.parse File.read(json), :create_additions => false
-          rescue => error
-            raise "Syntax error in #{json}: #{error.message}"
-          end
-        end
-        ui.msg "Cookbook and JSON syntaxes are OK"
       end
 
       def chef_path

@@ -19,33 +19,8 @@ class CookTest < TestCase
     assert_equal "/tmp/chef-solo/cookbooks/chef_solo_patches/libraries", command.patch_path
   end
 
-  def test_check_syntax_raises_error
-    in_kitchen do
-      create_syntax_error_file
-      assert_raises RuntimeError do
-        command.check_syntax
-      end
-    end
-  end
-
   def test_chefignore_is_valid_object
     assert_instance_of Chef::Cookbook::Chefignore, command.chefignore
-  end
-
-  def test_check_syntax_ignores_files_in_chefignore
-    in_kitchen do
-      create_syntax_error_file
-      ignore_syntax_error_file
-      command.check_syntax
-    end
-  end
-
-  def test_rsync_exclude_sources_chefignore
-    in_kitchen do
-      create_syntax_error_file
-      ignore_syntax_error_file
-      assert command.rsync_exclude.include?(SYNTAX_ERROR_FILE)
-    end
   end
 
   def test_barks_without_atleast_a_hostname
