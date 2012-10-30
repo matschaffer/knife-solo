@@ -37,6 +37,12 @@ class Chef
         :boolean => false,
         :description => "Only sync the cookbook - do not run Chef"
 
+      option :why_run,
+        :short        => '-W',
+        :long         => '--why-run',
+        :boolean      => true,
+        :description  => "Enable whyrun mode"
+
       def run
         time('Run') do
           validate_params!
@@ -115,6 +121,7 @@ class Chef
         cmd = "sudo chef-solo -c #{chef_path}/solo.rb -j #{chef_path}/#{node_config}"
         cmd << " -l debug" if debug?
         cmd << " -N #{config[:chef_node_name]}" if config[:chef_node_name]
+        cmd << " -W" if config[:why_run]
 
         stream_command cmd
       end
