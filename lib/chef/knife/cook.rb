@@ -72,9 +72,13 @@ class Chef
         (%w{revision-deploys tmp '.*'} + chefignore.ignores).uniq
       end
 
+      def debug?
+        config[:verbosity] and config[:verbosity] > 0
+      end
+
       # Time a command
       def time(msg)
-        return yield if config[:verbosity] == 0
+        return yield unless debug?
         ui.msg "Starting '#{msg}'"
         start = Time.now
         yield
@@ -84,7 +88,7 @@ class Chef
       def rsync_kitchen
         time('Rsync kitchen') do
           cmd = %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
-          ui.msg cmd unless config[:verbosity] == 0
+          ui.msg cmd if debug?
           system! cmd
         end
       end
@@ -108,7 +112,7 @@ class Chef
       end
 
       def cook
-        logging_arg = "-l debug" if config[:verbosity] > 0
+        logging_arg = "-l debug" if debug?
         node_name_arg = "-N #{config[:chef_node_name]}" if config[:chef_node_name]
 
         stream_command <<-BASH
