@@ -23,6 +23,15 @@ class CookTest < TestCase
     assert_instance_of Chef::Cookbook::Chefignore, command.chefignore
   end
 
+  def test_rsync_exclude_sources_chefignore
+    in_kitchen do
+      file_to_ignore = "dummy.txt"
+      File.open(file_to_ignore, 'w') {|f| f.puts "This file should be ignored"}
+      File.open("chefignore", 'w') {|f| f.puts file_to_ignore}
+      assert command.rsync_exclude.include?(file_to_ignore), "#{file_to_ignore} should have been excluded"
+    end
+  end
+
   def test_barks_without_atleast_a_hostname
     in_kitchen do
       assert_raises KnifeSolo::KnifeSoloError do
