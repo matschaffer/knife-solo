@@ -83,7 +83,7 @@ class Chef
 
       def rsync_kitchen
         time('Rsync kitchen') do
-          cmd = %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
+          cmd = %Q{rsync -rl --rsh="ssh #{ssh_args}" --rsync-path="sudo rsync" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
           ui.msg cmd unless config[:verbosity] == 0
           system! cmd
         end
