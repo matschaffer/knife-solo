@@ -112,14 +112,11 @@ class Chef
       end
 
       def cook
-        logging_arg = "-l debug" if debug?
-        node_name_arg = "-N #{config[:chef_node_name]}" if config[:chef_node_name]
+        cmd = "sudo chef-solo -c #{chef_path}/solo.rb -j #{chef_path}/#{node_config}"
+        cmd << " -l debug" if debug?
+        cmd << " -N #{config[:chef_node_name]}" if config[:chef_node_name]
 
-        stream_command <<-BASH
-          sudo chef-solo -c #{chef_path}/solo.rb \
-                         -j #{chef_path}/#{node_config} \
-                         #{logging_arg} #{node_name_arg}
-        BASH
+        stream_command cmd
       end
 
       def validate_params!
