@@ -40,6 +40,29 @@ class CookTest < TestCase
     end
   end
 
+  def test_passes_node_name_to_chef_solo
+    assert_chef_solo_option "--node-name=mynode", "-N mynode"
+  end
+
+  def test_passes_whyrun_mode_to_chef_solo
+    assert_chef_solo_option "--why-run", "-W"
+  end
+
+  # Asserts that the chef_solo_option is passed to chef-solo iff cook_option
+  # is specified for the cook command
+  def assert_chef_solo_option(cook_option, chef_solo_option)
+    matcher = regexp_matches(/\s#{Regexp.quote(chef_solo_option)}(\s|$)/)
+    in_kitchen do
+      cmd = command("somehost", cook_option)
+      cmd.expects(:stream_command).with(matcher)
+      cmd.cook
+
+      cmd = command("somehost")
+      cmd.expects(:stream_command).with(Not(matcher))
+      cmd.cook
+    end
+  end
+
   def command(*args)
     knife_command(Chef::Knife::Cook, *args)
   end
