@@ -68,14 +68,14 @@ module KnifeSolo::Bootstraps
       return @distro if @distro
       @distro = case issue
       when %r{Debian GNU/Linux 5}
-        {:type => "omnibus", :version => "lenny"}
+        {:type => "debianoid_omnibus", :version => "lenny"}
       when %r{Debian GNU/Linux 6}
-        {:type => "omnibus", :version => "squeeze"}
+        {:type => "debianoid_omnibus", :version => "squeeze"}
       when %r{Debian GNU/Linux wheezy}
         {:type => "debian_gem", :version => "wheezy"}
       when %r{Ubuntu}i
         version = run_command("lsb_release -cs").stdout.strip
-        {:type => "ubuntu_omnibus", :version => version}
+        {:type => "debianoid_omnibus", :version => version}
       when %r{Linaro}
         version = run_command("lsb_release -cs").stdout.strip
         {:type => "debian_gem", :version => version}

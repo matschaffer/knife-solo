@@ -37,6 +37,12 @@ class Chef
         :boolean => false,
         :description => "Only sync the cookbook - do not run Chef"
 
+      option :why_run,
+        :short        => '-W',
+        :long         => '--why-run',
+        :boolean      => true,
+        :description  => "Enable whyrun mode"
+
       def run
         time('Run') do
           validate_params!
@@ -72,9 +78,13 @@ class Chef
         (%w{revision-deploys tmp '.*'} + chefignore.ignores).uniq
       end
 
+      def debug?
+        config[:verbosity] and config[:verbosity] > 0
+      end
+
       # Time a command
       def time(msg)
-        return yield if config[:verbosity] == 0
+        return yield unless debug?
         ui.msg "Starting '#{msg}'"
         start = Time.now
         yield
@@ -108,14 +118,12 @@ class Chef
       end
 
       def cook
-        logging_arg = "-l debug" if config[:verbosity] > 0
-        node_name_arg = "-N #{config[:chef_node_name]}" if config[:chef_node_name]
+        cmd = "sudo chef-solo -c #{chef_path}/solo.rb -j #{chef_path}/#{node_config}"
+        cmd << " -l debug" if debug?
+        cmd << " -N #{config[:chef_node_name]}" if config[:chef_node_name]
+        cmd << " -W" if config[:why_run]
 
-        stream_command <<-BASH
-          sudo chef-solo -c #{chef_path}/solo.rb \
-                         -j #{chef_path}/#{node_config} \
-                         #{logging_arg} #{node_name_arg}
-        BASH
+        stream_command cmd
       end
 
       def validate_params!
