@@ -78,12 +78,12 @@ module KnifeSolo
         stream_command(install_command)
       end
 
-      def ubuntu_omnibus_install
+      def debianoid_omnibus_install
         omnibus_install
         # Update to avoid out-of-date package caches
         run_command("sudo apt-get update")
         # Make sure we have rsync on builds that don't include it by default
-        # (observed on linode's ubuntu 10.04 images)
+        # (for example linode's ubuntu 10.04 images)
         run_command("sudo apt-get -y install rsync")
       end
 
