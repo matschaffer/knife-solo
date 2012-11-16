@@ -66,7 +66,7 @@ module KnifeSolo
       end
 
       def omnibus_install
-        url = prepare.config[:omnibus_url] || "http://opscode.com/chef/install.sh"
+        url = prepare.config[:omnibus_url] || "https://www.opscode.com/chef/install.sh"
         file = File.basename(url)
         http_client_get_url(url, file)
         # `release_version` within install.sh will be installed if
