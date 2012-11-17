@@ -78,6 +78,14 @@ module KnifeSolo
         stream_command(install_command)
       end
 
+      def yum_omnibus_install
+        omnibus_install
+        # Update to avoid out-of-date package caches
+        # Make sure we have rsync on builds that don't include it by default
+        # (for example Scientific Linux minimal)
+        run_command("sudo yum -y install rsync")
+      end
+
       def debianoid_omnibus_install
         omnibus_install
         # Update to avoid out-of-date package caches

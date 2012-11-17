@@ -94,7 +94,7 @@ module KnifeSolo::Bootstraps
       when %r{Scientific Linux.*? 5}
         {:type => "omnibus", :version => "RHEL5"}
       when %r{Scientific Linux.*? 6}
-        {:type => "omnibus", :version => "RHEL6"}
+        {:type => "yum_omnibus", :version => "RHEL6"}
       when %r{SUSE Linux Enterprise Server 11 SP1}
         {:type => "zypper_gem", :version => "SLES11"}
       when %r{openSUSE 11.4}
