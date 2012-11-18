@@ -9,10 +9,10 @@ class Chef
         require 'knife-solo/knife_solo_error'
       end
 
-      banner "knife kitchen NAME or initialize current directory with '.'"
+      banner "knife kitchen [DIRECTORY]"
 
       def run
-        raise KnifeSolo::KnifeSoloError.new(banner) unless base = @name_args.first
+        base = @name_args.first || '.'
 
         create_kitchen base
         create_cupboards base, %w(nodes roles data_bags site-cookbooks cookbooks)
