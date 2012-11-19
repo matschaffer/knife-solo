@@ -9,10 +9,6 @@ class Ubuntu12_04Test < IntegrationTest
     "ami-9a873ff3"
   end
 
-  def prepare_command
-    "prepare"
-  end
-
   include EmptyCook
   include Apache2Cook
   include EncryptedDataBag
