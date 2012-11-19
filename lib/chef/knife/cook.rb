@@ -11,6 +11,7 @@ class Chef
     # Copyright 2009, Trotter Cashion
     class Cook < Knife
       OMNIBUS_EMBEDDED_PATHS  = ["/opt/chef/embedded/bin", "/opt/opscode/embedded/bin"]
+      OMNIBUS_EMBEDDED_GEM_PATHS  = ["/opt/chef/embedded/lib/ruby/gems/1.9.1", "/opt/opscode/embedded/lib/ruby/gems/1.9.1"]
       CHEF_VERSION_CONSTRAINT = ">=0.10.4"
 
       include KnifeSolo::SshCommand
@@ -112,6 +113,7 @@ class Chef
         ui.msg "Checking Chef version..."
         result = run_command <<-BASH
           export PATH="#{OMNIBUS_EMBEDDED_PATHS.join(":")}:$PATH"
+          export GEM_PATH="#{OMNIBUS_EMBEDDED_GEM_PATHS.join(":")}:$GEM_PATH"
           ruby -rubygems -e "gem 'chef', '#{CHEF_VERSION_CONSTRAINT}'"
         BASH
         raise "Couldn't find Chef #{CHEF_VERSION_CONSTRAINT} on #{host}. Please run `#{$0} prepare #{ssh_args}` to ensure Chef is installed and up to date." unless result.success?
