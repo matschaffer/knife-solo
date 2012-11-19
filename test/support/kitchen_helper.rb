@@ -6,7 +6,7 @@ module KitchenHelper
 
   def in_kitchen
     outside_kitchen do
-      knife_command(Chef::Knife::Kitchen, ".").run
+      knife_command(Chef::Knife::Kitchen).run
       yield
     end
   end

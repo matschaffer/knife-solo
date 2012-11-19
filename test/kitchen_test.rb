@@ -19,9 +19,10 @@ class KitchenTest < TestCase
     end
   end
 
-  def test_barks_without_directory_arg
-    assert_raises KnifeSolo::KnifeSoloError do
+  def test_defaults_to_current_directory
+    outside_kitchen do
       command.run
+      assert File.exist?("solo.rb")
     end
   end
 
