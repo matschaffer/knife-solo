@@ -111,8 +111,9 @@ class Chef
       def check_chef_version
         ui.msg "Checking Chef version..."
         result = run_command <<-BASH
-          export PATH="#{OMNIBUS_EMBEDDED_PATHS.join(":")}:$PATH"
-          ruby -rubygems -e "gem 'chef', '#{CHEF_VERSION_CONSTRAINT}'"
+          sudo bash -c \\
+            "export PATH=\\"#{OMNIBUS_EMBEDDED_PATHS.join(":")}:\\$PATH\\" && \\
+            ruby -rubygems -e \\"gem 'chef', '#{CHEF_VERSION_CONSTRAINT}'\\""
         BASH
         raise "Couldn't find Chef #{CHEF_VERSION_CONSTRAINT} on #{host}. Please run `#{$0} prepare #{ssh_args}` to ensure Chef is installed and up to date." unless result.success?
       end
