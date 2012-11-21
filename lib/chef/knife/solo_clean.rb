@@ -4,11 +4,11 @@ require 'knife-solo/kitchen_command'
 
 class Chef
   class Knife
-    class SoloWashUp < Knife
+    class SoloClean < Knife
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
 
-      banner "knife solo wash_up [user@]hostname"
+      banner "knife solo clean [user@]hostname"
 
       def run
         validate_first_cli_arg_is_a_hostname!
