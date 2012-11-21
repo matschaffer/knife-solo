@@ -1,12 +1,12 @@
 require 'tmpdir'
 
-require 'chef/knife/solo_kitchen'
+require 'chef/knife/solo_init'
 
 module KitchenHelper
 
   def in_kitchen
     outside_kitchen do
-      knife_command(Chef::Knife::SoloKitchen, ".").run
+      knife_command(Chef::Knife::SoloInit, ".").run
       yield
     end
   end

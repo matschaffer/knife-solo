@@ -1,10 +1,10 @@
 require 'test_helper'
 require 'support/kitchen_helper'
 
-require 'chef/knife/solo_kitchen'
+require 'chef/knife/solo_init'
 require 'knife-solo/knife_solo_error'
 
-class SoloKitchenTest < TestCase
+class SoloInitTest < TestCase
   include KitchenHelper
 
   def test_produces_folders
@@ -33,6 +33,6 @@ class SoloKitchenTest < TestCase
   end
 
   def command(*args)
-    knife_command(Chef::Knife::SoloKitchen, *args)
+    knife_command(Chef::Knife::SoloInit, *args)
   end
 end

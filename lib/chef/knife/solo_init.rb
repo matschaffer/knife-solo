@@ -2,14 +2,14 @@ require 'chef/knife'
 
 class Chef
   class Knife
-    class SoloKitchen < Knife
+    class SoloInit < Knife
       include FileUtils
 
       deps do
         require 'knife-solo/knife_solo_error'
       end
 
-      banner "knife solo kitchen NAME or initialize current directory with '.'"
+      banner "knife solo init NAME or initialize current directory with '.'"
 
       def run
         raise KnifeSolo::KnifeSoloError.new(banner) unless base = @name_args.first
