@@ -5,6 +5,11 @@ module KnifeSolo::Bootstraps
       prepare.run_command("cat /etc/issue").stdout.strip || perepare.run_command("lsb_release -d -s").stdout.strip
     end
 
+    def x86?
+      machine = run_command('uname -m').stdout.strip
+      %w{i686 x86 x86_64}.include?(machine)
+    end
+
     def package_list
       @packages.join(' ')
     end
@@ -68,14 +73,14 @@ module KnifeSolo::Bootstraps
       return @distro if @distro
       @distro = case issue
       when %r{Debian GNU/Linux 5}
-        {:type => "debianoid_omnibus", :version => "lenny"}
+        {:type => if x86? then "debianoid_omnibus" else "debian_gem" end, :version => "lenny"}
       when %r{Debian GNU/Linux 6}
-        {:type => "debianoid_omnibus", :version => "squeeze"}
+        {:type => if x86? then "debianoid_omnibus" else "debian_gem" end, :version => "squeeze"}
       when %r{Debian GNU/Linux wheezy}
         {:type => "debian_gem", :version => "wheezy"}
       when %r{Ubuntu}i
         version = run_command("lsb_release -cs").stdout.strip
-        {:type => "debianoid_omnibus", :version => version}
+        {:type => if x86? then "debianoid_omnibus" else "debian_gem" end, :version => version}
       when %r{Linaro}
         version = run_command("lsb_release -cs").stdout.strip
         {:type => "debian_gem", :version => version}
