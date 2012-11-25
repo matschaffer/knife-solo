@@ -11,6 +11,7 @@ class Chef
       banner "knife wash_up [user@]hostname"
 
       def run
+        validate_first_cli_arg_is_a_hostname!
         super
         Chef::Config.from_file('solo.rb')
         run_command "rm -rf #{Chef::Config.file_cache_path}"

@@ -1,6 +1,6 @@
 = knife-solo
 
-{Build Status}[http://travis-ci.org/matschaffer/knife-solo.png]
+{<img src="https://secure.travis-ci.org/matschaffer/knife-solo.png" alt="Build Status" />}[http://travis-ci.org/matschaffer/knife-solo]
 {<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/matschaffer/knife-solo]
 
 == DESCRIPTION:
@@ -9,7 +9,7 @@ Knife-solo is a gem plugin for Chef's knife utility. It currently adds 4 subcomm
 
 The +kitchen+ command is used to create a new directory structure that fits with chef's standard structure and can be used to build and store recipes.
 
-The +prepare+ command installs Ruby, RubyGems and \Chef on a given host. It's structured to auto-detect the target OS and change the installation process accordingly.
+The +prepare+ command installs Ruby, RubyGems and Chef on a given host. It's structured to auto-detect the target OS and change the installation process accordingly.
 
 The +cook+ command uploads the current kitchen (chef repo) to the target host and runs chef-solo on that host.
 
@@ -68,7 +68,7 @@ The cook command also takes an ssh-style host argument:
 
     knife cook ubuntu@10.0.0.201
 
-The cook command uploads the current kitchen to the server and runs chef-solo on that server. If you only specify one argument it will look for a node config in +nodes/<hostname>.json+. Or if you want to specify a node config you can pass the path to the file as the second argument.
+The cook command uploads the current kitchen to the server and runs chef-solo on that server. If you only specify one argument it will look for a node config in <tt>nodes/<hostname>.json</tt>. Or if you want to specify a node config you can pass the path to the file as the second argument.
 
 This uploads all of your cookbooks in addition to a patch that allows you to use data_bags in a read-only fashion from the +data_bags+ folder.
 
@@ -91,7 +91,7 @@ The cook command will work on Windows node if you meet the following howto:
 
 ==== Kitchen then tweak
 
-- run `knife kitchen` then edit solo.rb to use Windows path-naming (see https://gist.github.com/1773854)
+- run <tt>knife kitchen</tt> then edit solo.rb to use Windows path-naming (see https://gist.github.com/1773854)
 
 ==== Prepare the node manually
 
@@ -99,7 +99,7 @@ The cook command will work on Windows node if you meet the following howto:
 - install rsync on the node (see https://github.com/thbar/rsync-windows)
 - add rsync to the user PATH
 - install http://www.opscode.com/chef/install.msi
-- add nodes/hostname.json and put `{ "run_list": [] }` in it
+- add nodes/hostname.json and put <tt>{ "run_list": [] }</tt> in it
 
 ==== Cook
 
@@ -111,7 +111,7 @@ Get set up by running +./script/newb+ this will do some of the steps and guide y
 
 When running integration tests all output is sent to the log directory into a file that matches matches the test case name. The EC2Runner log is the main runner log that contains information about instance provisioning.
 
-Note that instances will remain running until your tests pass. This aids in speeding up the test cycle. Upon succesfful test completion you'll be given 10 seconds to cancel the process before the instances are cleaned up. Note that any instance tagged with knife_solo_integration_user == $USER will be cleaned up. Or if you want to leave your instances running regardless, specify SKIP_DESTROY=true as an environment variable.
+Note that instances will remain running until your tests pass. This aids in speeding up the test cycle. Upon succesfful test completion you'll be given 10 seconds to cancel the process before the instances are cleaned up. Note that any instance tagged with <tt>knife_solo_integration_user == $USER</tt> will be cleaned up. Or if you want to leave your instances running regardless, specify <tt>SKIP_DESTROY=true</tt> as an environment variable.
 
 To make an integration test, create a file in the +test/integration+ directory and a test class that inherits from +IntegrationTest+ and includes a module from +test/integration/cases+. You can override methods as necessary, but generally you only need to override +user+ and +image_id+ to specify the user name and AMI ID.
 

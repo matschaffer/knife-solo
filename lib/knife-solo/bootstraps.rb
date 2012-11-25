@@ -55,8 +55,7 @@ module KnifeSolo
         raise "implement gem packages for #{self.class.name}"
       end
 
-      def http_client_get_url(url)
-        file = File.basename(url)
+      def http_client_get_url(url, file)
         stream_command <<-BASH
           if which curl 2>/dev/null; then
             curl -L -o #{file} #{url}
@@ -67,23 +66,32 @@ module KnifeSolo
       end
 
       def omnibus_install
-        http_client_get_url("http://opscode.com/chef/install.sh")
-
+        url = prepare.config[:omnibus_url] || "https://www.opscode.com/chef/install.sh"
+        file = File.basename(url)
+        http_client_get_url(url, file)
         # `release_version` within install.sh will be installed if
         # `omnibus_version` is not provided.
-        install_command = "sudo bash install.sh"
+        install_command = "sudo bash #{file}"
         install_command << " -v #{prepare.config[:omnibus_version]}" if prepare.config[:omnibus_version]
+        install_command << " #{prepare.config[:options]}" if prepare.config[:options]
 
         stream_command(install_command)
       end
 
-      def ubuntu_omnibus_install
+      def yum_omnibus_install
+        omnibus_install
+        # Make sure we have rsync on builds that don't include it by default
+        # (for example Scientific Linux minimal)
+        run_command("sudo yum -y install rsync")
+      end
+
+      def debianoid_omnibus_install
         omnibus_install
         # Update to avoid out-of-date package caches
         run_command("sudo apt-get update")
         # Make sure we have rsync on builds that don't include it by default
-        # (observed on linode's ubuntu 10.04 images)
-        run_command("sudo apt-get install rsync")
+        # (for example linode's ubuntu 10.04 images)
+        run_command("sudo apt-get -y install rsync")
       end
 
       def gem_install
@@ -91,7 +99,7 @@ module KnifeSolo
         release = "rubygems-1.8.10"
         file = "#{release}.tgz"
         url = "http://production.cf.rubygems.org/rubygems/#{file}"
-        http_client_get_url(url)
+        http_client_get_url(url, file)
         run_command("tar zxf #{file}")
         run_command("cd #{release} && sudo ruby setup.rb --no-format-executable")
         run_command("sudo rm -rf #{release} #{file}")

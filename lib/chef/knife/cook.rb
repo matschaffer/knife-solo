@@ -1,11 +1,8 @@
-require 'pathname'
-
 require 'chef/knife'
-require 'chef/config'
-require 'chef/cookbook/chefignore'
 
 require 'knife-solo/ssh_command'
 require 'knife-solo/kitchen_command'
+require 'knife-solo/node_config_command'
 require 'knife-solo/tools'
 
 class Chef
@@ -14,13 +11,20 @@ class Chef
     # Copyright 2009, Trotter Cashion
     class Cook < Knife
       OMNIBUS_EMBEDDED_PATHS  = ["/opt/chef/embedded/bin", "/opt/opscode/embedded/bin"]
+      OMNIBUS_EMBEDDED_GEM_PATHS  = ["/opt/chef/embedded/lib/ruby/gems/1.9.1", "/opt/opscode/embedded/lib/ruby/gems/1.9.1"]
       CHEF_VERSION_CONSTRAINT = ">=0.10.4"
 
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
+      include KnifeSolo::NodeConfigCommand
       include KnifeSolo::Tools
 
-      class WrongCookError < KnifeSolo::KnifeSoloError; end
+      deps do
+        require 'chef/cookbook/chefignore'
+        require 'pathname'
+        KnifeSolo::SshCommand.load_deps
+        KnifeSolo::NodeConfigCommand.load_deps
+      end
 
       banner "knife cook [user@]hostname [json] (options)"
 
@@ -34,49 +38,23 @@ class Chef
         :boolean => false,
         :description => "Only sync the cookbook - do not run Chef"
 
-      option :skip_syntax_check,
-        :long => '--skip-syntax-check',
-        :boolean => true,
-        :description => "Skip Ruby syntax checks"
+      option :why_run,
+        :short        => '-W',
+        :long         => '--why-run',
+        :boolean      => true,
+        :description  => "Enable whyrun mode"
 
-      option :syntax_check_only,
-        :long => '--syntax-check-only',
-        :boolean => true,
-        :description => "Only run syntax checks - do not run Chef"
-      
       def run
-        validate_params!
-        super
-        check_syntax unless config[:skip_syntax_check]
-        return if config[:syntax_check_only]
-        Chef::Config.from_file('solo.rb')
-        check_chef_version unless config[:skip_chef_check]
-        rsync_kitchen
-        add_patches
-        cook unless config[:sync_only]
-      end
-
-      def check_syntax
-        ui.msg('Checking cookbook syntax...')
-        chefignore.remove_ignores_from(Dir["**/*.rb"]).each do |recipe|
-          ok = system "ruby -c #{recipe} >/dev/null 2>&1"
-          raise "Syntax error in #{recipe}" if not ok
+        time('Run') do
+          validate_params!
+          super
+          Chef::Config.from_file('solo.rb')
+          check_chef_version unless config[:skip_chef_check]
+          generate_node_config
+          rsync_kitchen
+          add_patches
+          cook unless config[:sync_only]
         end
-
-        chefignore.remove_ignores_from(Dir["**/*.json"]).each do |json|
-          begin
-            require 'json'
-            # parse without instantiating Chef classes
-            JSON.parse File.read(json), :create_additions => false
-          rescue => error
-            raise "Syntax error in #{json}: #{error.message}"
-          end
-        end
-        Chef::Log.info "cookbook and json syntax is ok"
-      end
-
-      def node_config
-        @name_args[1] || super
       end
 
       def chef_path
@@ -101,39 +79,59 @@ class Chef
         (%w{revision-deploys tmp '.*'} + chefignore.ignores).uniq
       end
 
+      def debug?
+        config[:verbosity] and config[:verbosity] > 0
+      end
+
+      # Time a command
+      def time(msg)
+        return yield unless debug?
+        ui.msg "Starting '#{msg}'"
+        start = Time.now
+        yield
+        ui.msg "#{msg} finished in #{Time.now - start} seconds"
+      end
+
       def rsync_kitchen
-        system! %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
+        time('Rsync kitchen') do
+          cmd = %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
+          ui.msg cmd if debug?
+          system! cmd
+        end
       end
 
       def add_patches
         run_portable_mkdir_p(patch_path)
-        Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb")].each do |patch|
-          system! %Q{rsync -rl --rsh="ssh #{ssh_args}" #{patch} :#{adjust_rsync_path(patch_path)}}
+        Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb").to_s].each do |patch|
+          time(patch) do
+            system! %Q{rsync -rl --rsh="ssh #{ssh_args}" #{patch} :#{adjust_rsync_path(patch_path)}}
+          end
         end
       end
 
       def check_chef_version
+        ui.msg "Checking Chef version..."
         result = run_command <<-BASH
           export PATH="#{OMNIBUS_EMBEDDED_PATHS.join(":")}:$PATH"
+          export GEM_PATH="#{OMNIBUS_EMBEDDED_GEM_PATHS.join(":")}:$GEM_PATH"
           ruby -rubygems -e "gem 'chef', '#{CHEF_VERSION_CONSTRAINT}'"
         BASH
         raise "Couldn't find Chef #{CHEF_VERSION_CONSTRAINT} on #{host}. Please run `#{$0} prepare #{ssh_args}` to ensure Chef is installed and up to date." unless result.success?
       end
-      
-      def cook
-        logging_arg = "-l debug" if config[:verbosity] > 0
 
-        stream_command <<-BASH
-          sudo chef-solo -c #{chef_path}/solo.rb \
-                         -j #{chef_path}/#{node_config} \
-                         #{logging_arg}
-        BASH
+      def cook
+        cmd = "sudo chef-solo -c #{chef_path}/solo.rb -j #{chef_path}/#{node_config}"
+        cmd << " -l debug" if debug?
+        cmd << " -N #{config[:chef_node_name]}" if config[:chef_node_name]
+        cmd << " -W" if config[:why_run]
+
+        stream_command cmd
       end
 
       def validate_params!
-        validate_first_cli_arg_is_a_hostname!(WrongCookError)
+        validate_first_cli_arg_is_a_hostname!
       end
-      
+
     end
   end
 end

@@ -2,7 +2,20 @@
 
 ## Goals
 
-* Solid windows support :)
+* Cleaner bootstrap code
+* Local integration testing
+
+# 0.0.14: September 21st, 2012
+
+* Fix argument checks (#101)
+* Allow custom omnibus URLs (#99)
+* Verbose logging options (#96)
+
+## Thanks to our contributors!
+
+* [Vaughan Rouesnel][vjpr]
+* [Ryan Walker][ryandub]
+* [Aaron Cruz][pferdefleisch]
 
 # 0.0.13: August 16th, 2012
 
@@ -128,22 +141,26 @@
 * Generate node config on prepare
 * Cook via rsync
 
-[rubiojr]: https://github.com/rubiojr
-[natlownes]: https://github.com/natlownes
-[retr0h]: https://github.com/retr0h
-[hectcastro]: https://github.com/hectcastro
-[patatepartie]: https://github.com/patatepartie
-[fnichol]: https://github.com/fnichol
-[jgarber]: https://github.com/jgarber
-[gsterndale]: https://github.com/gsterndale
-[amoslanka]: https://github.com/amoslanka
-[rmoriz]: http://github.com/rmoriz
-[TylerRick]: http://github.com/TylerRick
-[Motiejus]: http://github.com/Motiejus
-[Nix-wie-weg]: https://github.com/Nix-wie-weg
-[jgrevich]: https://github.com/jgrevich
-[rosstimson]: https://github.com/rosstimson
-[brynary]: https://github.com/brynary
-[gregf]: https://github.com/gregf
-[deepak]: https://github.com/deepak
-[funglaub]: https://github/funglaub
+[rubiojr]:       https://github.com/rubiojr
+[natlownes]:     https://github.com/natlownes
+[retr0h]:        https://github.com/retr0h
+[hectcastro]:    https://github.com/hectcastro
+[patatepartie]:  https://github.com/patatepartie
+[fnichol]:       https://github.com/fnichol
+[jgarber]:       https://github.com/jgarber
+[gsterndale]:    https://github.com/gsterndale
+[amoslanka]:     https://github.com/amoslanka
+[rmoriz]:        http://github.com/rmoriz
+[TylerRick]:     http://github.com/TylerRick
+[Motiejus]:      http://github.com/Motiejus
+[Nix-wie-weg]:   https://github.com/Nix-wie-weg
+[jgrevich]:      https://github.com/jgrevich
+[rosstimson]:    https://github.com/rosstimson
+[brynary]:       https://github.com/brynary
+[gregf]:         https://github.com/gregf
+[deepak]:        https://github.com/deepak
+[funglaub]:      https://github/funglaub
+[vjpr]:          https://github.com/vjpr
+[ryandub]:       https://github.com/ryandub
+[pferdefleisch]: https://github.com/pferdefleisch
+[portertech]:    https://github.com/portertech

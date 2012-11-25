@@ -1,15 +1,15 @@
 require 'integration_helper'
 
-class Ubuntu12_04Test < IntegrationTest
+class ScientificLinux63Test < IntegrationTest
   def user
-    "ubuntu"
+    "root"
   end
 
   def image_id
-    "ami-9a873ff3"
+    "ami-313b8e58"
   end
 
   include EmptyCook
-  include Apache2Cook
+  #include Apache2Cook
   include EncryptedDataBag
 end

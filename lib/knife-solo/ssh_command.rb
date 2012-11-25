@@ -1,12 +1,26 @@
-require 'pathname'
-
 module KnifeSolo
   module SshCommand
+
+    def self.load_deps
+      require 'knife-solo/knife_solo_error'
+      require 'net/ssh'
+    end
+
     def self.included(other)
-      other.instance_eval do
-        deps do
-          require 'net/ssh'
-        end
+      other.class_eval do
+        # Lazy load our dependencies if the including class did not call
+        # Knife#deps yet. Later calls to #deps override previous ones, so if
+        # the outer class calls it, it should also call our #load_deps, i.e:
+        #
+        #   Include KnifeSolo::SshCommand
+        #
+        #   dep do
+        #     require 'foo'
+        #     require 'bar'
+        #     KnifeSolo::SshCommand.load_deps
+        #   end
+        #
+        deps { KnifeSolo::SshCommand.load_deps } unless @dependency_loader
 
         option :ssh_config,
           :short => "-F CONFIG_FILE",
@@ -35,8 +49,15 @@ module KnifeSolo
       end
     end
 
-    def node_config
-      Pathname.new("nodes/#{host}.json")
+    def first_cli_arg_is_a_hostname?
+      @name_args.first =~ /\A([^@]+(?>@)[^@]+|[^@]+?(?!@))\z/
+    end
+
+    def validate_first_cli_arg_is_a_hostname!
+      unless first_cli_arg_is_a_hostname?
+        ui.msg opt_parser.help
+        raise KnifeSoloError.new "need to pass atleast a [user@]hostname as the first argument"
+      end
     end
 
     def host_descriptor
