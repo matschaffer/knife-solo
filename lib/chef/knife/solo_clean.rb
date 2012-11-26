@@ -11,10 +11,14 @@ class Chef
       banner "knife solo clean [user@]hostname"
 
       def run
-        validate_first_cli_arg_is_a_hostname!
-        super
+        validate!
         Chef::Config.from_file('solo.rb')
         run_command "rm -rf #{Chef::Config.file_cache_path}"
+      end
+
+      def validate!
+        validate_first_cli_arg_is_a_hostname!
+        validate_kitchen!
       end
     end
   end

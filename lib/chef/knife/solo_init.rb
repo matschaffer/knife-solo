@@ -12,11 +12,15 @@ class Chef
       banner "knife solo init NAME or initialize current directory with '.'"
 
       def run
-        raise KnifeSolo::KnifeSoloError.new(banner) unless base = @name_args.first
-
+        validate!
+        base = @name_args.first
         create_kitchen base
         create_cupboards base, %w(nodes roles data_bags site-cookbooks cookbooks)
         create_solo_config base
+      end
+
+      def validate!
+        raise KnifeSolo::KnifeSoloError.new(banner) unless @name_args.first
       end
 
       private

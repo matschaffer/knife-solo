@@ -14,14 +14,14 @@ class KitchenCommandTest < TestCase
   def test_barks_outside_of_the_kitchen
     outside_kitchen do
       assert_raises KnifeSolo::KitchenCommand::OutOfKitchenError do
-        command.run
+        command.validate_kitchen!
       end
     end
   end
 
   def test_runs_when_in_a_kitchen
     in_kitchen do
-      command.run
+      command.validate_kitchen!
     end
   end
 

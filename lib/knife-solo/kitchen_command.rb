@@ -12,7 +12,7 @@ module KnifeSolo
       %w(solo.rb)
     end
 
-    def run
+    def validate_kitchen!
       raise OutOfKitchenError.new unless required_files_present?
     end
 

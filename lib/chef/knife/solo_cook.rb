@@ -46,8 +46,7 @@ class Chef
 
       def run
         time('Run') do
-          validate_params!
-          super
+          validate!
           Chef::Config.from_file('solo.rb')
           check_chef_version unless config[:skip_chef_check]
           generate_node_config
@@ -55,6 +54,11 @@ class Chef
           add_patches
           cook unless config[:sync_only]
         end
+      end
+
+      def validate!
+        validate_first_cli_arg_is_a_hostname!
+        validate_kitchen!
       end
 
       def chef_path
@@ -127,11 +131,6 @@ class Chef
 
         stream_command cmd
       end
-
-      def validate_params!
-        validate_first_cli_arg_is_a_hostname!
-      end
-
     end
   end
 end
