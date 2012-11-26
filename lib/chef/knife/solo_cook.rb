@@ -26,7 +26,7 @@ class Chef
         KnifeSolo::NodeConfigCommand.load_deps
       end
 
-      banner "knife solo cook [user@]hostname [json] (options)"
+      banner "knife solo cook [USER@]HOSTNAME [JSON] (options)"
 
       option :skip_chef_check,
         :long => '--skip-chef-check',

@@ -8,7 +8,7 @@ class Chef
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
 
-      banner "knife solo clean [user@]hostname"
+      banner "knife solo clean [USER@]HOSTNAME"
 
       def run
         validate!

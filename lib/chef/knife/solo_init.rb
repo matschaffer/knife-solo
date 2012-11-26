@@ -9,7 +9,7 @@ class Chef
         require 'knife-solo/knife_solo_error'
       end
 
-      banner "knife solo init NAME or initialize current directory with '.'"
+      banner "knife solo init DIRECTORY"
 
       def run
         validate!

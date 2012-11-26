@@ -18,7 +18,7 @@ class Chef
         KnifeSolo::NodeConfigCommand.load_deps
       end
 
-      banner "knife solo prepare [user@]hostname [json] (options)"
+      banner "knife solo prepare [USER@]HOSTNAME [JSON] (options)"
 
       option :omnibus_version,
         :long => "--omnibus-version VERSION",

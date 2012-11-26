@@ -10,7 +10,7 @@ class Chef
         SoloCook.load_deps
       end
 
-      banner "knife solo bootstrap [user@]hostname [json] (options)"
+      banner "knife solo bootstrap [USER@]HOSTNAME [JSON] (options)"
 
       # Use (some) options from prepare and cook commands
       self.options = SoloPrepare.options
