@@ -1,13 +1,13 @@
 require 'test_helper'
 require 'support/kitchen_helper'
+require 'support/validation_helper'
 
 require 'chef/cookbook/chefignore'
-require 'chef/knife'
 require 'chef/knife/solo_cook'
-require 'knife-solo/knife_solo_error'
 
 class SoloCookTest < TestCase
   include KitchenHelper
+  include ValidationHelper::ValidationTests
 
   def test_gets_destination_path_from_chef_config
     Chef::Config.file_cache_path "/tmp/chef-solo"
@@ -29,14 +29,6 @@ class SoloCookTest < TestCase
       File.open(file_to_ignore, 'w') {|f| f.puts "This file should be ignored"}
       File.open("chefignore", 'w') {|f| f.puts file_to_ignore}
       assert command.rsync_exclude.include?(file_to_ignore), "#{file_to_ignore} should have been excluded"
-    end
-  end
-
-  def test_barks_without_atleast_a_hostname
-    in_kitchen do
-      assert_raises KnifeSolo::KnifeSoloError do
-        command.run
-      end
     end
   end
 
