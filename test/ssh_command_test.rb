@@ -87,9 +87,10 @@ class SshCommandTest < TestCase
   end
 
   def test_barks_without_atleast_a_hostname
-    assert_raises KnifeSolo::KnifeSoloError do
-      command.validate_first_cli_arg_is_a_hostname!
-    end
+    cmd = command
+    cmd.ui.expects(:err).with(regexp_matches(/hostname.*argument/))
+    $stdout.stubs(:puts)
+    assert_exits { cmd.validate_first_cli_arg_is_a_hostname! }
   end
 
   def command(*args)

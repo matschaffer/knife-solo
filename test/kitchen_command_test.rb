@@ -12,10 +12,10 @@ class KitchenCommandTest < TestCase
   include KitchenHelper
 
   def test_barks_outside_of_the_kitchen
+    cmd = command
+    cmd.ui.expects(:err).with(regexp_matches(/must be run inside .* kitchen/))
     outside_kitchen do
-      assert_raises KnifeSolo::KitchenCommand::OutOfKitchenError do
-        command.validate_kitchen!
-      end
+      assert_exits { cmd.validate_kitchen! }
     end
   end
 

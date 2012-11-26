@@ -5,10 +5,6 @@ class Chef
     class SoloInit < Knife
       include FileUtils
 
-      deps do
-        require 'knife-solo/knife_solo_error'
-      end
-
       banner "knife solo init DIRECTORY"
 
       def run
@@ -20,7 +16,11 @@ class Chef
       end
 
       def validate!
-        raise KnifeSolo::KnifeSoloError.new(banner) unless @name_args.first
+        unless @name_args.first
+          show_usage
+          ui.fatal "You must specify a directory. Use '.' to initialize the current one."
+          exit 1
+        end
       end
 
       private
