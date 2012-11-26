@@ -10,4 +10,15 @@ class TestCase < MiniTest::Unit::TestCase
     command.ui.stubs(:err)
     command
   end
+
+  # Assert that the specified command or block raises SystemExit
+  def assert_exits(command = nil)
+    assert_raises SystemExit do
+      if command
+        command.run
+      else
+        yield
+      end
+    end
+  end
 end
