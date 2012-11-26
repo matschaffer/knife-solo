@@ -25,7 +25,7 @@ module KnifeSolo
 
     def generate_node_config
       if node_config.exist?
-        ui.msg "Node config '#{node_config}' already exists"
+        Chef::Log.debug "Node config '#{node_config}' already exists"
       else
         ui.msg "Generating node config '#{node_config}'..."
         File.open(node_config, 'w') do |f|
