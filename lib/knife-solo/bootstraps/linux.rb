@@ -96,6 +96,8 @@ module KnifeSolo::Bootstraps
         {:type => "omnibus", :version => "FC15"}
       when %r{Fedora release.*? 16}
         {:type => "omnibus", :version => "FC16"}
+      when %r{Fedora release.*? 17}
+        {:type => "omnibus", :version => "FC17"}
       when %r{Scientific Linux.*? 5}
         {:type => "omnibus", :version => "RHEL5"}
       when %r{Scientific Linux.*? 6}
