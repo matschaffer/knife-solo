@@ -4,7 +4,15 @@
 
 * Cleaner bootstrap code
 * Local integration testing
-* Compatibilty with plugins like knife-ec2
+* Compatibility with plugins like knife-ec2
+
+# Not released yet
+
+* Detect Fedora 17 (#141)
+
+## Thanks to our contributors!
+
+* [Marek Hulan][ares]
 
 # 0.0.15: November 29th, 2012
 
@@ -174,6 +182,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [TylerRick]:     https://github.com/TylerRick
 [aaronjensen]:   https://github.com/aaronjensen
 [amoslanka]:     https://github.com/amoslanka
+[ares]:          https://github.com/ares
 [avit]:          https://github.com/avit
 [brynary]:       https://github.com/brynary
 [btm]:           https://github.com/btm
