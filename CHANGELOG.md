@@ -8,6 +8,7 @@
 
 # Not released yet
 
+* Add `knife solo bootstrap` command (#120)
 * Detect Fedora 17 (#141)
 
 ## Thanks to our contributors!
