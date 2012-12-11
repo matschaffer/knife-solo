@@ -129,7 +129,8 @@ class Chef
         cmd << " -N #{config[:chef_node_name]}" if config[:chef_node_name]
         cmd << " -W" if config[:why_run]
 
-        stream_command cmd
+        result = stream_command cmd
+        raise "chef-solo failed. See output above." unless result.success?
       end
     end
   end

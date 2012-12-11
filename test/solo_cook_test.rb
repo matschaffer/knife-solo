@@ -5,6 +5,12 @@ require 'support/validation_helper'
 require 'chef/cookbook/chefignore'
 require 'chef/knife/solo_cook'
 
+class SuccessfulResult
+  def success?
+    true
+  end
+end
+
 class SoloCookTest < TestCase
   include KitchenHelper
   include ValidationHelper::ValidationTests
@@ -46,11 +52,11 @@ class SoloCookTest < TestCase
     matcher = regexp_matches(/\s#{Regexp.quote(chef_solo_option)}(\s|$)/)
     in_kitchen do
       cmd = command("somehost", cook_option)
-      cmd.expects(:stream_command).with(matcher)
+      cmd.expects(:stream_command).with(matcher).returns(SuccessfulResult.new)
       cmd.cook
 
       cmd = command("somehost")
-      cmd.expects(:stream_command).with(Not(matcher))
+      cmd.expects(:stream_command).with(Not(matcher)).returns(SuccessfulResult.new)
       cmd.cook
     end
   end
