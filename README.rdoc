@@ -5,19 +5,19 @@
 
 == DESCRIPTION:
 
-Knife-solo is a gem plugin for Chef's knife utility. It currently adds 5 subcommands to knife: +kitchen+, +prepare+, +cook+, <tt>solo bootstrap</tt> and +wash_up+.
+Knife-solo is a gem plugin for Chef's knife utility. It currently adds 5 subcommands to knife:
 
-The +kitchen+ command is used to create a new directory structure that fits with chef's standard structure and can be used to build and store recipes.
+- <tt>knife solo init</tt> is used to create a new directory structure (i.e. "kitchen") that fits with chef's standard structure and can be used to build and store recipes.
 
-The +prepare+ command installs Ruby, RubyGems and Chef on a given host. It's structured to auto-detect the target OS and change the installation process accordingly.
+- <tt>knife solo prepare</tt> installs Ruby, RubyGems and Chef on a given host. It's structured to auto-detect the target OS and change the installation process accordingly.
 
-The +cook+ command uploads the current kitchen (chef repo) to the target host and runs chef-solo on that host.
+- <tt>knife solo cook</tt> uploads the current kitchen (chef repo) to the target host and runs chef-solo on that host.
 
-The <tt>solo bootstrap</tt> command combines the two previous ones (prepare and cook).
+- <tt>knife solo bootstrap</tt> combines the two previous ones (prepare and cook).
 
-The +wash_up+ command removes the uploaded kitchen from the target host.
+- <tt>knife solo clean</tt> removes the uploaded kitchen from the target host.
 
-Preliminary Windows support for +cook+ is available (see below).
+Preliminary Windows support for "knife solo cook" is available (see below).
 
 == USAGE:
 
@@ -29,15 +29,15 @@ If you need to install from git run:
 
     rake install
 
-=== Kitchen command
+=== Init command
 
-The kitchen command simply takes a name of the directory to store the kitchen structure.
+The init command simply takes a name of the directory to store the kitchen structure. Use "." to initialize the current directory.
 
-    knife kitchen mychefrepo
+    knife init mychefrepo
 
 Currently the directory structure looks like this, but could change as development continues.
 
-    mykitchen/
+    mychefrepo/
     ├── cookbooks
     ├── data_bags
     ├── nodes
@@ -49,7 +49,7 @@ Currently the directory structure looks like this, but could change as developme
 
 The prepare command takes an ssh-style host argument as follows:
 
-    knife prepare ubuntu@10.0.0.201
+    knife solo prepare ubuntu@10.0.0.201
 
 It will look up SSH information from <tt>~/.ssh/config</tt> or in the file specified by +-F+. You can also pass port information (+-p+), identity information (+-i+), or a password (+-P+). It will use sudo to run some of these commands and will prompt you for the password if it's not supplied on the command line.
 
@@ -68,7 +68,7 @@ Or if your modifications provide some general benefit, consider sending a pull r
 
 The cook command also takes an ssh-style host argument:
 
-    knife cook ubuntu@10.0.0.201
+    knife solo cook ubuntu@10.0.0.201
 
 The cook command uploads the current kitchen to the server and runs chef-solo on that server. If you only specify one argument it will look for a node config in <tt>nodes/<hostname>.json</tt>. Or if you want to specify a node config you can pass the path to the file as the second argument.
 
@@ -78,30 +78,29 @@ This also supports encrypted data bags. To use them, place your key in +data_bag
 
 The knife command for creating encrypted data bags doesn't work well without a Chef server, so use {this gist}[https://gist.github.com/2896172] as an example on how to create encrypted data bag items on your local file system.
 
-=== Solo Bootstrap command
+=== Bootstrap command
 
-The solo_bootstrap command takes the same arguments and most of the options as prepare and cook:
+The bootstrap command takes the same arguments and most of the options as prepare and cook:
 
     knife solo bootstrap ubuntu@10.0.0.201
 
-Under the hood it first calls +knife prepare+ and then +knife cook+ with the specified arguments and options.
+Under the hood it first calls +knife solo prepare+ and then +knife solo cook+ with the specified arguments and options.
 
-=== WashUp command
+=== Clean command
 
-The wash_up command takes the same arguments like prepare and cook:
+The clean command takes the same arguments like prepare and cook:
 
-    knife wash_up ubuntu@10.0.0.201
+    knife solo clean ubuntu@10.0.0.201
 
-The wash_up command removes an uploaded kitchen completely from the target host.
-This improves security because passwords etc. are not left behind on that host.
+The clean command removes an uploaded kitchen completely from the target host. This improves security because passwords etc. are not left behind on that host.
 
 === Windows support
 
 The cook command will work on Windows node if you meet the following howto:
 
-==== Kitchen then tweak
+==== Init then tweak
 
-- run <tt>knife kitchen</tt> then edit solo.rb to use Windows path-naming (see https://gist.github.com/1773854)
+- run <tt>knife solo init</tt> then edit solo.rb to use Windows path-naming (see https://gist.github.com/1773854)
 
 ==== Prepare the node manually
 

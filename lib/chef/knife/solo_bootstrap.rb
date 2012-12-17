@@ -1,26 +1,26 @@
 require 'chef/knife'
-require 'chef/knife/cook'
-require 'chef/knife/prepare'
+require 'chef/knife/solo_cook'
+require 'chef/knife/solo_prepare'
 
 class Chef
   class Knife
     class SoloBootstrap < Knife
       deps do
-        Prepare.load_deps
-        Cook.load_deps
+        SoloPrepare.load_deps
+        SoloCook.load_deps
       end
 
       banner "knife solo bootstrap [user@]hostname [json] (options)"
 
       # Use (some) options from prepare and cook commands
-      self.options = Prepare.options
-      [:sync_only, :why_run].each { |opt| option opt, Cook.options[opt] }
+      self.options = SoloPrepare.options
+      [:sync_only, :why_run].each { |opt| option opt, SoloCook.options[opt] }
 
       def run
-        prepare = command_with_same_args(Prepare)
+        prepare = command_with_same_args(SoloPrepare)
         prepare.run
 
-        cook = command_with_same_args(Cook)
+        cook = command_with_same_args(SoloCook)
         cook.config[:skip_chef_check] = true
         cook.run
       end
