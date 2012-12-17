@@ -1,21 +1,10 @@
-require 'chef/knife'
-require 'knife-solo/ssh_command'
-require 'knife-solo/kitchen_command'
+require 'chef/knife/solo_clean'
+require 'knife-solo/deprecated_command'
 
 class Chef
   class Knife
-    class WashUp < Knife
-      include KnifeSolo::SshCommand
-      include KnifeSolo::KitchenCommand
-
-      banner "knife wash_up [user@]hostname"
-
-      def run
-        validate_first_cli_arg_is_a_hostname!
-        super
-        Chef::Config.from_file('solo.rb')
-        run_command "rm -rf #{Chef::Config.file_cache_path}"
-      end
+    class WashUp < SoloClean
+      include KnifeSolo::DeprecatedCommand
     end
   end
 end

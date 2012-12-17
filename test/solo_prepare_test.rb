@@ -1,10 +1,10 @@
 require 'test_helper'
 require 'support/kitchen_helper'
 
-require 'chef/knife/prepare'
+require 'chef/knife/solo_prepare'
 require 'knife-solo/knife_solo_error'
 
-class PrepareTest < TestCase
+class SoloPrepareTest < TestCase
   include KitchenHelper
 
   def setup
@@ -52,6 +52,6 @@ class PrepareTest < TestCase
   end
 
   def command(*args)
-    knife_command(Chef::Knife::Prepare, *args)
+    knife_command(Chef::Knife::SoloPrepare, *args)
   end
 end

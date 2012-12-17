@@ -1,9 +1,9 @@
 require 'test_helper'
 require 'support/kitchen_helper'
 
-require 'chef/knife/cook'
-require 'chef/knife/prepare'
 require 'chef/knife/solo_bootstrap'
+require 'chef/knife/solo_cook'
+require 'chef/knife/solo_prepare'
 require 'knife-solo/knife_solo_error'
 
 class SoloBootstrapTest < TestCase
@@ -11,14 +11,14 @@ class SoloBootstrapTest < TestCase
 
   def test_includes_all_prepare_options
     bootstrap_options = Chef::Knife::SoloBootstrap.options
-    Chef::Knife::Prepare.new.options.keys.each do |opt_key|
+    Chef::Knife::SoloPrepare.new.options.keys.each do |opt_key|
       assert bootstrap_options.include?(opt_key), "Should support option :#{opt_key}"
     end
   end
 
   def test_runs_prepare_and_cook
-    Chef::Knife::Prepare.any_instance.expects(:run)
-    Chef::Knife::Cook.any_instance.expects(:run)
+    Chef::Knife::SoloPrepare.any_instance.expects(:run)
+    Chef::Knife::SoloCook.any_instance.expects(:run)
 
     in_kitchen do
       command("somehost").run

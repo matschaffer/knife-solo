@@ -3,10 +3,10 @@ require 'support/kitchen_helper'
 
 require 'chef/cookbook/chefignore'
 require 'chef/knife'
-require 'chef/knife/cook'
+require 'chef/knife/solo_cook'
 require 'knife-solo/knife_solo_error'
 
-class CookTest < TestCase
+class SoloCookTest < TestCase
   include KitchenHelper
 
   def test_gets_destination_path_from_chef_config
@@ -64,6 +64,6 @@ class CookTest < TestCase
   end
 
   def command(*args)
-    knife_command(Chef::Knife::Cook, *args)
+    knife_command(Chef::Knife::SoloCook, *args)
   end
 end
