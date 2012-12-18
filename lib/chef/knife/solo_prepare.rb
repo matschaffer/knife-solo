@@ -18,7 +18,7 @@ class Chef
         KnifeSolo::NodeConfigCommand.load_deps
       end
 
-      banner "knife solo prepare [user@]hostname [json] (options)"
+      banner "knife solo prepare [USER@]HOSTNAME [JSON] (options)"
 
       option :omnibus_version,
         :long => "--omnibus-version VERSION",
@@ -33,10 +33,14 @@ class Chef
         :description => "Pass options to the install.sh script"
 
       def run
-        validate_params!
-        super
+        validate!
         bootstrap.bootstrap!
         generate_node_config
+      end
+
+      def validate!
+        validate_first_cli_arg_is_a_hostname!
+        validate_kitchen!
       end
 
       def bootstrap
@@ -46,10 +50,6 @@ class Chef
 
       def operating_system
         @operating_system ||= run_command('uname -s').stdout.strip
-      end
-
-      def validate_params!
-        validate_first_cli_arg_is_a_hostname!
       end
     end
   end

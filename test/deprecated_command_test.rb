@@ -23,10 +23,7 @@ end
 class DeprecatedCommandTest < TestCase
   def test_help_warns_about_deprecation
     $stdout.expects(:puts).with(regexp_matches(/deprecated!/))
-    begin
-      command("--help")
-    rescue SystemExit
-    end
+    assert_exits { command("--help") }
   end
 
   def test_warns_about_deprecation

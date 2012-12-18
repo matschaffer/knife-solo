@@ -1,19 +1,14 @@
-require 'knife-solo/knife_solo_error'
-
 module KnifeSolo
   module KitchenCommand
-    class OutOfKitchenError < KnifeSoloError
-      def message
-        "This command must be run inside a Chef solo kitchen."
-      end
-    end
-
     def self.required_files
       %w(solo.rb)
     end
 
-    def run
-      raise OutOfKitchenError.new unless required_files_present?
+    def validate_kitchen!
+      unless required_files_present?
+        ui.fatal "This command must be run inside a Chef solo kitchen."
+        exit 1
+      end
     end
 
     def required_files_present?

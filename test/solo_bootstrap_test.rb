@@ -1,13 +1,14 @@
 require 'test_helper'
 require 'support/kitchen_helper'
+require 'support/validation_helper'
 
 require 'chef/knife/solo_bootstrap'
 require 'chef/knife/solo_cook'
 require 'chef/knife/solo_prepare'
-require 'knife-solo/knife_solo_error'
 
 class SoloBootstrapTest < TestCase
   include KitchenHelper
+  include ValidationHelper::ValidationTests
 
   def test_includes_all_prepare_options
     bootstrap_options = Chef::Knife::SoloBootstrap.options
@@ -22,22 +23,6 @@ class SoloBootstrapTest < TestCase
 
     in_kitchen do
       command("somehost").run
-    end
-  end
-
-  def test_barks_without_atleast_a_hostname
-    in_kitchen do
-      assert_raises KnifeSolo::KnifeSoloError do
-        command.run
-      end
-    end
-  end
-
-  def test_barks_outside_of_the_kitchen
-    outside_kitchen do
-      assert_raises KnifeSolo::KitchenCommand::OutOfKitchenError do
-        command("somehost").run
-      end
     end
   end
 
