@@ -8,6 +8,9 @@
 
 # Not released yet
 
+* Move all commands under "knife solo" namespace (#118)
+    - Rename `knife kitchen` to `knife solo init`
+    - Rename `knife wash_up` to `knife solo clean`
 * Add `knife solo bootstrap` command (#120)
 * Detect Fedora 17 (#141)
 
