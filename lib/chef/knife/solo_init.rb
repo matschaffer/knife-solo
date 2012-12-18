@@ -5,18 +5,22 @@ class Chef
     class SoloInit < Knife
       include FileUtils
 
-      deps do
-        require 'knife-solo/knife_solo_error'
-      end
-
-      banner "knife solo init NAME or initialize current directory with '.'"
+      banner "knife solo init DIRECTORY"
 
       def run
-        raise KnifeSolo::KnifeSoloError.new(banner) unless base = @name_args.first
-
+        validate!
+        base = @name_args.first
         create_kitchen base
         create_cupboards base, %w(nodes roles data_bags site-cookbooks cookbooks)
         create_solo_config base
+      end
+
+      def validate!
+        unless @name_args.first
+          show_usage
+          ui.fatal "You must specify a directory. Use '.' to initialize the current one."
+          exit 1
+        end
       end
 
       private

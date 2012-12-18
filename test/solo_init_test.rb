@@ -2,7 +2,6 @@ require 'test_helper'
 require 'support/kitchen_helper'
 
 require 'chef/knife/solo_init'
-require 'knife-solo/knife_solo_error'
 
 class SoloInitTest < TestCase
   include KitchenHelper
@@ -20,8 +19,11 @@ class SoloInitTest < TestCase
   end
 
   def test_barks_without_directory_arg
-    assert_raises KnifeSolo::KnifeSoloError do
-      command.run
+    cmd = command
+    cmd.ui.expects(:err).with(regexp_matches(/You must specify a directory/))
+    $stdout.stubs(:puts)
+    outside_kitchen do
+      assert_exits cmd
     end
   end
 

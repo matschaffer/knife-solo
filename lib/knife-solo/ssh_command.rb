@@ -2,7 +2,6 @@ module KnifeSolo
   module SshCommand
 
     def self.load_deps
-      require 'knife-solo/knife_solo_error'
       require 'net/ssh'
     end
 
@@ -55,8 +54,9 @@ module KnifeSolo
 
     def validate_first_cli_arg_is_a_hostname!
       unless first_cli_arg_is_a_hostname?
-        ui.msg opt_parser.help
-        raise KnifeSoloError.new "need to pass atleast a [user@]hostname as the first argument"
+        show_usage
+        ui.fatal "You must specify [<user>@]<hostname> as the first argument"
+        exit 1
       end
     end
 

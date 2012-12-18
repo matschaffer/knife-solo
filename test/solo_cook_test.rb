@@ -1,13 +1,19 @@
 require 'test_helper'
 require 'support/kitchen_helper'
+require 'support/validation_helper'
 
 require 'chef/cookbook/chefignore'
-require 'chef/knife'
 require 'chef/knife/solo_cook'
-require 'knife-solo/knife_solo_error'
+
+class SuccessfulResult
+  def success?
+    true
+  end
+end
 
 class SoloCookTest < TestCase
   include KitchenHelper
+  include ValidationHelper::ValidationTests
 
   def test_gets_destination_path_from_chef_config
     Chef::Config.file_cache_path "/tmp/chef-solo"
@@ -32,14 +38,6 @@ class SoloCookTest < TestCase
     end
   end
 
-  def test_barks_without_atleast_a_hostname
-    in_kitchen do
-      assert_raises KnifeSolo::KnifeSoloError do
-        command.run
-      end
-    end
-  end
-
   def test_passes_node_name_to_chef_solo
     assert_chef_solo_option "--node-name=mynode", "-N mynode"
   end
@@ -54,11 +52,11 @@ class SoloCookTest < TestCase
     matcher = regexp_matches(/\s#{Regexp.quote(chef_solo_option)}(\s|$)/)
     in_kitchen do
       cmd = command("somehost", cook_option)
-      cmd.expects(:stream_command).with(matcher)
+      cmd.expects(:stream_command).with(matcher).returns(SuccessfulResult.new)
       cmd.cook
 
       cmd = command("somehost")
-      cmd.expects(:stream_command).with(Not(matcher))
+      cmd.expects(:stream_command).with(Not(matcher)).returns(SuccessfulResult.new)
       cmd.cook
     end
   end

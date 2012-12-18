@@ -86,6 +86,13 @@ class SshCommandTest < TestCase
     assert_equal "usertest@10.0.0.1 -p 222", cmd.ssh_args
   end
 
+  def test_barks_without_atleast_a_hostname
+    cmd = command
+    cmd.ui.expects(:err).with(regexp_matches(/hostname.*argument/))
+    $stdout.stubs(:puts)
+    assert_exits { cmd.validate_first_cli_arg_is_a_hostname! }
+  end
+
   def command(*args)
     Net::SSH::Config.stubs(:default_files)
     knife_command(DummySshCommand, *args)
