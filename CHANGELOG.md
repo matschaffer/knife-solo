@@ -13,6 +13,8 @@
     - Rename `knife wash_up` to `knife solo clean`
 * Add `knife solo bootstrap` command (#120)
 * Detect Fedora 17 (#141)
+* Improve help/error messages and validation (#142)
+* Fix exit status of "cook" if chef-solo fails (#97)
 
 ## Thanks to our contributors!
 
