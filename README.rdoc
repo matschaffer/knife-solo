@@ -7,11 +7,11 @@
 
 Knife-solo is a gem plugin for Chef's knife utility. It currently adds 5 subcommands to knife:
 
-- <tt>knife solo init</tt> is used to create a new directory structure (i.e. "kitchen") that fits with chef's standard structure and can be used to build and store recipes.
+- <tt>knife solo init</tt> is used to create a new directory structure (i.e. "kitchen") that fits with Chef's standard structure and can be used to build and store recipes.
 
-- <tt>knife solo prepare</tt> installs Ruby, RubyGems and Chef on a given host. It's structured to auto-detect the target OS and change the installation process accordingly.
+- <tt>knife solo prepare</tt> installs Chef on a given host. It's structured to auto-detect the target OS and change the installation process accordingly.
 
-- <tt>knife solo cook</tt> uploads the current kitchen (chef repo) to the target host and runs chef-solo on that host.
+- <tt>knife solo cook</tt> uploads the current kitchen (Chef repo) to the target host and runs chef-solo on that host.
 
 - <tt>knife solo bootstrap</tt> combines the two previous ones (prepare and cook).
 
@@ -53,7 +53,7 @@ The prepare command takes an ssh-style host argument as follows:
 
 It will look up SSH information from <tt>~/.ssh/config</tt> or in the file specified by +-F+. You can also pass port information (+-p+), identity information (+-i+), or a password (+-P+). It will use sudo to run some of these commands and will prompt you for the password if it's not supplied on the command line.
 
-This command will make a best-effort to detect and install Chef-solo on your target operating system. We use the {Opscode Installer}[http://www.opscode.com/chef/install/] wherever possible.
+This command will make a best-effort to detect and install Chef Solo on your target operating system. We use the {Opscode Installer}[http://www.opscode.com/chef/install/] wherever possible.
 
 If you need specific behavior you can fallback to a knife bootstrap command with an empty runlist using the following:
 
