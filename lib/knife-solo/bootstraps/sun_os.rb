@@ -1,8 +1,9 @@
 module KnifeSolo::Bootstraps
   class SunOS < Base
     def bootstrap!
-      # FIXME: Doesn't work on https, need to install verisign's CA
-      stream_command "curl -L http://opscode.com/chef/install.sh | bash"
+      stream_command "sudo pkg install network/rsync web/ca-bundle"
+      stream_command "sudo bash -c 'echo ca_certificate=/etc/cacert.pem >> /etc/wgetrc'"
+      omnibus_install
     end
   end
 end
