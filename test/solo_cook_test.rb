@@ -16,7 +16,7 @@ class SoloCookTest < TestCase
   include ValidationHelper::ValidationTests
 
   def test_gets_destination_path_from_chef_config
-    Chef::Config.file_cache_path "/tmp/chef-solo"
+    Chef::Config.knife[:solo_path] = "/tmp/chef-solo"
     assert_equal "/tmp/chef-solo", command.chef_path
   end
 
