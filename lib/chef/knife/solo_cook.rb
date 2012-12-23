@@ -99,6 +99,8 @@ class Chef
       def rsync_kitchen
         time('Rsync kitchen') do
           run_command "sudo echo priming sudo for rsync"
+          remote_mkdir_p(chef_path)
+          remote_chmod("0700", chef_path)
           cmd = %Q{rsync -rl --rsh="ssh #{ssh_args}" --rsync-path="sudo rsync" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
           ui.msg cmd if debug?
           system! cmd
@@ -106,7 +108,7 @@ class Chef
       end
 
       def add_patches
-        run_portable_mkdir_p(patch_path)
+        remote_mkdir_p(patch_path)
         Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb").to_s].each do |patch|
           time(patch) do
             # FIXME mat: This is duplicated with rsync_kitchen, should extract
