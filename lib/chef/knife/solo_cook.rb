@@ -62,7 +62,7 @@ class Chef
       end
 
       def chef_path
-        Chef::Config.file_cache_path
+        Chef::Config.knife[:solo_path]
       end
 
       def chefignore
@@ -98,7 +98,8 @@ class Chef
 
       def rsync_kitchen
         time('Rsync kitchen') do
-          cmd = %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
+          run_command "sudo echo priming sudo for rsync"
+          cmd = %Q{rsync -rl --rsh="ssh #{ssh_args}" --rsync-path="sudo rsync" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
           ui.msg cmd if debug?
           system! cmd
         end
@@ -108,7 +109,8 @@ class Chef
         run_portable_mkdir_p(patch_path)
         Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb").to_s].each do |patch|
           time(patch) do
-            system! %Q{rsync -rl --rsh="ssh #{ssh_args}" #{patch} :#{adjust_rsync_path(patch_path)}}
+            # FIXME mat: This is duplicated with rsync_kitchen, should extract
+            system! %Q{rsync -rl --rsh="ssh #{ssh_args}" --rsync-path="sudo rsync" --delete #{patch} :#{adjust_rsync_path(patch_path)}}
           end
         end
       end

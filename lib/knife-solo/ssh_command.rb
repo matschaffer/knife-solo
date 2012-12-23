@@ -246,7 +246,7 @@ module KnifeSolo
         # no mkdir -p on windows - fake it
         run_command %Q{ruby -e "require 'fileutils'; FileUtils.mkdir_p('#{folder}')"}
       else
-        run_command "mkdir -p #{folder}"
+        run_command "sudo mkdir -p #{folder}"
       end
     end
 
