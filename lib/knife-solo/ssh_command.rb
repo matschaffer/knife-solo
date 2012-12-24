@@ -242,16 +242,16 @@ module KnifeSolo
       if windows_node?
         # TODO mat: figure out how to mimic 0700 mode on windows
       else
-        run_command "sudo chmod #{mode} #{target}"
+        run_command "chmod #{mode} #{target}"
       end
     end
 
     def remote_mkdir_p(folder)
       if windows_node?
         # no mkdir -p on windows - fake it
-        run_command %Q{sudo ruby -e "require 'fileutils'; FileUtils.mkdir_p('#{folder}')"}
+        run_command %Q{ruby -e "require 'fileutils'; FileUtils.mkdir_p('#{folder}')"}
       else
-        run_command "sudo mkdir -p #{folder}"
+        run_command "mkdir -p #{folder}"
       end
     end
 
