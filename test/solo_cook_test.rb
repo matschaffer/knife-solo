@@ -20,6 +20,11 @@ class SoloCookTest < TestCase
     assert_equal "/tmp/chef-solo", command.chef_path
   end
 
+  def test_barks_if_solo_path_isnt_set
+    Chef::Config.knife[:solo_path] = nil
+    assert_exits { command.validate_chef_path! }
+  end
+
   def test_gets_patch_path_from_chef_config
     Chef::Config.cookbook_path ["/tmp/chef-solo/cookbooks"]
     assert_equal "/tmp/chef-solo/cookbooks/chef_solo_patches/libraries", command.patch_path

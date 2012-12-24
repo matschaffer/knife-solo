@@ -47,7 +47,6 @@ class Chef
       def run
         time('Run') do
           validate!
-          Chef::Config.from_file('solo.rb')
           check_chef_version unless config[:skip_chef_check]
           generate_node_config
           rsync_kitchen
@@ -59,10 +58,30 @@ class Chef
       def validate!
         validate_first_cli_arg_is_a_hostname!
         validate_kitchen!
+        validate_chef_path!
+      end
+
+      def validate_chef_path!
+        unless chef_path && !chef_path.empty?
+          ui.fatal <<-TXT.gsub(/^ {12}/, '') + SoloInit.solo_rb
+            knife[:solo_path] needs to be set in solo.rb. Check that your solo.rb file is present
+            and looks like this example:
+
+          TXT
+          exit 1
+        end
+      end
+
+      def load_configuration
+        Chef::Config.from_file('solo.rb')
+      rescue Errno::ENOENT
+        ui.warn "Unable to load solo.rb"
       end
 
       def chef_path
-        Chef::Config.knife[:solo_path]
+        return @chef_path if @chef_path
+        load_configuration
+        @chef_path = Chef::Config.knife[:solo_path]
       end
 
       def chefignore
@@ -96,23 +115,32 @@ class Chef
         ui.msg "#{msg} finished in #{Time.now - start} seconds"
       end
 
+      def rsync_path
+        if sudo_available?
+          "sudo rsync"
+        else
+          "rsync"
+        end
+      end
+
       def rsync_kitchen
         time('Rsync kitchen') do
-          run_command "sudo echo priming sudo for rsync"
+          run_command "sudo -v"
           remote_mkdir_p(chef_path)
           remote_chmod("0700", chef_path)
-          cmd = %Q{rsync -rl --rsh="ssh #{ssh_args}" --rsync-path="sudo rsync" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
+          cmd = %Q{rsync -rl --rsh="ssh #{ssh_args}" --rsync-path="#{rsync_path}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
           ui.msg cmd if debug?
           system! cmd
         end
       end
 
       def add_patches
+        run_command "sudo -v"
         remote_mkdir_p(patch_path)
         Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb").to_s].each do |patch|
           time(patch) do
             # FIXME mat: This is duplicated with rsync_kitchen, should extract
-            system! %Q{rsync -rl --rsh="ssh #{ssh_args}" --rsync-path="sudo rsync" --delete #{patch} :#{adjust_rsync_path(patch_path)}}
+            system! %Q{rsync -rl --rsh="ssh #{ssh_args}" --rsync-path="#{rsync_path}" --delete #{patch} :#{adjust_rsync_path(patch_path)}}
           end
         end
       end

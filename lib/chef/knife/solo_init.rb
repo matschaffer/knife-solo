@@ -39,19 +39,24 @@ class Chef
         mkdir base unless base == '.'
       end
 
+      def self.solo_rb
+        <<-RUBY.gsub(/^ {10}/, '')
+          knife[:solo_path] = "/tmp/chef-solo"
+
+          data_bag_path             "/tmp/chef-solo/data_bags"
+          encrypted_data_bag_secret "/tmp/chef-solo/data_bag_key"
+          cookbook_path             [ "/tmp/chef-solo/site-cookbooks",
+                                        "/tmp/chef-solo/cookbooks" ]
+          role_path                 "/tmp/chef-solo/roles"
+        RUBY
+      end
+
       def create_solo_config(base)
         solo_file = File.join(base, 'solo.rb')
         return if File.exist? solo_file
 
         File.open(solo_file, 'w') do |f|
-          f << <<-RUBY.gsub(/^ {12}/, '')
-            file_cache_path           "/tmp/chef-solo"
-            data_bag_path             "/tmp/chef-solo/data_bags"
-            encrypted_data_bag_secret "/tmp/chef-solo/data_bag_key"
-            cookbook_path             [ "/tmp/chef-solo/site-cookbooks",
-                                        "/tmp/chef-solo/cookbooks" ]
-            role_path                 "/tmp/chef-solo/roles"
-          RUBY
+          f << self.class.solo_rb
         end
       end
     end
