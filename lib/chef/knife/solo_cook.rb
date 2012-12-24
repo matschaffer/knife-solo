@@ -98,10 +98,6 @@ class Chef
         Array(Chef::Config.cookbook_path).first + "/chef_solo_patches/libraries"
       end
 
-      def rsync_exclude
-        (%w{revision-deploys tmp '.*'} + chefignore.ignores).uniq
-      end
-
       def debug?
         config[:verbosity] and config[:verbosity] > 0
       end
@@ -115,11 +111,23 @@ class Chef
         ui.msg "#{msg} finished in #{Time.now - start} seconds"
       end
 
+      def rsync
+        %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete}
+      end
+
+      def rsync_excluded_files
+        (%w{revision-deploys tmp '.*'} + chefignore.ignores).uniq
+      end
+
+      def rsync_exclude_switches
+        rsync_excluded_files.collect{ |ignore| "--exclude #{ignore} " }.join
+      end
+
       def rsync_kitchen
         time('Rsync kitchen') do
           remote_mkdir_p(chef_path)
           remote_chmod("0700", chef_path)
-          cmd = %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
+          cmd = %Q{#{rsync} #{rsync_exclude_switches} ./ :#{adjust_rsync_path(chef_path)}}
           ui.msg cmd if debug?
           system! cmd
         end
@@ -129,8 +137,7 @@ class Chef
         remote_mkdir_p(patch_path)
         Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb").to_s].each do |patch|
           time(patch) do
-            # FIXME mat: This is duplicated with rsync_kitchen, should extract
-            system! %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{patch} :#{adjust_rsync_path(patch_path)}}
+            system! %Q{#{rsync} #{patch} :#{adjust_rsync_path(patch_path)}}
           end
         end
       end
