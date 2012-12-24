@@ -157,7 +157,7 @@ module KnifeSolo
 
     def windows_node?
       return @windows_node unless @windows_node.nil?
-      @windows_node = run_command('ver', :process_sudo => false).stdout =~ /Windows/i
+      @windows_node = run_command('ver', :process_sudo => false).stdout =~ /Windows/i || false
       Chef::Log.debug("Windows node detected") if @windows_node
       @windows_node
     end
