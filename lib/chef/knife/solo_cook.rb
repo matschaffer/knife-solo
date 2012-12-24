@@ -115,32 +115,22 @@ class Chef
         ui.msg "#{msg} finished in #{Time.now - start} seconds"
       end
 
-      def rsync_path
-        if sudo_available?
-          "sudo rsync"
-        else
-          "rsync"
-        end
-      end
-
       def rsync_kitchen
         time('Rsync kitchen') do
-          run_command "sudo -v"
           remote_mkdir_p(chef_path)
           remote_chmod("0700", chef_path)
-          cmd = %Q{rsync -rl --rsh="ssh #{ssh_args}" --rsync-path="#{rsync_path}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
+          cmd = %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
           ui.msg cmd if debug?
           system! cmd
         end
       end
 
       def add_patches
-        run_command "sudo -v"
         remote_mkdir_p(patch_path)
         Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb").to_s].each do |patch|
           time(patch) do
             # FIXME mat: This is duplicated with rsync_kitchen, should extract
-            system! %Q{rsync -rl --rsh="ssh #{ssh_args}" --rsync-path="#{rsync_path}" --delete #{patch} :#{adjust_rsync_path(patch_path)}}
+            system! %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{patch} :#{adjust_rsync_path(patch_path)}}
           end
         end
       end
