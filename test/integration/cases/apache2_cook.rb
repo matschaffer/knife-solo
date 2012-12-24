@@ -15,7 +15,7 @@ module Apache2Cook
   end
 
   def default_apache_message
-    /It works!/
+    /Apache Server/
   end
 
   def test_apache2
