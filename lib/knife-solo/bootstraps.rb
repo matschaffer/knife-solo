@@ -103,6 +103,8 @@ module KnifeSolo
         run_command("tar zxf #{file}")
         run_command("cd #{release} && sudo ruby setup.rb --no-format-executable")
         run_command("sudo rm -rf #{release} #{file}")
+        # Workaround for http://tickets.opscode.com/browse/CHEF-3721
+        run_command("sudo gem install --no-rdoc --no-ri moneta -v=0.6.0")
         run_command("sudo gem install --no-rdoc --no-ri #{gem_packages().join(' ')}")
       end
     end #InstallCommands
