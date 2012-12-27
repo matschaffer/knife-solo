@@ -6,7 +6,7 @@ class Sles11_Test < IntegrationTest
   end
 
   def image_id
-    "ami-e0a35789"
+    "ami-ca32efa3"
   end
 
   include EmptyCook
