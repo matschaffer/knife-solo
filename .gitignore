@@ -3,6 +3,7 @@
 /.bundle
 /mykitchen
 /doc
+/.yardoc
 /log
 /test/support/config.yml
 /test/support/knife-solo.pem
