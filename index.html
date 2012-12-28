@@ -1,146 +1,188 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <title>knife-solo by matschaffer</title>
-  </head>
+---
+layout: default
+---
 
-  <body>
-    <div id="container">
-      <div class="inner">
+<h1 id="label-knife-solo">knife-solo</h1>
 
-        <header>
-          <h1>knife-solo</h1>
-          <h2>Concepts from spatula and littlechef implemented as a knife plugin</h2>
-        </header>
+<p><a href="http://travis-ci.org/matschaffer/knife-solo"><img
+src="https://secure.travis-ci.org/matschaffer/knife-solo.png" alt="Build
+Status" /></a> <a
+href="https://codeclimate.com/github/matschaffer/knife-solo"><img
+src="https://codeclimate.com/badge.png" /></a></p>
 
-        <section id="downloads" class="clearfix">
-          <a href="https://github.com/matschaffer/knife-solo/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/matschaffer/knife-solo/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/matschaffer/knife-solo" id="view-on-github" class="button"><span>View on GitHub</span></a>
-        </section>
+<h2 id="label-DESCRIPTION%3A">DESCRIPTION:</h2>
 
-        <hr>
+<p>Knife-solo is a gem plugin for Chef’s knife utility. It currently adds 4
+subcommands to knife: kitchen, prepare, cook and wash_up</p>
 
-        <section id="main_content">
-          <h1>knife-solo</h1>
+<p>The <code>kitchen</code> command is used to create a new directory
+structure that fits with chef’s standard structure and can be used to build
+and store recipes.</p>
 
-<h2>DESCRIPTION:</h2>
+<p>The <code>prepare</code> command installs Ruby, RubyGems and Chef on a
+given host. It’s structured to auto-detect the target OS and change the
+installation process accordingly.</p>
 
-<p>Knife-solo is a gem plugin for Chef's knife utility. It currently adds 3 subcommands to knife: kitchen, prepare and cook</p>
+<p>The <code>cook</code> command uploads the current kitchen (chef repo) to
+the target host and runs chef-solo on that host.</p>
 
-<p>The <code>kitchen</code> command is used to create a new directory structure that fits with chef's standard structure and can be used to build and store recipes.</p>
-
-<p>The <code>prepare</code> command installs Ruby, RubyGems and \Chef on a given host. It's structured to auto-detect the target OS and change the installation process accordingly.</p>
-
-<p>The <code>cook</code> command uploads the current kitchen (chef repo) to the target host and runs chef-solo on that host.</p>
+<p>The <code>wash_up</code> command removes the uploaded kitchen from the
+target host.</p>
 
 <p>Preliminary Windows support for <code>cook</code> is available (see below).</p>
 
-<h2>USAGE:</h2>
+<h2 id="label-USAGE%3A">USAGE:</h2>
 
 <p>Installation is a normal gem installation.</p>
 
-<pre><code>gem install knife-solo
-</code></pre>
+<pre>gem install knife-solo</pre>
 
-<h3>Kitchen command</h3>
+<p>If you need to install from git run:</p>
 
-<p>The kitchen command simply takes a name of the directory to store the kitchen structure.</p>
+<pre>rake install</pre>
 
-<pre><code>knife kitchen mychefrepo
-</code></pre>
+<h3 id="label-Kitchen+command">Kitchen command</h3>
 
-<p>Currently the directory structure looks like this, but could change as development continues.</p>
+<p>The kitchen command simply takes a name of the directory to store the
+kitchen structure.</p>
 
-<pre><code>mykitchen/
+<pre>knife kitchen mychefrepo</pre>
+
+<p>Currently the directory structure looks like this, but could change as
+development continues.</p>
+
+<pre>mykitchen/
 ├── cookbooks
 ├── data_bags
 ├── nodes
 ├── roles
 ├── site-cookbooks
-└── solo.rb
-</code></pre>
+└── solo.rb</pre>
 
-<h3>Prepare command</h3>
+<h3 id="label-Prepare+command">Prepare command</h3>
 
 <p>The prepare command takes an ssh-style host argument as follows:</p>
 
-<pre><code>knife prepare ubuntu@10.0.0.201
-</code></pre>
+<pre>knife prepare ubuntu@10.0.0.201</pre>
 
-<p>It will look up SSH information from <code>~/.ssh/config</code> or in the file specified by <code>-F</code>. You can also pass port information (<code>-p</code>), identity information (<code>-i</code>), or a password (<code>-P</code>). It will use sudo to run some of these commands and will prompt you for the password if it's not supplied on the command line.</p>
+<p>It will look up SSH information from <code>~/.ssh/config</code> or in the
+file specified by <code>-F</code>. You can also pass port information
+(<code>-p</code>), identity information (<code>-i</code>), or a password
+(<code>-P</code>). It will use sudo to run some of these commands and will
+prompt you for the password if it’s not supplied on the command line.</p>
 
-<h3>Cook command</h3>
+<p>This command will make a best-effort to detect and install Chef-solo on
+your target operating system. We use the <a
+href="http://www.opscode.com/chef/install/">Opscode Installer</a> wherever
+possible.</p>
+
+<p>If you need specific behavior you can fallback to a knife bootstrap command
+with an empty runlist using the following:</p>
+
+<pre>knife bootstrap --template-file bootstrap.centos.erb -u root 172.16.144.132
+echo '{&quot;run_list&quot;:[]}' &gt; nodes/172.16.144.132.json</pre>
+
+<p>Bootstrap templates are quite simple, as shown in <a
+href="https://gist.github.com/2402433">this gist for
+bootstrap.centos.erb</a>.</p>
+
+<p>Or if your modifications provide some general benefit, consider sending a
+pull request to <a href="https://github.com/matschaffer/knife-solo">this
+project</a> or <a href="https://github.com/opscode/omnibus">the omnibus
+installer</a>.</p>
+
+<h3 id="label-Cook+command">Cook command</h3>
 
 <p>The cook command also takes an ssh-style host argument:</p>
 
-<pre><code>knife cook ubuntu@10.0.0.201
-</code></pre>
+<pre>knife cook ubuntu@10.0.0.201</pre>
 
-<p>The cook command uploads the current kitchen to the server and runs chef-solo on that server. If you only specify one argument it will look for a node config in <code>nodes/&lt;hostname&gt;.json</code>. Or if you want to specify a node config you can pass the path to the file as the second argument.</p>
+<p>The cook command uploads the current kitchen to the server and runs
+chef-solo on that server. If you only specify one argument it will look for
+a node config in <code>nodes/&lt;hostname&gt;.json</code>. Or if you want
+to specify a node config you can pass the path to the file as the second
+argument.</p>
 
-<p>This uploads all of your cookbooks in addition to a patch that allows you to use data_bags in a read-only fashion from the <code>data_bags</code> folder.</p>
+<p>This uploads all of your cookbooks in addition to a patch that allows you
+to use data_bags in a read-only fashion from the <code>data_bags</code>
+folder.</p>
 
-<h3>Windows support</h3>
+<p>This also supports encrypted data bags. To use them, place your key in
+<code>data_bag_key</code> in the root of your kitchen (or if you move it
+make sure to update <code>solo.rb</code> to reflect the new path).</p>
+
+<p>The knife command for creating encrypted data bags doesn’t work well
+without a Chef server, so use <a
+href="https://gist.github.com/2896172">this gist</a> as an example on how
+to create encrypted data bag items on your local file system.</p>
+
+<h3 id="label-WashUp+command">WashUp command</h3>
+
+<p>The wash_up command takes the same arguments like prepare and cook:</p>
+
+<pre>knife wash_up ubuntu@10.0.0.201</pre>
+
+<p>The wash_up command removes an uploaded kitchen completely from the target
+host. This improves security because passwords etc. are not left behind on
+that host.</p>
+
+<h3 id="label-Windows+support">Windows support</h3>
 
 <p>The cook command will work on Windows node if you meet the following howto:</p>
 
-<h4>Kitchen then tweak</h4>
+<h4 id="label-Kitchen+then+tweak">Kitchen then tweak</h4>
+<ul><li>
+<p>run <code>knife kitchen</code> then edit solo.rb to use Windows path-naming
+(see <a href="https://gist.github.com/1773854">gist.github.com/1773854</a>)</p>
+</li></ul>
 
-<ul>
-<li>run <code>knife kitchen</code> then edit solo.rb to use Windows path-naming (see <a href="https://gist.github.com/1773854">https://gist.github.com/1773854</a>)</li>
-</ul><h4>Prepare the node manually</h4>
+<h4 id="label-Prepare+the+node+manually">Prepare the node manually</h4>
+<ul><li>
+<p>install a SSH server (eg: WinSSHd)</p>
+</li><li>
+<p>install rsync on the node (see <a
+href="https://github.com/thbar/rsync-windows">github.com/thbar/rsync-windows</a>)</p>
+</li><li>
+<p>add rsync to the user PATH</p>
+</li><li>
+<p>install <a
+href="http://www.opscode.com/chef/install.msi">www.opscode.com/chef/install.msi</a></p>
+</li><li>
+<p>add nodes/hostname.json and put <code>{ &quot;run_list&quot;: [] }</code>
+in it</p>
+</li></ul>
 
-<ul>
-<li>install a SSH server (eg: WinSSHd)</li>
-<li>install rsync on the node (see <a href="https://github.com/thbar/rsync-windows">https://github.com/thbar/rsync-windows</a>)</li>
-<li>add rsync to the user PATH</li>
-<li>install <a href="http://www.opscode.com/chef/install.msi">http://www.opscode.com/chef/install.msi</a>
-</li>
-<li>add nodes/hostname.json and put <code>{ "run_list": [] }</code> in it</li>
-</ul><h4>Cook</h4>
+<h4 id="label-Cook">Cook</h4>
+<ul><li>
+<p>cook should work as expected automatically, if you use cygwin rsync</p>
+</li></ul>
 
-<ul>
-<li>cook should work as expected automatically, if you use cygwin rsync</li>
-</ul><h2>DEVELOPMENT</h2>
+<h2 id="label-DEVELOPMENT">DEVELOPMENT</h2>
 
-<p>Get set up by running <code>./script/newb</code> this will do some of the steps and guide you through the rest. If it doesn't run for you, feel free to <a href="https://github.com/matschaffer/knife-solo/issues">file an issue</a>.</p>
+<p>Get set up by running <code>./script/newb</code> this will do some of the
+steps and guide you through the rest. If it doesn’t run for you, feel free
+to <a href="https://github.com/matschaffer/knife-solo/issues">file an
+issue</a>.</p>
 
-<p>When running integration tests you can specify VERBOSE=true as an environment variable to enable verbose output. All integration testing output is sent to the log directory into a file that matches matches the test case name.</p>
+<p>When running integration tests all output is sent to the log directory into
+a file that matches matches the test case name. The EC2Runner log is the
+main runner log that contains information about instance provisioning.</p>
 
-<p>You can also specify SKIP_DESTROY=true to leave the EC2 instances running after test completion. Note that this is for debugging purposes and re-running the test will not re-use old instances. Please clean them up manually if you cancel the test or specify SKIP_DESTROY.</p>
+<p>Note that instances will remain running until your tests pass. This aids in
+speeding up the test cycle. Upon succesfful test completion you’ll be given
+10 seconds to cancel the process before the instances are cleaned up. Note
+that any instance tagged with <code>knife_solo_integration_user ==
+$USER</code> will be cleaned up. Or if you want to leave your instances
+running regardless, specify <code>SKIP_DESTROY=true</code> as an
+environment variable.</p>
 
-<p>To make an integration test, create a file in the <code>test/integration</code> directory and a test class that inherits from <code>IntegrationTest</code> and includes <code>IntegrationTest::BasicPrepareAndCook</code> or other test cases. You can override methods as necessary, but generally you only need to override <code>user</code> and <code>image_id</code> to specify the user name and AMI ID.</p>
+<p>To make an integration test, create a file in the
+<code>test/integration</code> directory and a test class that inherits from
+<code>IntegrationTest</code> and includes a module from
+<code>test/integration/cases</code>. You can override methods as necessary,
+but generally you only need to override <code>user</code> and
+<code>image_id</code> to specify the user name and AMI ID.</p>
 
-<p>If you're interested in contributing, contact me via GitHub or have a look at the <a href="https://github.com/matschaffer/knife-solo/issues">GitHub issues page</a>.</p>
-        </section>
-
-        <footer>
-          knife-solo is maintained by <a href="https://github.com/matschaffer">matschaffer</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
-        </footer>
-
-                  <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-1510564-4");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
-
-      </div>
-    </div>
-  </body>
-</html>
+<p>If you’re interested in contributing, contact me via GitHub or have a look
+at the <a href="https://github.com/matschaffer/knife-solo/issues">GitHub
+issues page</a>.</p>
