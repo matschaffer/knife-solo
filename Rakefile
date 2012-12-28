@@ -3,7 +3,12 @@ require 'rake/testtask'
 
 desc 'Updates Manifest.txt with a list of files from git'
 task :manifest do
-  `git ls-files > Manifest.txt`
+  git_files = `git ls-files`.split("\n")
+  ignored = %w(.gitignore Gemfile Gemfile.lock Manifest.txt knife-solo.gemspec script/newb script/test)
+
+  File.open('Manifest.txt', 'w') do |f|
+    f.puts (git_files - ignored).join("\n")
+  end
 end
 
 namespace :test do
