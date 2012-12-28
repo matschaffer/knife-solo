@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
 
   s.author   = 'Mat Schaffer'
   s.email    = 'mat@schaffer.me'
-  s.homepage = 'https://github.com/matschaffer/knife-solo'
+  s.homepage = 'http://matschaffer.github.com/knife-solo/'
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'mocha'
