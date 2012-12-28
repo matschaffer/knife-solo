@@ -11,6 +11,8 @@ task :manifest do
   end
 end
 
+task :release => :manifest
+
 namespace :test do
   Rake::TestTask.new(:integration) do |t|
     t.libs << "test"
