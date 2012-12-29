@@ -1,20 +1,22 @@
-# 0.1.0: In progress
-
-## Goals
+# 0.2.0 Goals
 
 * Cleaner bootstrap code
 * Local integration testing
 * Compatibility with plugins like knife-ec2
 
-# Not released yet
+# 0.1.0: Not released yet
 
 * Move all commands under "knife solo" namespace (#118)
     - Rename `knife kitchen` to `knife solo init`
     - Rename `knife wash_up` to `knife solo clean`
 * Add `knife solo bootstrap` command (#120)
+* OmniOS support (#144)
 * Detect Fedora 17 (#141)
 * Improve help/error messages and validation (#142)
 * Fix exit status of "cook" if chef-solo fails (#97)
+* Include documentation and tests in the gem (e01c23)
+
+* Other fixes: #146
 
 ## Thanks to our contributors!
 
