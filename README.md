@@ -29,4 +29,4 @@ To install knife-solo from source run:
 
     rake install
 
-Documentation for the latest master version of knife-solo is available in [README.rdoc](blob/master/README.rdoc).
+Documentation for the latest master version of knife-solo is available in [README.rdoc](https://github.com/matschaffer/knife-solo/blob/master/README.rdoc).
