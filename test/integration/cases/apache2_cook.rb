@@ -20,7 +20,6 @@ module Apache2Cook
 
   def test_apache2
     write_cheffile
-    system "librarian-chef install >> #{log_file}"
     write_nodefile(run_list: ["recipe[apache2]"])
     assert_subcommand "cook"
     assert_match default_apache_message, http_response
