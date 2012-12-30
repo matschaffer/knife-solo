@@ -1,11 +1,8 @@
 = knife-solo
 
-{<img src="https://secure.travis-ci.org/matschaffer/knife-solo.png" alt="Build Status" />}[http://travis-ci.org/matschaffer/knife-solo]
-{<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/matschaffer/knife-solo]
-
 == DESCRIPTION:
 
-Knife-solo is a gem plugin for Chef's knife utility. It currently adds 5 subcommands to knife:
+knife-solo adds a handful of commands that aim to make working with chef-solo as powerful as chef-server. It currently adds 5 subcommands to knife:
 
 - <tt>knife solo init</tt> is used to create a new directory structure (i.e. "kitchen") that fits with Chef's standard structure and can be used to build and store recipes.
 
