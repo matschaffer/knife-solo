@@ -21,6 +21,8 @@ class Chef
 
       deps do
         require 'chef/cookbook/chefignore'
+        require 'librarian/action'
+        require 'librarian/chef'
         require 'pathname'
         KnifeSolo::SshCommand.load_deps
         KnifeSolo::NodeConfigCommand.load_deps
@@ -50,6 +52,7 @@ class Chef
           Chef::Config.from_file('solo.rb')
           check_chef_version unless config[:skip_chef_check]
           generate_node_config
+          librarian_install
           rsync_kitchen
           add_patches
           cook unless config[:sync_only]
@@ -94,6 +97,18 @@ class Chef
         start = Time.now
         yield
         ui.msg "#{msg} finished in #{Time.now - start} seconds"
+      end
+
+      def librarian_install
+        return unless File.exist? 'Cheffile'
+        Chef::Log.debug("Installing Librarian cookbooks")
+        Librarian::Action::Clean.new(librarian_env).run
+        Librarian::Action::Resolve.new(librarian_env).run
+        Librarian::Action::Install.new(librarian_env).run
+      end
+
+      def librarian_env
+        @librarian_env ||= Librarian::Chef::Environment.new
       end
 
       def rsync_kitchen
