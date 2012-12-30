@@ -13,6 +13,16 @@ end
 
 task :release => :manifest
 
+desc 'Renerates gh-pages from project'
+task 'gh-pages' do
+  require 'tmpdir'
+  Dir.mktmpdir do |clone|
+    clone = "local_tmp"; mkdir(clone)
+    sh "git clone -b gh-pages git@github.com:matschaffer/knife-solo.git #{clone}"
+    sh "rdoc -o #{clone}/doc"
+  end
+end
+
 namespace :test do
   Rake::TestTask.new(:integration) do |t|
     t.libs << "test"
