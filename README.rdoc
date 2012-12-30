@@ -30,7 +30,7 @@ If you need to install from git run:
 
 The init command simply takes a name of the directory to store the kitchen structure. Use "." to initialize the current directory.
 
-    knife init mychefrepo
+    knife solo init mychefrepo
 
 Currently the directory structure looks like this, but could change as development continues.
 
