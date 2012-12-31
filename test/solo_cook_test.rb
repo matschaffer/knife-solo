@@ -46,6 +46,19 @@ class SoloCookTest < TestCase
     assert_chef_solo_option "--why-run", "-W"
   end
 
+  def test_install_berksfile_if_present
+    in_kitchen do
+      File.open("Berksfile", 'w') {}
+      cmd = command("somehost")
+      cmd.expects(:check_chef_version)
+      cmd.expects(:install_berskfile)
+      cmd.expects(:rsync_kitchen)
+      cmd.expects(:add_patches)
+      cmd.expects(:cook)
+      cmd.run
+    end
+  end
+
   # Asserts that the chef_solo_option is passed to chef-solo iff cook_option
   # is specified for the cook command
   def assert_chef_solo_option(cook_option, chef_solo_option)
