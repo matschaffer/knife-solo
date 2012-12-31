@@ -10,7 +10,6 @@ task :manifest do
     f.puts (git_files - ignored).join("\n")
   end
 end
-
 task :release => :manifest
 
 # Returns the parsed RDoc for a single file as HTML
@@ -46,6 +45,7 @@ task 'gh-pages' do
     end
   end
 end
+task :release => 'gh-pages'
 
 namespace :test do
   Rake::TestTask.new(:integration) do |t|
