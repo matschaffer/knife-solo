@@ -142,7 +142,7 @@ class Chef
       end
 
       def install_berskfile
-        Berkshelf::Berksfile.new(File.expand_path('Berksfile')).install(path: File.expand_path('cookbooks'))
+        Berkshelf::Berksfile.new(File.expand_path('Berksfile')).install(:path => File.expand_path('cookbooks'))
       end
     end
   end
