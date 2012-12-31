@@ -40,8 +40,8 @@ task 'gh-pages' do
     end
     rev = `git rev-parse HEAD`[0..7]
     Dir.chdir(clone) do
-      sh "git commit -m 'Updated index from README.rdoc rev #{rev}' index.html"
-      sh "git push origin master"
+      sh "git commit --allow-empty -m 'Updated index from README.rdoc rev #{rev}' index.html"
+      sh "git push origin gh-pages"
     end
   end
 end
