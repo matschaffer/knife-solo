@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'mocha'
+  s.add_development_dependency 'rdoc'
 
   s.add_dependency 'chef',    '>= 0.10.10'
   s.add_dependency 'net-ssh', '>= 2.1.3', '< 2.3.0'

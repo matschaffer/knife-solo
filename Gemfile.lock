@@ -100,6 +100,8 @@ GEM
       slop (~> 3.3.1)
     rake (10.0.2)
     rbx-require-relative (0.0.9)
+    rdoc (3.12)
+      json (~> 1.4)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     ruby-debug (0.10.4)
@@ -129,4 +131,5 @@ DEPENDENCIES
   parallel
   pry
   rake
+  rdoc
   ruby-debug
