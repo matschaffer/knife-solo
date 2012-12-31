@@ -89,6 +89,11 @@ GEM
     i18n (0.6.1)
     ipaddress (0.8.0)
     json (1.5.4)
+    librarian (0.0.26)
+      archive-tar-minitar (>= 0.5.2)
+      chef (>= 0.10)
+      highline
+      thor (~> 0.15)
     linecache (0.46)
       rbx-require-relative (> 0.0.4)
     log4r (1.1.10)
@@ -183,6 +188,7 @@ DEPENDENCIES
   debugger
   fog
   knife-solo!
+  librarian (~> 0.0.20)
   minitest
   mocha
   parallel
