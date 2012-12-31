@@ -21,6 +21,11 @@ class Chef
         :long => '--librarian',
         :description => 'Initialize Librarian'
 
+      option :skip_berkshelf,
+        :long => '--skip-berkshelf',
+        :boolean => false,
+        :description => "Skip generating files for Berkshelf support"
+
       def run
         @base = @name_args.first
         validate!
@@ -28,6 +33,7 @@ class Chef
         create_config
         create_cupboards %w[nodes roles data_bags site-cookbooks cookbooks]
         librarian_init if config[:librarian]
+        bootstrap_berkshelf unless config[:skip_berkshelf]
       end
 
       def validate!
@@ -35,6 +41,12 @@ class Chef
           show_usage
           ui.fatal "You must specify a directory. Use '.' to initialize the current one."
           exit 1
+        end
+      end
+
+      def bootstrap_berkshelf
+        File.open(File.join(@base, 'Berksfile'), 'w') do |f|
+          f.write("site :opscode\n")
         end
       end
 

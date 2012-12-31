@@ -21,6 +21,7 @@ class Chef
         require 'erubis'
         require 'pathname'
         require 'tempfile'
+        require 'berkshelf'
         KnifeSolo::SshCommand.load_deps
         KnifeSolo::NodeConfigCommand.load_deps
       end
@@ -73,6 +74,7 @@ class Chef
           check_chef_version if config[:chef_check]
           generate_node_config
           librarian_install if config_value(:librarian, true)
+          install_berskfile if has_berksfile?
           sync_kitchen
           generate_solorb
           cook unless config[:sync_only]
@@ -261,6 +263,16 @@ class Chef
 
         result = stream_command cmd
         raise "chef-solo failed. See output above." unless result.success?
+      end
+
+      private
+
+      def has_berksfile?
+        File.exist?('Berksfile')
+      end
+
+      def install_berskfile
+        Berkshelf::Berksfile.from_file(File.expand_path('Berksfile')).install(:path => File.expand_path('cookbooks'))
       end
     end
   end
