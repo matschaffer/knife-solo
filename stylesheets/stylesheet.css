@@ -164,6 +164,9 @@ a.button span {
 #view-on-rubygems span {
   background: transparent url(../images/ruby-icon.png) 12px 50% no-repeat;
 }
+#view-api-docs span {
+  background: transparent url(../images/api-icon.png) 12px 50% no-repeat;
+}
 
 #view-on-github {
   margin-right: 0;
