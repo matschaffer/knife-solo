@@ -45,6 +45,13 @@ module KnifeSolo
           :short => "-s FILE",
           :long => "--startup-script FILE",
           :description => "The startup script on the remote server containing variable definitions"
+
+        option :windows_check,
+          :short => "-w",
+          :long => "--windows-check",
+          :boolean => true,
+          :description => "Check if client is running Windows"
+
       end
     end
 
@@ -156,8 +163,9 @@ module KnifeSolo
     end
 
     def windows_node?
+      return false unless config[:windows_check]
       return @windows_node unless @windows_node.nil?
-      @windows_node = run_command('ver', :process_sudo => false).stdout =~ /Windows/i
+      @windows_node = (run_command('ver', :process_sudo => false).stdout =~ /Windows/i).nil?
       Chef::Log.debug("Windows node detected") if @windows_node
       @windows_node
     end
