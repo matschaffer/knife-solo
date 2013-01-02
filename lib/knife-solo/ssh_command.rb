@@ -157,7 +157,7 @@ module KnifeSolo
 
     def windows_node?
       return @windows_node unless @windows_node.nil?
-      @windows_node = run_command('ver', :process_sudo => false).stdout =~ /Windows/i
+      @windows_node = run_command('ver', :process_sudo => false).stdout =~ /Windows/i || false
       Chef::Log.debug("Windows node detected") if @windows_node
       @windows_node
     end
@@ -238,10 +238,15 @@ module KnifeSolo
       result
     end
 
-    # TODO:
-    # - move this to a dedicated "portability" module?
-    # - use ruby in all cases instead?
-    def run_portable_mkdir_p(folder)
+    def remote_chmod(mode, target)
+      if windows_node?
+        # TODO mat: figure out how to mimic 0700 mode on windows
+      else
+        run_command "chmod #{mode} #{target}"
+      end
+    end
+
+    def remote_mkdir_p(folder)
       if windows_node?
         # no mkdir -p on windows - fake it
         run_command %Q{ruby -e "require 'fileutils'; FileUtils.mkdir_p('#{folder}')"}
