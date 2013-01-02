@@ -20,8 +20,14 @@ class SoloCookTest < TestCase
     assert_equal "/tmp/chef-solo", command.chef_path
   end
 
-  def test_barks_if_solo_path_isnt_set
+  def test_exits_if_solo_path_isnt_set
     Chef::Config.knife[:solo_path] = nil
+    assert_exits { command.validate_chef_path! }
+  end
+
+  def test_exits_if_solo_path_is_same_as_cache_path
+    Chef::Config.knife[:solo_path] = "/tmp/chef-solo"
+    Chef::Config.file_cache_path = "/tmp/chef-solo"
     assert_exits { command.validate_chef_path! }
   end
 

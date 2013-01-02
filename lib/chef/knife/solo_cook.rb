@@ -64,8 +64,22 @@ class Chef
       def validate_chef_path!
         unless chef_path && !chef_path.empty?
           ui.fatal <<-TXT.gsub(/^ {12}/, '') + SoloInit.solo_rb
-            knife[:solo_path] needs to be set in solo.rb. Check that your solo.rb file is present
-            and looks like this example:
+            knife[:solo_path] needs to be set in solo.rb.
+                   Check that your solo.rb file is present and
+                   looks like this example:
+
+          TXT
+          exit 1
+        end
+
+        if chef_path == Chef::Config.file_cache_path
+          ui.fatal <<-TXT.gsub(/^ {12}/, '') + SoloInit.solo_rb
+            knife[:solo_path] should be different from
+                   file_cache_path in solo.rb otherwise you
+                   may run into errors on subsequent chef-solo runs.
+
+            Please ensure that your solo.rb file looks
+            like this template:
 
           TXT
           exit 1
