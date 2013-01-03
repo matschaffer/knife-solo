@@ -5,7 +5,7 @@ Rakefile
 lib/chef/knife/cook.rb
 lib/chef/knife/kitchen.rb
 lib/chef/knife/patches/parser.rb
-lib/chef/knife/patches/search_patch.rb
+lib/chef/knife/patches/search.rb
 lib/chef/knife/prepare.rb
 lib/chef/knife/solo_bootstrap.rb
 lib/chef/knife/solo_clean.rb
