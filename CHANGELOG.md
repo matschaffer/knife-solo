@@ -197,7 +197,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [davidsch]:      https://github.com/davidsch
 [deepak]:        https://github.com/deepak
 [fnichol]:       https://github.com/fnichol
-[funglaub]:      https://github/funglaub
+[funglaub]:      https://github.com/funglaub
 [gregf]:         https://github.com/gregf
 [gsterndale]:    https://github.com/gsterndale
 [hectcastro]:    https://github.com/hectcastro
@@ -209,7 +209,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [pferdefleisch]: https://github.com/pferdefleisch
 [portertech]:    https://github.com/portertech
 [retr0h]:        https://github.com/retr0h
-[rmoriz]:        http://github.com/rmoriz
+[rmoriz]:        https://github.com/rmoriz
 [rosstimson]:    https://github.com/rosstimson
 [rubiojr]:       https://github.com/rubiojr
 [ryandub]:       https://github.com/ryandub
