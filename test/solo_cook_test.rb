@@ -4,6 +4,7 @@ require 'support/validation_helper'
 
 require 'chef/cookbook/chefignore'
 require 'chef/knife/solo_cook'
+require 'librarian/action/install'
 
 class SuccessfulResult
   def success?
@@ -35,6 +36,21 @@ class SoloCookTest < TestCase
       File.open(file_to_ignore, 'w') {|f| f.puts "This file should be ignored"}
       File.open("chefignore", 'w') {|f| f.puts file_to_ignore}
       assert command.rsync_exclude.include?(file_to_ignore), "#{file_to_ignore} should have been excluded"
+    end
+  end
+
+  def test_does_not_run_librarian_if_no_cheffile
+    in_kitchen do
+      Librarian::Action::Install.any_instance.expects(:run).never
+      command.librarian_install
+    end
+  end
+
+  def test_runs_librarian_if_cheffile_found
+    in_kitchen do
+      File.open("Cheffile", 'w') {}
+      Librarian::Action::Install.any_instance.expects(:run)
+      command.librarian_install
     end
   end
 
