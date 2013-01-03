@@ -34,6 +34,20 @@ class SoloInitTest < TestCase
     end
   end
 
+  def test_creates_berksfile
+    outside_kitchen do
+      command("new_kitchen").run
+      assert File.exist?("new_kitchen/Berksfile")
+    end
+  end
+
+  def test_skips_berksfile_creation_if_given_option
+    outside_kitchen do
+      command("new_kitchen", "--skip-berkshelf").run
+      assert !File.exist?("new_kitchen/Berksfile")
+    end
+  end
+
   def command(*args)
     knife_command(Chef::Knife::SoloInit, *args)
   end

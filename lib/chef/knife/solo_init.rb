@@ -7,11 +7,17 @@ class Chef
 
       banner "knife solo init DIRECTORY"
 
+      option :skip_berkshelf,
+        :long => '--skip-berkshelf',
+        :boolean => false,
+        :description => "Skip generating files for Berkshelf support"
+
       def run
         validate!
         base = @name_args.first
         create_kitchen base
         create_cupboards base, %w(nodes roles data_bags site-cookbooks cookbooks)
+        bootstrap_berkshelf(base) unless config[:skip_berkshelf]
         create_solo_config base
       end
 
@@ -24,6 +30,12 @@ class Chef
       end
 
       private
+
+      def bootstrap_berkshelf(base)
+        File.open(File.join(base, 'Berksfile'), 'w') do |f|
+          f.write("site :opscode\n")
+        end
+      end
 
       def create_cupboards(base, dirs)
         dirs.each do |dir|

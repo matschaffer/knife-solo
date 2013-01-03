@@ -22,6 +22,7 @@ class Chef
       deps do
         require 'chef/cookbook/chefignore'
         require 'pathname'
+        require 'berkshelf'
         KnifeSolo::SshCommand.load_deps
         KnifeSolo::NodeConfigCommand.load_deps
       end
@@ -50,6 +51,7 @@ class Chef
           Chef::Config.from_file('solo.rb')
           check_chef_version unless config[:skip_chef_check]
           generate_node_config
+          install_berskfile if has_berksfile?
           rsync_kitchen
           add_patches
           cook unless config[:sync_only]
@@ -131,6 +133,16 @@ class Chef
 
         result = stream_command cmd
         raise "chef-solo failed. See output above." unless result.success?
+      end
+
+      private
+
+      def has_berksfile?
+        File.exist?('Berksfile')
+      end
+
+      def install_berskfile
+        Berkshelf::Berksfile.from_file(File.expand_path('Berksfile')).install(:path => File.expand_path('cookbooks'))
       end
     end
   end
