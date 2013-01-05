@@ -74,15 +74,29 @@ class Chef
 
       # cygwin rsync path must be adjusted to work
       def adjust_rsync_path(path)
-        return path unless windows_node?
         path.gsub(/^(\w):/) { "/cygdrive/#{$1}" }
+      end
+
+      def adjust_rsync_path_on_node(path)
+        return path unless windows_node?
+        adjust_rsync_path(path)
+      end
+
+      def adjust_rsync_path_on_client(path)
+        return path unless windows_client?
+        adjust_rsync_path(path)
+      end
+
+      # see http://stackoverflow.com/questions/5798807/rsync-permission-denied-created-directories-have-no-permissions
+      def rsync_permissions
+        '--chmod=ugo=rwX' if windows_client?
       end
 
       def patch_path
         Array(Chef::Config.cookbook_path).first + "/chef_solo_patches/libraries"
       end
 
-      def rsync_exclude
+      def rsync_excludes
         (%w{revision-deploys tmp '.*'} + chefignore.ignores).uniq
       end
 
@@ -113,9 +127,7 @@ class Chef
 
       def rsync_kitchen
         time('Rsync kitchen') do
-          cmd = %Q{rsync -rl --rsh="ssh #{ssh_args}" --delete #{rsync_exclude.collect{ |ignore| "--exclude #{ignore} " }.join} ./ :#{adjust_rsync_path(chef_path)}}
-          ui.msg cmd if debug?
-          system! cmd
+          rsync('./', chef_path, '--delete')
         end
       end
 
@@ -123,9 +135,15 @@ class Chef
         run_portable_mkdir_p(patch_path)
         Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb").to_s].each do |patch|
           time(patch) do
-            system! %Q{rsync -rl --rsh="ssh #{ssh_args}" #{patch} :#{adjust_rsync_path(patch_path)}}
+            rsync(patch, patch_path)
           end
         end
+      end
+
+      def rsync(source_path, target_path, extra_opts = '')
+        cmd = %Q{rsync -rl #{rsync_permissions} --rsh="ssh #{ssh_args}" #{extra_opts} #{rsync_excludes.collect{ |ignore| "--exclude #{ignore} " }.join} #{adjust_rsync_path_on_client(source_path)} :#{adjust_rsync_path_on_node(target_path)}}
+        ui.msg cmd if debug?
+        system! cmd
       end
 
       def check_chef_version
