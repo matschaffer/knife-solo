@@ -4,7 +4,7 @@ gemspec
 group :test do
   gem 'parallel'
   gem 'minitest', :require => 'minitest/autorun'
-  gem 'mocha'
+  gem 'mocha', :require => 'mocha/setup'
 end
 
 group :development, :test do

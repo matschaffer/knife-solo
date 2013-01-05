@@ -84,7 +84,7 @@ class BootstrapsTest < TestCase
   # ***
 
   def bootstrap_instance
-    @prepare = mock('Knife::Chef::Prepare')
+    @prepare = mock('Knife::Chef::SoloPrepare')
     KnifeSolo::Bootstraps::StubOS.new(@prepare)
   end
 end

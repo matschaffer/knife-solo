@@ -2,6 +2,7 @@ require 'test_helper'
 
 require 'knife-solo/ssh_command'
 require 'chef/knife'
+require 'net/ssh'
 
 class DummySshCommand < Chef::Knife
   include KnifeSolo::SshCommand
@@ -16,6 +17,20 @@ class SshCommandTest < TestCase
   def test_defaults_to_system_user
     ENV['USER'] = "test"
     assert_equal "test", command("10.0.0.1").user
+  end
+
+  def test_host_regex_rejects_invalid_hostnames
+    %w[@name @@name.com name@ name@@ joe@@example.com joe@name@example.com].each do |invalid|
+      cmd = command(invalid)
+      refute cmd.first_cli_arg_is_a_hostname?, "#{invalid} should have been rejected"
+    end
+  end
+
+  def test_host_regex_accpets_valid_hostnames
+    %w[name.com name joe@example.com].each do |valid|
+      cmd = command(valid)
+      assert cmd.first_cli_arg_is_a_hostname?, "#{valid} should have been accepted"
+    end
   end
 
   def test_prompts_for_password_if_not_provided
@@ -71,8 +86,15 @@ class SshCommandTest < TestCase
     assert_equal "usertest@10.0.0.1 -p 222", cmd.ssh_args
   end
 
+  def test_barks_without_atleast_a_hostname
+    cmd = command
+    cmd.ui.expects(:err).with(regexp_matches(/hostname.*argument/))
+    $stdout.stubs(:puts)
+    assert_exits { cmd.validate_first_cli_arg_is_a_hostname! }
+  end
+
   def command(*args)
-    DummySshCommand.load_deps
-    DummySshCommand.new(args)
+    Net::SSH::Config.stubs(:default_files)
+    knife_command(DummySshCommand, *args)
   end
 end

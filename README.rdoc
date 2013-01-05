@@ -1,21 +1,20 @@
 = knife-solo
 
-{Build Status}[http://travis-ci.org/matschaffer/knife-solo.png]
-{<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/matschaffer/knife-solo]
-
 == DESCRIPTION:
 
-Knife-solo is a gem plugin for Chef's knife utility. It currently adds 4 subcommands to knife: kitchen, prepare, cook and wash_up
+knife-solo adds a handful of commands that aim to make working with chef-solo as powerful as chef-server. It currently adds 5 subcommands to knife:
 
-The +kitchen+ command is used to create a new directory structure that fits with chef's standard structure and can be used to build and store recipes.
+- <tt>knife solo init</tt> is used to create a new directory structure (i.e. "kitchen") that fits with Chef's standard structure and can be used to build and store recipes.
 
-The +prepare+ command installs Ruby, RubyGems and \Chef on a given host. It's structured to auto-detect the target OS and change the installation process accordingly.
+- <tt>knife solo prepare</tt> installs Chef on a given host. It's structured to auto-detect the target OS and change the installation process accordingly.
 
-The +cook+ command uploads the current kitchen (chef repo) to the target host and runs chef-solo on that host.
+- <tt>knife solo cook</tt> uploads the current kitchen (Chef repo) to the target host and runs chef-solo on that host.
 
-The +wash_up+ command removes the uploaded kitchen from the target host.
+- <tt>knife solo bootstrap</tt> combines the two previous ones (prepare and cook).
 
-Preliminary Windows support for +cook+ is available (see below).
+- <tt>knife solo clean</tt> removes the uploaded kitchen from the target host.
+
+Preliminary Windows support for "knife solo cook" is available (see below).
 
 == USAGE:
 
@@ -27,15 +26,15 @@ If you need to install from git run:
 
     rake install
 
-=== Kitchen command
+=== Init command
 
-The kitchen command simply takes a name of the directory to store the kitchen structure.
+The init command simply takes a name of the directory to store the kitchen structure. Use "." to initialize the current directory.
 
-    knife kitchen mychefrepo
+    knife solo init mychefrepo
 
 Currently the directory structure looks like this, but could change as development continues.
 
-    mykitchen/
+    mychefrepo/
     ├── cookbooks
     ├── data_bags
     ├── nodes
@@ -47,11 +46,11 @@ Currently the directory structure looks like this, but could change as developme
 
 The prepare command takes an ssh-style host argument as follows:
 
-    knife prepare ubuntu@10.0.0.201
+    knife solo prepare ubuntu@10.0.0.201
 
 It will look up SSH information from <tt>~/.ssh/config</tt> or in the file specified by +-F+. You can also pass port information (+-p+), identity information (+-i+), or a password (+-P+). It will use sudo to run some of these commands and will prompt you for the password if it's not supplied on the command line.
 
-This command will make a best-effort to detect and install Chef-solo on your target operating system. We use the {Opscode Installer}[http://www.opscode.com/chef/install/] wherever possible.
+This command will make a best-effort to detect and install Chef Solo on your target operating system. We use the {Opscode Installer}[http://www.opscode.com/chef/install/] wherever possible.
 
 If you need specific behavior you can fallback to a knife bootstrap command with an empty runlist using the following:
 
@@ -66,9 +65,9 @@ Or if your modifications provide some general benefit, consider sending a pull r
 
 The cook command also takes an ssh-style host argument:
 
-    knife cook ubuntu@10.0.0.201
+    knife solo cook ubuntu@10.0.0.201
 
-The cook command uploads the current kitchen to the server and runs chef-solo on that server. If you only specify one argument it will look for a node config in +nodes/<hostname>.json+. Or if you want to specify a node config you can pass the path to the file as the second argument.
+The cook command uploads the current kitchen to the server and runs chef-solo on that server. If you only specify one argument it will look for a node config in <tt>nodes/<hostname>.json</tt>. Or if you want to specify a node config you can pass the path to the file as the second argument.
 
 This uploads all of your cookbooks in addition to a patch that allows you to use data_bags in a read-only fashion from the +data_bags+ folder.
 
@@ -76,22 +75,29 @@ This also supports encrypted data bags. To use them, place your key in +data_bag
 
 The knife command for creating encrypted data bags doesn't work well without a Chef server, so use {this gist}[https://gist.github.com/2896172] as an example on how to create encrypted data bag items on your local file system.
 
-=== WashUp command
+=== Bootstrap command
 
-The wash_up command takes the same arguments like prepare and cook:
+The bootstrap command takes the same arguments and most of the options as prepare and cook:
 
-    knife wash_up ubuntu@10.0.0.201
+    knife solo bootstrap ubuntu@10.0.0.201
 
-The wash_up command removes an uploaded kitchen completely from the target host.
-This improves security because passwords etc. are not left behind on that host.
+Under the hood it first calls +knife solo prepare+ and then +knife solo cook+ with the specified arguments and options.
+
+=== Clean command
+
+The clean command takes the same arguments like prepare and cook:
+
+    knife solo clean ubuntu@10.0.0.201
+
+The clean command removes an uploaded kitchen completely from the target host. This improves security because passwords etc. are not left behind on that host.
 
 === Windows support
 
 The cook command will work on Windows node if you meet the following howto:
 
-==== Kitchen then tweak
+==== Init then tweak
 
-- run `knife kitchen` then edit solo.rb to use Windows path-naming (see https://gist.github.com/1773854)
+- run <tt>knife solo init</tt> then edit solo.rb to use Windows path-naming (see https://gist.github.com/1773854)
 
 ==== Prepare the node manually
 
@@ -99,7 +105,7 @@ The cook command will work on Windows node if you meet the following howto:
 - install rsync on the node (see https://github.com/thbar/rsync-windows)
 - add rsync to the user PATH
 - install http://www.opscode.com/chef/install.msi
-- add nodes/hostname.json and put `{ "run_list": [] }` in it
+- add nodes/hostname.json and put <tt>{ "run_list": [] }</tt> in it
 
 ==== Cook
 
@@ -111,7 +117,7 @@ Get set up by running +./script/newb+ this will do some of the steps and guide y
 
 When running integration tests all output is sent to the log directory into a file that matches matches the test case name. The EC2Runner log is the main runner log that contains information about instance provisioning.
 
-Note that instances will remain running until your tests pass. This aids in speeding up the test cycle. Upon succesfful test completion you'll be given 10 seconds to cancel the process before the instances are cleaned up. Note that any instance tagged with knife_solo_integration_user == $USER will be cleaned up. Or if you want to leave your instances running regardless, specify SKIP_DESTROY=true as an environment variable.
+Note that instances will remain running until your tests pass. This aids in speeding up the test cycle. Upon succesfful test completion you'll be given 10 seconds to cancel the process before the instances are cleaned up. Note that any instance tagged with <tt>knife_solo_integration_user == $USER</tt> will be cleaned up. Or if you want to leave your instances running regardless, specify <tt>SKIP_DESTROY=true</tt> as an environment variable.
 
 To make an integration test, create a file in the +test/integration+ directory and a test class that inherits from +IntegrationTest+ and includes a module from +test/integration/cases+. You can override methods as necessary, but generally you only need to override +user+ and +image_id+ to specify the user name and AMI ID.
 

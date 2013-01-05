@@ -1,12 +1,12 @@
 require 'integration_helper'
 
-class Sles11_Test < IntegrationTest
+class OmniOSr151004Test < IntegrationTest
   def user
     "root"
   end
 
   def image_id
-    "ami-ca32efa3"
+    "ami-4e2c9727"
   end
 
   include EmptyCook

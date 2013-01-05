@@ -3,11 +3,22 @@ class TestCase < MiniTest::Unit::TestCase
     super unless self.class == TestCase
   end
 
-  def suppress_knife_error_output
-    old_level = Chef::Log.level
-    Chef::Log.level = :error
-    yield
-  ensure
-    Chef::Log.level = old_level
+  def knife_command(cmd_class, *args)
+    cmd_class.load_deps
+    command = cmd_class.new(args)
+    command.ui.stubs(:msg)
+    command.ui.stubs(:err)
+    command
+  end
+
+  # Assert that the specified command or block raises SystemExit
+  def assert_exits(command = nil)
+    assert_raises SystemExit do
+      if command
+        command.run
+      else
+        yield
+      end
+    end
   end
 end

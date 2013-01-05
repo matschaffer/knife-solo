@@ -1,14 +1,15 @@
 require 'integration_helper'
 
-class Sles11_Test < IntegrationTest
+class ScientificLinux63Test < IntegrationTest
   def user
     "root"
   end
 
   def image_id
-    "ami-ca32efa3"
+    "ami-313b8e58"
   end
 
   include EmptyCook
+  #include Apache2Cook
   include EncryptedDataBag
 end
