@@ -1,10 +1,6 @@
-# 0.2.0 Goals
-
-* Cleaner bootstrap code
-* Local integration testing
-* Compatibility with plugins like knife-ec2
-
 # 0.1.0: Not released yet
+
+## Changes and new features
 
 * Move all commands under "knife solo" namespace (#118)
     - Rename `knife kitchen` to `knife solo init`
@@ -12,15 +8,29 @@
 * Add `knife solo bootstrap` command (#120)
 * OmniOS support (#144)
 * Detect Fedora 17 (#141)
+* Update chef-solo-search and add support of encrypted data bags (#127)
+* Support Librarian (#36)
+* Always install rsync from yum on RPM-based Linuxes (#157)
+
+## Fixes
+
 * Improve help/error messages and validation (#142)
 * Fix exit status of "cook" if chef-solo fails (#97)
-* Include documentation and tests in the gem (e01c23)
+* Other fixes: #146, #155, #158
 
-* Other fixes: #146
+## Documentation
+
+* Include documentation and tests in the gem (e01c23)
+* [Home page](http://matschaffer.github.com/knife-solo/)
+  that reflects always the current release (#151)
 
 ## Thanks to our contributors!
 
 * [Marek Hulan][ares]
+* [Anton Orel][skyeagle]
+* [Adam Carlile][Frozenproduce]
+* [Chris Lundquist][ChrisLundquist]
+* [Hiten Parmar][hrp]
 
 # 0.0.15: November 29th, 2012
 
@@ -184,7 +194,9 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 * Generate node config on prepare
 * Cook via rsync
 
+[ChrisLundquist]:https://github.com/ChrisLundquist
 [DrGonzo65]:     https://github.com/DrGonzo65
+[Frozenproduce]: https://github.com/Frozenproduce
 [Motiejus]:      https://github.com/Motiejus
 [Nix-wie-weg]:   https://github.com/Nix-wie-weg
 [TylerRick]:     https://github.com/TylerRick
@@ -201,6 +213,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [gregf]:         https://github.com/gregf
 [gsterndale]:    https://github.com/gsterndale
 [hectcastro]:    https://github.com/hectcastro
+[hrp]:           https://github.com/hrp
 [jgarber]:       https://github.com/jgarber
 [jgrevich]:      https://github.com/jgrevich
 [natlownes]:     https://github.com/natlownes
@@ -213,6 +226,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [rosstimson]:    https://github.com/rosstimson
 [rubiojr]:       https://github.com/rubiojr
 [ryandub]:       https://github.com/ryandub
+[skyeagle]:      https://github.com/skyeagle
 [tmatilai]:      https://github.com/tmatilai
 [vjpr]:          https://github.com/vjpr
 [zeph]:          https://github.com/zeph
