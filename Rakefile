@@ -57,6 +57,9 @@ namespace :test do
     t.libs << "test"
     t.test_files = FileList['test/*_test.rb']
   end
+
+  desc 'Run both unit and integration tests'
+  task :all => [:units, :integration]
 end
 
 desc "Alias for test:units"
