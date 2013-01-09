@@ -85,21 +85,21 @@ module KnifeSolo::Bootstraps
         version = run_command("lsb_release -cs").stdout.strip
         {:type => "debian_gem", :version => version}
       when %r{CentOS.*? 5}
-        {:type => "omnibus", :version => "RHEL5"}
+        {:type => "yum_omnibus", :version => "RHEL5"}
       when %r{CentOS.*? 6}
-        {:type => "omnibus", :version => "RHEL6"}
+        {:type => "yum_omnibus", :version => "RHEL6"}
       when %r{Red Hat Enterprise.*? 5}
-        {:type => "omnibus", :version => "RHEL5"}
+        {:type => "yum_omnibus", :version => "RHEL5"}
       when %r{Red Hat Enterprise.*? 6}
-        {:type => "omnibus", :version => "RHEL6"}
+        {:type => "yum_omnibus", :version => "RHEL6"}
       when %r{Fedora release.*? 15}
-        {:type => "omnibus", :version => "FC15"}
+        {:type => "yum_omnibus", :version => "FC15"}
       when %r{Fedora release.*? 16}
-        {:type => "omnibus", :version => "FC16"}
+        {:type => "yum_omnibus", :version => "FC16"}
       when %r{Fedora release.*? 17}
-        {:type => "omnibus", :version => "FC17"}
+        {:type => "yum_omnibus", :version => "FC17"}
       when %r{Scientific Linux.*? 5}
-        {:type => "omnibus", :version => "RHEL5"}
+        {:type => "yum_omnibus", :version => "RHEL5"}
       when %r{Scientific Linux.*? 6}
         {:type => "yum_omnibus", :version => "RHEL6"}
       when %r{SUSE Linux Enterprise Server 1[12]}

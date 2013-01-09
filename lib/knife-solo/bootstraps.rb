@@ -81,7 +81,7 @@ module KnifeSolo
       def yum_omnibus_install
         omnibus_install
         # Make sure we have rsync on builds that don't include it by default
-        # (for example Scientific Linux minimal)
+        # (for example Scientific Linux minimal, CentOS minimal)
         run_command("sudo yum -y install rsync")
       end
 
