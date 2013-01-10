@@ -102,7 +102,6 @@ class Chef
       def librarian_install
         return unless File.exist? 'Cheffile'
         Chef::Log.debug("Installing Librarian cookbooks")
-        Librarian::Action::Clean.new(librarian_env).run
         Librarian::Action::Resolve.new(librarian_env).run
         Librarian::Action::Install.new(librarian_env).run
       end
