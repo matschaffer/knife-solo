@@ -16,7 +16,8 @@
 
 * Improve help/error messages and validation (#142)
 * Fix exit status of "cook" if chef-solo fails (#97)
-* Other fixes: #146, #155, #158
+* Fix option passing to the Omnibus installer (#163)
+* Other fixes: #146, #155, #158, #160, #164
 
 ## Documentation
 
@@ -31,6 +32,7 @@
 * [Adam Carlile][Frozenproduce]
 * [Chris Lundquist][ChrisLundquist]
 * [Hiten Parmar][hrp]
+* [Patrick Connolly][patcon]
 
 # 0.0.15: November 29th, 2012
 
