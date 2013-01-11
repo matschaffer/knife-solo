@@ -32,18 +32,15 @@ class Chef
 
       option :skip_chef_check,
         :long => '--skip-chef-check',
-        :boolean => true,
         :description => "Skip the version check on the Chef gem"
 
       option :sync_only,
         :long => '--sync-only',
-        :boolean => false,
         :description => "Only sync the cookbook - do not run Chef"
 
       option :why_run,
         :short        => '-W',
         :long         => '--why-run',
-        :boolean      => true,
         :description  => "Enable whyrun mode"
 
       def run
