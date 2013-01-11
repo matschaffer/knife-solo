@@ -22,29 +22,29 @@ module KnifeSolo
         deps { KnifeSolo::SshCommand.load_deps } unless @dependency_loader
 
         option :ssh_config,
-          :short => "-F CONFIG_FILE",
-          :long => "--ssh-config-file CONFIG_FILE",
-          :description => "Alternate location for ssh config file"
+          :short       => '-F CONFIG_FILE',
+          :long        => '--ssh-config-file CONFIG_FILE',
+          :description => 'Alternate location for ssh config file'
 
         option :ssh_password,
-          :short => "-P PASSWORD",
-          :long => "--ssh-password PASSWORD",
-          :description => "The ssh password"
+          :short       => '-P PASSWORD',
+          :long        => '--ssh-password PASSWORD',
+          :description => 'The ssh password'
 
         option :ssh_identity,
-          :short => "-i FILE",
-          :long => "--ssh-identity FILE",
-          :description => "The ssh identity file"
+          :short       => '-i FILE',
+          :long        => '--ssh-identity FILE',
+          :description => 'The ssh identity file'
 
         option :ssh_port,
-          :short => "-p PORT",
-          :long => "--ssh-port PORT",
-          :description => "The ssh port"
+          :short       => '-p PORT',
+          :long        => '--ssh-port PORT',
+          :description => 'The ssh port'
 
         option :startup_script,
-          :short => "-s FILE",
-          :long => "--startup-script FILE",
-          :description => "The startup script on the remote server containing variable definitions"
+          :short       => '-s FILE',
+          :long        => '--startup-script FILE',
+          :description => 'The startup script on the remote server containing variable definitions'
       end
     end
 

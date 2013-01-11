@@ -10,8 +10,8 @@ class Chef
     # Approach ported from spatula (https://github.com/trotter/spatula)
     # Copyright 2009, Trotter Cashion
     class SoloCook < Knife
-      OMNIBUS_EMBEDDED_PATHS     ||= ["/opt/chef/embedded/bin", "/opt/opscode/embedded/bin"]
-      OMNIBUS_EMBEDDED_GEM_PATHS ||= ["/opt/chef/embedded/lib/ruby/gems/1.9.1", "/opt/opscode/embedded/lib/ruby/gems/1.9.1"]
+      OMNIBUS_EMBEDDED_PATHS     ||= %w[/opt/chef/embedded/bin /opt/opscode/embedded/bin]
+      OMNIBUS_EMBEDDED_GEM_PATHS ||= %w[/opt/chef/embedded/lib/ruby/gems/1.9.1 /opt/opscode/embedded/lib/ruby/gems/1.9.1]
       CHEF_VERSION_CONSTRAINT    ||= ">=0.10.4"
 
       include KnifeSolo::SshCommand
@@ -31,20 +31,17 @@ class Chef
       banner "knife solo cook [USER@]HOSTNAME [JSON] (options)"
 
       option :skip_chef_check,
-        :long => '--skip-chef-check',
-        :boolean => true,
-        :description => "Skip the version check on the Chef gem"
+        :long        => '--skip-chef-check',
+        :description => 'Skip the version check on the Chef gem'
 
       option :sync_only,
-        :long => '--sync-only',
-        :boolean => false,
-        :description => "Only sync the cookbook - do not run Chef"
+        :long        => '--sync-only',
+        :description => 'Only sync the cookbook - do not run Chef'
 
       option :why_run,
-        :short        => '-W',
-        :long         => '--why-run',
-        :boolean      => true,
-        :description  => "Enable whyrun mode"
+        :short       => '-W',
+        :long        => '--why-run',
+        :description => 'Enable whyrun mode'
 
       def run
         time('Run') do

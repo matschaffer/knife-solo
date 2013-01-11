@@ -21,16 +21,16 @@ class Chef
       banner "knife solo prepare [USER@]HOSTNAME [JSON] (options)"
 
       option :omnibus_version,
-        :long => "--omnibus-version VERSION",
-        :description => "The version of Omnibus to install"
+        :long        => '--omnibus-version VERSION',
+        :description => 'The version of Omnibus to install'
 
       option :omnibus_url,
-        :long => "--omnibus-url URL",
-        :description => "URL to download install.sh from"
+        :long        => '--omnibus-url URL',
+        :description => 'URL to download install.sh from'
 
       option :omnibus_options,
-        :long => "--omnibus-options \"-r -n\"",
-        :description => "Pass options to the install.sh script"
+        :long        => '--omnibus-options "OPTIONS"',
+        :description => 'Pass options to the install.sh script'
 
       def run
         validate!

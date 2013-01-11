@@ -23,8 +23,6 @@ class Chef
         end
       end
 
-      private
-
       def create_cupboards(base, dirs)
         dirs.each do |dir|
           cupboard_dir = File.join(base, dir)
