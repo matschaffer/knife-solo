@@ -10,8 +10,8 @@ class Chef
     # Approach ported from spatula (https://github.com/trotter/spatula)
     # Copyright 2009, Trotter Cashion
     class SoloCook < Knife
-      OMNIBUS_EMBEDDED_PATHS     ||= ["/opt/chef/embedded/bin", "/opt/opscode/embedded/bin"]
-      OMNIBUS_EMBEDDED_GEM_PATHS ||= ["/opt/chef/embedded/lib/ruby/gems/1.9.1", "/opt/opscode/embedded/lib/ruby/gems/1.9.1"]
+      OMNIBUS_EMBEDDED_PATHS     ||= %w[/opt/chef/embedded/bin /opt/opscode/embedded/bin]
+      OMNIBUS_EMBEDDED_GEM_PATHS ||= %w[/opt/chef/embedded/lib/ruby/gems/1.9.1 /opt/opscode/embedded/lib/ruby/gems/1.9.1]
       CHEF_VERSION_CONSTRAINT    ||= ">=0.10.4"
 
       include KnifeSolo::SshCommand
