@@ -11,7 +11,7 @@ module Apache2Cook
   end
 
   def http_response
-    Net::HTTP.get(URI.parse("http://"+server.public_ip_address))
+    Net::HTTP.get(URI.parse("http://#{server.public_ip_address}"))
   end
 
   def default_apache_message
