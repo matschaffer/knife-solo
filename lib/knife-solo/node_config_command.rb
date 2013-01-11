@@ -12,23 +12,23 @@ module KnifeSolo
         deps { KnifeSolo::NodeConfigCommand.load_deps } unless @dependency_loader
 
         option :chef_node_name,
-          :short => "-N NAME",
-          :long => "--node-name NAME",
-          :description => "The Chef node name for your new node"
+          :short       => '-N NAME',
+          :long        => '--node-name NAME',
+          :description => 'The Chef node name for your new node'
 
         option :run_list,
-          :short => "-r RUN_LIST",
-          :long => "--run-list RUN_LIST",
-          :description => "Comma separated list of roles/recipes to put to node config (if it does not exist)",
-          :proc => lambda { |o| o.split(/[\s,]+/) },
-          :default => []
+          :short       => '-r RUN_LIST',
+          :long        => '--run-list RUN_LIST',
+          :description => 'Comma separated list of roles/recipes to put to node config (if it does not exist)',
+          :proc        => lambda { |o| o.split(/[\s,]+/) },
+          :default     => []
 
         option :first_boot_attributes,
-          :short => "-j JSON_ATTRIBS",
-          :long => "--json-attributes",
-          :description => "A JSON string to be added to node config (if it does not exist)",
-          :proc => lambda { |o| JSON.parse(o) },
-          :default => {}
+          :short       => '-j JSON_ATTRIBS',
+          :long        => '--json-attributes',
+          :description => 'A JSON string to be added to node config (if it does not exist)',
+          :proc        => lambda { |o| JSON.parse(o) },
+          :default     => {}
       end
     end
 

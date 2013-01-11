@@ -31,17 +31,17 @@ class Chef
       banner "knife solo cook [USER@]HOSTNAME [JSON] (options)"
 
       option :skip_chef_check,
-        :long => '--skip-chef-check',
-        :description => "Skip the version check on the Chef gem"
+        :long        => '--skip-chef-check',
+        :description => 'Skip the version check on the Chef gem'
 
       option :sync_only,
-        :long => '--sync-only',
-        :description => "Only sync the cookbook - do not run Chef"
+        :long        => '--sync-only',
+        :description => 'Only sync the cookbook - do not run Chef'
 
       option :why_run,
-        :short        => '-W',
-        :long         => '--why-run',
-        :description  => "Enable whyrun mode"
+        :short       => '-W',
+        :long        => '--why-run',
+        :description => 'Enable whyrun mode'
 
       def run
         time('Run') do
