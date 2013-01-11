@@ -24,7 +24,7 @@ Installation is a normal gem installation.
 
 If you need to install from git run:
 
-    rake install
+    bundle && bundle exec rake install
 
 === Init command
 

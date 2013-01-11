@@ -27,6 +27,6 @@ More complete usage documentation for the current release is available at [matsc
 
 To install knife-solo from source run:
 
-    rake install
+    bundle && bundle exec rake install
 
 Documentation for the latest master version of knife-solo is available in [README.rdoc](https://github.com/matschaffer/knife-solo/blob/master/README.rdoc).
