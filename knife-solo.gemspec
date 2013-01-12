@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'minitest'
   s.add_development_dependency 'parallel'
 
-  s.add_dependency 'chef',    '>= 0.10.10'
-  s.add_dependency 'net-ssh', '>= 2.1.3', '< 2.3.0'
+  s.add_dependency 'chef',    '~> 10.12'
+  s.add_dependency 'net-ssh', '~> 2.2.2'
   s.add_dependency 'librarian', '~> 0.0.20'
 end
