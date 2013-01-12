@@ -4,32 +4,31 @@ layout: default
 
 <h1 id="label-knife-solo">knife-solo</h1>
 
-<p><a href="http://travis-ci.org/matschaffer/knife-solo"><img
-src="https://secure.travis-ci.org/matschaffer/knife-solo.png" alt="Build
-Status" /></a> <a
-href="https://codeclimate.com/github/matschaffer/knife-solo"><img
-src="https://codeclimate.com/badge.png" /></a></p>
-
 <h2 id="label-DESCRIPTION%3A">DESCRIPTION:</h2>
 
-<p>Knife-solo is a gem plugin for Chef’s knife utility. It currently adds 4
-subcommands to knife: kitchen, prepare, cook and wash_up</p>
+<p>knife-solo adds a handful of commands that aim to make working with
+chef-solo as powerful as chef-server. It currently adds 5 subcommands to
+knife:</p>
+<ul><li>
+<p><code>knife solo init</code> is used to create a new directory structure
+(i.e. "kitchen") that fits with Chef's standard structure and can be used
+to build and store recipes.</p>
+</li><li>
+<p><code>knife solo prepare</code> installs Chef on a given host. It's
+structured to auto-detect the target OS and change the installation process
+accordingly.</p>
+</li><li>
+<p><code>knife solo cook</code> uploads the current kitchen (Chef repo) to the
+target host and runs chef-solo on that host.</p>
+</li><li>
+<p><code>knife solo bootstrap</code> combines the two previous ones (prepare
+and cook).</p>
+</li><li>
+<p><code>knife solo clean</code> removes the uploaded kitchen from the target
+host.</p>
+</li></ul>
 
-<p>The <code>kitchen</code> command is used to create a new directory
-structure that fits with chef’s standard structure and can be used to build
-and store recipes.</p>
-
-<p>The <code>prepare</code> command installs Ruby, RubyGems and Chef on a
-given host. It’s structured to auto-detect the target OS and change the
-installation process accordingly.</p>
-
-<p>The <code>cook</code> command uploads the current kitchen (chef repo) to
-the target host and runs chef-solo on that host.</p>
-
-<p>The <code>wash_up</code> command removes the uploaded kitchen from the
-target host.</p>
-
-<p>Preliminary Windows support for <code>cook</code> is available (see below).</p>
+<p>Preliminary Windows support for “knife solo cook” is available (see below).</p>
 
 <h2 id="label-USAGE%3A">USAGE:</h2>
 
@@ -39,19 +38,19 @@ target host.</p>
 
 <p>If you need to install from git run:</p>
 
-<pre>rake install</pre>
+<pre>bundle &amp;&amp; bundle exec rake install</pre>
 
-<h3 id="label-Kitchen+command">Kitchen command</h3>
+<h3 id="label-Init+command">Init command</h3>
 
-<p>The kitchen command simply takes a name of the directory to store the
-kitchen structure.</p>
+<p>The init command simply takes a name of the directory to store the kitchen
+structure. Use “.” to initialize the current directory.</p>
 
-<pre>knife kitchen mychefrepo</pre>
+<pre>knife solo init mychefrepo</pre>
 
 <p>Currently the directory structure looks like this, but could change as
 development continues.</p>
 
-<pre>mykitchen/
+<pre>mychefrepo/
 ├── cookbooks
 ├── data_bags
 ├── nodes
@@ -63,7 +62,7 @@ development continues.</p>
 
 <p>The prepare command takes an ssh-style host argument as follows:</p>
 
-<pre>knife prepare ubuntu@10.0.0.201</pre>
+<pre>knife solo prepare ubuntu@10.0.0.201</pre>
 
 <p>It will look up SSH information from <code>~/.ssh/config</code> or in the
 file specified by <code>-F</code>. You can also pass port information
@@ -71,7 +70,7 @@ file specified by <code>-F</code>. You can also pass port information
 (<code>-P</code>). It will use sudo to run some of these commands and will
 prompt you for the password if it’s not supplied on the command line.</p>
 
-<p>This command will make a best-effort to detect and install Chef-solo on
+<p>This command will make a best-effort to detect and install Chef Solo on
 your target operating system. We use the <a
 href="http://www.opscode.com/chef/install/">Opscode Installer</a> wherever
 possible.</p>
@@ -95,7 +94,7 @@ installer</a>.</p>
 
 <p>The cook command also takes an ssh-style host argument:</p>
 
-<pre>knife cook ubuntu@10.0.0.201</pre>
+<pre>knife solo cook ubuntu@10.0.0.201</pre>
 
 <p>The cook command uploads the current kitchen to the server and runs
 chef-solo on that server. If you only specify one argument it will look for
@@ -116,13 +115,23 @@ without a Chef server, so use <a
 href="https://gist.github.com/2896172">this gist</a> as an example on how
 to create encrypted data bag items on your local file system.</p>
 
-<h3 id="label-WashUp+command">WashUp command</h3>
+<h3 id="label-Bootstrap+command">Bootstrap command</h3>
 
-<p>The wash_up command takes the same arguments like prepare and cook:</p>
+<p>The bootstrap command takes the same arguments and most of the options as
+prepare and cook:</p>
 
-<pre>knife wash_up ubuntu@10.0.0.201</pre>
+<pre>knife solo bootstrap ubuntu@10.0.0.201</pre>
 
-<p>The wash_up command removes an uploaded kitchen completely from the target
+<p>Under the hood it first calls +knife solo prepare+ and then +knife solo
+cook+ with the specified arguments and options.</p>
+
+<h3 id="label-Clean+command">Clean command</h3>
+
+<p>The clean command takes the same arguments like prepare and cook:</p>
+
+<pre>knife solo clean ubuntu@10.0.0.201</pre>
+
+<p>The clean command removes an uploaded kitchen completely from the target
 host. This improves security because passwords etc. are not left behind on
 that host.</p>
 
@@ -130,10 +139,11 @@ that host.</p>
 
 <p>The cook command will work on Windows node if you meet the following howto:</p>
 
-<h4 id="label-Kitchen+then+tweak">Kitchen then tweak</h4>
+<h4 id="label-Init+then+tweak">Init then tweak</h4>
 <ul><li>
-<p>run <code>knife kitchen</code> then edit solo.rb to use Windows path-naming
-(see <a href="https://gist.github.com/1773854">gist.github.com/1773854</a>)</p>
+<p>run <code>knife solo init</code> then edit solo.rb to use Windows
+path-naming (see <a
+href="https://gist.github.com/1773854">gist.github.com/1773854</a>)</p>
 </li></ul>
 
 <h4 id="label-Prepare+the+node+manually">Prepare the node manually</h4>
