@@ -1,13 +1,24 @@
 require 'bundler/gem_tasks'
 require 'rake/testtask'
 
+MANIFEST_IGNORES = %w[
+    .travis.yml
+    .gitignore
+    Gemfile
+    Gemfile.lock
+    Manifest.txt
+    README.md
+    knife-solo.gemspec
+    script/newb
+    script/test
+  ]
+
 desc 'Updates Manifest.txt with a list of files from git'
 task :manifest do
   git_files = `git ls-files`.split("\n")
-  ignored = %w(.gitignore Gemfile Gemfile.lock Manifest.txt README.md knife-solo.gemspec script/newb script/test)
 
   File.open('Manifest.txt', 'w') do |f|
-    f.puts (git_files - ignored).join("\n")
+    f.puts (git_files - MANIFEST_IGNORES).join("\n")
   end
 end
 task :release => :manifest
