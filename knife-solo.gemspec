@@ -16,9 +16,13 @@ Gem::Specification.new do |s|
   s.test_files    = manifest.grep(%r{^(test|spec|features)/})
   s.require_paths = ["lib"]
 
+  s.add_development_dependency 'bundler'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'mocha'
   s.add_development_dependency 'rdoc'
+  s.add_development_dependency 'fog'
+  s.add_development_dependency 'minitest'
+  s.add_development_dependency 'parallel'
 
   s.add_dependency 'chef',    '>= 0.10.10'
   s.add_dependency 'net-ssh', '>= 2.1.3', '< 2.3.0'

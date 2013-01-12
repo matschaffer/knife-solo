@@ -1,9 +1,8 @@
 require 'rubygems'
-require 'bundler'
+require 'bundler/setup'
 
-Bundler.require
 require 'minitest/parallel'
-Bundler.require(:test)
+require 'minitest/autorun'
 
 require 'pathname'
 $base_dir = Pathname.new(__FILE__).dirname

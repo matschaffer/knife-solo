@@ -1,4 +1,5 @@
 require 'yaml'
+require 'fog'
 
 # A custom runner that serves as a common point for EC2 control
 class EC2Runner < MiniTest::Unit
