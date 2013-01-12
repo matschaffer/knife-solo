@@ -1,4 +1,4 @@
-# 0.1.0: Not released yet
+# 0.1.0: January 12, 2013
 
 ## Changes and new features
 
@@ -11,13 +11,14 @@
 * Update chef-solo-search and add support of encrypted data bags (#127)
 * Support Librarian (#36)
 * Always install rsync from yum on RPM-based Linuxes (#157)
+* Debian wheezy (7) support (#165)
 
 ## Fixes
 
 * Improve help/error messages and validation (#142)
 * Fix exit status of "cook" if chef-solo fails (#97)
 * Fix option passing to the Omnibus installer (#163)
-* Other fixes: #146, #155, #158, #160, #164
+* Other fixes: SuSE omnibus #146, #155, #158, #160, #164
 
 ## Documentation
 
