@@ -78,8 +78,8 @@ module KnifeSolo::Bootstraps
       @distro = case issue
       when %r{Debian GNU/Linux 6}
         {:type => if x86? then "debianoid_omnibus" else "debian_gem" end, :version => "squeeze"}
-      when %r{Debian GNU/Linux 7}
-        {:type => "debian_gem", :version => "wheezy"}
+      when %r{Debian}
+        {:type => "debian_gem", :version => lsb_release_codename}
       when %r{Ubuntu}i
         {:type => if x86? then "debianoid_omnibus" else "debian_gem" end, :version => lsb_release_codename}
       when %r{Linaro}
