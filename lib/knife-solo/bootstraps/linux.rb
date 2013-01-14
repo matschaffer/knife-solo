@@ -77,8 +77,6 @@ module KnifeSolo::Bootstraps
       when %r{Debian GNU/Linux 6}
         {:type => if x86? then "debianoid_omnibus" else "debian_gem" end, :version => "squeeze"}
       when %r{Debian GNU/Linux 7}
-        {:type => if x86? then "debianoid_omnibus" else "debian_gem" end, :version => "wheezy"}
-      when %r{Debian GNU/Linux wheezy}
         {:type => "debian_gem", :version => "wheezy"}
       when %r{Ubuntu}i
         version = run_command("lsb_release -cs").stdout.strip
