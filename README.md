@@ -5,7 +5,7 @@
 
 ## Description
 
-knife-solo adds a handful of commands that aim to make working with chef-solo as powerful as chef-server.
+knife-solo adds a handful of Knife commands that aim to make working with chef-solo as powerful as chef-server.
 
 ## Usage
 
@@ -17,7 +17,7 @@ Or add this to your Gemfile if you use bundler:
 
     gem 'knife-solo'
 
-Having the gem installed will add knife subcommands. Run `knife` with no arguments to see a list of available commands.
+Having the gem installed will add Knife subcommands. Run `knife solo` with no arguments to see a list of available commands.
 
 ## Documentation
 
