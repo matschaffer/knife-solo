@@ -85,6 +85,29 @@ class NodeConfigCommandTest < TestCase
     end
   end
 
+  def test_generates_a_node_config_with_specified_json_attributes
+    in_kitchen do
+      foo_json     = '"foo":99'
+      ignored_json = '"bar":"ignored"'
+
+      cmd = command(@host)
+      cmd.config[:json_attributes]       = JSON.parse("{#{foo_json}}")
+      cmd.config[:first_boot_attributes] = JSON.parse("{#{ignored_json}}")
+      cmd.generate_node_config
+      assert_match "{#{foo_json},\"run_list\":[]}", cmd.node_config.read
+    end
+  end
+
+  def test_generates_a_node_config_with_specified_first_boot_attributes
+    in_kitchen do
+      foo_json = '"foo":null'
+      cmd = command(@host)
+      cmd.config[:first_boot_attributes] = JSON.parse("{#{foo_json}}")
+      cmd.generate_node_config
+      assert_match "{#{foo_json},\"run_list\":[]}", cmd.node_config.read
+    end
+  end
+
   def test_generates_a_node_config_with_specified_run_list_and_attributes
     in_kitchen do
       foo_json = '"foo":"bar"'
