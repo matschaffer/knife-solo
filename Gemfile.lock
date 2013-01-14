@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    knife-solo (0.1.0)
+    knife-solo (0.2.0.pre1)
       chef (~> 10.12)
       librarian (~> 0.0.20)
       net-ssh (~> 2.2.2)
