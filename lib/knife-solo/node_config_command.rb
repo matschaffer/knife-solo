@@ -28,7 +28,7 @@ module KnifeSolo
           :long        => '--json-attributes',
           :description => 'A JSON string to be added to node config (if it does not exist)',
           :proc        => lambda { |o| JSON.parse(o) },
-          :default     => {}
+          :default     => nil
       end
     end
 
@@ -43,7 +43,7 @@ module KnifeSolo
       else
         ui.msg "Generating node config '#{node_config}'..."
         File.open(node_config, 'w') do |f|
-          attributes = config[:json_attributes] || {}
+          attributes = config[:json_attributes] || config[:first_boot_attributes] || {}
           run_list = { :run_list => config[:run_list] || [] }
           f.print attributes.merge(run_list).to_json
         end
