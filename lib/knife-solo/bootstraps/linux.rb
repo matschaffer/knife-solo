@@ -10,6 +10,10 @@ module KnifeSolo::Bootstraps
       %w{i686 x86 x86_64}.include?(machine)
     end
 
+    def lsb_release_codename
+      run_command("lsb_release -cs").stdout.strip
+    end
+
     def package_list
       @packages.join(' ')
     end
@@ -77,11 +81,9 @@ module KnifeSolo::Bootstraps
       when %r{Debian GNU/Linux 7}
         {:type => "debian_gem", :version => "wheezy"}
       when %r{Ubuntu}i
-        version = run_command("lsb_release -cs").stdout.strip
-        {:type => if x86? then "debianoid_omnibus" else "debian_gem" end, :version => version}
+        {:type => if x86? then "debianoid_omnibus" else "debian_gem" end, :version => lsb_release_codename}
       when %r{Linaro}
-        version = run_command("lsb_release -cs").stdout.strip
-        {:type => "debian_gem", :version => version}
+        {:type => "debian_gem", :version => lsb_release_codename}
       when %r{CentOS.*? 5}
         {:type => "yum_omnibus", :version => "RHEL5"}
       when %r{CentOS.*? 6}
