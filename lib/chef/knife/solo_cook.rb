@@ -30,9 +30,14 @@ class Chef
 
       banner "knife solo cook [USER@]HOSTNAME [JSON] (options)"
 
+      option :chef_check,
+        :long        => '--no-chef-check',
+        :description => 'Skip the Chef version check on the node',
+        :default     => true
+
       option :skip_chef_check,
         :long        => '--skip-chef-check',
-        :description => 'Skip the version check on the Chef gem'
+        :description => 'Deprecated. Replaced with --no-chef-check.'
 
       option :sync_only,
         :long        => '--sync-only',
@@ -45,9 +50,14 @@ class Chef
 
       def run
         time('Run') do
+          if config[:skip_chef_check]
+            ui.warn '`--skip-chef-check` is deprecated, please use `--no-chef-check`.'
+            config[:chef_check] = false
+          end
+
           validate!
           Chef::Config.from_file('solo.rb')
-          check_chef_version unless config[:skip_chef_check]
+          check_chef_version if config[:chef_check]
           generate_node_config
           librarian_install
           rsync_kitchen
