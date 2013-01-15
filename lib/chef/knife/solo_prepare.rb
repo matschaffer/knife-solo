@@ -49,11 +49,11 @@ class Chef
 
       def bootstrap
         ui.msg "Bootstrapping Chef..."
-        KnifeSolo::Bootstraps.class_for_operating_system(operating_system()).new(self)
+        KnifeSolo::Bootstraps.class_for_operating_system(operating_system).new(self)
       end
 
       def operating_system
-        @operating_system ||= run_command('uname -s').stdout.strip
+        run_command('uname -s').stdout.strip
       end
     end
   end
