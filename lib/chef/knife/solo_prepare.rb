@@ -20,10 +20,6 @@ class Chef
 
       banner "knife solo prepare [USER@]HOSTNAME [JSON] (options)"
 
-      option :omnibus_version,
-        :long        => '--omnibus-version VERSION',
-        :description => 'The version of Omnibus to install'
-
       option :omnibus_url,
         :long        => '--omnibus-url URL',
         :description => 'URL to download install.sh from'
@@ -32,7 +28,15 @@ class Chef
         :long        => '--omnibus-options "OPTIONS"',
         :description => 'Pass options to the install.sh script'
 
+      option :omnibus_version,
+        :long        => '--omnibus-version VERSION',
+        :description => 'The version of Omnibus to install'
+
       def run
+        if config[:omnibus_version]
+          config[:omnibus_options] = "#{config[:omnibus_options]} -v #{config[:omnibus_version]}".strip
+        end
+
         validate!
         bootstrap.bootstrap!
         generate_node_config
@@ -45,11 +49,11 @@ class Chef
 
       def bootstrap
         ui.msg "Bootstrapping Chef..."
-        KnifeSolo::Bootstraps.class_for_operating_system(operating_system()).new(self)
+        KnifeSolo::Bootstraps.class_for_operating_system(operating_system).new(self)
       end
 
       def operating_system
-        @operating_system ||= run_command('uname -s').stdout.strip
+        run_command('uname -s').stdout.strip
       end
     end
   end

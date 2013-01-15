@@ -69,12 +69,8 @@ module KnifeSolo
         url = prepare.config[:omnibus_url] || "https://www.opscode.com/chef/install.sh"
         file = File.basename(url)
         http_client_get_url(url, file)
-        # `release_version` within install.sh will be installed if
-        # `omnibus_version` is not provided.
-        install_command = "sudo bash #{file}"
-        install_command << " -v #{prepare.config[:omnibus_version]}" if prepare.config[:omnibus_version]
-        install_command << " #{prepare.config[:omnibus_options]}" if prepare.config[:omnibus_options]
 
+        install_command = "sudo bash #{file} #{prepare.config[:omnibus_options]}"
         stream_command(install_command)
       end
 
