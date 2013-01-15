@@ -12,10 +12,16 @@ class SoloPrepareTest < TestCase
     @host = 'someuser@somehost.domain.com'
   end
 
-  def test_will_specify_omnibus_version
+  def test_combines_omnibus_options
     in_kitchen do
-      run_command = command(@host, "--omnibus-version", "'0.10.8-3'")
-      assert_match "0.10.8-3", run_command.config[:omnibus_version]
+      bootstrap_instance = mock('mock OS bootstrap instance')
+      bootstrap_instance.stubs(:bootstrap!)
+
+      run_command = command(@host, "--omnibus-version", "0.10.8-3", "--omnibus-options", "-s")
+      run_command.stubs(:bootstrap).returns(bootstrap_instance)
+      run_command.run
+
+      assert_match "-s -v 0.10.8-3", run_command.config[:omnibus_options]
     end
   end
 

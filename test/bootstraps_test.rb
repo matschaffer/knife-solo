@@ -65,6 +65,18 @@ class BootstrapsTest < TestCase
     bootstrap = bootstrap_instance
     bootstrap.stubs(:distro).returns({:type => "omnibus"})
     bootstrap.expects(:omnibus_install)
+    bootstrap.bootstrap!
+  end
+
+  def test_passes_omnibus_options
+    bootstrap = bootstrap_instance
+    bootstrap.stubs(:distro).returns({:type => "omnibus"})
+    bootstrap.stubs(:http_client_get_url)
+
+    options = "-v 10.16.4"
+    matcher = regexp_matches(/\s#{Regexp.quote(options)}(\s|$)/)
+    bootstrap.prepare.stubs(:config).returns({:omnibus_options => options})
+    bootstrap.prepare.expects(:stream_command).with(matcher).returns(SuccessfulResult.new)
 
     bootstrap.bootstrap!
   end
