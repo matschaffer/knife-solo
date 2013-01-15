@@ -22,7 +22,6 @@ class SoloPrepareTest < TestCase
   def test_run_raises_if_operating_system_is_not_supported
     in_kitchen do
       run_command = command(@host)
-      run_command.stubs(:required_files_present?).returns(true)
       run_command.stubs(:operating_system).returns('MythicalOS')
       assert_raises KnifeSolo::Bootstraps::OperatingSystemNotImplementedError do
         run_command.run
@@ -32,14 +31,11 @@ class SoloPrepareTest < TestCase
 
   def test_run_calls_bootstrap
     in_kitchen do
-      run_command = command(@host)
       bootstrap_instance = mock('mock OS bootstrap instance')
-      run_command.stubs(:required_files_present?).returns(true)
-      run_command.stubs(:operating_system).returns('MythicalOS')
-      run_command.stubs(:bootstrap).returns(bootstrap_instance)
-
       bootstrap_instance.expects(:bootstrap!)
 
+      run_command = command(@host)
+      run_command.stubs(:bootstrap).returns(bootstrap_instance)
       run_command.run
     end
   end
