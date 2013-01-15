@@ -11,8 +11,8 @@ class Chef
     # Copyright 2009, Trotter Cashion
     class SoloCook < Knife
       OMNIBUS_EMBEDDED_PATHS     = %w[/opt/chef/embedded/bin /opt/opscode/embedded/bin] unless defined? OMNIBUS_EMBEDDED_PATHS
-      OMNIBUS_EMBEDDED_GEM_PATHS = %w[/opt/chef/embedded/lib/ruby/gems/1.9.1 /opt/opscode/embedded/lib/ruby/gems/1.9.1] unless defined? OMNIBUS_EMBEDDED_PATHS
-      CHEF_VERSION_CONSTRAINT    = ">=0.10.4" unless defined? OMNIBUS_EMBEDDED_PATHS
+      OMNIBUS_EMBEDDED_GEM_PATHS = %w[/opt/chef/embedded/lib/ruby/gems/1.9.1 /opt/opscode/embedded/lib/ruby/gems/1.9.1] unless defined? OMNIBUS_EMBEDDED_GEM_PATHS
+      CHEF_VERSION_CONSTRAINT    = ">=0.10.4" unless defined? CHEF_VERSION_CONSTRAINT
 
       include KnifeSolo::SshCommand
       include KnifeSolo::KitchenCommand
