@@ -1,3 +1,22 @@
+# 0.2.0: _Not released yet_
+
+## Changes and new features
+
+* Support unknown/unreleased Debian versions by using the
+  gem installer (#172)
+* Drop support for Debian 5.0 Lenny (#172)
+* Integration tests for Debian 6 and 7 (74c6ed1 - f299a6)
+
+## Fixes
+
+* Fix Debian 7.0 Wheezy support by using gem installer (#172)
+* Fix compatibility with Ruby 1.8.7 on work station (#170)
+* Other fixes: #166, #173
+
+## Thanks to our contributors!
+
+* [Russell Cardullo][russellcardullo]
+
 # 0.1.0: January 12, 2013
 
 ## Changes and new features
@@ -228,6 +247,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [rmoriz]:        https://github.com/rmoriz
 [rosstimson]:    https://github.com/rosstimson
 [rubiojr]:       https://github.com/rubiojr
+[russellcardullo]: https://github.com/russellcardullo
 [ryandub]:       https://github.com/ryandub
 [skyeagle]:      https://github.com/skyeagle
 [tmatilai]:      https://github.com/tmatilai
