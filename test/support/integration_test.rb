@@ -15,7 +15,7 @@ class IntegrationTest < TestCase
   # Returns a name for the current test's server
   # that should be fairly unique.
   def server_name
-    "knife_solo-#{image_id}"
+    "knife-solo_#{self.class}"
   end
 
   # Shortcut to access the test runner
