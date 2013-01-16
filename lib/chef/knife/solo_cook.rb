@@ -10,8 +10,6 @@ class Chef
     # Approach ported from spatula (https://github.com/trotter/spatula)
     # Copyright 2009, Trotter Cashion
     class SoloCook < Knife
-      OMNIBUS_EMBEDDED_PATHS     = %w[/opt/chef/embedded/bin /opt/opscode/embedded/bin] unless defined? OMNIBUS_EMBEDDED_PATHS
-      OMNIBUS_EMBEDDED_GEM_PATHS = %w[/opt/chef/embedded/lib/ruby/gems/1.9.1 /opt/opscode/embedded/lib/ruby/gems/1.9.1] unless defined? OMNIBUS_EMBEDDED_GEM_PATHS
       CHEF_VERSION_CONSTRAINT    = ">=0.10.4" unless defined? CHEF_VERSION_CONSTRAINT
 
       include KnifeSolo::SshCommand
@@ -30,9 +28,14 @@ class Chef
 
       banner "knife solo cook [USER@]HOSTNAME [JSON] (options)"
 
+      option :chef_check,
+        :long        => '--no-chef-check',
+        :description => 'Skip the Chef version check on the node',
+        :default     => true
+
       option :skip_chef_check,
         :long        => '--skip-chef-check',
-        :description => 'Skip the version check on the Chef gem'
+        :description => 'Deprecated. Replaced with --no-chef-check.'
 
       option :sync_only,
         :long        => '--sync-only',
@@ -45,9 +48,14 @@ class Chef
 
       def run
         time('Run') do
+          if config[:skip_chef_check]
+            ui.warn '`--skip-chef-check` is deprecated, please use `--no-chef-check`.'
+            config[:chef_check] = false
+          end
+
           validate!
           Chef::Config.from_file('solo.rb')
-          check_chef_version unless config[:skip_chef_check]
+          check_chef_version if config[:chef_check]
           generate_node_config
           librarian_install
           rsync_kitchen
@@ -126,12 +134,14 @@ class Chef
 
       def check_chef_version
         ui.msg "Checking Chef version..."
-        result = run_command <<-BASH
-          export PATH="#{OMNIBUS_EMBEDDED_PATHS.join(":")}:$PATH"
-          export GEM_PATH="#{OMNIBUS_EMBEDDED_GEM_PATHS.join(":")}:$GEM_PATH"
-          ruby -rubygems -e "gem 'chef', '#{CHEF_VERSION_CONSTRAINT}'"
-        BASH
-        raise "Couldn't find Chef #{CHEF_VERSION_CONSTRAINT} on #{host}. Please run `#{$0} prepare #{ssh_args}` to ensure Chef is installed and up to date." unless result.success?
+        unless Gem::Requirement.new(CHEF_VERSION_CONSTRAINT).satisfied_by? Gem::Version.new(chef_version)
+          raise "Couldn't find Chef #{CHEF_VERSION_CONSTRAINT} on #{host}. Please run `knife solo prepare #{ssh_args}` to ensure Chef is installed and up to date."
+        end
+      end
+
+      def chef_version
+        v = run_command("sudo chef-solo --version").stdout.split(':') # "Chef: x.y.z"
+        v[0] == "Chef" ? v[1].strip : ""
       end
 
       def cook

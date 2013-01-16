@@ -30,7 +30,7 @@ class Chef
         prepare.run
 
         cook = command_with_same_args(SoloCook)
-        cook.config[:skip_chef_check] = true
+        cook.config[:chef_check] = false
         cook.run
       end
 
