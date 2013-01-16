@@ -1,6 +1,6 @@
 require 'integration_helper'
 
-class Debian7BootstrapTest < IntegrationTest
+class Debian6BootstrapTest < IntegrationTest
   def user
     "admin"
   end
