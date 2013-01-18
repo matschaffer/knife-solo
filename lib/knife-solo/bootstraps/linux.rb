@@ -22,12 +22,6 @@ module KnifeSolo::Bootstraps
       ['ruby-shadow','chef']
     end
 
-    def zypper_gem_install
-      ui.msg("Installing required packages...")
-      run_command("sudo zypper --non-interactive install ruby-devel make gcc rsync")
-      gem_install
-    end
-
     def emerge_gem_install
       ui.msg("Installing required packages...")
       run_command("sudo USE='-test' ACCEPT_KEYWORDS='~amd64' emerge -u chef")
