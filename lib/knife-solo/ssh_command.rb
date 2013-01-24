@@ -33,7 +33,7 @@ module KnifeSolo
 
         option :ssh_identity,
           :long        => '--ssh-identity FILE',
-          :description => 'Deprecated option for the ssh identity file'
+          :description => 'Deprecated. Replaced with --identity-file.'
 
         option :identity_file,
           :short       => '-i IDENTITY_FILE',
@@ -108,6 +108,7 @@ module KnifeSolo
       if config[:identity_file]
         options[:keys] = [config[:identity_file]]
       elsif config[:ssh_identity]
+        ui.warn '`--ssh-identity` is deprecated.  Please use `--identity-file`.'
         options[:keys] = [config[:ssh_identity]]
       end
       options
@@ -136,6 +137,7 @@ module KnifeSolo
       if config[:identity_file]
         ident_arg = "-i #{config[:identity_file]}"
       elsif config[:ssh_identity]
+        ui.warn '`--ssh-identity` is deprecated.  Please use `--identity-file`.'
         ident_arg = "-i #{config[:ssh_identity]}"
       end
       port_arg = "-p #{config[:ssh_port]}" if config[:ssh_port]
