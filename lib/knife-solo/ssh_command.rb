@@ -32,8 +32,12 @@ module KnifeSolo
           :description => 'The ssh password'
 
         option :ssh_identity,
-          :short       => '-i FILE',
           :long        => '--ssh-identity FILE',
+          :description => 'Deprecated. Replaced with --identity-file.'
+
+        option :identity_file,
+          :short       => '-i IDENTITY_FILE',
+          :long        => '--identity-file FILE',
           :description => 'The ssh identity file'
 
         option :ssh_port,
@@ -52,7 +56,11 @@ module KnifeSolo
       @name_args.first =~ /\A([^@]+(?>@)[^@]+|[^@]+?(?!@))\z/
     end
 
-    def validate_first_cli_arg_is_a_hostname!
+    def validate_ssh_options!
+      if config[:ssh_identity]
+        ui.warn '`--ssh-identity` is deprecated, please use `--identity-file`.'
+        config[:identity_file] ||= config[:ssh_identity]
+      end
       unless first_cli_arg_is_a_hostname?
         show_usage
         ui.fatal "You must specify [<user>@]<hostname> as the first argument"
@@ -101,7 +109,7 @@ module KnifeSolo
       options = config_file_options
       options[:port] = config[:ssh_port] if config[:ssh_port]
       options[:password] = config[:ssh_password] if config[:ssh_password]
-      options[:keys] = [config[:ssh_identity]] if config[:ssh_identity]
+      options[:keys] = [config[:identity_file]] if config[:identity_file]
       options
     end
 
@@ -125,7 +133,7 @@ module KnifeSolo
     def ssh_args
       host_arg = [user, host].compact.join('@')
       config_arg = "-F #{config[:ssh_config]}" if config[:ssh_config]
-      ident_arg = "-i #{config[:ssh_identity]}" if config[:ssh_identity]
+      ident_arg = "-i #{config[:identity_file]}" if config[:identity_file]
       port_arg = "-p #{config[:ssh_port]}" if config[:ssh_port]
 
       [host_arg, config_arg, ident_arg, port_arg].compact.join(' ')
