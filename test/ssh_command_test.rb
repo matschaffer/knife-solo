@@ -19,6 +19,18 @@ class SshCommandTest < TestCase
     assert_equal "test", command("10.0.0.1").user
   end
 
+  def test_takes_user_from_options
+    cmd = command("10.0.0.1", "--ssh-user=test")
+    cmd.validate_ssh_options!
+    assert_equal "test", cmd.user
+  end
+
+  def test_takes_user_as_arg
+    cmd = command("test@10.0.0.1", "--ssh-user=ignored")
+    cmd.validate_ssh_options!
+    assert_equal "test", cmd.user
+  end
+
   def test_host_regex_rejects_invalid_hostnames
     %w[@name @@name.com name@ name@@ joe@@example.com joe@name@example.com].each do |invalid|
       cmd = command(invalid)

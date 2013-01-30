@@ -26,6 +26,11 @@ module KnifeSolo
           :long        => '--ssh-config-file CONFIG_FILE',
           :description => 'Alternate location for ssh config file'
 
+        option :ssh_user,
+          :short       => '-x USERNAME',
+          :long        => '--ssh-user USERNAME',
+          :description => 'The ssh username'
+
         option :ssh_password,
           :short       => '-P PASSWORD',
           :long        => '--ssh-password PASSWORD',
@@ -65,6 +70,9 @@ module KnifeSolo
         show_usage
         ui.fatal "You must specify [<user>@]<hostname> as the first argument"
         exit 1
+      end
+      if config[:ssh_user]
+        host_descriptor[:user] ||= config[:ssh_user]
       end
     end
 
