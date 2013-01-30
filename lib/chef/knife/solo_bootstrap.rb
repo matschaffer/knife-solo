@@ -35,7 +35,7 @@ class Chef
       end
 
       def validate!
-        validate_first_cli_arg_is_a_hostname!
+        validate_ssh_options!
         validate_kitchen!
       end
 

@@ -93,7 +93,7 @@ class SshCommandTest < TestCase
     cmd = command
     cmd.ui.expects(:err).with(regexp_matches(/hostname.*argument/))
     $stdout.stubs(:puts)
-    assert_exits { cmd.validate_first_cli_arg_is_a_hostname! }
+    assert_exits { cmd.validate_ssh_options! }
   end
 
   def command(*args)

@@ -56,7 +56,7 @@ module KnifeSolo
       @name_args.first =~ /\A([^@]+(?>@)[^@]+|[^@]+?(?!@))\z/
     end
 
-    def validate_first_cli_arg_is_a_hostname!
+    def validate_ssh_options!
       unless first_cli_arg_is_a_hostname?
         show_usage
         ui.fatal "You must specify [<user>@]<hostname> as the first argument"
