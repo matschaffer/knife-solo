@@ -35,7 +35,7 @@ class SoloCookTest < TestCase
       file_to_ignore = "dummy.txt"
       File.open(file_to_ignore, 'w') {|f| f.puts "This file should be ignored"}
       File.open("chefignore", 'w') {|f| f.puts file_to_ignore}
-      assert command.rsync_exclude.include?(file_to_ignore), "#{file_to_ignore} should have been excluded"
+      assert command.rsync_excludes.include?(file_to_ignore), "#{file_to_ignore} should have been excluded"
     end
   end
 
