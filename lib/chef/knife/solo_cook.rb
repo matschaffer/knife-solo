@@ -41,6 +41,10 @@ class Chef
         :long        => '--sync-only',
         :description => 'Only sync the cookbook - do not run Chef'
 
+      option :skip_librarian,
+        :long        => '--skip-librarian',
+        :description => 'Skip librarian-chef install'
+
       option :why_run,
         :short       => '-W',
         :long        => '--why-run',
@@ -57,7 +61,7 @@ class Chef
           Chef::Config.from_file('solo.rb')
           check_chef_version if config[:chef_check]
           generate_node_config
-          librarian_install
+          librarian_install unless config[:skip_librarian]
           rsync_kitchen
           add_patches
           cook unless config[:sync_only]
