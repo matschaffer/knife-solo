@@ -41,9 +41,10 @@ class Chef
         :long        => '--sync-only',
         :description => 'Only sync the cookbook - do not run Chef'
 
-      option :skip_librarian,
-        :long        => '--skip-librarian',
-        :description => 'Skip librarian-chef install'
+      option :librarian,
+        :long        => '--no-librarian',
+        :description => 'Skip librarian-chef install',
+        :default    => true
 
       option :why_run,
         :short       => '-W',
