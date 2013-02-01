@@ -62,7 +62,7 @@ class Chef
           Chef::Config.from_file('solo.rb')
           check_chef_version if config[:chef_check]
           generate_node_config
-          librarian_install unless config[:skip_librarian]
+          librarian_install if config[:librarian]
           rsync_kitchen
           add_patches
           cook unless config[:sync_only]

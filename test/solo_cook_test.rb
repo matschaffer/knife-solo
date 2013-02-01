@@ -62,6 +62,19 @@ class SoloCookTest < TestCase
     assert_chef_solo_option "--why-run", "-W"
   end
 
+  def test_no_librarian_option
+    solo_cook = command("somehost", "--no-librarian")
+    solo_cook.expects(:librarian_install).never
+    solo_cook.stubs(:validate!)
+    Chef::Config.stubs(:from_file)
+    solo_cook.stubs(:check_chef_version)
+    solo_cook.stubs(:generate_node_config)
+    solo_cook.stubs(:rsync_kitchen)
+    solo_cook.stubs(:add_patches)
+    solo_cook.stubs(:cook)
+    solo_cook.run
+  end
+
   # Asserts that the chef_solo_option is passed to chef-solo iff cook_option
   # is specified for the cook command
   def assert_chef_solo_option(cook_option, chef_solo_option)
