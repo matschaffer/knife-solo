@@ -62,6 +62,44 @@ class SoloCookTest < TestCase
     end
   end
 
+  def test_validates_chef_version
+    in_kitchen do
+      cmd = command("somehost")
+      cmd.expects(:check_chef_version)
+      cmd.run
+    end
+  end
+
+  def test_does_not_validate_chef_version_if_denied_by_option
+    in_kitchen do
+      cmd = command("somehost", "--no-chef-check")
+      cmd.expects(:check_chef_version).never
+      cmd.run
+    end
+  end
+
+  def test_barks_if_chef_not_found
+    in_kitchen do
+      cmd = command("somehost")
+      cmd.unstub(:check_chef_version)
+      cmd.stubs(:chef_version).returns("")
+      assert_raises RuntimeError do
+        cmd.run
+      end
+    end
+  end
+
+  def test_barks_if_chef_too_old
+    in_kitchen do
+      cmd = command("somehost")
+      cmd.unstub(:check_chef_version)
+      cmd.stubs(:chef_version).returns("0.8.0")
+      assert_raises RuntimeError do
+        cmd.run
+      end
+    end
+  end
+
   def test_passes_node_name_to_chef_solo
     assert_chef_solo_option "--node-name=mynode", "-N mynode"
   end
