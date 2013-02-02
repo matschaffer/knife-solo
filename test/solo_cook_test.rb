@@ -42,7 +42,7 @@ class SoloCookTest < TestCase
   def test_does_not_run_librarian_if_no_cheffile
     in_kitchen do
       Librarian::Action::Install.any_instance.expects(:run).never
-      command.librarian_install
+      command("somehost").run
     end
   end
 
@@ -50,7 +50,15 @@ class SoloCookTest < TestCase
     in_kitchen do
       File.open("Cheffile", 'w') {}
       Librarian::Action::Install.any_instance.expects(:run)
-      command.librarian_install
+      command("somehost").run
+    end
+  end
+
+  def test_does_not_run_librarian_if_denied_by_option
+    in_kitchen do
+      File.open("Cheffile", 'w') {}
+      Librarian::Action::Install.any_instance.expects(:run).never
+      command("somehost", "--no-librarian").run
     end
   end
 
@@ -60,14 +68,6 @@ class SoloCookTest < TestCase
 
   def test_passes_whyrun_mode_to_chef_solo
     assert_chef_solo_option "--why-run", "-W"
-  end
-
-  def test_no_librarian_option
-    in_kitchen do
-      cmd = command("somehost", "--no-librarian")
-      cmd.expects(:librarian_install).never
-      cmd.run
-    end
   end
 
   # Asserts that the chef_solo_option is passed to chef-solo iff cook_option
