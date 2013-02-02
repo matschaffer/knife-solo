@@ -100,6 +100,14 @@ class SoloCookTest < TestCase
     end
   end
 
+  def test_does_not_cook_if_sync_only_specified
+    in_kitchen do
+      cmd = command("somehost", "--sync-only")
+      cmd.expects(:cook).never
+      cmd.run
+    end
+  end
+
   def test_passes_node_name_to_chef_solo
     assert_chef_solo_option "--node-name=mynode", "-N mynode"
   end
