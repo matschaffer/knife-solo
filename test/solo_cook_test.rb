@@ -63,16 +63,11 @@ class SoloCookTest < TestCase
   end
 
   def test_no_librarian_option
-    solo_cook = command("somehost", "--no-librarian")
-    solo_cook.expects(:librarian_install).never
-    solo_cook.stubs(:validate!)
-    Chef::Config.stubs(:from_file)
-    solo_cook.stubs(:check_chef_version)
-    solo_cook.stubs(:generate_node_config)
-    solo_cook.stubs(:rsync_kitchen)
-    solo_cook.stubs(:add_patches)
-    solo_cook.stubs(:cook)
-    solo_cook.run
+    in_kitchen do
+      cmd = command("somehost", "--no-librarian")
+      cmd.expects(:librarian_install).never
+      cmd.run
+    end
   end
 
   # Asserts that the chef_solo_option is passed to chef-solo iff cook_option
@@ -82,15 +77,20 @@ class SoloCookTest < TestCase
     in_kitchen do
       cmd = command("somehost", cook_option)
       cmd.expects(:stream_command).with(matcher).returns(SuccessfulResult.new)
-      cmd.cook
+      cmd.run
 
       cmd = command("somehost")
       cmd.expects(:stream_command).with(Not(matcher)).returns(SuccessfulResult.new)
-      cmd.cook
+      cmd.run
     end
   end
 
   def command(*args)
-    knife_command(Chef::Knife::SoloCook, *args)
+    cmd = knife_command(Chef::Knife::SoloCook, *args)
+    cmd.stubs(:check_chef_version)
+    cmd.stubs(:rsync_kitchen)
+    cmd.stubs(:add_patches)
+    cmd.stubs(:stream_command).returns(SuccessfulResult.new)
+    cmd
   end
 end
