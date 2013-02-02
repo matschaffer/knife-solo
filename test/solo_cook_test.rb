@@ -42,7 +42,7 @@ class SoloCookTest < TestCase
   def test_does_not_run_librarian_if_no_cheffile
     in_kitchen do
       Librarian::Action::Install.any_instance.expects(:run).never
-      command.librarian_install
+      command("somehost").run
     end
   end
 
@@ -50,7 +50,61 @@ class SoloCookTest < TestCase
     in_kitchen do
       File.open("Cheffile", 'w') {}
       Librarian::Action::Install.any_instance.expects(:run)
-      command.librarian_install
+      command("somehost").run
+    end
+  end
+
+  def test_does_not_run_librarian_if_denied_by_option
+    in_kitchen do
+      File.open("Cheffile", 'w') {}
+      Librarian::Action::Install.any_instance.expects(:run).never
+      command("somehost", "--no-librarian").run
+    end
+  end
+
+  def test_validates_chef_version
+    in_kitchen do
+      cmd = command("somehost")
+      cmd.expects(:check_chef_version)
+      cmd.run
+    end
+  end
+
+  def test_does_not_validate_chef_version_if_denied_by_option
+    in_kitchen do
+      cmd = command("somehost", "--no-chef-check")
+      cmd.expects(:check_chef_version).never
+      cmd.run
+    end
+  end
+
+  def test_barks_if_chef_not_found
+    in_kitchen do
+      cmd = command("somehost")
+      cmd.unstub(:check_chef_version)
+      cmd.stubs(:chef_version).returns("")
+      assert_raises RuntimeError do
+        cmd.run
+      end
+    end
+  end
+
+  def test_barks_if_chef_too_old
+    in_kitchen do
+      cmd = command("somehost")
+      cmd.unstub(:check_chef_version)
+      cmd.stubs(:chef_version).returns("0.8.0")
+      assert_raises RuntimeError do
+        cmd.run
+      end
+    end
+  end
+
+  def test_does_not_cook_if_sync_only_specified
+    in_kitchen do
+      cmd = command("somehost", "--sync-only")
+      cmd.expects(:cook).never
+      cmd.run
     end
   end
 
@@ -62,19 +116,6 @@ class SoloCookTest < TestCase
     assert_chef_solo_option "--why-run", "-W"
   end
 
-  def test_no_librarian_option
-    solo_cook = command("somehost", "--no-librarian")
-    solo_cook.expects(:librarian_install).never
-    solo_cook.stubs(:validate!)
-    Chef::Config.stubs(:from_file)
-    solo_cook.stubs(:check_chef_version)
-    solo_cook.stubs(:generate_node_config)
-    solo_cook.stubs(:rsync_kitchen)
-    solo_cook.stubs(:add_patches)
-    solo_cook.stubs(:cook)
-    solo_cook.run
-  end
-
   # Asserts that the chef_solo_option is passed to chef-solo iff cook_option
   # is specified for the cook command
   def assert_chef_solo_option(cook_option, chef_solo_option)
@@ -82,15 +123,20 @@ class SoloCookTest < TestCase
     in_kitchen do
       cmd = command("somehost", cook_option)
       cmd.expects(:stream_command).with(matcher).returns(SuccessfulResult.new)
-      cmd.cook
+      cmd.run
 
       cmd = command("somehost")
       cmd.expects(:stream_command).with(Not(matcher)).returns(SuccessfulResult.new)
-      cmd.cook
+      cmd.run
     end
   end
 
   def command(*args)
-    knife_command(Chef::Knife::SoloCook, *args)
+    cmd = knife_command(Chef::Knife::SoloCook, *args)
+    cmd.stubs(:check_chef_version)
+    cmd.stubs(:rsync_kitchen)
+    cmd.stubs(:add_patches)
+    cmd.stubs(:stream_command).returns(SuccessfulResult.new)
+    cmd
   end
 end
