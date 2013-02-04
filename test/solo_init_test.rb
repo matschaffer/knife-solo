@@ -34,6 +34,29 @@ class SoloInitTest < TestCase
     end
   end
 
+  def test_wont_create_cheffile_by_default
+    in_kitchen do
+      refute File.exist?("Cheffile")
+    end
+  end
+
+  def test_creates_cheffile_if_specified
+    outside_kitchen do
+      command("foo", "--librarian").run
+      assert File.exist?("foo/Cheffile")
+    end
+  end
+
+  def test_wont_overwrite_cheffile
+    outside_kitchen do
+      File.open("Cheffile", "w") do |f|
+        f << "testdata"
+      end
+      command(".", "--librarian").run
+      assert_equal "testdata", IO.read("Cheffile")
+    end
+  end
+
   def command(*args)
     knife_command(Chef::Knife::SoloInit, *args)
   end

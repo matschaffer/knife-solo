@@ -7,11 +7,16 @@ class Chef
 
       banner "knife solo init DIRECTORY"
 
+      option :librarian,
+        :long => '--librarian',
+        :description => 'Initialize Librarian'
+
       def run
         @base = @name_args.first
         validate!
         create_kitchen
         create_cupboards %w[nodes roles data_bags site-cookbooks cookbooks]
+        librarian_init if config[:librarian]
         create_solo_config
       end
 
@@ -50,6 +55,15 @@ class Chef
                                         "/tmp/chef-solo/cookbooks" ]
             role_path                 "/tmp/chef-solo/roles"
           RUBY
+        end
+      end
+
+      def librarian_init
+        cheffile = File.join(@base, 'Cheffile')
+        unless File.exist?(cheffile)
+          File.open(cheffile, 'w') do |f|
+            f.puts("site 'http://community.opscode.com/api/v1'")
+          end
         end
       end
     end
