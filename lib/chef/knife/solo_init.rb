@@ -8,24 +8,24 @@ class Chef
       banner "knife solo init DIRECTORY"
 
       def run
+        @base = @name_args.first
         validate!
-        base = @name_args.first
-        create_kitchen base
-        create_cupboards base, %w(nodes roles data_bags site-cookbooks cookbooks)
-        create_solo_config base
+        create_kitchen
+        create_cupboards %w[nodes roles data_bags site-cookbooks cookbooks]
+        create_solo_config
       end
 
       def validate!
-        unless @name_args.first
+        unless @base
           show_usage
           ui.fatal "You must specify a directory. Use '.' to initialize the current one."
           exit 1
         end
       end
 
-      def create_cupboards(base, dirs)
+      def create_cupboards(dirs)
         dirs.each do |dir|
-          cupboard_dir = File.join(base, dir)
+          cupboard_dir = File.join(@base, dir)
           unless File.exist?(cupboard_dir)
             mkdir cupboard_dir
             touch File.join(cupboard_dir, '.gitkeep')
@@ -33,12 +33,12 @@ class Chef
         end
       end
 
-      def create_kitchen(base)
-        mkdir base unless base == '.'
+      def create_kitchen
+        mkdir @base unless @base == '.'
       end
 
-      def create_solo_config(base)
-        solo_file = File.join(base, 'solo.rb')
+      def create_solo_config
+        solo_file = File.join(@base, 'solo.rb')
         return if File.exist? solo_file
 
         File.open(solo_file, 'w') do |f|
