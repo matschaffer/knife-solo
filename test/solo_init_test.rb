@@ -57,6 +57,20 @@ class SoloInitTest < TestCase
     end
   end
 
+  def test_creates_gitignore_for_librarian
+    outside_kitchen do
+      command("bar", "--librarian").run
+      assert File.exist?("bar/.gitignore")
+    end
+  end
+
+  def test_wont_create_gitignore_for_librarian_if_denied
+    outside_kitchen do
+      command(".", "--librarian", "--no-git").run
+      refute File.exist?(".gitignore")
+    end
+  end
+
   def command(*args)
     knife_command(Chef::Knife::SoloInit, *args)
   end

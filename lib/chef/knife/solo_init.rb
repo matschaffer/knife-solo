@@ -5,7 +5,16 @@ class Chef
     class SoloInit < Knife
       include FileUtils
 
+      deps do
+        require 'knife-solo/gitignore'
+      end
+
       banner "knife solo init DIRECTORY"
+
+      option :git,
+        :long => '--no-git',
+        :description => 'Do not generate .gitignore',
+        :default => true
 
       option :librarian,
         :long => '--librarian',
@@ -64,6 +73,13 @@ class Chef
           File.open(cheffile, 'w') do |f|
             f.puts("site 'http://community.opscode.com/api/v1'")
           end
+        end
+        gitignore %w[/cookbooks/ /tmp/librarian/]
+      end
+
+      def gitignore(*entries)
+        if config[:git]
+          KnifeSolo::Gitignore.new(@base).add(*entries)
         end
       end
     end
