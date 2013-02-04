@@ -3,10 +3,8 @@
 module Apache2Cook
   def write_cheffile
     File.open('Cheffile', 'w') do |f|
-      f.print <<-CHEF
-            site 'http://community.opscode.com/api/v1'
-            cookbook 'apache2'
-      CHEF
+      f.puts "site 'http://community.opscode.com/api/v1'"
+      f.puts "cookbook 'apache2'"
     end
   end
 
