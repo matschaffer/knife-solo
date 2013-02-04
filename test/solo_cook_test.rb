@@ -17,13 +17,15 @@ class SoloCookTest < TestCase
   include ValidationHelper::ValidationTests
 
   def test_gets_destination_path_from_chef_config
-    Chef::Config.file_cache_path "/tmp/chef-solo"
-    assert_equal "/tmp/chef-solo", command.chef_path
+    cmd = command
+    Chef::Config.file_cache_path "/foo/chef-solo"
+    assert_equal "/foo/chef-solo", cmd.chef_path
   end
 
   def test_gets_patch_path_from_chef_config
-    Chef::Config.cookbook_path ["/tmp/chef-solo/cookbooks"]
-    assert_equal "/tmp/chef-solo/cookbooks/chef_solo_patches/libraries", command.patch_path
+    cmd = command
+    Chef::Config.cookbook_path ["/bar/chef-solo/cookbooks"]
+    assert_equal "/bar/chef-solo/cookbooks/chef_solo_patches/libraries", cmd.patch_path
   end
 
   def test_chefignore_is_valid_object
