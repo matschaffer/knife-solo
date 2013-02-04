@@ -3,4 +3,4 @@ rvm:
   - 1.9.3
 env:
   - CHEF_VERSION=
-  - CHEF_VERSION="~> 11.0.0"
+  - CHEF_VERSION="~> 10"

@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'lib', 'knife-solo', 'info')
 
-chef_version = ['~> 10.12']
+chef_version = ['>= 10.12']
 unless ENV['CHEF_VERSION'].to_s.empty?
   chef_version = Gem::Requirement.new(ENV['CHEF_VERSION'])
 end
