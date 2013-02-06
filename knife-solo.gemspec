@@ -30,6 +30,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'parallel'
 
   s.add_dependency 'chef',     chef_version
-  s.add_dependency 'net-ssh',  '~> 2.2.2'
+  s.add_dependency 'net-ssh',  '>= 2.2.2', '< 3.0'
   s.add_dependency 'librarian', '~> 0.0.20'
 end
