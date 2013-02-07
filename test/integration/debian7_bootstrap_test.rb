@@ -14,7 +14,7 @@ class Debian7BootstrapTest < IntegrationTest
   end
 
   def default_apache_message
-    /iIt works!/
+    /It works!/
   end
 
   include Apache2Bootstrap
