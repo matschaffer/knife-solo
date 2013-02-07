@@ -20,6 +20,7 @@ lib/knife-solo/bootstraps/freebsd.rb
 lib/knife-solo/bootstraps/linux.rb
 lib/knife-solo/bootstraps/sun_os.rb
 lib/knife-solo/deprecated_command.rb
+lib/knife-solo/gitignore.rb
 lib/knife-solo/info.rb
 lib/knife-solo/kitchen_command.rb
 lib/knife-solo/node_config_command.rb
@@ -27,11 +28,14 @@ lib/knife-solo/ssh_command.rb
 lib/knife-solo/tools.rb
 test/bootstraps_test.rb
 test/deprecated_command_test.rb
+test/gitignore_test.rb
 test/integration/cases/apache2_bootstrap.rb
 test/integration/cases/apache2_cook.rb
 test/integration/cases/empty_cook.rb
 test/integration/cases/encrypted_data_bag.rb
 test/integration/centos5_6_test.rb
+test/integration/debian6_bootstrap_test.rb
+test/integration/debian7_bootstrap_test.rb
 test/integration/gentoo2011_test.rb
 test/integration/omnios_r151004_test.rb
 test/integration/scientific_linux_63_test.rb
