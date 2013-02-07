@@ -18,7 +18,7 @@ task :manifest do
   git_files = `git ls-files`.split("\n")
 
   File.open('Manifest.txt', 'w') do |f|
-    f.puts (git_files - MANIFEST_IGNORES).join("\n")
+    f.puts((git_files - MANIFEST_IGNORES).join("\n"))
   end
 end
 task :release => :manifest
@@ -76,4 +76,3 @@ end
 desc "Alias for test:units"
 task :test => ['test:units']
 task :default => :test
-
