@@ -78,6 +78,15 @@ class SoloCookTest < TestCase
     end
   end
 
+  def test_accept_valid_chef_version
+    in_kitchen do
+      cmd = command("somehost")
+      cmd.unstub(:check_chef_version)
+      cmd.stubs(:chef_version).returns("11.2.0")
+      cmd.run
+    end
+  end
+
   def test_barks_if_chef_not_found
     in_kitchen do
       cmd = command("somehost")
