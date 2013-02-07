@@ -2,6 +2,12 @@
 
 ## Changes and new features
 
+* Rename Cook command's `--skip-chef-check` option to `--no-chef-check (#162)
+* Rename `--ssh-identity` option to `--identity-file` (#178)
+* Add `--ssh-user option` (#179)
+* Add `--no-librarian` option to bootstrap and cook commands (#180)
+* Generate Cheffile and .gitignore on `knife solo init --librarian` (#182)
+* Windows client compatibility (#156, #91)
 * Support unknown/unreleased Debian versions by using the
   gem installer (#172)
 * Drop support for Debian 5.0 Lenny (#172)
@@ -11,11 +17,13 @@
 
 * Fix Debian 7.0 Wheezy support by using gem installer (#172)
 * Fix compatibility with Ruby 1.8.7 on work station (#170)
-* Other fixes: #166, #173
+* Other fixes: #166, #168, #173
 
 ## Thanks to our contributors!
 
 * [Russell Cardullo][russellcardullo]
+* "[tknerr][]"
+* [Shaun Dern][smdern]
 
 # 0.1.0: January 12, 2013
 
@@ -250,6 +258,8 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [russellcardullo]: https://github.com/russellcardullo
 [ryandub]:       https://github.com/ryandub
 [skyeagle]:      https://github.com/skyeagle
+[smdern]:        https://github.com/smdern
+[tknerr]:        https://github.com/tknerr
 [tmatilai]:      https://github.com/tmatilai
 [vjpr]:          https://github.com/vjpr
 [zeph]:          https://github.com/zeph
