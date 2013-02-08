@@ -79,7 +79,7 @@ class IntegrationTest < TestCase
     return "" if ENV['CHEF_VERSION'].to_s.empty?
 
     v = `knife --version`.split(':')
-    v[0] == "Chef" ? "--omnibus-version=#{v[1].strip}" : ""
+    v[0].strip == 'Chef' ? "--omnibus-version=#{v[1].strip}" : ''
   end
 
   # Provides the path to the runner's key file
