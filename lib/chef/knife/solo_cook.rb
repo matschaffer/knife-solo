@@ -162,9 +162,10 @@ class Chef
         end
       end
 
+      # Parses "Chef: x.y.z" from the chef-solo version output
       def chef_version
-        v = run_command("sudo chef-solo --version").stdout.split(':') # "Chef: x.y.z"
-        v[0] == "Chef" ? v[1].strip : ""
+        v = run_command('sudo chef-solo --version').stdout.split(':')
+        v[0].strip == 'Chef' ? v[1].strip : ''
       end
 
       def cook
