@@ -1,1 +1,10 @@
 language: ruby
+rvm:
+  - 1.9.3
+env:
+  - CHEF_VERSION=
+  - CHEF_VERSION="~> 10"
+matrix:
+  include:
+    - rvm: 2.0.0
+      env: CHEF_VERSION=
