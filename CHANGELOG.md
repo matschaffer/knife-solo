@@ -20,6 +20,7 @@
 * Fix Debian 7.0 Wheezy support by using gem installer (#172)
 * Fix compatibility with Ruby 1.8.7 on work station (#170)
 * Fix Chef version checking if sudo promts password (#190)
+* Fix compatibility (net-ssh dependency) with Chef 10.20.0 and 11.2.0 (#188)
 * Other fixes: #166, #168, #173
 
 ## Thanks to our contributors!
