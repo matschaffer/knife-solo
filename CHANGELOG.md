@@ -2,6 +2,7 @@
 
 ## Changes and new features
 
+* Support Chef 11 (#183)
 * Rename Cook command's `--skip-chef-check` option to `--no-chef-check (#162)
 * Rename `--ssh-identity` option to `--identity-file` (#178)
 * Add `--ssh-user option` (#179)
@@ -12,11 +13,13 @@
   gem installer (#172)
 * Drop support for Debian 5.0 Lenny (#172)
 * Integration tests for Debian 6 and 7 (74c6ed1 - f299a6)
+* Travis tests for both Chef 10 and 11 (#183)
 
 ## Fixes
 
 * Fix Debian 7.0 Wheezy support by using gem installer (#172)
 * Fix compatibility with Ruby 1.8.7 on work station (#170)
+* Fix Chef version checking if sudo promts password (#190)
 * Other fixes: #166, #168, #173
 
 ## Thanks to our contributors!
