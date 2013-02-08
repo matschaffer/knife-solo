@@ -8,7 +8,7 @@ module Apache2Bootstrap
 
   def test_apache2
     write_cheffile
-    assert_subcommand "bootstrap --run-list=recipe[apache2]"
+    assert_subcommand "bootstrap --run-list=recipe[apache2] #{omnibus_options}"
     assert_match default_apache_message, http_response
   end
 end

@@ -8,6 +8,8 @@ class TestCase < MiniTest::Unit::TestCase
     command = cmd_class.new(args)
     command.ui.stubs(:msg)
     command.ui.stubs(:err)
+    Chef::Config[:verbosity] = 0
+    command.configure_chef
     command
   end
 
