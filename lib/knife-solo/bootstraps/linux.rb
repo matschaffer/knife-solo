@@ -82,7 +82,7 @@ module KnifeSolo::Bootstraps
         {:type => "yum_omnibus", :version => "RHEL5"}
       when %r{CentOS.*? 6}
         {:type => "yum_omnibus", :version => "RHEL6"}
-      when %r{Amazon Linux AMI.*? 2012\.09}
+      when %r{Amazon Linux}
         {:type => "yum_omnibus", :version => "RHEL6"}
       when %r{Red Hat Enterprise.*? 5}
         {:type => "yum_omnibus", :version => "RHEL5"}
