@@ -9,6 +9,7 @@
 * Add `--no-librarian` option to bootstrap and cook commands (#180)
 * Generate Cheffile and .gitignore on `knife solo init --librarian` (#182)
 * Windows client compatibility (#156, #91)
+* Support Amazon Linux (#181)
 * Support unknown/unreleased Debian versions by using the
   gem installer (#172)
 * Drop support for Debian 5.0 Lenny (#172)
@@ -28,6 +29,7 @@
 * [Russell Cardullo][russellcardullo]
 * "[tknerr][]"
 * [Shaun Dern][smdern]
+* [Mike Bain][TheAlphaTester]
 
 # 0.1.0: January 12, 2013
 
@@ -233,6 +235,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [Frozenproduce]: https://github.com/Frozenproduce
 [Motiejus]:      https://github.com/Motiejus
 [Nix-wie-weg]:   https://github.com/Nix-wie-weg
+[TheAlphaTester]:https://github.com/TheAlphaTester
 [TylerRick]:     https://github.com/TylerRick
 [aaronjensen]:   https://github.com/aaronjensen
 [amoslanka]:     https://github.com/amoslanka
