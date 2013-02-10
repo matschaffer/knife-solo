@@ -1,5 +1,6 @@
 require 'bundler/gem_tasks'
 require 'rake/testtask'
+require File.join(File.dirname(__FILE__), 'lib', 'knife-solo', 'info')
 
 MANIFEST_IGNORES = %w[
     .travis.yml
@@ -51,12 +52,12 @@ task 'gh-pages' do
     end
     rev = `git rev-parse HEAD`[0..7]
     Dir.chdir(clone) do
-      sh "git commit --allow-empty -m 'Updated index from README.rdoc rev #{rev}' index.html"
+      sh "git commit --allow-empty -m 'Update index for v#{KnifeSolo.version} from README.rdoc rev #{rev}' index.html"
       sh "git push origin gh-pages"
     end
   end
 end
-task :release => 'gh-pages'
+task :release => 'gh-pages' unless KnifeSolo.prerelease?
 
 namespace :test do
   Rake::TestTask.new(:integration) do |t|
