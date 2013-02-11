@@ -16,18 +16,6 @@ class SoloCookTest < TestCase
   include KitchenHelper
   include ValidationHelper::ValidationTests
 
-  def test_gets_destination_path_from_chef_config
-    cmd = command
-    Chef::Config.file_cache_path "/foo/chef-solo"
-    assert_equal "/foo/chef-solo", cmd.chef_path
-  end
-
-  def test_gets_patch_path_from_chef_config
-    cmd = command
-    Chef::Config.cookbook_path ["/bar/chef-solo/cookbooks"]
-    assert_equal "/bar/chef-solo/cookbooks/chef_solo_patches/libraries", cmd.patch_path
-  end
-
   def test_chefignore_is_valid_object
     assert_instance_of Chef::Cookbook::Chefignore, command.chefignore
   end
@@ -134,6 +122,25 @@ class SoloCookTest < TestCase
     assert_chef_solo_option "--why-run", "-W"
   end
 
+  def test_uses_cookbook_path_from_solo_rb_if_available
+    in_kitchen do
+      cmd = command("somehost")
+      write_file('solo.rb', <<-RUBY)
+        cookbook_path ["custom/path"]
+      RUBY
+      assert_equal "custom/path", cmd.cookbook_path
+    end
+  end
+
+  def test_reads_chef_root_path_from_knife_config_or_defaults_to_home
+    in_kitchen do
+      cmd = command("somehost")
+      assert_equal './chef-solo', cmd.chef_path
+      Chef::Config.knife[:solo_path] = "/tmp/custom-chef-solo"
+      assert_equal "/tmp/custom-chef-solo", cmd.chef_path
+    end
+  end
+
   # Asserts that the chef_solo_option is passed to chef-solo iff cook_option
   # is specified for the cook command
   def assert_chef_solo_option(cook_option, chef_solo_option)
@@ -149,11 +156,16 @@ class SoloCookTest < TestCase
     end
   end
 
+  def write_file(file, contents)
+    FileUtils.mkpath(File.dirname(file))
+    File.open(file, 'w') { |f| f.print contents }
+  end
+
   def command(*args)
     cmd = knife_command(Chef::Knife::SoloCook, *args)
     cmd.stubs(:check_chef_version)
-    cmd.stubs(:rsync_kitchen)
     cmd.stubs(:add_patches)
+    cmd.stubs(:rsync)
     cmd.stubs(:stream_command).returns(SuccessfulResult.new)
     cmd
   end

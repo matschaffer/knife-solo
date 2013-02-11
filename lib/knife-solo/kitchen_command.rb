@@ -4,7 +4,9 @@ module KnifeSolo
       %w(solo.rb)
     end
 
+    # TODO without solo.rb how do we avoid rsyncing outside the kitchen?
     def validate_kitchen!
+      return true
       unless required_files_present?
         ui.fatal "This command must be run inside a Chef solo kitchen."
         exit 1

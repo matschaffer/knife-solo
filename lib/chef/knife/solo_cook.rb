@@ -1,5 +1,6 @@
 require 'chef/knife'
 
+require 'knife-solo'
 require 'knife-solo/ssh_command'
 require 'knife-solo/kitchen_command'
 require 'knife-solo/node_config_command'
@@ -59,12 +60,12 @@ class Chef
           end
 
           validate!
-          Chef::Config.from_file('solo.rb')
           check_chef_version if config[:chef_check]
           generate_node_config
           librarian_install if config[:librarian]
           rsync_kitchen
           add_patches
+          add_solo_config
           cook unless config[:sync_only]
         end
       end
@@ -75,7 +76,16 @@ class Chef
       end
 
       def chef_path
-        Chef::Config.file_cache_path
+        Chef::Config.knife[:solo_path] || './chef-solo'
+      end
+
+      def cookbook_path
+        if File.exist?('solo.rb')
+          Chef::Config.from_file('solo.rb')
+          Array(Chef::Config.cookbook_path).first
+        else
+          chef_path + '/cookbooks'
+        end
       end
 
       def chefignore
@@ -103,7 +113,7 @@ class Chef
       end
 
       def patch_path
-        Array(Chef::Config.cookbook_path).first + "/chef_solo_patches/libraries"
+        cookbook_path + "/chef_solo_patches/libraries"
       end
 
       def rsync_excludes
@@ -149,8 +159,13 @@ class Chef
         end
       end
 
+      def add_solo_config
+        rsync(KnifeSolo.resource('solo.rb'), chef_path)
+      end
+
       def rsync(source_path, target_path, extra_opts = '')
-        cmd = %Q{rsync -rl #{rsync_permissions} --rsh="ssh #{ssh_args}" #{extra_opts} #{rsync_excludes.collect{ |ignore| "--exclude #{ignore} " }.join} #{adjust_rsync_path_on_client(source_path)} :#{adjust_rsync_path_on_node(target_path)}}
+        # TODO handle windows path adjustment (via cygwin)
+        cmd = %Q|rsync -rl #{rsync_permissions} --rsh="ssh #{ssh_args}" #{extra_opts} #{rsync_excludes.collect{ |ignore| "--exclude #{ignore} " }.join} #{source_path} :#{target_path}|
         ui.msg cmd if debug?
         system! cmd
       end
@@ -169,6 +184,7 @@ class Chef
       end
 
       def cook
+        # TODO: handle custom solo path
         cmd = "sudo chef-solo -c #{chef_path}/solo.rb -j #{chef_path}/#{node_config}"
         cmd << " -l debug" if debug?
         cmd << " -N #{config[:chef_node_name]}" if config[:chef_node_name]
