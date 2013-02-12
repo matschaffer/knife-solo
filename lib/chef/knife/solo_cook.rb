@@ -63,7 +63,7 @@ class Chef
           librarian_install if config[:librarian]
           rsync_kitchen
           add_patches
-          add_solo_config if using_custom_solorb?
+          add_solo_config unless using_custom_solorb?
           cook unless config[:sync_only]
         end
       end
