@@ -14,7 +14,6 @@ MANIFEST_IGNORES = %w[
     script/test
   ]
 
-task :release => :manifest
 
 namespace :manifest do
   desc 'Checks for outstanding changes to the manifest'
@@ -32,6 +31,8 @@ namespace :manifest do
     end
   end
 end
+
+desc 'Alias to manifest:update'
 task :manifest => 'manifest:update'
 
 # Returns the parsed RDoc for a single file as HTML
@@ -67,7 +68,6 @@ task 'gh-pages' do
     end
   end
 end
-task :release => 'gh-pages' unless KnifeSolo.prerelease?
 
 namespace :test do
   Rake::TestTask.new(:integration) do |t|
@@ -84,8 +84,11 @@ namespace :test do
   task :all => [:units, :integration]
 end
 
-desc "Alias for test:units"
-task :test => ['test:units']
+desc 'Alias for test:units'
+task :test => 'test:units'
 
 task :default => :test
 task :default => 'manifest:verify'
+
+task :release => :manifest
+task :release => 'gh-pages' unless KnifeSolo.prerelease?
