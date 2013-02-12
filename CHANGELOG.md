@@ -1,7 +1,8 @@
-# 0.2.0: _Not released yet_
+# 0.2.0: February 12, 2013
 
 ## Changes and new features
 
+* Post-install hook to remind people about removing old gems (#152)
 * Support Chef 11 (#183)
 * Rename Cook command's `--skip-chef-check` option to `--no-chef-check (#162)
 * Rename `--ssh-identity` option to `--identity-file` (#178)
@@ -22,12 +23,14 @@
 * Fix compatibility with Ruby 1.8.7 on work station (#170)
 * Fix Chef version checking if sudo promts password (#190)
 * Fix compatibility (net-ssh dependency) with Chef 10.20.0 and 11.2.0 (#188)
-* Other fixes: #166, #168, #173
+* Fail CI if manifest isn't updated (#195)
+* Better unit tests around solo cook
+* Other fixes: #166, #168, #173, #194
 
 ## Thanks to our contributors!
 
 * [Russell Cardullo][russellcardullo]
-* "[tknerr][]"
+* [tknerr][tknerr]
 * [Shaun Dern][smdern]
 * [Mike Bain][TheAlphaTester]
 
