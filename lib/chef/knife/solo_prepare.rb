@@ -1,6 +1,5 @@
 require 'chef/knife'
 require 'knife-solo/ssh_command'
-require 'knife-solo/kitchen_command'
 require 'knife-solo/node_config_command'
 
 class Chef
@@ -9,7 +8,6 @@ class Chef
     # Copyright 2010, 2011, Miquel Torres <tobami@googlemail.com>
     class SoloPrepare < Knife
       include KnifeSolo::SshCommand
-      include KnifeSolo::KitchenCommand
       include KnifeSolo::NodeConfigCommand
 
       deps do
@@ -44,7 +42,6 @@ class Chef
 
       def validate!
         validate_ssh_options!
-        validate_kitchen!
       end
 
       def bootstrap

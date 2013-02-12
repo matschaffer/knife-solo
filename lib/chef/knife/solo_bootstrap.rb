@@ -2,13 +2,11 @@ require 'chef/knife'
 require 'chef/knife/solo_cook'
 require 'chef/knife/solo_prepare'
 
-require 'knife-solo/kitchen_command'
 require 'knife-solo/ssh_command'
 
 class Chef
   class Knife
     class SoloBootstrap < Knife
-      include KnifeSolo::KitchenCommand
       include KnifeSolo::SshCommand
 
       deps do
@@ -36,7 +34,6 @@ class Chef
 
       def validate!
         validate_ssh_options!
-        validate_kitchen!
       end
 
       def command_with_same_args(klass)

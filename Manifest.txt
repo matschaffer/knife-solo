@@ -22,7 +22,6 @@ lib/knife-solo/bootstraps/sun_os.rb
 lib/knife-solo/deprecated_command.rb
 lib/knife-solo/gitignore.rb
 lib/knife-solo/info.rb
-lib/knife-solo/kitchen_command.rb
 lib/knife-solo/node_config_command.rb
 lib/knife-solo/resources/solo.rb
 lib/knife-solo/ssh_command.rb
@@ -46,7 +45,6 @@ test/integration/ubuntu10_04_test.rb
 test/integration/ubuntu12_04_bootstrap_test.rb
 test/integration/ubuntu12_04_test.rb
 test/integration_helper.rb
-test/kitchen_command_test.rb
 test/minitest/parallel.rb
 test/node_config_command_test.rb
 test/solo_bootstrap_test.rb

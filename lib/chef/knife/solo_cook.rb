@@ -2,7 +2,6 @@ require 'chef/knife'
 
 require 'knife-solo'
 require 'knife-solo/ssh_command'
-require 'knife-solo/kitchen_command'
 require 'knife-solo/node_config_command'
 require 'knife-solo/tools'
 
@@ -14,7 +13,6 @@ class Chef
       CHEF_VERSION_CONSTRAINT    = ">=0.10.4" unless defined? CHEF_VERSION_CONSTRAINT
 
       include KnifeSolo::SshCommand
-      include KnifeSolo::KitchenCommand
       include KnifeSolo::NodeConfigCommand
       include KnifeSolo::Tools
 
@@ -72,7 +70,6 @@ class Chef
 
       def validate!
         validate_ssh_options!
-        validate_kitchen!
         validate_solorb_config!
       end
 
