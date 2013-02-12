@@ -21,6 +21,8 @@ Gem::Specification.new do |s|
   s.test_files    = manifest.grep(%r{^(test|spec|features)/})
   s.require_paths = ["lib"]
 
+   s.post_install_message = KnifeSolo.post_install_message
+
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'mocha'
