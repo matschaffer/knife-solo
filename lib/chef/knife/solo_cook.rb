@@ -105,21 +105,6 @@ class Chef
         @chefignore ||= ::Chef::Cookbook::Chefignore.new("./")
       end
 
-      # cygwin rsync path must be adjusted to work
-      def adjust_rsync_path(path)
-        path.gsub(/^(\w):/) { "/cygdrive/#{$1}" }
-      end
-
-      def adjust_rsync_path_on_node(path)
-        return path unless windows_node?
-        adjust_rsync_path(path)
-      end
-
-      def adjust_rsync_path_on_client(path)
-        return path unless windows_client?
-        adjust_rsync_path(path)
-      end
-
       # see http://stackoverflow.com/questions/5798807/rsync-permission-denied-created-directories-have-no-permissions
       def rsync_permissions
         '--chmod=ugo=rwX' if windows_client?
@@ -177,7 +162,6 @@ class Chef
       end
 
       def rsync(source_path, target_path, extra_opts = '')
-        # TODO handle windows path adjustment (via cygwin)
         cmd = %Q|rsync -rl #{rsync_permissions} --rsh="ssh #{ssh_args}" #{extra_opts} #{rsync_excludes.collect{ |ignore| "--exclude #{ignore} " }.join} #{source_path} :#{target_path}|
         ui.msg cmd if debug?
         system! cmd
@@ -197,7 +181,6 @@ class Chef
       end
 
       def cook
-        # TODO: handle custom solo path
         cmd = "sudo chef-solo -c #{chef_path}/solo.rb -j #{chef_path}/#{node_config}"
         cmd << " -l debug" if debug?
         cmd << " -N #{config[:chef_node_name]}" if config[:chef_node_name]
