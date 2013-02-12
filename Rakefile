@@ -14,15 +14,26 @@ MANIFEST_IGNORES = %w[
     script/test
   ]
 
-desc 'Updates Manifest.txt with a list of files from git'
-task :manifest do
-  git_files = `git ls-files`.split("\n")
 
-  File.open('Manifest.txt', 'w') do |f|
-    f.puts((git_files - MANIFEST_IGNORES).join("\n"))
+namespace :manifest do
+  desc 'Checks for outstanding changes to the manifest'
+  task :verify => :update do
+    changes = `git status --porcelain Manifest.txt`
+    raise "Manifest has not been updated" unless changes.empty?
+  end
+
+  desc 'Updates Manifest.txt with a list of files from git'
+  task :update do
+    git_files = `git ls-files`.split("\n")
+
+    File.open('Manifest.txt', 'w') do |f|
+      f.puts((git_files - MANIFEST_IGNORES).join("\n"))
+    end
   end
 end
-task :release => :manifest
+
+desc 'Alias to manifest:update'
+task :manifest => 'manifest:update'
 
 # Returns the parsed RDoc for a single file as HTML
 # Somewhat gnarly, but does the job.
@@ -57,7 +68,6 @@ task 'gh-pages' do
     end
   end
 end
-task :release => 'gh-pages' unless KnifeSolo.prerelease?
 
 namespace :test do
   Rake::TestTask.new(:integration) do |t|
@@ -74,6 +84,11 @@ namespace :test do
   task :all => [:units, :integration]
 end
 
-desc "Alias for test:units"
-task :test => ['test:units']
+desc 'Alias for test:units'
+task :test => 'test:units'
+
 task :default => :test
+task :default => 'manifest:verify'
+
+task :release => :manifest
+task :release => 'gh-pages' unless KnifeSolo.prerelease?
