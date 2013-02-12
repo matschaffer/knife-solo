@@ -1,5 +1,7 @@
 require 'chef/knife'
+
 require 'knife-solo/ssh_command'
+require 'knife-solo/config'
 
 class Chef
   class Knife
@@ -9,13 +11,14 @@ class Chef
       banner "knife solo clean [USER@]HOSTNAME"
 
       def run
+        @solo_config = KnifeSolo::Config.new
         validate!
-        Chef::Config.from_file('solo.rb')
-        run_command "rm -rf #{Chef::Config.file_cache_path}"
+        run_command "rm -rf #{@solo_config.chef_path}"
       end
 
       def validate!
         validate_ssh_options!
+        @solo_config.validate!
       end
     end
   end
