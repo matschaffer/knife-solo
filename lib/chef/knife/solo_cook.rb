@@ -4,6 +4,7 @@ require 'knife-solo'
 require 'knife-solo/ssh_command'
 require 'knife-solo/node_config_command'
 require 'knife-solo/tools'
+require 'knife-solo/config'
 
 class Chef
   class Knife
@@ -51,6 +52,8 @@ class Chef
         :description => 'Enable whyrun mode'
 
       def run
+        @solo_config = KnifeSolo::Config.new
+
         time('Run') do
           if config[:skip_chef_check]
             ui.warn '`--skip-chef-check` is deprecated, please use `--no-chef-check`.'
@@ -68,34 +71,14 @@ class Chef
         end
       end
 
+      def_delegators :@solo_config,
+        :chef_path,
+        :using_custom_solorb?,
+        :patch_path
+
       def validate!
         validate_ssh_options!
-        validate_solorb_config!
-      end
-
-      def validate_solorb_config!
-        raise KnifeSolo::BadConfigError.new, "You have a solo.rb file, but knife[:solo_path] is not set. You need to set one or delete solo.rb. See https://github.com/matschaffer/knife-solo/wiki/Upgrading-to-0.2.0 for more information on the change." if using_custom_solorb? && solo_path.nil?
-      end
-
-      def solo_path
-        Chef::Config.knife[:solo_path]
-      end
-
-      def chef_path
-        solo_path || './chef-solo'
-      end
-
-      def using_custom_solorb?
-        File.exist?('solo.rb')
-      end
-
-      def cookbook_path
-        if using_custom_solorb?
-          Chef::Config.from_file('solo.rb')
-          Array(Chef::Config.cookbook_path).first
-        else
-          chef_path + '/cookbooks'
-        end
+        @solo_config.validate!
       end
 
       def chefignore
@@ -105,10 +88,6 @@ class Chef
       # see http://stackoverflow.com/questions/5798807/rsync-permission-denied-created-directories-have-no-permissions
       def rsync_permissions
         '--chmod=ugo=rwX' if windows_client?
-      end
-
-      def patch_path
-        cookbook_path + "/chef_solo_patches/libraries"
       end
 
       def rsync_excludes

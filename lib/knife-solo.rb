@@ -4,6 +4,4 @@ module KnifeSolo
   def self.resource(name)
     Pathname.new(__FILE__).dirname.join('knife-solo/resources', name)
   end
-
-  class BadConfigError < StandardError; end
 end

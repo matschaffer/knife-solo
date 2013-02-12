@@ -122,39 +122,6 @@ class SoloCookTest < TestCase
     assert_chef_solo_option "--why-run", "-W"
   end
 
-  def test_uses_cookbook_path_from_solo_rb_if_available
-    in_kitchen do
-      cmd = command("somehost")
-      write_file('solo.rb', <<-RUBY)
-        knife[:solo_path] = "./custom"
-        cookbook_path ["./custom/path"]
-      RUBY
-      assert_equal "./custom/path", cmd.cookbook_path
-    end
-  end
-
-  def test_reads_chef_root_path_from_knife_config_or_defaults_to_home
-    in_kitchen do
-      cmd = command("somehost")
-      assert_equal './chef-solo', cmd.chef_path
-      Chef::Config.knife[:solo_path] = "/tmp/custom-chef-solo"
-      assert_equal "/tmp/custom-chef-solo", cmd.chef_path
-    end
-  end
-
-  def test_errors_if_user_has_solo_rb_and_no_solo_path
-    in_kitchen do
-      cmd = command("somehost")
-      Chef::Config.knife[:solo_path] = nil
-      write_file('solo.rb', <<-RUBY)
-        cookbook_path ["custom/path"]
-      RUBY
-      assert_raises KnifeSolo::BadConfigError do
-        cmd.run
-      end
-    end
-  end
-
   # Asserts that the chef_solo_option is passed to chef-solo iff cook_option
   # is specified for the cook command
   def assert_chef_solo_option(cook_option, chef_solo_option)
@@ -168,11 +135,6 @@ class SoloCookTest < TestCase
       cmd.expects(:stream_command).with(Not(matcher)).returns(SuccessfulResult.new)
       cmd.run
     end
-  end
-
-  def write_file(file, contents)
-    FileUtils.mkpath(File.dirname(file))
-    File.open(file, 'w') { |f| f.print contents }
   end
 
   def command(*args)
