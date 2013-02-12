@@ -65,7 +65,7 @@ class Chef
           librarian_install if config[:librarian]
           rsync_kitchen
           add_patches
-          add_solo_config
+          add_solo_config if using_custom_solorb?
           cook unless config[:sync_only]
         end
       end
@@ -73,14 +73,27 @@ class Chef
       def validate!
         validate_ssh_options!
         validate_kitchen!
+        validate_solorb_config!
+      end
+
+      def validate_solorb_config!
+        raise KnifeSolo::BadConfigError.new, "You have a solo.rb file, but knife[:solo_path] is not set. You need to set one or delete solo.rb. See https://github.com/matschaffer/knife-solo/wiki/Upgrading-to-0.2.0 for more information on the change." if using_custom_solorb? && solo_path.nil?
+      end
+
+      def solo_path
+        Chef::Config.knife[:solo_path]
       end
 
       def chef_path
-        Chef::Config.knife[:solo_path] || './chef-solo'
+        solo_path || './chef-solo'
+      end
+
+      def using_custom_solorb?
+        File.exist?('solo.rb')
       end
 
       def cookbook_path
-        if File.exist?('solo.rb')
+        if using_custom_solorb?
           Chef::Config.from_file('solo.rb')
           Array(Chef::Config.cookbook_path).first
         else

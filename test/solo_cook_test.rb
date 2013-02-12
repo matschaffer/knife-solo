@@ -126,9 +126,10 @@ class SoloCookTest < TestCase
     in_kitchen do
       cmd = command("somehost")
       write_file('solo.rb', <<-RUBY)
-        cookbook_path ["custom/path"]
+        knife[:solo_path] = "./custom"
+        cookbook_path ["./custom/path"]
       RUBY
-      assert_equal "custom/path", cmd.cookbook_path
+      assert_equal "./custom/path", cmd.cookbook_path
     end
   end
 
@@ -138,6 +139,19 @@ class SoloCookTest < TestCase
       assert_equal './chef-solo', cmd.chef_path
       Chef::Config.knife[:solo_path] = "/tmp/custom-chef-solo"
       assert_equal "/tmp/custom-chef-solo", cmd.chef_path
+    end
+  end
+
+  def test_errors_if_user_has_solo_rb_and_no_solo_path
+    in_kitchen do
+      cmd = command("somehost")
+      Chef::Config.knife[:solo_path] = nil
+      write_file('solo.rb', <<-RUBY)
+        cookbook_path ["custom/path"]
+      RUBY
+      assert_raises KnifeSolo::BadConfigError do
+        cmd.run
+      end
     end
   end
 
