@@ -18,6 +18,7 @@
 * Drop support for Debian 5.0 Lenny (#172)
 * Integration tests for Debian 6 and 7 (74c6ed1 - f299a6)
 * Travis tests for both Chef 10 and 11 (#183)
+* Remove solo.rb and transfer cookbooks to user-owned path (#1, #86, #125, #128, #177). See https://github.com/matschaffer/knife-solo/wiki/Upgrading-to-0.2.0
 
 ## Fixes
 
