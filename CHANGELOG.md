@@ -1,3 +1,5 @@
+# 0.3.0: _In progress_
+
 # 0.2.0: February 12, 2013
 
 ## Changes and new features
