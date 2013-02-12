@@ -14,15 +14,25 @@ MANIFEST_IGNORES = %w[
     script/test
   ]
 
-desc 'Updates Manifest.txt with a list of files from git'
-task :manifest do
-  git_files = `git ls-files`.split("\n")
+task :release => :manifest
 
-  File.open('Manifest.txt', 'w') do |f|
-    f.puts((git_files - MANIFEST_IGNORES).join("\n"))
+namespace :manifest do
+  desc 'Checks for outstanding changes to the manifest'
+  task :verify => :update do
+    changes = `git status --porcelain Manifest.txt`
+    raise "Manifest has not been updated" unless changes.empty?
+  end
+
+  desc 'Updates Manifest.txt with a list of files from git'
+  task :update do
+    git_files = `git ls-files`.split("\n")
+
+    File.open('Manifest.txt', 'w') do |f|
+      f.puts((git_files - MANIFEST_IGNORES).join("\n"))
+    end
   end
 end
-task :release => :manifest
+task :manifest => 'manifest:update'
 
 # Returns the parsed RDoc for a single file as HTML
 # Somewhat gnarly, but does the job.
@@ -76,4 +86,6 @@ end
 
 desc "Alias for test:units"
 task :test => ['test:units']
+
 task :default => :test
+task :default => 'manifest:verify'
