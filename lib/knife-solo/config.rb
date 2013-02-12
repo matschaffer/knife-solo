@@ -31,7 +31,7 @@ module KnifeSolo
     end
 
     def validate!
-      raise Error, "You have a solo.rb file, but knife[:solo_path] is not set. You probably need to delete solo.rb unless you've customized it. See https://github.com/matschaffer/knife-solo/wiki/Upgrading-to-0.2.0 for more information." if using_custom_solorb? && solo_path.nil?
+      raise Error, "You have a solo.rb file, but knife[:solo_path] is not set. You probably need to delete solo.rb unless you've customized it. See https://github.com/matschaffer/knife-solo/wiki/Upgrading-to-0.3.0 for more information." if using_custom_solorb? && solo_path.nil?
     end
 
     class Error < StandardError; end
