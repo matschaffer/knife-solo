@@ -3,6 +3,11 @@ class TestCase < MiniTest::Unit::TestCase
     super unless self.class == TestCase
   end
 
+  def write_file(file, contents)
+    FileUtils.mkpath(File.dirname(file))
+    File.open(file, 'w') { |f| f.print contents }
+  end
+
   def knife_command(cmd_class, *args)
     cmd_class.load_deps
     command = cmd_class.new(args)

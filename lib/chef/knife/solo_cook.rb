@@ -1,9 +1,10 @@
 require 'chef/knife'
 
+require 'knife-solo'
 require 'knife-solo/ssh_command'
-require 'knife-solo/kitchen_command'
 require 'knife-solo/node_config_command'
 require 'knife-solo/tools'
+require 'knife-solo/config'
 
 class Chef
   class Knife
@@ -13,7 +14,6 @@ class Chef
       CHEF_VERSION_CONSTRAINT    = ">=0.10.4" unless defined? CHEF_VERSION_CONSTRAINT
 
       include KnifeSolo::SshCommand
-      include KnifeSolo::KitchenCommand
       include KnifeSolo::NodeConfigCommand
       include KnifeSolo::Tools
 
@@ -52,6 +52,8 @@ class Chef
         :description => 'Enable whyrun mode'
 
       def run
+        @solo_config = KnifeSolo::Config.new
+
         time('Run') do
           if config[:skip_chef_check]
             ui.warn '`--skip-chef-check` is deprecated, please use `--no-chef-check`.'
@@ -59,51 +61,33 @@ class Chef
           end
 
           validate!
-          Chef::Config.from_file('solo.rb')
           check_chef_version if config[:chef_check]
           generate_node_config
           librarian_install if config[:librarian]
           rsync_kitchen
           add_patches
+          add_solo_config unless using_custom_solorb?
           cook unless config[:sync_only]
         end
       end
 
+      def_delegators :@solo_config,
+        :chef_path,
+        :using_custom_solorb?,
+        :patch_path
+
       def validate!
         validate_ssh_options!
-        validate_kitchen!
-      end
-
-      def chef_path
-        Chef::Config.file_cache_path
+        @solo_config.validate!
       end
 
       def chefignore
         @chefignore ||= ::Chef::Cookbook::Chefignore.new("./")
       end
 
-      # cygwin rsync path must be adjusted to work
-      def adjust_rsync_path(path)
-        path.gsub(/^(\w):/) { "/cygdrive/#{$1}" }
-      end
-
-      def adjust_rsync_path_on_node(path)
-        return path unless windows_node?
-        adjust_rsync_path(path)
-      end
-
-      def adjust_rsync_path_on_client(path)
-        return path unless windows_client?
-        adjust_rsync_path(path)
-      end
-
       # see http://stackoverflow.com/questions/5798807/rsync-permission-denied-created-directories-have-no-permissions
       def rsync_permissions
         '--chmod=ugo=rwX' if windows_client?
-      end
-
-      def patch_path
-        Array(Chef::Config.cookbook_path).first + "/chef_solo_patches/libraries"
       end
 
       def rsync_excludes
@@ -149,8 +133,12 @@ class Chef
         end
       end
 
+      def add_solo_config
+        rsync(KnifeSolo.resource('solo.rb'), chef_path)
+      end
+
       def rsync(source_path, target_path, extra_opts = '')
-        cmd = %Q{rsync -rl #{rsync_permissions} --rsh="ssh #{ssh_args}" #{extra_opts} #{rsync_excludes.collect{ |ignore| "--exclude #{ignore} " }.join} #{adjust_rsync_path_on_client(source_path)} :#{adjust_rsync_path_on_node(target_path)}}
+        cmd = %Q|rsync -rl #{rsync_permissions} --rsh="ssh #{ssh_args}" #{extra_opts} #{rsync_excludes.collect{ |ignore| "--exclude #{ignore} " }.join} #{source_path} :#{target_path}|
         ui.msg cmd if debug?
         system! cmd
       end

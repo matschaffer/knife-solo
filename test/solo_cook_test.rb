@@ -16,18 +16,6 @@ class SoloCookTest < TestCase
   include KitchenHelper
   include ValidationHelper::ValidationTests
 
-  def test_gets_destination_path_from_chef_config
-    cmd = command
-    Chef::Config.file_cache_path "/foo/chef-solo"
-    assert_equal "/foo/chef-solo", cmd.chef_path
-  end
-
-  def test_gets_patch_path_from_chef_config
-    cmd = command
-    Chef::Config.cookbook_path ["/bar/chef-solo/cookbooks"]
-    assert_equal "/bar/chef-solo/cookbooks/chef_solo_patches/libraries", cmd.patch_path
-  end
-
   def test_chefignore_is_valid_object
     assert_instance_of Chef::Cookbook::Chefignore, command.chefignore
   end
@@ -152,8 +140,8 @@ class SoloCookTest < TestCase
   def command(*args)
     cmd = knife_command(Chef::Knife::SoloCook, *args)
     cmd.stubs(:check_chef_version)
-    cmd.stubs(:rsync_kitchen)
     cmd.stubs(:add_patches)
+    cmd.stubs(:rsync)
     cmd.stubs(:stream_command).returns(SuccessfulResult.new)
     cmd
   end

@@ -19,11 +19,12 @@ lib/knife-solo/bootstraps/darwin.rb
 lib/knife-solo/bootstraps/freebsd.rb
 lib/knife-solo/bootstraps/linux.rb
 lib/knife-solo/bootstraps/sun_os.rb
+lib/knife-solo/config.rb
 lib/knife-solo/deprecated_command.rb
 lib/knife-solo/gitignore.rb
 lib/knife-solo/info.rb
-lib/knife-solo/kitchen_command.rb
 lib/knife-solo/node_config_command.rb
+lib/knife-solo/resources/solo.rb
 lib/knife-solo/ssh_command.rb
 lib/knife-solo/tools.rb
 test/bootstraps_test.rb
@@ -32,6 +33,7 @@ test/gitignore_test.rb
 test/integration/amazon_linux_2012_09_bootstrap_test.rb
 test/integration/cases/apache2_bootstrap.rb
 test/integration/cases/apache2_cook.rb
+test/integration/cases/cache_path_usage.rb
 test/integration/cases/empty_cook.rb
 test/integration/cases/encrypted_data_bag.rb
 test/integration/centos5_6_test.rb
@@ -45,7 +47,7 @@ test/integration/ubuntu10_04_test.rb
 test/integration/ubuntu12_04_bootstrap_test.rb
 test/integration/ubuntu12_04_test.rb
 test/integration_helper.rb
-test/kitchen_command_test.rb
+test/knife-solo/config_test.rb
 test/minitest/parallel.rb
 test/node_config_command_test.rb
 test/solo_bootstrap_test.rb
@@ -54,6 +56,8 @@ test/solo_cook_test.rb
 test/solo_init_test.rb
 test/solo_prepare_test.rb
 test/ssh_command_test.rb
+test/support/cache_using_cookbook/metadata.rb
+test/support/cache_using_cookbook/recipes/default.rb
 test/support/config.yml.example
 test/support/data_bag_key
 test/support/ec2_runner.rb
