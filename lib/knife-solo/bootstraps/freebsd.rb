@@ -47,7 +47,7 @@ module KnifeSolo::Bootstraps
     def distro
       return @distro if @distro
       case issue
-      when %r{FreeBSD 9.0-RELEASE}
+      when %r{FreeBSD 9\.[01]}
         {:type => 'freebsd_port'}
       else
         raise "#{issue} not supported"
