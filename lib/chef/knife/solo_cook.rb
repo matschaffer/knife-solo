@@ -106,10 +106,6 @@ class Chef
         '--chmod=ugo=rwX' if windows_client?
       end
 
-      def patch_path
-        Array(Chef::Config.cookbook_path).first + "/chef_solo_patches/libraries"
-      end
-
       def rsync_excludes
         (%w{revision-deploys tmp '.*'} + chefignore.ignores).uniq
       end
