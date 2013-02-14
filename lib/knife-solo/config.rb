@@ -1,4 +1,6 @@
 require 'chef/config'
+require 'knife-solo'
+require 'erubis'
 
 module KnifeSolo
   # Encapsulates some logic for checking and extracting
@@ -11,6 +13,16 @@ module KnifeSolo
 
     def chef_path
       solo_path || './chef-solo'
+    end
+
+    def knife_solo_config
+      Chef::Config.knife[:solo]
+    end
+
+    def solo_rb
+      config = Chef::Config.knife[:solo]
+      path = config.delete(:path) || './chef-solo'
+      Erubis::Eruby.new(KnifeSolo.resource('solo.rb.erb').read).result(binding)
     end
 
     def cookbook_path

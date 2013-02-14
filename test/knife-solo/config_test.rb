@@ -12,6 +12,26 @@ class KnifeSoloConfigTest < TestCase
     FileUtils.rm_f 'solo.rb'
   end
 
+  def test_can_generate_solorb_from_knife_configs
+    Chef::Config.knife[:solo] = {
+      :file_cache_path           => "/custom/cache/path",
+      :data_bag_path             => "/custom/data_bag/path",
+      :encrypted_data_bag_secret => "/custom/secret/path",
+      :role_path                 => "/custom/role/path",
+      :cookbook_path             => [ "/custom/cookbook/path1", "/custom/cookbook/path2" ]
+    }
+
+    write_file('solo.rb', @config.solo_rb)
+    Chef::Config.from_file('solo.rb')
+
+    assert_equal "/custom/cache/path",    Chef::Config.file_cache_path
+    assert_equal "/custom/data_bag/path", Chef::Config.data_bag_path
+    assert_equal "/custom/secret/path",   Chef::Config.encrypted_data_bag_secret
+    assert_equal "/custom/role/path",     Chef::Config.role_path
+    assert Chef::Config.cookbook_path.include?("/custom/cookbook/path1") &&
+           Chef::Config.cookbook_path.include?("/custom/cookbook/path2")
+  end
+
   def test_uses_cookbook_path_from_solo_rb_if_available
     write_file('solo.rb', <<-RUBY)
       knife[:solo_path] = "./custom"
