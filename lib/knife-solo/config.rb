@@ -19,6 +19,19 @@ module KnifeSolo
       Chef::Config.knife[:solo]
     end
 
+    def process_path(path)
+      if path[0] == '.'
+        "base + #{path[1..-1].inspect}"
+      else
+        path.inspect
+      end
+    end
+
+    def process_paths(paths)
+      return process_path(paths) unless paths.is_a? Array
+      "[" + paths.map { |path| process_path(path) }.join(',') + "]"
+    end
+
     def solo_rb
       config = Chef::Config.knife[:solo]
       path = config.delete(:path) || './chef-solo'

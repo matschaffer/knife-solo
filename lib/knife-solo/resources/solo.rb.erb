@@ -1,5 +1,5 @@
 base = File.expand_path('..', __FILE__)
 
 <% config.each do |key, value| %>
-  <%= key %>(<%= value.inspect %>)
+  <%= key %>(<%= process_paths(value) %>)
 <% end %>

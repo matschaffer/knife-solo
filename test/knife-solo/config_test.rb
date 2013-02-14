@@ -32,6 +32,15 @@ class KnifeSoloConfigTest < TestCase
            Chef::Config.cookbook_path.include?("/custom/cookbook/path2")
   end
 
+  def test_expands_paths_relative_to_file
+    Chef::Config.knife[:solo] = { :data_bag_path => './data_bags',
+                                  :cookbook_path => ['./cookbooks'] }
+    write_file('solo.rb', @config.solo_rb)
+    Chef::Config.from_file('solo.rb')
+    assert_equal File.expand_path('../../../data_bags', __FILE__),
+                 Chef::Config.data_bag_path
+  end
+
   def test_uses_cookbook_path_from_solo_rb_if_available
     write_file('solo.rb', <<-RUBY)
       knife[:solo_path] = "./custom"
@@ -41,6 +50,7 @@ class KnifeSoloConfigTest < TestCase
   end
 
   def test_reads_chef_root_path_from_knife_config_or_defaults_to_home
+    Chef::Config.knife[:solo_path] = nil
     assert_equal './chef-solo', @config.chef_path
     Chef::Config.knife[:solo_path] = "/tmp/custom-chef-solo"
     assert_equal "/tmp/custom-chef-solo", @config.chef_path
