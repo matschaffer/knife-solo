@@ -25,6 +25,7 @@ lib/knife-solo/gitignore.rb
 lib/knife-solo/info.rb
 lib/knife-solo/node_config_command.rb
 lib/knife-solo/resources/solo.rb
+lib/knife-solo/resources/solo.rb.erb
 lib/knife-solo/ssh_command.rb
 lib/knife-solo/tools.rb
 test/bootstraps_test.rb
