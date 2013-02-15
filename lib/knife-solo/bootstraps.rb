@@ -43,7 +43,7 @@ module KnifeSolo
     module InstallCommands
 
       def bootstrap!
-        run_pre_bootstrap_checks()
+        run_pre_bootstrap_checks
         send("#{distro[:type]}_install")
       end
 
@@ -51,8 +51,9 @@ module KnifeSolo
         raise "implement distro detection for #{self.class.name}"
       end
 
+      # gems to install before chef
       def gem_packages
-        raise "implement gem packages for #{self.class.name}"
+        []
       end
 
       def http_client_get_url(url, file)
@@ -101,7 +102,8 @@ module KnifeSolo
         run_command("tar zxf #{file}")
         run_command("cd #{release} && sudo ruby setup.rb --no-format-executable")
         run_command("sudo rm -rf #{release} #{file}")
-        run_command("sudo gem install --no-rdoc --no-ri #{gem_packages().join(' ')}")
+        run_command("sudo gem install --no-rdoc --no-ri #{gem_packages.join(' ')}") unless gem_packages.empty?
+        run_command("sudo gem install --no-rdoc --no-ri chef")
       end
     end #InstallCommands
 

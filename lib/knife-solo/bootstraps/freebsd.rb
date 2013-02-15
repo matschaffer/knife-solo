@@ -4,10 +4,6 @@ module KnifeSolo::Bootstraps
       run_command("uname -sr").stdout.strip
     end
 
-    def gem_packages
-      ['chef']
-    end
-
     def prepare_make_conf
       ui.msg "Preparing make.conf"
       run_command <<-EOF

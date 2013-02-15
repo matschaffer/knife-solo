@@ -6,7 +6,6 @@ class KnifeSolo::Bootstraps::StubOS < KnifeSolo::Bootstraps::Base
 end
 
 class KnifeSolo::Bootstraps::StubOS2 < KnifeSolo::Bootstraps::Base
-  def gem_packages ; ['chef'] ; end
   def distro ; {:type => 'gem', :version => 'Fanny Faker'} ; end
   def gem_install
     # dont' actually install anything
@@ -21,13 +20,7 @@ class BootstrapsTest < TestCase
 
   def test_distro_raises_if_not_implemented
     assert_raises RuntimeError do
-      bootstrap_instance.distro()
-    end
-  end
-
-  def test_gem_packages_raises_if_not_implemented
-    assert_raises RuntimeError do
-      bootstrap_instance.gem_packages()
+      bootstrap_instance.distro
     end
   end
 
