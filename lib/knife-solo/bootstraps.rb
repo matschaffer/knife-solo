@@ -35,6 +35,10 @@ module KnifeSolo
         prepare.ui
       end
 
+      def chef_version
+        prepare.chef_version
+      end
+
       def prepare
         @prepare
       end
@@ -43,7 +47,7 @@ module KnifeSolo
     module InstallCommands
 
       def bootstrap!
-        run_pre_bootstrap_checks()
+        run_pre_bootstrap_checks
         send("#{distro[:type]}_install")
       end
 
@@ -51,8 +55,9 @@ module KnifeSolo
         raise "implement distro detection for #{self.class.name}"
       end
 
+      # gems to install before chef
       def gem_packages
-        raise "implement gem packages for #{self.class.name}"
+        []
       end
 
       def http_client_get_url(url, file)
@@ -70,8 +75,14 @@ module KnifeSolo
         file = File.basename(url)
         http_client_get_url(url, file)
 
-        install_command = "sudo bash #{file} #{prepare.config[:omnibus_options]}"
+        install_command = "sudo bash #{file} #{omnibus_options}"
         stream_command(install_command)
+      end
+
+      def omnibus_options
+        options = prepare.config[:omnibus_options] || ""
+        options << " -v #{chef_version}" if chef_version
+        options
       end
 
       def yum_omnibus_install
@@ -101,7 +112,12 @@ module KnifeSolo
         run_command("tar zxf #{file}")
         run_command("cd #{release} && sudo ruby setup.rb --no-format-executable")
         run_command("sudo rm -rf #{release} #{file}")
-        run_command("sudo gem install --no-rdoc --no-ri #{gem_packages().join(' ')}")
+        run_command("sudo gem install --no-rdoc --no-ri #{gem_packages.join(' ')}") unless gem_packages.empty?
+        run_command("sudo gem install --no-rdoc --no-ri chef #{gem_options}")
+      end
+
+      def gem_options
+        "--version #{chef_version}" if chef_version
       end
     end #InstallCommands
 

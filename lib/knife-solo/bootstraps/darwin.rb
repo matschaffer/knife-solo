@@ -5,10 +5,6 @@ module KnifeSolo::Bootstraps
       run_command("sw_vers -productVersion").stdout.strip
     end
 
-    def gem_packages
-      ['chef']
-    end
-
     def distro
       case issue
       when %r{10.5}

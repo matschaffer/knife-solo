@@ -12,17 +12,13 @@ class SoloPrepareTest < TestCase
     @host = 'someuser@somehost.domain.com'
   end
 
-  def test_combines_omnibus_options
-    in_kitchen do
-      bootstrap_instance = mock('mock OS bootstrap instance')
-      bootstrap_instance.stubs(:bootstrap!)
+  def test_uses_chef_version_from_knife_config
+    Chef::Config[:knife][:bootstrap_version] = "10.12.2"
+    assert_match "10.12.2", command.chef_version
+  end
 
-      run_command = command(@host, "--omnibus-version", "0.10.8-3", "--omnibus-options", "-s")
-      run_command.stubs(:bootstrap).returns(bootstrap_instance)
-      run_command.run
-
-      assert_match "-s -v 0.10.8-3", run_command.config[:omnibus_options]
-    end
+  def test_chef_version_returns_nil_if_empty
+    assert_nil command("--bootstrap-version", "").chef_version
   end
 
   def test_run_raises_if_operating_system_is_not_supported
