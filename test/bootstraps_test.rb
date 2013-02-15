@@ -65,6 +65,7 @@ class BootstrapsTest < TestCase
     bootstrap = bootstrap_instance
     bootstrap.stubs(:distro).returns({:type => "omnibus"})
     bootstrap.stubs(:http_client_get_url)
+    bootstrap.stubs(:chef_version)
 
     options = "-v 10.16.4"
     matcher = regexp_matches(/\s#{Regexp.quote(options)}(\s|$)/)
@@ -72,6 +73,13 @@ class BootstrapsTest < TestCase
     bootstrap.prepare.expects(:stream_command).with(matcher).returns(SuccessfulResult.new)
 
     bootstrap.bootstrap!
+  end
+
+  def test_combines_omnibus_options
+    bootstrap = bootstrap_instance
+    bootstrap.prepare.stubs(:chef_version).returns("0.10.8-3")
+    bootstrap.prepare.stubs(:config).returns({:omnibus_options => "-s"})
+    assert_match "-s -v 0.10.8-3", bootstrap.omnibus_options
   end
 
   def test_passes_gem_version

@@ -75,8 +75,14 @@ module KnifeSolo
         file = File.basename(url)
         http_client_get_url(url, file)
 
-        install_command = "sudo bash #{file} #{prepare.config[:omnibus_options]}"
+        install_command = "sudo bash #{file} #{omnibus_options}"
         stream_command(install_command)
+      end
+
+      def omnibus_options
+        options = prepare.config[:omnibus_options] || ""
+        options << " -v #{chef_version}" if chef_version
+        options
       end
 
       def yum_omnibus_install

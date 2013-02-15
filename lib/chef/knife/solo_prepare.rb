@@ -40,9 +40,6 @@ class Chef
           ui.warn '`--omnibus-version` is deprecated, please use `--bootstrap-version`.'
           Chef::Config[:knife][:bootstrap_version] = config[:omnibus_version]
         end
-        if chef_version
-          config[:omnibus_options] = "#{config[:omnibus_options]} -v #{chef_version}".strip
-        end
 
         validate!
         bootstrap.bootstrap!

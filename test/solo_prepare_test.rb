@@ -21,19 +21,6 @@ class SoloPrepareTest < TestCase
     assert_nil command("--bootstrap-version", "").chef_version
   end
 
-  def test_combines_omnibus_options
-    in_kitchen do
-      bootstrap_instance = mock('mock OS bootstrap instance')
-      bootstrap_instance.stubs(:bootstrap!)
-
-      run_command = command(@host, "--bootstrap-version", "0.10.8-3", "--omnibus-options", "-s")
-      run_command.stubs(:bootstrap).returns(bootstrap_instance)
-      run_command.run
-
-      assert_match "-s -v 0.10.8-3", run_command.config[:omnibus_options]
-    end
-  end
-
   def test_run_raises_if_operating_system_is_not_supported
     in_kitchen do
       run_command = command(@host)
