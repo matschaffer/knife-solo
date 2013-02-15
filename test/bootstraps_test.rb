@@ -6,7 +6,6 @@ class KnifeSolo::Bootstraps::StubOS < KnifeSolo::Bootstraps::Base
 end
 
 class KnifeSolo::Bootstraps::StubOS2 < KnifeSolo::Bootstraps::Base
-  def gem_packages ; ['chef'] ; end
   def distro ; {:type => 'gem', :version => 'Fanny Faker'} ; end
   def gem_install
     # dont' actually install anything
@@ -21,13 +20,7 @@ class BootstrapsTest < TestCase
 
   def test_distro_raises_if_not_implemented
     assert_raises RuntimeError do
-      bootstrap_instance.distro()
-    end
-  end
-
-  def test_gem_packages_raises_if_not_implemented
-    assert_raises RuntimeError do
-      bootstrap_instance.gem_packages()
+      bootstrap_instance.distro
     end
   end
 
@@ -72,6 +65,7 @@ class BootstrapsTest < TestCase
     bootstrap = bootstrap_instance
     bootstrap.stubs(:distro).returns({:type => "omnibus"})
     bootstrap.stubs(:http_client_get_url)
+    bootstrap.stubs(:chef_version)
 
     options = "-v 10.16.4"
     matcher = regexp_matches(/\s#{Regexp.quote(options)}(\s|$)/)
@@ -79,6 +73,25 @@ class BootstrapsTest < TestCase
     bootstrap.prepare.expects(:stream_command).with(matcher).returns(SuccessfulResult.new)
 
     bootstrap.bootstrap!
+  end
+
+  def test_combines_omnibus_options
+    bootstrap = bootstrap_instance
+    bootstrap.prepare.stubs(:chef_version).returns("0.10.8-3")
+    bootstrap.prepare.stubs(:config).returns({:omnibus_options => "-s"})
+    assert_match "-s -v 0.10.8-3", bootstrap.omnibus_options
+  end
+
+  def test_passes_gem_version
+    bootstrap = bootstrap_instance
+    bootstrap.prepare.stubs(:chef_version).returns("10.16.4")
+    assert_equal "--version 10.16.4", bootstrap.gem_options
+  end
+
+  def test_wont_pass_unset_gem_version
+    bootstrap = bootstrap_instance
+    bootstrap.prepare.stubs(:chef_version).returns(nil)
+    assert_equal "", bootstrap.gem_options.to_s
   end
 
   # ***

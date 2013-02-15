@@ -19,7 +19,7 @@ module KnifeSolo::Bootstraps
     end
 
     def gem_packages
-      ['ruby-shadow','chef']
+      ['ruby-shadow']
     end
 
     def emerge_gem_install

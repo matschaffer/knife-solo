@@ -18,6 +18,11 @@ class Chef
 
       banner "knife solo prepare [USER@]HOSTNAME [JSON] (options)"
 
+      option :bootstrap_version,
+        :long        => '--bootstrap-version VERSION',
+        :description => 'The version of Chef to install',
+        :proc        => lambda {|v| Chef::Config[:knife][:bootstrap_version] = v}
+
       option :omnibus_url,
         :long        => '--omnibus-url URL',
         :description => 'URL to download install.sh from'
@@ -28,11 +33,12 @@ class Chef
 
       option :omnibus_version,
         :long        => '--omnibus-version VERSION',
-        :description => 'The version of Omnibus to install'
+        :description => 'Deprecated. Replaced with --bootstrap-check.'
 
       def run
         if config[:omnibus_version]
-          config[:omnibus_options] = "#{config[:omnibus_options]} -v #{config[:omnibus_version]}".strip
+          ui.warn '`--omnibus-version` is deprecated, please use `--bootstrap-version`.'
+          Chef::Config[:knife][:bootstrap_version] = config[:omnibus_version]
         end
 
         validate!
@@ -51,6 +57,11 @@ class Chef
 
       def operating_system
         run_command('uname -s').stdout.strip
+      end
+
+      def chef_version
+        v = Chef::Config[:knife][:bootstrap_version]
+        (v && !v.empty?) ? v : nil
       end
     end
   end
