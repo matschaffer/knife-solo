@@ -122,6 +122,10 @@ class SoloCookTest < TestCase
     assert_chef_solo_option "--why-run", "-W"
   end
 
+  def test_passes_override_runlist_to_chef_solo
+    assert_chef_solo_option "--override-runlist=sandbox::default", "-o sandbox::default"
+  end
+
   # Asserts that the chef_solo_option is passed to chef-solo iff cook_option
   # is specified for the cook command
   def assert_chef_solo_option(cook_option, chef_solo_option)
