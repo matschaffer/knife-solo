@@ -23,6 +23,10 @@ class Chef
         :description => 'The version of Chef to install',
         :proc        => lambda {|v| Chef::Config[:knife][:bootstrap_version] = v}
 
+      option :prerelease,
+        :long        => '--prerelease',
+        :description => 'Install the pre-release Chef version'
+
       option :omnibus_url,
         :long        => '--omnibus-url URL',
         :description => 'URL to download install.sh from'

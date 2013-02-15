@@ -81,7 +81,11 @@ module KnifeSolo
 
       def omnibus_options
         options = prepare.config[:omnibus_options] || ""
-        options << " -v #{chef_version}" if chef_version
+        if prepare.config[:prerelease]
+          options << " -p"
+        elsif chef_version
+          options << " -v #{chef_version}"
+        end
         options
       end
 
@@ -117,7 +121,11 @@ module KnifeSolo
       end
 
       def gem_options
-        "--version #{chef_version}" if chef_version
+        if prepare.config[:prerelease]
+          "--prerelease"
+        elsif chef_version
+          "--version #{chef_version}"
+        end
       end
     end #InstallCommands
 
