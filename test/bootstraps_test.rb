@@ -14,8 +14,8 @@ end
 
 class BootstrapsTest < TestCase
   def test_bootstrap_class_exists_for
-    assert_equal true, KnifeSolo::Bootstraps.class_exists_for?('Stub OS')
-    assert_equal false, KnifeSolo::Bootstraps.class_exists_for?('Mythical OS')
+    assert KnifeSolo::Bootstraps.class_exists_for?('Stub OS')
+    refute KnifeSolo::Bootstraps.class_exists_for?('Mythical OS')
   end
 
   def test_distro_raises_if_not_implemented
@@ -40,8 +40,7 @@ class BootstrapsTest < TestCase
   def test_bootstrap_delegates_to_knife_prepare
     prepare = mock('chef::knife::prepare')
     bootstrap = KnifeSolo::Bootstraps::StubOS2.new(prepare)
-
-    assert prepare == bootstrap.prepare
+    assert_equal prepare, bootstrap.prepare
   end
 
   def test_darwin_checks_for_xcode_install_and_barfs_if_missing
@@ -79,7 +78,7 @@ class BootstrapsTest < TestCase
     bootstrap = bootstrap_instance
     bootstrap.prepare.stubs(:chef_version).returns("0.10.8-3")
     bootstrap.prepare.stubs(:config).returns({:omnibus_options => "-s"})
-    assert_match "-s -v 0.10.8-3", bootstrap.omnibus_options
+    assert_equal "-s -v 0.10.8-3", bootstrap.omnibus_options
   end
 
   def test_passes_gem_version
