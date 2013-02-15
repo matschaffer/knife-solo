@@ -12,12 +12,23 @@ class SoloPrepareTest < TestCase
     @host = 'someuser@somehost.domain.com'
   end
 
+  def test_uses_local_chef_version_by_default
+    Chef::Config[:knife][:bootstrap_version] = nil
+    assert_equal Chef::VERSION, command.chef_version
+  end
+
   def test_uses_chef_version_from_knife_config
     Chef::Config[:knife][:bootstrap_version] = "10.12.2"
-    assert_match "10.12.2", command.chef_version
+    assert_equal "10.12.2", command.chef_version
+  end
+
+  def test_uses_chef_version_from_command_line_option
+    Chef::Config[:knife][:bootstrap_version] = "10.16.2"
+    assert_equal "0.4.2", command("--bootstrap-version", "0.4.2").chef_version
   end
 
   def test_chef_version_returns_nil_if_empty
+    Chef::Config[:knife][:bootstrap_version] = "10.12.2"
     assert_nil command("--bootstrap-version", "").chef_version
   end
 

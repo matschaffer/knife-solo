@@ -72,14 +72,7 @@ class IntegrationTest < TestCase
 
   # The prepare command to use on this server
   def prepare_command
-    "prepare #{omnibus_options}"
-  end
-
-  def omnibus_options
-    return "" if ENV['CHEF_VERSION'].to_s.empty?
-
-    v = `knife --version`.split(':')
-    v[0].strip == 'Chef' ? "--bootstrap-version=#{v[1].strip}" : ''
+    "prepare"
   end
 
   # Provides the path to the runner's key file
