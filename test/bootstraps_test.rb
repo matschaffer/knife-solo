@@ -74,6 +74,18 @@ class BootstrapsTest < TestCase
     bootstrap.bootstrap!
   end
 
+  def test_passes_gem_version
+    bootstrap = bootstrap_instance
+    bootstrap.prepare.stubs(:chef_version).returns("10.16.4")
+    assert_equal "--version 10.16.4", bootstrap.gem_options
+  end
+
+  def test_wont_pass_unset_gem_version
+    bootstrap = bootstrap_instance
+    bootstrap.prepare.stubs(:chef_version).returns(nil)
+    assert_equal "", bootstrap.gem_options.to_s
+  end
+
   # ***
 
   def bootstrap_instance

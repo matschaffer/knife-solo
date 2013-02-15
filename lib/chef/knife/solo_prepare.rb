@@ -40,8 +40,8 @@ class Chef
           ui.warn '`--omnibus-version` is deprecated, please use `--bootstrap-version`.'
           Chef::Config[:knife][:bootstrap_version] = config[:omnibus_version]
         end
-        if Chef::Config[:knife][:bootstrap_version]
-          config[:omnibus_options] = "#{config[:omnibus_options]} -v #{Chef::Config[:knife][:bootstrap_version]}".strip
+        if chef_version
+          config[:omnibus_options] = "#{config[:omnibus_options]} -v #{chef_version}".strip
         end
 
         validate!
@@ -60,6 +60,11 @@ class Chef
 
       def operating_system
         run_command('uname -s').stdout.strip
+      end
+
+      def chef_version
+        v = Chef::Config[:knife][:bootstrap_version]
+        (v && !v.empty?) ? v : nil
       end
     end
   end

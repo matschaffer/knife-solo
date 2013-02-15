@@ -12,6 +12,15 @@ class SoloPrepareTest < TestCase
     @host = 'someuser@somehost.domain.com'
   end
 
+  def test_uses_chef_version_from_knife_config
+    Chef::Config[:knife][:bootstrap_version] = "10.12.2"
+    assert_match "10.12.2", command.chef_version
+  end
+
+  def test_chef_version_returns_nil_if_empty
+    assert_nil command("--bootstrap-version", "").chef_version
+  end
+
   def test_combines_omnibus_options
     in_kitchen do
       bootstrap_instance = mock('mock OS bootstrap instance')

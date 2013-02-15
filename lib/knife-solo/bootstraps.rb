@@ -35,6 +35,10 @@ module KnifeSolo
         prepare.ui
       end
 
+      def chef_version
+        prepare.chef_version
+      end
+
       def prepare
         @prepare
       end
@@ -103,7 +107,11 @@ module KnifeSolo
         run_command("cd #{release} && sudo ruby setup.rb --no-format-executable")
         run_command("sudo rm -rf #{release} #{file}")
         run_command("sudo gem install --no-rdoc --no-ri #{gem_packages.join(' ')}") unless gem_packages.empty?
-        run_command("sudo gem install --no-rdoc --no-ri chef")
+        run_command("sudo gem install --no-rdoc --no-ri chef #{gem_options}")
+      end
+
+      def gem_options
+        "--version #{chef_version}" if chef_version
       end
     end #InstallCommands
 
