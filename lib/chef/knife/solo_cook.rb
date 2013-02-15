@@ -51,6 +51,11 @@ class Chef
         :long        => '--why-run',
         :description => 'Enable whyrun mode'
 
+      option :override_runlist,
+        :short       => '-o RunlistItem,RunlistItem...,',
+        :long        => '--override-runlist',
+        :description => 'Replace current run list with specified items'
+
       def run
         @solo_config = KnifeSolo::Config.new
 
@@ -177,6 +182,7 @@ class Chef
         cmd << " -l debug" if debug?
         cmd << " -N #{config[:chef_node_name]}" if config[:chef_node_name]
         cmd << " -W" if config[:why_run]
+        cmd << " -o #{config[:override_runlist]}" if config[:override_runlist]
 
         result = stream_command cmd
         raise "chef-solo failed. See output above." unless result.success?
