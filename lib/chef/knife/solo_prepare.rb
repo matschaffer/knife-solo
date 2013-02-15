@@ -60,8 +60,11 @@ class Chef
       end
 
       def chef_version
-        v = Chef::Config[:knife][:bootstrap_version]
-        (v && !v.empty?) ? v : nil
+        if (v = Chef::Config[:knife][:bootstrap_version])
+          v.empty? ? nil : v
+        else
+          Chef::VERSION
+        end
       end
     end
   end
