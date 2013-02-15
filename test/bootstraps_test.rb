@@ -81,10 +81,24 @@ class BootstrapsTest < TestCase
     assert_equal "-s -v 0.10.8-3", bootstrap.omnibus_options
   end
 
+  def test_passes_prerelease_omnibus_version
+    bootstrap = bootstrap_instance
+    bootstrap.prepare.stubs(:chef_version).returns("10.18.3")
+    bootstrap.prepare.stubs(:config).returns({:prerelease => true})
+    assert_equal "-p", bootstrap.omnibus_options.strip
+  end
+
   def test_passes_gem_version
     bootstrap = bootstrap_instance
     bootstrap.prepare.stubs(:chef_version).returns("10.16.4")
     assert_equal "--version 10.16.4", bootstrap.gem_options
+  end
+
+  def test_passes_prereleaes_gem_version
+    bootstrap = bootstrap_instance
+    bootstrap.prepare.stubs(:chef_version).returns("10.18.1")
+    bootstrap.prepare.stubs(:config).returns({:prerelease => true})
+    assert_equal "--prerelease", bootstrap.gem_options
   end
 
   def test_wont_pass_unset_gem_version
@@ -97,6 +111,7 @@ class BootstrapsTest < TestCase
 
   def bootstrap_instance
     prepare = mock('Knife::Chef::SoloPrepare')
+    prepare.stubs(:config).returns({})
     KnifeSolo::Bootstraps::StubOS.new(prepare)
   end
 end
