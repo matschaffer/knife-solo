@@ -17,7 +17,7 @@ class SoloPrepareTest < TestCase
       bootstrap_instance = mock('mock OS bootstrap instance')
       bootstrap_instance.stubs(:bootstrap!)
 
-      run_command = command(@host, "--omnibus-version", "0.10.8-3", "--omnibus-options", "-s")
+      run_command = command(@host, "--bootstrap-version", "0.10.8-3", "--omnibus-options", "-s")
       run_command.stubs(:bootstrap).returns(bootstrap_instance)
       run_command.run
 
