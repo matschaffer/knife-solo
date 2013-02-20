@@ -1,5 +1,23 @@
 # 0.3.0: _In progress_
 
+## Changes and new features
+
+* Moved root path configuration into `knife[:solo_path]` and use $HOME/chef-solo by default (#197)
+* `--prerelease` option to allow pre-release versions of chef omnibus or rubygem to be installed (#205)
+* Prepare/bootstrap now installs the same version of Chef that the workstation is running (#186)
+* Switch `--omnibus-version` flag to `--bootstrap-version` (#185)
+* Support --override-runlist option (#204)
+
+## Fixes
+
+* FreeBSD 9.1 support
+* Clear yum cache before installing rsync (#200)
+
+## Thanks to our contributors!
+
+* [David Kinzer][dkinzer]
+* [Naoya Ito][naoya]
+
 # 0.2.0: February 12, 2013
 
 ## Changes and new features
@@ -276,3 +294,5 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [tmatilai]:      https://github.com/tmatilai
 [vjpr]:          https://github.com/vjpr
 [zeph]:          https://github.com/zeph
+[dkinzer]:       https://github.com/dkinzer
+[naoya]:         https://github.com/naoya
