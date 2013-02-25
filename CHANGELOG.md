@@ -1,4 +1,4 @@
-# 0.3.0: _In progress_
+# 0.3.0 / _In progress_
 
 ## Changes and new features
 
@@ -18,7 +18,7 @@
 * [David Kinzer][dkinzer]
 * [Naoya Ito][naoya]
 
-# 0.2.0: February 12, 2013
+# 0.2.0 / 2013-02-12
 
 ## Changes and new features
 
@@ -55,7 +55,7 @@
 * [Shaun Dern][smdern]
 * [Mike Bain][TheAlphaTester]
 
-# 0.1.0: January 12, 2013
+# 0.1.0 / 2013-01-12
 
 ## Changes and new features
 
@@ -92,7 +92,7 @@
 * [Hiten Parmar][hrp]
 * [Patrick Connolly][patcon]
 
-# 0.0.15: November 29th, 2012
+# 0.0.15 / 2012-11-29
 
 * Support for non-x86 omnibus (#137)
 * Validate hostname in wash\_up (7a9115)
@@ -118,7 +118,7 @@
 
 And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of direct colaborators!
 
-# 0.0.14: September 21st, 2012
+# 0.0.14 / 2012-09-21
 
 * Fix argument checks (#101)
 * Allow custom omnibus URLs (#99)
@@ -130,7 +130,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 * [Ryan Walker][ryandub]
 * [Aaron Cruz][pferdefleisch]
 
-# 0.0.13: August 16th, 2012
+# 0.0.13 / 2012-08-16
 
 * Less agressive in-kitchen check (36a14161a1c)
 * New curl/wget selection during omnibus install (#84)
@@ -143,7 +143,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 * [Deepak Kannan][deepak]
 * [Florian Unglaub][funglaub]
 
-# 0.0.12: June 25th, 2012
+# 0.0.12 / 2012-06-25
 
 * Better validation on CLI args (#68, #70)
 * Switch from wget to curl (#66)
@@ -156,7 +156,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 * [Greg Fitzgerald][gregf]
 * [Deepak Kannan][deepak]
 
-# 0.0.11: June 16th, 2012
+# 0.0.11 / 2012-06-16
 
 * Encrypted data bag support (#22)
 * Updated dependency version (#63, #64)
@@ -168,7 +168,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 * [Hector Castro][hectcastro]
 * [Sean Porter][portertech]
 
-# 0.0.10: May 30th, 2012
+# 0.0.10 / 2012-05-30
 
 * Include apache recipe during integration testing (#17)
 * Use omnibus installer on Ubuntu and RedHat (#40, #45, #58)
@@ -183,7 +183,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 * [Justin Grevich][jgrevich]
 * [Ross Timson][rosstimson]
 
-# 0.0.9: May 13th, 2012
+# 0.0.9 / 2012-05-13
 
 * Chef 0.10.10 compatibility (b0fa50e9)
 * Finished support and integration testing for remaining key OSes (Issues #2 and #15)
@@ -199,7 +199,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 * [Tyler Rick][TylerRick]
 * [Motiejus Jakštys][Motiejus]
 
-# 0.0.8: February 10, 2012
+# 0.0.8 / 2012-02-10
 
 * Add --startup-script which gets sourced before any command to setup env vars (e.g., ~/.bashrc) (d1489f94)
 * Use curl + rpm rather than rpm against direct URL for better proxy support (51ad9c51)
@@ -214,13 +214,13 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 * [Jason Garber][jgarber]
 * [Greg Sterndale][gsterndale]
 
-# 0.0.7: Dec 9, 2011
+# 0.0.7 / 2011-12-09
 
 * BUG #9: Fix intelligent sudo handling for OSes that don't have it
 * Move integration tests into proper test cases
 * CentOS 5.6 integration test
 
-# 0.0.6: Dec 8, 2011
+# 0.0.6 / 2011-12-08
 
 * Support for Mac OS 10.5 and 10.6 (00921ebd1b93)
 * Parallel integration testing and SLES (167360d447..167360d447)
@@ -231,13 +231,13 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 * [Sergio Rubio][rubiojr]
 * [Nat Lownes][natlownes]
 
-# 0.0.5: Oct 31, 2011
+# 0.0.5 / 2011-10-31
 
 * Started on integration testing via EC2
 * Add openSuSE support. Installation via zypper. (64ff2edf42)
 * Upgraded Rubygems to 1.8.10 (8ac1f4d43a)
 
-# 0.0.4: Oct 7, 2011
+# 0.0.4 / 2011-10-07
 
 * Chef 0.10.4 based databag and search method (a800880e6d)
 * Proper path for roles (b143ae290a)
@@ -247,7 +247,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 
 * [John Dewey][retr0h]
 
-# 0.0.3: July 31, 2011
+# 0.0.3 / 2011-07-31
 
 * Kitchen directory generation
 * Prepare tested on ubuntu
