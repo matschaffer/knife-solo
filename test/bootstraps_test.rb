@@ -43,16 +43,6 @@ class BootstrapsTest < TestCase
     assert_equal prepare, bootstrap.prepare
   end
 
-  def test_darwin_checks_for_xcode_install_and_barfs_if_missing
-    bootstrap = KnifeSolo::Bootstraps::Darwin.new(mock)
-    bootstrap.stubs(:gem_install)
-    bootstrap.expects(:has_xcode_installed?).returns(false)
-
-    assert_raises RuntimeError do
-      bootstrap.bootstrap!
-    end
-  end
-
   def test_omnibus_install_methdod
     bootstrap = bootstrap_instance
     bootstrap.stubs(:distro).returns({:type => "omnibus"})
