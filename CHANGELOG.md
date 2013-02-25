@@ -11,6 +11,7 @@
 ## Fixes
 
 * FreeBSD 9.1 support
+* OS X (especially 10.8) support (#209, #210)
 * Clear yum cache before installing rsync (#200)
 
 ## Thanks to our contributors!
@@ -269,6 +270,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [btm]:           https://github.com/btm
 [davidsch]:      https://github.com/davidsch
 [deepak]:        https://github.com/deepak
+[dkinzer]:       https://github.com/dkinzer
 [fnichol]:       https://github.com/fnichol
 [funglaub]:      https://github.com/funglaub
 [gregf]:         https://github.com/gregf
@@ -277,6 +279,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [hrp]:           https://github.com/hrp
 [jgarber]:       https://github.com/jgarber
 [jgrevich]:      https://github.com/jgrevich
+[naoya]:         https://github.com/naoya
 [natlownes]:     https://github.com/natlownes
 [patatepartie]:  https://github.com/patatepartie
 [patcon]:        https://github.com/patcon
@@ -294,5 +297,3 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [tmatilai]:      https://github.com/tmatilai
 [vjpr]:          https://github.com/vjpr
 [zeph]:          https://github.com/zeph
-[dkinzer]:       https://github.com/dkinzer
-[naoya]:         https://github.com/naoya
