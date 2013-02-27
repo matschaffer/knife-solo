@@ -42,6 +42,24 @@ module KnifeSolo::Bootstraps
       gem_install
     end
 
+    def debianoid_omnibus_install
+      omnibus_install
+      # Update to avoid out-of-date package caches
+      run_command("sudo apt-get update")
+      # Make sure we have rsync on builds that don't include it by default
+      # (for example linode's ubuntu 10.04 images)
+      run_command("sudo apt-get -y install rsync")
+    end
+
+    def yum_omnibus_install
+      omnibus_install
+      # Avoid rsync not being found in package cache.
+      run_command("sudo yum clean all")
+      # Make sure we have rsync on builds that don't include it by default
+      # (for example Scientific Linux minimal, CentOS minimal)
+      run_command("sudo yum -y install rsync")
+    end
+
     def distro
       return @distro if @distro
       @distro = case issue
