@@ -28,7 +28,7 @@ module KnifeSolo::Bootstraps
       gem_install
     end
 
-    def debian_gem_install
+    def debianoid_gem_install
       ui.msg "Updating apt caches..."
       run_command("sudo apt-get update")
 
@@ -64,13 +64,13 @@ module KnifeSolo::Bootstraps
       return @distro if @distro
       @distro = case issue
       when %r{Debian GNU/Linux 6}
-        {:type => (x86? ? "debianoid_omnibus" : "debian_gem"), :version => "squeeze"}
+        {:type => (x86? ? "debianoid_omnibus" : "debianoid_gem"), :version => "squeeze"}
       when %r{Debian}
-        {:type => "debian_gem", :version => lsb_release_codename}
+        {:type => "debianoid_gem", :version => lsb_release_codename}
       when %r{Ubuntu}i
-        {:type => (x86? ? "debianoid_omnibus" : "debian_gem"), :version => lsb_release_codename}
+        {:type => (x86? ? "debianoid_omnibus" : "debianoid_gem"), :version => lsb_release_codename}
       when %r{Linaro}
-        {:type => "debian_gem", :version => lsb_release_codename}
+        {:type => "debianoid_gem", :version => lsb_release_codename}
       when %r{CentOS.*? 5}
         {:type => "yum_omnibus", :version => "RHEL5"}
       when %r{CentOS.*? 6}
