@@ -10,10 +10,6 @@ module KnifeSolo::Bootstraps
       %w{i686 x86 x86_64}.include?(machine)
     end
 
-    def lsb_release_codename
-      run_command("lsb_release -cs").stdout.strip
-    end
-
     def package_list
       @packages.join(' ')
     end
@@ -64,39 +60,39 @@ module KnifeSolo::Bootstraps
       return @distro if @distro
       @distro = case issue
       when %r{Debian GNU/Linux 6}
-        {:type => (x86? ? "debianoid_omnibus" : "debianoid_gem"), :version => "squeeze"}
+        {:type => (x86? ? "debianoid_omnibus" : "debianoid_gem")}
       when %r{Debian}
-        {:type => "debianoid_gem", :version => lsb_release_codename}
+        {:type => "debianoid_gem"}
       when %r{Ubuntu}i
-        {:type => (x86? ? "debianoid_omnibus" : "debianoid_gem"), :version => lsb_release_codename}
+        {:type => (x86? ? "debianoid_omnibus" : "debianoid_gem")}
       when %r{Linaro}
-        {:type => "debianoid_gem", :version => lsb_release_codename}
+        {:type => "debianoid_gem"}
       when %r{CentOS.*? 5}
-        {:type => "yum_omnibus", :version => "RHEL5"}
+        {:type => "yum_omnibus"}
       when %r{CentOS.*? 6}
-        {:type => "yum_omnibus", :version => "RHEL6"}
+        {:type => "yum_omnibus"}
       when %r{Amazon Linux}
-        {:type => "yum_omnibus", :version => "RHEL6"}
+        {:type => "yum_omnibus"}
       when %r{Red Hat Enterprise.*? 5}
-        {:type => "yum_omnibus", :version => "RHEL5"}
+        {:type => "yum_omnibus"}
       when %r{Red Hat Enterprise.*? 6}
-        {:type => "yum_omnibus", :version => "RHEL6"}
+        {:type => "yum_omnibus"}
       when %r{Fedora release.*? 15}
-        {:type => "yum_omnibus", :version => "FC15"}
+        {:type => "yum_omnibus"}
       when %r{Fedora release.*? 16}
-        {:type => "yum_omnibus", :version => "FC16"}
+        {:type => "yum_omnibus"}
       when %r{Fedora release.*? 17}
-        {:type => "yum_omnibus", :version => "FC17"}
+        {:type => "yum_omnibus"}
       when %r{Scientific Linux.*? 5}
-        {:type => "yum_omnibus", :version => "RHEL5"}
+        {:type => "yum_omnibus"}
       when %r{Scientific Linux.*? 6}
-        {:type => "yum_omnibus", :version => "RHEL6"}
+        {:type => "yum_omnibus"}
       when %r{SUSE Linux Enterprise Server 1[12]}
-        {:type => "omnibus", :version => "SLES11"}
+        {:type => "omnibus"}
       when %r{openSUSE 1[12]}
-        {:type => "omnibus", :version => "openSUSE"}
+        {:type => "omnibus"}
       when %r{This is \\n\.\\O \(\\s \\m \\r\) \\t}
-        {:type => "emerge_gem", :version => "Gentoo"}
+        {:type => "emerge_gem"}
       else
         raise "Distro not recognized from looking at /etc/issue. Please fork https://github.com/matschaffer/knife-solo and add support for your distro."
       end
