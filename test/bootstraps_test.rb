@@ -6,7 +6,10 @@ class KnifeSolo::Bootstraps::StubOS < KnifeSolo::Bootstraps::Base
 end
 
 class KnifeSolo::Bootstraps::StubOS2 < KnifeSolo::Bootstraps::Base
-  def distro ; {:type => 'gem', :version => 'Fanny Faker'} ; end
+  def distro
+    {:type => 'gem'}
+  end
+
   def gem_install
     # dont' actually install anything
   end
