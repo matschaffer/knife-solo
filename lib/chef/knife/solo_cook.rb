@@ -112,7 +112,7 @@ class Chef
       end
 
       def rsync_excludes
-        (%w{revision-deploys tmp .git .hg} + chefignore.ignores).uniq
+        (%w{revision-deploys tmp .git .hg .svn .bzr} + chefignore.ignores).uniq
       end
 
       def debug?
