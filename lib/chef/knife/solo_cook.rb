@@ -60,7 +60,6 @@ class Chef
         @solo_config = KnifeSolo::Config.new
 
         time('Run') do
-          ui.msg "Running Chef on #{host}..."
 
           if config[:skip_chef_check]
             ui.warn '`--skip-chef-check` is deprecated, please use `--no-chef-check`.'
@@ -68,6 +67,9 @@ class Chef
           end
 
           validate!
+
+          ui.msg "Running Chef on #{host}..."
+
           check_chef_version if config[:chef_check]
           generate_node_config
           librarian_install if config[:librarian]
