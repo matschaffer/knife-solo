@@ -37,6 +37,7 @@ class Chef
       end
 
       def create_cupboards(dirs)
+        ui.msg "Creating cupboards..."
         dirs.each do |dir|
           cupboard_dir = File.join(@base, dir)
           unless File.exist?(cupboard_dir)
@@ -47,10 +48,12 @@ class Chef
       end
 
       def create_kitchen
+        ui.msg "Creating kitchen..."
         mkdir @base unless @base == '.'
       end
 
       def librarian_init
+        ui.msg "Setting up Librarian..."
         cheffile = File.join(@base, 'Cheffile')
         unless File.exist?(cheffile)
           File.open(cheffile, 'w') do |f|

@@ -60,12 +60,16 @@ class Chef
         @solo_config = KnifeSolo::Config.new
 
         time('Run') do
+
           if config[:skip_chef_check]
             ui.warn '`--skip-chef-check` is deprecated, please use `--no-chef-check`.'
             config[:chef_check] = false
           end
 
           validate!
+
+          ui.msg "Running Chef on #{host}..."
+
           check_chef_version if config[:chef_check]
           generate_node_config
           librarian_install if config[:librarian]
@@ -130,7 +134,7 @@ class Chef
 
       def librarian_install
         return unless File.exist? 'Cheffile'
-        Chef::Log.debug("Installing Librarian cookbooks")
+        ui.msg "Installing Librarian cookbooks..."
         Librarian::Action::Resolve.new(librarian_env).run
         Librarian::Action::Install.new(librarian_env).run
       end
@@ -140,12 +144,14 @@ class Chef
       end
 
       def rsync_kitchen
+        ui.msg "Syncing kitchen..."
         time('Rsync kitchen') do
           rsync('./', chef_path, '--delete')
         end
       end
 
       def add_patches
+        ui.msg "Adding patches..."
         run_portable_mkdir_p(patch_path)
         Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb").to_s].each do |patch|
           time(patch) do
@@ -155,6 +161,7 @@ class Chef
       end
 
       def add_solo_config
+        ui.msg "Syncing solo config..."
         rsync(KnifeSolo.resource('solo.rb'), chef_path)
       end
 
@@ -178,6 +185,7 @@ class Chef
       end
 
       def cook
+        ui.msg "Running Chef..."
         cmd = "sudo chef-solo -c #{chef_path}/solo.rb -j #{chef_path}/#{node_config}"
         cmd << " -l debug" if debug?
         cmd << " -N #{config[:chef_node_name]}" if config[:chef_node_name]
