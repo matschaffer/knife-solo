@@ -4,7 +4,10 @@ require 'knife-solo'
 require 'knife-solo/ssh_command'
 require 'knife-solo/node_config_command'
 require 'knife-solo/tools'
-require 'knife-solo/config'
+
+require 'tempfile'
+require 'erubis'
+require 'chef/config'
 
 class Chef
   class Knife
@@ -56,9 +59,12 @@ class Chef
         :long        => '--override-runlist',
         :description => 'Replace current run list with specified items'
 
-      def run
-        @solo_config = KnifeSolo::Config.new
+      option :provisioning_path,
+        :long        => '--provisioning-path path',
+        :description => 'Where to store kitchen data on the node',
+        :default     => './chef-solo'
 
+      def run
         time('Run') do
 
           if config[:skip_chef_check]
@@ -73,21 +79,45 @@ class Chef
           check_chef_version if config[:chef_check]
           generate_node_config
           librarian_install if config[:librarian]
-          rsync_kitchen
-          add_patches
-          add_solo_config unless using_custom_solorb?
+          sync_kitchen
+          generate_solorb
           cook unless config[:sync_only]
         end
       end
 
-      def_delegators :@solo_config,
-        :chef_path,
-        :using_custom_solorb?,
-        :patch_path
+      def provisioning_path
+        config[:provisioning_path]
+      end
+
+      def sync_kitchen
+        run_portable_mkdir_p(provisioning_path)
+
+        cookbook_paths.each do |path|
+          upload(path, provisioning_path)
+        end
+
+        upload(role_path, provisioning_path + '/roles')
+        upload(nodes_path, provisioning_path + '/nodes')
+        upload(data_bag_path, provisioning_path + '/data_bags')
+        upload(encrypted_data_bag_secret, provisioning_path + '/data_bag_key') if encrypted_data_bag_secret
+      end
+
+      # TODO should watch for name collision here
+      def cookbook_paths
+        Chef::Config.cookbook_path + [KnifeSolo.resource('patch_cookbooks')]
+      end
+
+      def nodes_path
+        'nodes'
+      end
+
+      def_delegators 'Chef::Config',
+        :role_path,
+        :data_bag_path,
+        :encrypted_data_bag_secret
 
       def validate!
         validate_ssh_options!
-        @solo_config.validate!
       end
 
       def chefignore
@@ -143,29 +173,27 @@ class Chef
         @librarian_env ||= Librarian::Chef::Environment.new
       end
 
-      def rsync_kitchen
-        ui.msg "Syncing kitchen..."
-        time('Rsync kitchen') do
-          rsync('./', chef_path, '--delete')
-        end
+      def generate_solorb
+        ui.msg "Generating solo config..."
+        template = Erubis::Eruby.new(KnifeSolo.resource('solo.rb.erb').read)
+        write(template.result(binding), provisioning_path + '/solo.rb')
       end
 
-      def add_patches
-        ui.msg "Adding patches..."
-        run_portable_mkdir_p(patch_path)
-        Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb").to_s].each do |patch|
-          time(patch) do
-            rsync(patch, patch_path)
-          end
-        end
+      def upload(src, dest)
+        rsync(src, dest)
       end
 
-      def add_solo_config
-        ui.msg "Syncing solo config..."
-        rsync(KnifeSolo.resource('solo.rb'), chef_path)
+      # TODO probably can get Net::SSH to do this directly
+      def write(content, dest)
+        file = Tempfile.new(File.basename(dest))
+        file.write(content)
+        file.close
+        upload(file.path, dest)
+      ensure
+        file.unlink
       end
 
-      def rsync(source_path, target_path, extra_opts = '')
+      def rsync(source_path, target_path, extra_opts = '--delete')
         cmd = %Q{rsync -rl #{rsync_permissions} --rsh="ssh #{ssh_args}" #{extra_opts} #{rsync_excludes.collect{ |ignore| "--exclude #{ignore} " }.join} #{adjust_rsync_path_on_client(source_path)} :#{adjust_rsync_path_on_node(target_path)}}
         ui.msg cmd if debug?
         system! cmd
@@ -186,7 +214,7 @@ class Chef
 
       def cook
         ui.msg "Running Chef..."
-        cmd = "sudo chef-solo -c #{chef_path}/solo.rb -j #{chef_path}/#{node_config}"
+        cmd = "sudo chef-solo -c #{provisioning_path}/solo.rb -j #{provisioning_path}/#{node_config}"
         cmd << " -l debug" if debug?
         cmd << " -N #{config[:chef_node_name]}" if config[:chef_node_name]
         cmd << " -W" if config[:why_run]

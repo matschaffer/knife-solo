@@ -1,0 +1,3 @@
+[submodule "lib/knife-solo/resources/patch_cookbook/chef-solo-search"]
+	path = lib/knife-solo/resources/patch_cookbook/chef-solo-search
+	url = https://github.com/edelight/chef-solo-search.git
