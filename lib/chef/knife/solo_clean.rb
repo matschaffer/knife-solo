@@ -1,7 +1,6 @@
 require 'chef/knife'
 
 require 'knife-solo/ssh_command'
-require 'knife-solo/config'
 
 class Chef
   class Knife
@@ -10,10 +9,15 @@ class Chef
 
       banner "knife solo clean [USER@]HOSTNAME"
 
+      option :provisioning_path,
+        :long        => '--provisioning-path path',
+        :description => 'Where to store kitchen data on the node',
+        :default     => '~/chef-solo'
+        # TODO de-duplicate this option with solo cook
+
       def run
-        @solo_config = KnifeSolo::Config.new
         validate!
-        run_command "rm -rf #{@solo_config.chef_path}"
+        run_command "rm -rf #{config[:provisioning_path]}"
       end
 
       def validate!

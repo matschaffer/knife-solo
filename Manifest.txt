@@ -17,7 +17,6 @@ lib/knife-solo/bootstraps/darwin.rb
 lib/knife-solo/bootstraps/freebsd.rb
 lib/knife-solo/bootstraps/linux.rb
 lib/knife-solo/bootstraps/sun_os.rb
-lib/knife-solo/config.rb
 lib/knife-solo/deprecated_command.rb
 lib/knife-solo/gitignore.rb
 lib/knife-solo/info.rb
@@ -47,7 +46,6 @@ test/integration/ubuntu10_04_test.rb
 test/integration/ubuntu12_04_bootstrap_test.rb
 test/integration/ubuntu12_04_test.rb
 test/integration_helper.rb
-test/knife-solo/config_test.rb
 test/minitest/parallel.rb
 test/node_config_command_test.rb
 test/solo_bootstrap_test.rb
