@@ -56,8 +56,11 @@ class Chef
 
       def create_config
         ui.msg "Creating knife.rb in kitchen..."
-        mkdir File.join(@base, '.chef')
-        FileUtils.cp(KnifeSolo.resource('knife.rb'), File.join(@base, '.chef', 'knife.rb'))
+        mkdir_p File.join(@base, '.chef')
+        knife_rb = File.join(@base, '.chef', 'knife.rb')
+        unless File.exist?(knife_rb)
+          cp KnifeSolo.resource('knife.rb'), knife_rb
+        end
       end
 
       def librarian_init
