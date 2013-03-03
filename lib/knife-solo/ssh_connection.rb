@@ -2,6 +2,9 @@ require 'net/ssh'
 
 module KnifeSolo
   class SshConnection
+    # Custom exception for malformed argument strings
+    class ArgumentError < ::ArgumentError; end
+
     attr_reader :user, :host, :options
 
     # Creates a new ssh connection.
@@ -35,7 +38,15 @@ module KnifeSolo
       options[:password] || options[:password_prompter].call
     end
 
-    class ArgumentError < ::ArgumentError; end
+    # A string of arguments formatted for use with an openssh client
+    def ssh_args
+      host_arg = [user, host].compact.join('@')
+      config_arg = "-F #{options[:configfile]}" if options[:configfile]
+      ident_arg = "-i #{options[:identity_file]}" if options[:identity_file]
+      port_arg = "-p #{options[:port]}" if options[:port]
+
+      [host_arg, config_arg, ident_arg, port_arg].compact.join(' ')
+    end
 
     private
 

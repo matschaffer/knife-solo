@@ -45,6 +45,20 @@ class SshConnectionTest < TestCase
     assert_equal "testpassword", conn.password
   end
 
+  def test_builds_openssh_argument_string
+    conn = connection("10.0.0.1")
+    assert_equal "#{ENV['USER']}@10.0.0.1", conn.ssh_args
+
+    conn = connection("usertest@10.0.0.1", :configfile => 'myconfig')
+    assert_equal "usertest@10.0.0.1 -F myconfig", conn.ssh_args
+
+    conn = connection("usertest@10.0.0.1", :identity_file => 'my_rsa')
+    assert_equal "usertest@10.0.0.1 -i my_rsa", conn.ssh_args
+
+    conn = connection("usertest@10.0.0.1", :port => '222')
+    assert_equal "usertest@10.0.0.1 -p 222", conn.ssh_args
+  end
+
   def connection(*args)
     KnifeSolo::SshConnection.new(*args)
   end
