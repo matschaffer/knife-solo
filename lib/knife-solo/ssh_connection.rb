@@ -19,6 +19,11 @@ module KnifeSolo
       @user = options[:user] || config_file_options[:user] || ENV['USER'] || 'root'
     end
 
+    def password
+      return @password unless @password.nil?
+      options[:password] || options[:password_prompter].call
+    end
+
     class ArgumentError < ::ArgumentError; end
 
     private

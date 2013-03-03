@@ -40,6 +40,11 @@ class SshConnectionTest < TestCase
     end
   end
 
+  def test_uses_password_prompter_option_if_password_is_not_available
+    conn = connection("10.0.0.1", :password_prompter => lambda { 'testpassword' })
+    assert_equal "testpassword", conn.password
+  end
+
   def connection(*args)
     KnifeSolo::SshConnection.new(*args)
   end
