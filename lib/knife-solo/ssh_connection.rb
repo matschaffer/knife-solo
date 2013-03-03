@@ -7,22 +7,28 @@ module KnifeSolo
     def initialize(target, options = {})
       @options = options
       @user, @host = parse_connection_target(target)
+    end
 
-      set_default_user
-      set_default_host
+    def host
+      return @host unless @host.nil?
+      @host = 'localhost'
+    end
+
+    def user
+      return @user unless @user.nil?
+      @user = options[:user] || config_file_options[:user] || ENV['USER'] || 'root'
     end
 
     class ArgumentError < ::ArgumentError; end
 
     private
 
-    def set_default_user
-      @user = @options.fetch(:user, '') if @user.empty?
-      @user = ENV.fetch('USER', '') if @user.empty?
+    def config_files
+      Array(options[:configfile]) + Net::SSH::Config.default_files
     end
 
-    def set_default_host
-      @host = 'localhost' if @host.empty?
+    def config_file_options
+      Net::SSH::Config.for(host, config_files)
     end
 
     def parse_connection_target(target)
@@ -31,7 +37,9 @@ module KnifeSolo
       end
 
       parts = target.rpartition('@')
-      [ parts.first, parts.last ]
+      user = parts.first unless parts.first.empty?
+      host = parts.last unless parts.last.empty?
+      [ user, host ]
     end
   end
 end
