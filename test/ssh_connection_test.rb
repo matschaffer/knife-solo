@@ -1,6 +1,6 @@
 require 'test_helper'
 
-require 'knife-solo/ssh_connection'
+require 'knife-solo/ssh/connection'
 
 class SshConnectionTest < TestCase
   def test_separates_user_and_host
@@ -34,7 +34,7 @@ class SshConnectionTest < TestCase
 
   def test_rejects_invalid_argument_strings
     ["", "@", "@name"].each do |invalid|
-      assert_raises KnifeSolo::SshConnection::ArgumentError do
+      assert_raises KnifeSolo::SSH::Connection::ArgumentError do
         connection(invalid)
       end
     end
@@ -72,7 +72,14 @@ class SshConnectionTest < TestCase
     assert_equal :success, conn.session
   end
 
+  def test_execs_commands_on_the_channel
+    conn = connection('10.0.0.1')
+    session = mock('session', :open_channel => nil, :loop => nil)
+    conn.expects(:session).returns(session).times(2)
+    conn.channel_exec('echo hello world')
+  end
+
   def connection(*args)
-    KnifeSolo::SshConnection.new(*args)
+    KnifeSolo::SSH::Connection.new(*args)
   end
 end
