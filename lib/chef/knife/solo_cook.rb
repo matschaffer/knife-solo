@@ -100,7 +100,9 @@ class Chef
         upload(role_path + '/', provisioning_path + '/roles')
         upload(nodes_path + '/', provisioning_path + '/nodes')
         upload(data_bag_path + '/', provisioning_path + '/data_bags')
-        upload(encrypted_data_bag_secret, provisioning_path + '/data_bag_key') if encrypted_data_bag_secret
+        if File.exist?(encrypted_data_bag_secret)
+          upload(encrypted_data_bag_secret, provisioning_path + '/data_bag_key')
+        end
       end
 
       # TODO should watch for name collision here
