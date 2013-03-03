@@ -4,6 +4,17 @@ module KnifeSolo
   class SshConnection
     attr_reader :user, :host, :options
 
+    # Creates a new ssh connection.
+    # Takes openssh client styled target option as a string '[user@]host' and will select defaults similar to those
+    # that openssh client uses.
+    #
+    # Options:
+    #
+    #   :user - The user to log in as.
+    #   :configfile - The ssh config file to read for options (or uses default location).
+    #   :password - The account password to use.
+    #   :password_prompter - A callable object that returns the account password.
+    #
     def initialize(target, options = {})
       @options = options
       @user, @host = parse_connection_target(target)
