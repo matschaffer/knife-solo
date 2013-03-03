@@ -97,9 +97,9 @@ class Chef
           upload(path, provisioning_path)
         end
 
-        upload(role_path, provisioning_path + '/roles')
-        upload(nodes_path, provisioning_path + '/nodes')
-        upload(data_bag_path, provisioning_path + '/data_bags')
+        upload(role_path + '/', provisioning_path + '/roles')
+        upload(nodes_path + '/', provisioning_path + '/nodes')
+        upload(data_bag_path + '/', provisioning_path + '/data_bags')
         upload(encrypted_data_bag_secret, provisioning_path + '/data_bag_key') if encrypted_data_bag_secret
       end
 
