@@ -144,7 +144,7 @@ class SoloCookTest < TestCase
   def command(*args)
     cmd = knife_command(Chef::Knife::SoloCook, *args)
     cmd.stubs(:check_chef_version)
-    cmd.stubs(:add_patches)
+    cmd.stubs(:run_portable_mkdir_p)
     cmd.stubs(:rsync)
     cmd.stubs(:stream_command).returns(SuccessfulResult.new)
     cmd
