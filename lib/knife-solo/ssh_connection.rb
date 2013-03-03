@@ -5,7 +5,7 @@ module KnifeSolo
     # Custom exception for malformed argument strings
     class ArgumentError < ::ArgumentError; end
 
-    attr_reader :user, :host, :options
+    attr_reader :options
 
     # Creates a new ssh connection.
     # Takes openssh client styled target option as a string '[user@]host' and will select defaults similar to those
@@ -46,6 +46,24 @@ module KnifeSolo
       port_arg = "-p #{options[:port]}" if options[:port]
 
       [host_arg, config_arg, ident_arg, port_arg].compact.join(' ')
+    end
+
+    def session
+      return @session unless @session.nil?
+      methods = [ %w(publickey hostbased), %w(password keyboard-interactive) ]
+
+      ssh_options            = config_file_options
+      ssh_options[:port]     = options[:port] if options[:port]
+      ssh_options[:password] = options[:password] if options[:password]
+      ssh_options[:keys]     = [options[:identity_file]] if options[:identity_file]
+
+      begin
+        ssh_options[:auth_methods] = methods.shift
+        @session = Net::SSH.start(host, user, ssh_options)
+      rescue Net::SSH::AuthenticationFailed
+        ssh_options[:password] = password
+        retry unless methods.empty?
+      end
     end
 
     private

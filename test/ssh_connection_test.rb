@@ -59,6 +59,19 @@ class SshConnectionTest < TestCase
     assert_equal "usertest@10.0.0.1 -p 222", conn.ssh_args
   end
 
+  def test_tries_session_connection_only_once_if_key_is_authorized
+    conn = connection('10.0.0.1')
+    Net::SSH.expects(:start).with{ |h, u, o| h == conn.host && u = conn.user }.returns(:success)
+    assert_equal :success, conn.session
+  end
+
+  def test_tries_password_on_session_connection_if_key_fails
+    conn = connection('10.0.0.1', :password_prompter => lambda { "prompted password" })
+    Net::SSH.expects(:start).with{ |h, u, o| h == conn.host && u = conn.user }.raises(Net::SSH::AuthenticationFailed)
+    Net::SSH.expects(:start).with{ |h, u, o| o[:password] == "prompted password" }.returns(:success)
+    assert_equal :success, conn.session
+  end
+
   def connection(*args)
     KnifeSolo::SshConnection.new(*args)
   end
