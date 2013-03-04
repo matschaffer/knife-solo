@@ -76,7 +76,7 @@ class SshConnectionTest < TestCase
     conn = connection('10.0.0.1')
     session = mock('session', :open_channel => nil, :loop => nil)
     conn.expects(:session).returns(session).times(2)
-    conn.channel_exec('echo hello world')
+    conn.run('echo hello world')
   end
 
   def connection(*args)

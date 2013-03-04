@@ -72,7 +72,7 @@ module KnifeSolo
         end
       end
 
-      def channel_exec(command)
+      def run(command)
         result = ExecResult.new
 
         session.open_channel do |channel|
