@@ -12,6 +12,7 @@ module KnifeSolo
       class ChannelFailure < ::StandardError; end
 
       attr_reader :options
+      attr_accessor :sudo_prompt
 
       # Creates a new ssh connection.
       # Takes openssh client styled target option as a string '[user@]host' and will select defaults similar to those
@@ -99,7 +100,7 @@ module KnifeSolo
       private
 
       def handle_stdout(ch, data, result)
-        if data =~ /^knife-solo sudo password: /
+        if data =~ /^#{sudo_prompt}/
           ch.send_data(password + "\n")
           @strip_next_new_line = true
         else
