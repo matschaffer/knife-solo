@@ -25,6 +25,8 @@ lib/knife-solo/gitignore.rb
 lib/knife-solo/info.rb
 lib/knife-solo/node_config_command.rb
 lib/knife-solo/resources/solo.rb
+lib/knife-solo/ssh/connection.rb
+lib/knife-solo/ssh/exec_result.rb
 lib/knife-solo/ssh_command.rb
 lib/knife-solo/tools.rb
 test/bootstraps_test.rb
@@ -56,6 +58,7 @@ test/solo_cook_test.rb
 test/solo_init_test.rb
 test/solo_prepare_test.rb
 test/ssh_command_test.rb
+test/ssh_connection_test.rb
 test/support/cache_using_cookbook/metadata.rb
 test/support/cache_using_cookbook/recipes/default.rb
 test/support/config.yml.example
