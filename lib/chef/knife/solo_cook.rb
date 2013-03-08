@@ -19,11 +19,15 @@ class Chef
 
       deps do
         require 'chef/cookbook/chefignore'
-        require 'librarian/action'
-        require 'librarian/chef'
         require 'pathname'
         KnifeSolo::SshCommand.load_deps
         KnifeSolo::NodeConfigCommand.load_deps
+        begin
+          require 'librarian/action'
+          require 'librarian/chef'
+        rescue LoadError
+          Chef::Log.debug 'Failed to load Librarian'
+        end
       end
 
       banner "knife solo cook [USER@]HOSTNAME [JSON] (options)"
@@ -133,10 +137,19 @@ class Chef
       end
 
       def librarian_install
-        return unless File.exist? 'Cheffile'
-        ui.msg "Installing Librarian cookbooks..."
-        Librarian::Action::Resolve.new(librarian_env).run
-        Librarian::Action::Install.new(librarian_env).run
+        if !File.exist? 'Cheffile'
+          Chef::Log.debug "Cheffile not found"
+        elsif !defined? Librarian::Action::Resolve
+          ui.warn [
+            "Librarian-Chef could not be loaded.",
+            "Please add the librarian gem to your Gemfile or",
+            "install it manually with `gem install librarian`."
+            ].join(" ")
+        else
+          ui.msg "Installing Librarian cookbooks..."
+          Librarian::Action::Resolve.new(librarian_env).run
+          Librarian::Action::Install.new(librarian_env).run
+        end
       end
 
       def librarian_env

@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'fog'
+  s.add_development_dependency 'librarian'
   s.add_development_dependency 'minitest'
   s.add_development_dependency 'mocha'
   s.add_development_dependency 'parallel'
@@ -33,5 +34,4 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'chef',     chef_version
   s.add_dependency 'net-ssh',  '>= 2.2.2', '< 3.0'
-  s.add_dependency 'librarian', '~> 0.0.20'
 end
