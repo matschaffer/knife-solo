@@ -1,6 +1,6 @@
 require 'integration_helper'
 
-class Debian7BootstrapTest < IntegrationTest
+class Debian7KnifeBootstrapTest < IntegrationTest
   def user
     "admin"
   end
@@ -10,12 +10,12 @@ class Debian7BootstrapTest < IntegrationTest
   end
 
   def prepare_server
-    # Do nothing as `solo bootstrap` will do everything
+    # Do nothing as `knife bootstrap --solo` will do everything
   end
 
   def default_apache_message
     /It works!/
   end
 
-  include Apache2Bootstrap
+  include KnifeBootstrap
 end

@@ -85,10 +85,15 @@ class IntegrationTest < TestCase
     "-i #{key_file} #{user}@#{server.public_ip_address}"
   end
 
-  # Asserts that a prepare or cook command is successful
-  def assert_subcommand(subcommand)
-    system "knife solo #{subcommand} #{connection_string} -VV >> #{log_file}"
+  # Asserts that a knife command is successful
+  def assert_knife_command(subcommand)
+    system "knife #{subcommand} #{connection_string} -VV >> #{log_file}"
     assert $?.success?
+  end
+
+  # Asserts that a knife solo subcommand is successful
+  def assert_subcommand(subcommand)
+    assert_knife_command "solo #{subcommand}"
   end
 end
 
