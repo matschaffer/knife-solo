@@ -39,20 +39,15 @@ module KnifeSolo::Bootstraps
     end
 
     def debianoid_omnibus_install
-      # Update to avoid out-of-date package caches
       run_command("sudo apt-get update")
-      # Install packages that are not included on all minimal builds
       run_command("sudo apt-get -y install rsync ca-certificates")
       omnibus_install
     end
 
     def yum_omnibus_install
-      omnibus_install
-      # Avoid rsync not being found in package cache.
       run_command("sudo yum clean all")
-      # Make sure we have rsync on builds that don't include it by default
-      # (for example Scientific Linux minimal, CentOS minimal)
       run_command("sudo yum -y install rsync")
+      omnibus_install
     end
 
     def distro
