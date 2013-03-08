@@ -44,6 +44,11 @@ module KnifeSolo::Bootstraps
       omnibus_install
     end
 
+    def zypper_omnibus_install
+      run_command("sudo zypper --non-interactive install rsync")
+      omnibus_install
+    end
+
     def yum_omnibus_install
       run_command("sudo yum clean all")
       run_command("sudo yum -y install rsync")
@@ -84,7 +89,7 @@ module KnifeSolo::Bootstraps
       when %r{SUSE Linux Enterprise Server 1[12]}
         {:type => "omnibus"}
       when %r{openSUSE 12}
-        {:type => "omnibus"}
+        {:type => "zypper_omnibus"}
       when %r{This is \\n\.\\O \(\\s \\m \\r\) \\t}
         {:type => "emerge_gem"}
       else
