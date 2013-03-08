@@ -40,7 +40,7 @@ class Chef
         cmd = klass.new
         cmd.ui = ui
         cmd.name_args = @name_args
-        cmd.config = config
+        cmd.config.merge! config
         cmd
       end
     end
