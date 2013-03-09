@@ -37,7 +37,7 @@ class Chef
 
       option :omnibus_version,
         :long        => '--omnibus-version VERSION',
-        :description => 'Deprecated. Replaced with --bootstrap-check.'
+        :description => 'Deprecated. Replaced with --bootstrap-version.'
 
       def run
         if config[:omnibus_version]
