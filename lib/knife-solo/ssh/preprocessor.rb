@@ -13,9 +13,8 @@ module KnifeSolo
 
       def process_sudo(command)
         if analyzer.sudo?
-          custom_prompt = 'knife-solo sudo password: '
-          connection.sudo_prompt = custom_prompt
-          command.gsub(/\bsudo\b/, "sudo -p '#{custom_prompt}'")
+          connection.sudo_prompt = 'knife-solo sudo password: '
+          command.gsub(/\bsudo\b/, "sudo -p '#{connection.sudo_prompt}'")
         else
           command.gsub(/\bsudo\b/, '').lstrip
         end

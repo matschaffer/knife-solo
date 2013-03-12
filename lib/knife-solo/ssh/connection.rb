@@ -24,6 +24,8 @@ module KnifeSolo
       #   :configfile - The ssh config file to read for options (or uses default location).
       #   :password - The account password to use.
       #   :password_prompter - A callable object that returns the account password.
+      #   :port - Port to connect to server on.
+      #   :identity_file - Identity key file to use.
       #
       def initialize(target, options = {})
         @options = options
@@ -97,15 +99,19 @@ module KnifeSolo
         result
       end
 
+      def to_s
+        "#{user}@#{host}"
+      end
+
       private
 
       def handle_stdout(ch, data, result)
-        if data =~ /^#{sudo_prompt}/
+        if sudo_prompt && data =~ /^#{sudo_prompt}/
           ch.send_data(password + "\n")
           @strip_next_new_line = true
         else
           if @strip_next_new_line
-            data = data[2..-1]
+            data = data.sub(/\r{0,1}\n/, '')
             @strip_next_new_line = false
           end
 
