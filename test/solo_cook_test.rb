@@ -56,26 +56,20 @@ class SoloCookTest < TestCase
     in_kitchen do
       File.open("Cheffile", 'w') {}
       cmd = command("somehost")
-      # simulate that librarian gem is not installed
-      Librarian::Action.send(:remove_const, :Resolve)
-      Librarian::Action::Install.any_instance.expects(:run).never
+      cmd.expects(:load_librarian).returns(false)
       cmd.ui.expects(:err).with(regexp_matches(/librarian gem/))
+      Librarian::Action::Install.any_instance.expects(:run).never
       cmd.run
-      # reload to not break other tests
-      Kernel.load('librarian/action/resolve.rb')
     end
   end
 
   def test_wont_complain_if_librarian_gem_missing_but_no_cheffile
     in_kitchen do
       cmd = command("somehost")
-      # simulate that librarian gem is not installed
-      Librarian::Action.send(:remove_const, :Resolve)
-      Librarian::Action::Install.any_instance.expects(:run).never
+      cmd.expects(:load_librarian).never
       cmd.ui.expects(:err).never
+      Librarian::Action::Install.any_instance.expects(:run).never
       cmd.run
-      # reload to not break other tests
-      Kernel.load('librarian/action/resolve.rb')
     end
   end
 
