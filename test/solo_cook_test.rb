@@ -38,7 +38,7 @@ class SoloCookTest < TestCase
 
   def test_runs_librarian_if_cheffile_found
     in_kitchen do
-      File.open("Cheffile", 'w') {}
+      FileUtils.touch "Cheffile"
       Librarian::Action::Install.any_instance.expects(:run)
       command("somehost").run
     end
@@ -46,9 +46,30 @@ class SoloCookTest < TestCase
 
   def test_does_not_run_librarian_if_denied_by_option
     in_kitchen do
-      File.open("Cheffile", 'w') {}
+      FileUtils.touch "Cheffile"
       Librarian::Action::Install.any_instance.expects(:run).never
       command("somehost", "--no-librarian").run
+    end
+  end
+
+  def test_complains_if_librarian_gem_missing
+    in_kitchen do
+      FileUtils.touch "Cheffile"
+      cmd = command("somehost")
+      cmd.expects(:load_librarian).returns(false)
+      cmd.ui.expects(:err).with(regexp_matches(/librarian gem/))
+      Librarian::Action::Install.any_instance.expects(:run).never
+      cmd.run
+    end
+  end
+
+  def test_wont_complain_if_librarian_gem_missing_but_no_cheffile
+    in_kitchen do
+      cmd = command("somehost")
+      cmd.expects(:load_librarian).never
+      cmd.ui.expects(:err).never
+      Librarian::Action::Install.any_instance.expects(:run).never
+      cmd.run
     end
   end
 
