@@ -2,6 +2,7 @@ CHANGELOG.md
 LICENSE
 README.rdoc
 Rakefile
+lib/chef/knife/bootstrap_solo.rb
 lib/chef/knife/cook.rb
 lib/chef/knife/kitchen.rb
 lib/chef/knife/patches/parser.rb
@@ -48,6 +49,7 @@ test/integration/ubuntu12_04_bootstrap_test.rb
 test/integration/ubuntu12_04_test.rb
 test/integration_helper.rb
 test/knife-solo/config_test.rb
+test/knife_bootstrap_test.rb
 test/minitest/parallel.rb
 test/node_config_command_test.rb
 test/solo_bootstrap_test.rb
