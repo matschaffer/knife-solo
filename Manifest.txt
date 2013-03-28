@@ -73,3 +73,4 @@ test/support/ssh_config
 test/support/test_case.rb
 test/support/validation_helper.rb
 test/test_helper.rb
+test/tools_test.rb
