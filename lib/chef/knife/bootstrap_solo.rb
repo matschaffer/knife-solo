@@ -7,6 +7,7 @@ class Chef
       def self.load_deps
         super
         require 'chef/knife/solo_bootstrap'
+        require 'knife-solo/tools'
         SoloBootstrap.load_deps
       end
 
@@ -18,7 +19,7 @@ class Chef
       alias_method :orig_run, :run
 
       def run
-        if (config[:solo].nil? ? Chef::Config[:knife][:solo] : config[:solo])
+        if KnifeSolo::Tools.config_value(config, :solo)
           validate_name_args!
 
           bootstrap = SoloBootstrap.new
