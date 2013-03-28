@@ -20,6 +20,7 @@
 * Clean up bootstrap classes ([213])
 * Rsync dot files by default, exclude only VCS dirs ([d21756], [1d3485])
 * Standardize messaging across commands [215]
+* Librarian-Chef was not run by default when knife-solo was invoked from ruby ([221])
 
 ## Thanks to our contributors!
 
@@ -38,6 +39,7 @@
 [211]: https://github.com/matschaffer/knife-solo/issues/211
 [213]: https://github.com/matschaffer/knife-solo/issues/213
 [215]: https://github.com/matschaffer/knife-solo/issues/215
+[221]: https://github.com/matschaffer/knife-solo/issues/221
 [d21756]: https://github.com/matschaffer/knife-solo/commit/d21756
 [1d3485]: https://github.com/matschaffer/knife-solo/commit/1d3485
 [f43ba4]: https://github.com/matschaffer/knife-solo/commit/f43ba4
