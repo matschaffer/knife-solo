@@ -8,11 +8,15 @@ module KnifeSolo
       RbConfig::CONFIG['host_os'] =~ /mswin|mingw/
     end
 
+    def config_value(key, default = nil)
+      Tools.config_value(config, key, default)
+    end
+
     # Chef 10 compatible way of getting correct precedence for command line
     # and configuration file options. Adds correct handling of `false` values
     # to the original example in
     # http://docs.opscode.com/breaking_changes_chef_11.html#knife-configuration-parameter-changes
-    def config_value(key, default = nil)
+    def self.config_value(config, key, default = nil)
       key = key.to_sym
       if !config[key].nil?
         config[key]
