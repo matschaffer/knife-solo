@@ -41,8 +41,7 @@ class Chef
 
       option :librarian,
         :long        => '--no-librarian',
-        :description => 'Skip librarian-chef install',
-        :default    => true
+        :description => 'Skip librarian-chef install'
 
       option :why_run,
         :short       => '-W',
@@ -70,7 +69,7 @@ class Chef
 
           check_chef_version if config[:chef_check]
           generate_node_config
-          librarian_install if config[:librarian]
+          librarian_install if config_value(:librarian, true)
           rsync_kitchen
           add_patches
           add_solo_config unless using_custom_solorb?
