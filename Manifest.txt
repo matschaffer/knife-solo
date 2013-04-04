@@ -75,6 +75,7 @@ test/support/test_case.rb
 test/support/validation_helper.rb
 test/test_helper.rb
 test/tools_test.rb
+lib/knife-solo/resources/patch_cookbooks/chef-solo-search/.travis.yml
 lib/knife-solo/resources/patch_cookbooks/chef-solo-search/CHANGELOG
 lib/knife-solo/resources/patch_cookbooks/chef-solo-search/LICENSE
 lib/knife-solo/resources/patch_cookbooks/chef-solo-search/NOTICE
@@ -90,6 +91,7 @@ lib/knife-solo/resources/patch_cookbooks/chef-solo-search/recipes/default.rb
 lib/knife-solo/resources/patch_cookbooks/chef-solo-search/tests/Gemfile
 lib/knife-solo/resources/patch_cookbooks/chef-solo-search/tests/data/data_bags/node/alpha.json
 lib/knife-solo/resources/patch_cookbooks/chef-solo-search/tests/data/data_bags/node/beta.json
+lib/knife-solo/resources/patch_cookbooks/chef-solo-search/tests/data/data_bags/node/without_json_class.json
 lib/knife-solo/resources/patch_cookbooks/chef-solo-search/tests/data/data_bags/users/jerry.json
 lib/knife-solo/resources/patch_cookbooks/chef-solo-search/tests/data/data_bags/users/lea.json
 lib/knife-solo/resources/patch_cookbooks/chef-solo-search/tests/data/data_bags/users/mike.json
