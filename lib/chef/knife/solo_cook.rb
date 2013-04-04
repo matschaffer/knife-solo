@@ -100,7 +100,7 @@ class Chef
       end
 
       def cookbook_paths
-        Chef::Config.cookbook_path + [KnifeSolo.resource('patch_cookbooks')]
+        Chef::Config.cookbook_path + [KnifeSolo.resource('patch_cookbooks').to_s]
       end
 
       def nodes_path
