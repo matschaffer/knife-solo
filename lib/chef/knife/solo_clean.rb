@@ -26,7 +26,6 @@ class Chef
 
       def validate!
         validate_ssh_options!
-        @solo_config.validate!
       end
 
       def provisioning_path
