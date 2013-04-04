@@ -88,15 +88,13 @@ class Chef
         run_portable_mkdir_p(provisioning_path, '0700')
 
         cookbook_paths.each_with_index do |path, i|
-          upload(path + '/', provisioning_path + "/cookbooks-#{i + 1}")
+          upload_to_provision_path(path, "/cookbooks-#{i + 1}")
         end
 
-        upload(role_path + '/', provisioning_path + '/roles')
-        upload(nodes_path + '/', provisioning_path + '/nodes')
-        upload(data_bag_path + '/', provisioning_path + '/data_bags')
-        if encrypted_data_bag_secret && File.exist?(encrypted_data_bag_secret)
-          upload(encrypted_data_bag_secret, provisioning_path + '/data_bag_key')
-        end
+        upload_to_provision_path(role_path, 'roles')
+        upload_to_provision_path(nodes_path, 'nodes')
+        upload_to_provision_path(data_bag_path, 'data_bags')
+        upload_to_provision_path(encrypted_data_bag_secret, 'data_bag_key')
       end
 
       def cookbook_paths
@@ -194,6 +192,12 @@ class Chef
 
       def upload(src, dest)
         rsync(src, dest)
+      end
+
+      def upload_to_provision_path(src, dest)
+        if src && File.exist?(src)
+          upload("#{src}/", File.join(provisioning_path, dest))
+        end
       end
 
       # TODO probably can get Net::SSH to do this directly
