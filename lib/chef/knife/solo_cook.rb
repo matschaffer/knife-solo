@@ -22,8 +22,6 @@ class Chef
 
       deps do
         require 'chef/cookbook/chefignore'
-        require 'librarian/action'
-        require 'librarian/chef'
         require 'pathname'
         KnifeSolo::SshCommand.load_deps
         KnifeSolo::NodeConfigCommand.load_deps
@@ -46,8 +44,7 @@ class Chef
 
       option :librarian,
         :long        => '--no-librarian',
-        :description => 'Skip librarian-chef install',
-        :default    => true
+        :description => 'Skip librarian-chef install'
 
       option :why_run,
         :short       => '-W',
@@ -79,7 +76,7 @@ class Chef
 
           check_chef_version if config[:chef_check]
           generate_node_config
-          librarian_install if config[:librarian]
+          librarian_install if config_value(:librarian, true)
           sync_kitchen
           generate_solorb
           cook unless config[:sync_only]
@@ -166,10 +163,27 @@ class Chef
       end
 
       def librarian_install
-        return unless File.exist? 'Cheffile'
+        if !File.exist? 'Cheffile'
+          Chef::Log.debug "Cheffile not found"
+        elsif !load_librarian
+          ui.warn "Librarian-Chef could not be loaded"
+          ui.warn "Please add the librarian gem to your Gemfile or install it manually with `gem install librarian`"
+        else
         ui.msg "Installing Librarian cookbooks..."
         Librarian::Action::Resolve.new(librarian_env).run
         Librarian::Action::Install.new(librarian_env).run
+      end
+      end
+
+      def load_librarian
+        begin
+          require 'librarian/action'
+          require 'librarian/chef'
+        rescue LoadError
+          false
+        else
+          true
+        end
       end
 
       def librarian_env

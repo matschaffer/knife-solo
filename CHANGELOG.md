@@ -2,22 +2,47 @@
 
 ## Changes and new features
 
-* Moved root path configuration into `knife[:solo_path]` and use $HOME/chef-solo by default (#197)
-* `--prerelease` option to allow pre-release versions of chef omnibus or rubygem to be installed (#205)
-* Prepare/bootstrap now installs the same version of Chef that the workstation is running (#186)
-* Switch `--omnibus-version` flag to `--bootstrap-version` (#185)
-* Support --override-runlist option (#204)
+* Moved root path configuration into `knife[:solo_path]` and use $HOME/chef-solo by default ([197])
+* `--prerelease` option to allow pre-release versions of chef omnibus or rubygem to be installed ([205])
+* Prepare/bootstrap now installs the same version of Chef that the workstation is running ([186])
+* Remove hard dependency on Librarian-Chef ([211])
+* Switch `--omnibus-version` flag to `--bootstrap-version` ([185])
+* Support `--override-runlist` option ([204])
+* Drop support for openSUSE 11
 
 ## Fixes
 
 * FreeBSD 9.1 support
-* OS X (especially 10.8) support (#209, #210)
-* Clear yum cache before installing rsync (#200)
+* OS X (especially 10.8) support ([209], [210])
+* Clear yum cache before installing rsync ([200])
+* Make sure "ca-certificates" package is installed on Debian ([213])
+* Ensure rsync is installed on openSUSE ([f43ba4])
+* Clean up bootstrap classes ([213])
+* Rsync dot files by default, exclude only VCS dirs ([d21756], [1d3485])
+* Standardize messaging across commands [215]
+* Librarian-Chef was not run by default when knife-solo was invoked from ruby ([221])
 
 ## Thanks to our contributors!
 
 * [David Kinzer][dkinzer]
 * [Naoya Ito][naoya]
+* [David Radcliffe][dwradcliffe]
+
+[185]: https://github.com/matschaffer/knife-solo/issues/185
+[186]: https://github.com/matschaffer/knife-solo/issues/186
+[197]: https://github.com/matschaffer/knife-solo/issues/197
+[200]: https://github.com/matschaffer/knife-solo/issues/200
+[204]: https://github.com/matschaffer/knife-solo/issues/204
+[205]: https://github.com/matschaffer/knife-solo/issues/205
+[209]: https://github.com/matschaffer/knife-solo/issues/209
+[210]: https://github.com/matschaffer/knife-solo/issues/210
+[211]: https://github.com/matschaffer/knife-solo/issues/211
+[213]: https://github.com/matschaffer/knife-solo/issues/213
+[215]: https://github.com/matschaffer/knife-solo/issues/215
+[221]: https://github.com/matschaffer/knife-solo/issues/221
+[d21756]: https://github.com/matschaffer/knife-solo/commit/d21756
+[1d3485]: https://github.com/matschaffer/knife-solo/commit/1d3485
+[f43ba4]: https://github.com/matschaffer/knife-solo/commit/f43ba4
 
 # 0.2.0 / 2013-02-12
 
@@ -271,6 +296,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [davidsch]:      https://github.com/davidsch
 [deepak]:        https://github.com/deepak
 [dkinzer]:       https://github.com/dkinzer
+[dwradcliffe]:   https://github.com/dwradcliffe
 [fnichol]:       https://github.com/fnichol
 [funglaub]:      https://github.com/funglaub
 [gregf]:         https://github.com/gregf

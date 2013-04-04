@@ -24,15 +24,15 @@ Gem::Specification.new do |s|
    s.post_install_message = KnifeSolo.post_install_message
 
   s.add_development_dependency 'bundler'
-  s.add_development_dependency 'rake'
-  s.add_development_dependency 'mocha'
-  s.add_development_dependency 'rdoc'
   s.add_development_dependency 'fog'
+  s.add_development_dependency 'librarian', '~> 0.0.26'
   s.add_development_dependency 'minitest'
+  s.add_development_dependency 'mocha'
   s.add_development_dependency 'parallel'
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rdoc'
 
-  s.add_dependency 'chef',      chef_version
-  s.add_dependency 'net-ssh',   '>= 2.2.2', '< 3.0'
-  s.add_dependency 'librarian', '~> 0.0.20'
+  s.add_dependency 'chef',     chef_version
+  s.add_dependency 'net-ssh',  '>= 2.2.2', '< 3.0'
   s.add_dependency 'erubis',    '~> 2.7.0'
 end
