@@ -16,7 +16,7 @@ class Chef
         :description => 'Bootstrap using knife-solo'
 
       # Rename and override run method
-      alias_method :orig_run, :run
+      alias_method :run_with_chef_client, :run
 
       def run
         if KnifeSolo::Tools.config_value(config, :solo)
@@ -27,7 +27,7 @@ class Chef
           bootstrap.config.merge! config
           bootstrap.run
         else
-          orig_run
+          run_with_chef_client
         end
       end
     end

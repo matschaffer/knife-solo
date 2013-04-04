@@ -14,7 +14,7 @@ class KnifeBootstrapTest < TestCase
   def test_runs_solo_bootstrap_if_specified_as_option
     Chef::Config.knife[:solo] = false
     Chef::Knife::SoloBootstrap.any_instance.expects(:run)
-    Chef::Knife::Bootstrap.any_instance.expects(:orig_run).never
+    Chef::Knife::Bootstrap.any_instance.expects(:run_with_chef_client).never
     in_kitchen do
       command("somehost", "--solo").run
     end
@@ -23,7 +23,7 @@ class KnifeBootstrapTest < TestCase
   def test_runs_solo_bootstrap_if_specified_as_chef_configuration
     Chef::Config.knife[:solo] = true
     Chef::Knife::SoloBootstrap.any_instance.expects(:run)
-    Chef::Knife::Bootstrap.any_instance.expects(:orig_run).never
+    Chef::Knife::Bootstrap.any_instance.expects(:run_with_chef_client).never
     in_kitchen do
       command("somehost").run
     end
@@ -32,7 +32,7 @@ class KnifeBootstrapTest < TestCase
   def test_runs_original_bootstrap_by_default
     Chef::Config.knife[:solo] = false
     Chef::Knife::SoloBootstrap.any_instance.expects(:run).never
-    Chef::Knife::Bootstrap.any_instance.expects(:orig_run)
+    Chef::Knife::Bootstrap.any_instance.expects(:run_with_chef_client)
     in_kitchen do
       command("somehost").run
     end
@@ -41,7 +41,7 @@ class KnifeBootstrapTest < TestCase
   def test_runs_original_bootstrap_if_specified_as_option
     Chef::Config.knife[:solo] = true
     Chef::Knife::SoloBootstrap.any_instance.expects(:run).never
-    Chef::Knife::Bootstrap.any_instance.expects(:orig_run)
+    Chef::Knife::Bootstrap.any_instance.expects(:run_with_chef_client)
     in_kitchen do
       command("somehost", "--no-solo").run
     end
