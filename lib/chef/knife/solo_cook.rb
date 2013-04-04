@@ -87,7 +87,7 @@ class Chef
       end
 
       def sync_kitchen
-        run_portable_mkdir_p(provisioning_path)
+        run_portable_mkdir_p(provisioning_path, '0700')
 
         cookbook_paths.each do |path|
           upload(path, provisioning_path)
