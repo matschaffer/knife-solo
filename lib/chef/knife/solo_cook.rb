@@ -85,6 +85,7 @@ class Chef
       end
 
       def sync_kitchen
+        ui.msg "Uploading the kitchen..."
         run_portable_mkdir_p(provisioning_path, '0700')
 
         cookbook_paths.each_with_index do |path, i|
