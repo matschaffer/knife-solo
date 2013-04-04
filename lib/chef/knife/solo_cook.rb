@@ -58,9 +58,7 @@ class Chef
 
       option :provisioning_path,
         :long        => '--provisioning-path path',
-        :description => 'Where to store kitchen data on the node',
-        :default     => '~/chef-solo'
-        # TODO ~ will likely break on cmd.exe based windows sessions
+        :description => 'Where to store kitchen data on the node'
 
       def run
         time('Run') do
@@ -84,7 +82,8 @@ class Chef
       end
 
       def provisioning_path
-        config[:provisioning_path]
+        # TODO ~ will likely break on cmd.exe based windows sessions
+        config_value(:provisioning_path, '~/chef-solo')
       end
 
       def sync_kitchen
