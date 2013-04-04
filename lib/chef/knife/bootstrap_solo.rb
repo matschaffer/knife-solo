@@ -20,15 +20,20 @@ class Chef
 
       def run
         if KnifeSolo::Tools.config_value(config, :solo)
-          validate_name_args!
-
-          bootstrap = SoloBootstrap.new
-          bootstrap.name_args = @name_args
-          bootstrap.config.merge! config
-          bootstrap.run
+          run_with_knife_solo
         else
           run_with_chef_client
         end
+      end
+
+      # Bootstraps Chef on the node using knife-solo
+      def run_with_knife_solo
+        validate_name_args!
+
+        bootstrap = SoloBootstrap.new
+        bootstrap.name_args = @name_args
+        bootstrap.config.merge! config
+        bootstrap.run
       end
     end
   end
