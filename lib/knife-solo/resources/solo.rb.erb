@@ -1,8 +1,10 @@
 base = File.expand_path('..', __FILE__)
 
-role_path                 base + '/roles'
-data_bag_path             base + '/data_bags'
-encrypted_data_bag_secret base + '/data_bag_key'
+role_path                 File.join(base, 'roles')
+data_bag_path             File.join(base, 'data_bags')
+encrypted_data_bag_secret File.join(base, 'data_bag_key')
 
-cookbook_path             [ <%= cookbook_paths.map { |p| "base + '/' + " + File.basename(p).inspect }.join(', ') %> ]
-
+cookbook_path []
+<% cookbook_paths.each_with_index do |path, i| -%>
+cookbook_path << File.join(base, 'cookbooks-<%= i+1 %>') # <%= path %>
+<% end -%>

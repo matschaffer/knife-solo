@@ -89,8 +89,8 @@ class Chef
       def sync_kitchen
         run_portable_mkdir_p(provisioning_path, '0700')
 
-        cookbook_paths.each do |path|
-          upload(path, provisioning_path)
+        cookbook_paths.each_with_index do |path, i|
+          upload(path + '/', provisioning_path + "/cookbooks-#{i + 1}")
         end
 
         upload(role_path + '/', provisioning_path + '/roles')
@@ -101,7 +101,6 @@ class Chef
         end
       end
 
-      # TODO should watch for name collision here
       def cookbook_paths
         Chef::Config.cookbook_path + [KnifeSolo.resource('patch_cookbooks')]
       end
