@@ -10,7 +10,7 @@ knife-solo adds a handful of commands that aim to make working with chef-solo as
 
 - <tt>knife solo cook</tt> uploads the current kitchen (Chef repo) to the target host and runs chef-solo on that host.
 
-- <tt>knife solo bootstrap</tt> combines the two previous ones (prepare and cook).
+- <tt>knife solo bootstrap</tt> combines the two previous ones (prepare and cook). knife-solo also adds +--solo+ command line option and +knife[:solo]+ configuration parameter to <tt>knife bootstrap</tt> that can be used for triggering "knife solo bootstrap" instead of the normal template based chef-client bootstrap.
 
 - <tt>knife solo clean</tt> removes the uploaded kitchen from the target host.
 
@@ -82,6 +82,10 @@ The bootstrap command takes the same arguments and most of the options as prepar
     knife solo bootstrap ubuntu@10.0.0.201
 
 Under the hood it first calls +knife solo prepare+ and then +knife solo cook+ with the specified arguments and options.
+
+==== Integration with knife bootstrap
+
+knife-solo also integrates with <tt>knife bootstrap</tt> by adding +--solo+ command line option and +knife[:solo]+ configuration parameter to it. When requested, "knife solo bootrap" is used instead of the normal template based chef-client bootstrap. This is especially useful with other knife plugins like {knife-ec2}[https://github.com/opscode/knife-ec2] that invoke "knife bootstrap" after creating an server instance. Even if these plugins do not have the "--solo" option, you can put <tt>knife[:solo] = true</tt> in knife.rb.
 
 === Clean command
 
