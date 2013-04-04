@@ -5,10 +5,6 @@ require 'knife-solo/ssh_command'
 require 'knife-solo/node_config_command'
 require 'knife-solo/tools'
 
-require 'tempfile'
-require 'erubis'
-require 'chef/config'
-
 class Chef
   class Knife
     # Approach ported from spatula (https://github.com/trotter/spatula)
@@ -22,7 +18,9 @@ class Chef
 
       deps do
         require 'chef/cookbook/chefignore'
+        require 'erubis'
         require 'pathname'
+        require 'tempfile'
         KnifeSolo::SshCommand.load_deps
         KnifeSolo::NodeConfigCommand.load_deps
       end
