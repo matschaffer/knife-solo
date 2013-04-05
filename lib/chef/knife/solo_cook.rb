@@ -205,7 +205,8 @@ class Chef
         elsif !File.exist?(src)
           ui.warn "Local #{key_name} '#{src}' does not exist"
         else
-          upload("#{src}/", File.join(provisioning_path, dest))
+          src << '/' if File.directory? src
+          upload(src, File.join(provisioning_path, dest))
         end
       end
 
