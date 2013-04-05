@@ -35,12 +35,13 @@ The init command simply takes a name of the directory to store the kitchen struc
 Currently the directory structure looks like this, but could change as development continues.
 
     mychefrepo/
+    ├── .chef
+    │   └── knife.rb
     ├── cookbooks
     ├── data_bags
     ├── nodes
     ├── roles
-    ├── site-cookbooks
-    └── solo.rb
+    └── site-cookbooks
 
 === Prepare command
 
@@ -71,7 +72,7 @@ The cook command uploads the current kitchen to the server and runs chef-solo on
 
 This uploads all of your cookbooks in addition to a patch that allows you to use data_bags in a read-only fashion from the +data_bags+ folder.
 
-This also supports encrypted data bags. To use them, place your key in +data_bag_key+ in the root of your kitchen (or if you move it make sure to update +solo.rb+ to reflect the new path).
+This also supports encrypted data bags. To use them, set the path to your key with +encrypted_data_bag_secret+ in .chef/knife.rb.
 
 The knife command for creating encrypted data bags doesn't work well without a Chef server, so use {this gist}[https://gist.github.com/2896172] as an example on how to create encrypted data bag items on your local file system.
 
@@ -99,9 +100,9 @@ The clean command removes an uploaded kitchen completely from the target host. T
 
 The cook command will work on Windows node if you meet the following howto:
 
-==== Init then tweak
+==== Init as normally
 
-- run <tt>knife solo init</tt> then edit solo.rb to use Windows path-naming (see https://gist.github.com/1773854)
+- run <tt>knife solo init</tt>
 
 ==== Prepare the node manually
 
