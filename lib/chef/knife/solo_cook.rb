@@ -98,27 +98,21 @@ class Chef
         run_portable_mkdir_p(provisioning_path, '0700')
 
         cookbook_paths.each_with_index do |path, i|
-          upload_to_provision_path(path, "/cookbooks-#{i + 1}")
+          upload_to_provision_path(path, "/cookbooks-#{i + 1}", 'cookbook_path')
         end
-
-        upload_to_provision_path(role_path, 'roles')
         upload_to_provision_path(nodes_path, 'nodes')
-        upload_to_provision_path(data_bag_path, 'data_bags')
-        upload_to_provision_path(encrypted_data_bag_secret, 'data_bag_key')
+        upload_to_provision_path(:role_path, 'roles')
+        upload_to_provision_path(:data_bag_path, 'data_bags')
+        upload_to_provision_path(:encrypted_data_bag_secret, 'data_bag_key')
       end
 
       def cookbook_paths
-        Array(Chef::Config.cookbook_path) + [KnifeSolo.resource('patch_cookbooks').to_s]
+        Array(Chef::Config[:cookbook_path]) + [KnifeSolo.resource('patch_cookbooks').to_s]
       end
 
       def nodes_path
         'nodes'
       end
-
-      def_delegators 'Chef::Config',
-        :role_path,
-        :data_bag_path,
-        :encrypted_data_bag_secret
 
       def chefignore
         @chefignore ||= ::Chef::Cookbook::Chefignore.new("./")
@@ -200,8 +194,17 @@ class Chef
         rsync(src, dest)
       end
 
-      def upload_to_provision_path(src, dest)
-        if src && File.exist?(src)
+      def upload_to_provision_path(src, dest, key_name = 'path')
+        if src.is_a? Symbol
+          key_name = src.to_s
+          src = Chef::Config[src]
+        end
+
+        if src.nil?
+          Chef::Log.debug "'#{key_name}' not set"
+        elsif !File.exist?(src)
+          ui.warn "Local #{key_name} '#{src}' does not exist"
+        else
           upload("#{src}/", File.join(provisioning_path, dest))
         end
       end
