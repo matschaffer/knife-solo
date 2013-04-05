@@ -5,6 +5,9 @@ module EncryptedDataBag
     super
     FileUtils.cp $base_dir.join('support', 'data_bag_key'), 'data_bag_key'
     FileUtils.cp_r $base_dir.join('support', 'secret_cookbook'), 'cookbooks/secret_cookbook'
+    File.open('.chef/knife.rb', 'a') do |f|
+      f.puts 'encrypted_data_bag_secret "data_bag_key"'
+    end
     @password = "essential particles busy loud"
     create_data_bag
   end

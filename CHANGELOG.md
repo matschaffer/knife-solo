@@ -1,8 +1,12 @@
 # 0.3.0 / _In progress_
 
+**NOTE**: This release includes breaking changes. See [upgrade instructions](https://github.com/matschaffer/knife-solo/wiki/Upgrading-to-0.3.0) for more information.
+
 ## Changes and new features
 
-* Moved root path configuration into `knife[:solo_path]` and use $HOME/chef-solo by default ([197])
+* [BREAKING] Generate solo.rb based on knife.rb settings ([199])
+* [BREAKING] Set root path with `--provisioning-path` or `knife[:provisioning_path]` and use ~/chef-solo by default ([1], [86], [125], [128], [177], [197])
+* Read protect the provision directory from the world ([1])
 * `--prerelease` option to allow pre-release versions of chef omnibus or rubygem to be installed ([205])
 * Prepare/bootstrap now installs the same version of Chef that the workstation is running ([186])
 * Remove hard dependency on Librarian-Chef ([211])
@@ -28,9 +32,15 @@
 * [Naoya Ito][naoya]
 * [David Radcliffe][dwradcliffe]
 
+[1]: https://github.com/matschaffer/knife-solo/issues/1
+[86]: https://github.com/matschaffer/knife-solo/issues/86
+[125]: https://github.com/matschaffer/knife-solo/issues/125
+[128]: https://github.com/matschaffer/knife-solo/issues/128
+[177]: https://github.com/matschaffer/knife-solo/issues/177
 [185]: https://github.com/matschaffer/knife-solo/issues/185
 [186]: https://github.com/matschaffer/knife-solo/issues/186
 [197]: https://github.com/matschaffer/knife-solo/issues/197
+[199]: https://github.com/matschaffer/knife-solo/issues/199
 [200]: https://github.com/matschaffer/knife-solo/issues/200
 [204]: https://github.com/matschaffer/knife-solo/issues/204
 [205]: https://github.com/matschaffer/knife-solo/issues/205
@@ -62,7 +72,6 @@
 * Drop support for Debian 5.0 Lenny (#172)
 * Integration tests for Debian 6 and 7 (74c6ed1 - f299a6)
 * Travis tests for both Chef 10 and 11 (#183)
-* Remove solo.rb and transfer cookbooks to user-owned path (#1, #86, #125, #128, #177). See https://github.com/matschaffer/knife-solo/wiki/Upgrading-to-0.2.0
 
 ## Fixes
 

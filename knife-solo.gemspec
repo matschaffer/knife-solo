@@ -34,4 +34,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'chef',     chef_version
   s.add_dependency 'net-ssh',  '>= 2.2.2', '< 3.0'
+  s.add_dependency 'erubis',    '~> 2.7.0'
 end

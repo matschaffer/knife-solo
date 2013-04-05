@@ -4,7 +4,6 @@ require 'knife-solo'
 require 'knife-solo/ssh_command'
 require 'knife-solo/node_config_command'
 require 'knife-solo/tools'
-require 'knife-solo/config'
 
 class Chef
   class Knife
@@ -19,7 +18,9 @@ class Chef
 
       deps do
         require 'chef/cookbook/chefignore'
+        require 'erubis'
         require 'pathname'
+        require 'tempfile'
         KnifeSolo::SshCommand.load_deps
         KnifeSolo::NodeConfigCommand.load_deps
       end
@@ -53,9 +54,11 @@ class Chef
         :long        => '--override-runlist',
         :description => 'Replace current run list with specified items'
 
-      def run
-        @solo_config = KnifeSolo::Config.new
+      option :provisioning_path,
+        :long        => '--provisioning-path path',
+        :description => 'Where to store kitchen data on the node'
 
+      def run
         time('Run') do
 
           if config[:skip_chef_check]
@@ -70,21 +73,45 @@ class Chef
           check_chef_version if config[:chef_check]
           generate_node_config
           librarian_install if config_value(:librarian, true)
-          rsync_kitchen
-          add_patches
-          add_solo_config unless using_custom_solorb?
+          sync_kitchen
+          generate_solorb
           cook unless config[:sync_only]
         end
       end
 
-      def_delegators :@solo_config,
-        :chef_path,
-        :using_custom_solorb?,
-        :patch_path
-
       def validate!
         validate_ssh_options!
-        @solo_config.validate!
+
+        if File.exist? 'solo.rb'
+          ui.warn "solo.rb found, but since knife-solo v0.3.0 it is not used any more"
+          ui.warn "Please read the upgrade instructions: https://github.com/matschaffer/knife-solo/wiki/Upgrading-to-0.3.0"
+        end
+      end
+
+      def provisioning_path
+        # TODO ~ will likely break on cmd.exe based windows sessions
+        config_value(:provisioning_path, '~/chef-solo')
+      end
+
+      def sync_kitchen
+        ui.msg "Uploading the kitchen..."
+        run_portable_mkdir_p(provisioning_path, '0700')
+
+        cookbook_paths.each_with_index do |path, i|
+          upload_to_provision_path(path, "/cookbooks-#{i + 1}", 'cookbook_path')
+        end
+        upload_to_provision_path(nodes_path, 'nodes')
+        upload_to_provision_path(:role_path, 'roles')
+        upload_to_provision_path(:data_bag_path, 'data_bags')
+        upload_to_provision_path(:encrypted_data_bag_secret, 'data_bag_key')
+      end
+
+      def cookbook_paths
+        Array(Chef::Config[:cookbook_path]) + [KnifeSolo.resource('patch_cookbooks').to_s]
+      end
+
+      def nodes_path
+        'nodes'
       end
 
       def chefignore
@@ -136,10 +163,10 @@ class Chef
           ui.warn "Librarian-Chef could not be loaded"
           ui.warn "Please add the librarian gem to your Gemfile or install it manually with `gem install librarian`"
         else
-          ui.msg "Installing Librarian cookbooks..."
-          Librarian::Action::Resolve.new(librarian_env).run
-          Librarian::Action::Install.new(librarian_env).run
-        end
+        ui.msg "Installing Librarian cookbooks..."
+        Librarian::Action::Resolve.new(librarian_env).run
+        Librarian::Action::Install.new(librarian_env).run
+      end
       end
 
       def load_librarian
@@ -157,29 +184,43 @@ class Chef
         @librarian_env ||= Librarian::Chef::Environment.new
       end
 
-      def rsync_kitchen
-        ui.msg "Syncing kitchen..."
-        time('Rsync kitchen') do
-          rsync('./', chef_path, '--delete')
+      def generate_solorb
+        ui.msg "Generating solo config..."
+        template = Erubis::Eruby.new(KnifeSolo.resource('solo.rb.erb').read)
+        write(template.result(binding), provisioning_path + '/solo.rb')
+      end
+
+      def upload(src, dest)
+        rsync(src, dest)
+      end
+
+      def upload_to_provision_path(src, dest, key_name = 'path')
+        if src.is_a? Symbol
+          key_name = src.to_s
+          src = Chef::Config[src]
+        end
+
+        if src.nil?
+          Chef::Log.debug "'#{key_name}' not set"
+        elsif !File.exist?(src)
+          ui.warn "Local #{key_name} '#{src}' does not exist"
+        else
+          src << '/' if File.directory? src
+          upload(src, File.join(provisioning_path, dest))
         end
       end
 
-      def add_patches
-        ui.msg "Adding patches..."
-        run_portable_mkdir_p(patch_path)
-        Dir[Pathname.new(__FILE__).dirname.join("patches", "*.rb").to_s].each do |patch|
-          time(patch) do
-            rsync(patch, patch_path)
-          end
-        end
+      # TODO probably can get Net::SSH to do this directly
+      def write(content, dest)
+        file = Tempfile.new(File.basename(dest))
+        file.write(content)
+        file.close
+        upload(file.path, dest)
+      ensure
+        file.unlink
       end
 
-      def add_solo_config
-        ui.msg "Syncing solo config..."
-        rsync(KnifeSolo.resource('solo.rb'), chef_path)
-      end
-
-      def rsync(source_path, target_path, extra_opts = '')
+      def rsync(source_path, target_path, extra_opts = '--delete')
         cmd = %Q{rsync -rl #{rsync_permissions} --rsh="ssh #{ssh_args}" #{extra_opts} #{rsync_excludes.collect{ |ignore| "--exclude #{ignore} " }.join} #{adjust_rsync_path_on_client(source_path)} :#{adjust_rsync_path_on_node(target_path)}}
         ui.msg cmd if debug?
         system! cmd
@@ -200,7 +241,7 @@ class Chef
 
       def cook
         ui.msg "Running Chef..."
-        cmd = "sudo chef-solo -c #{chef_path}/solo.rb -j #{chef_path}/#{node_config}"
+        cmd = "sudo chef-solo -c #{provisioning_path}/solo.rb -j #{provisioning_path}/#{node_config}"
         cmd << " -l debug" if debug?
         cmd << " -N #{config[:chef_node_name]}" if config[:chef_node_name]
         cmd << " -W" if config[:why_run]
