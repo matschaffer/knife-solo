@@ -79,6 +79,15 @@ class Chef
         end
       end
 
+      def validate!
+        validate_ssh_options!
+
+        if File.exist? 'solo.rb'
+          ui.warn "solo.rb found, but since knife-solo v0.3.0 it is not used any more"
+          ui.warn "Please read the upgrade instructions: https://github.com/matschaffer/knife-solo/wiki/Upgrading-to-0.3.0"
+        end
+      end
+
       def provisioning_path
         # TODO ~ will likely break on cmd.exe based windows sessions
         config_value(:provisioning_path, '~/chef-solo')
@@ -110,10 +119,6 @@ class Chef
         :role_path,
         :data_bag_path,
         :encrypted_data_bag_secret
-
-      def validate!
-        validate_ssh_options!
-      end
 
       def chefignore
         @chefignore ||= ::Chef::Cookbook::Chefignore.new("./")
