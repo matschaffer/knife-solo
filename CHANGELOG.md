@@ -6,7 +6,7 @@
 
 * [BREAKING] Generate solo.rb based on knife.rb settings ([199])
 * [BREAKING] Set root path with `--provisioning-path` or `knife[:provisioning_path]` and use ~/chef-solo by default ([1], [86], [125], [128], [177], [197])
-* Read protect the provision directory from the world ([1])
+* Add `--solo` option and `knife[:solo]` configuration option to `knife bootstrap` ([207])
 * `--prerelease` option to allow pre-release versions of chef omnibus or rubygem to be installed ([205])
 * Prepare/bootstrap now installs the same version of Chef that the workstation is running ([186])
 * Remove hard dependency on Librarian-Chef ([211])
@@ -16,6 +16,7 @@
 
 ## Fixes
 
+* Read protect the provision directory from the world ([1])
 * FreeBSD 9.1 support
 * OS X (especially 10.8) support ([209], [210])
 * Clear yum cache before installing rsync ([200])
@@ -44,6 +45,7 @@
 [200]: https://github.com/matschaffer/knife-solo/issues/200
 [204]: https://github.com/matschaffer/knife-solo/issues/204
 [205]: https://github.com/matschaffer/knife-solo/issues/205
+[207]: https://github.com/matschaffer/knife-solo/issues/207
 [209]: https://github.com/matschaffer/knife-solo/issues/209
 [210]: https://github.com/matschaffer/knife-solo/issues/210
 [211]: https://github.com/matschaffer/knife-solo/issues/211
