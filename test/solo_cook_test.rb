@@ -57,7 +57,7 @@ class SoloCookTest < TestCase
       FileUtils.touch "Cheffile"
       cmd = command("somehost")
       cmd.expects(:load_librarian).returns(false)
-      cmd.ui.expects(:err).with(regexp_matches(/librarian gem/))
+      cmd.ui.expects(:err).with(regexp_matches(/librarian-chef gem/))
       Librarian::Action::Install.any_instance.expects(:run).never
       cmd.run
     end

@@ -161,7 +161,7 @@ class Chef
           Chef::Log.debug "Cheffile not found"
         elsif !load_librarian
           ui.warn "Librarian-Chef could not be loaded"
-          ui.warn "Please add the librarian gem to your Gemfile or install it manually with `gem install librarian`"
+          ui.warn "Please add the librarian-chef gem to your Gemfile or install it manually with `gem install librarian-chef`"
         else
         ui.msg "Installing Librarian cookbooks..."
         Librarian::Action::Resolve.new(librarian_env).run
