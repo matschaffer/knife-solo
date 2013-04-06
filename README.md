@@ -21,7 +21,7 @@ Having the gem installed will add Knife subcommands. Run `knife solo` with no ar
 
 ## Documentation
 
-More complete usage documentation for the current release is available at [matschaffer.github.com/knife-solo](http://matschaffer.github.com/knife-solo).
+More complete usage documentation for the current release is available at [matschaffer.github.io/knife-solo](http://matschaffer.github.io/knife-solo).
 
 ## Cutting Edge
 

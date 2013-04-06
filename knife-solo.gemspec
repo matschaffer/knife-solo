@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
 
   s.author   = 'Mat Schaffer'
   s.email    = 'mat@schaffer.me'
-  s.homepage = 'http://matschaffer.github.com/knife-solo/'
+  s.homepage = 'http://matschaffer.github.io/knife-solo/'
 
   manifest        = File.readlines("Manifest.txt").map(&:chomp)
   s.files         = manifest

@@ -115,7 +115,7 @@
 ## Documentation
 
 * Include documentation and tests in the gem (e01c23)
-* [Home page](http://matschaffer.github.com/knife-solo/)
+* [Home page](http://matschaffer.github.io/knife-solo/)
   that reflects always the current release (#151)
 
 ## Thanks to our contributors!
