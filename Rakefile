@@ -5,6 +5,7 @@ require File.join(File.dirname(__FILE__), 'lib', 'knife-solo', 'info')
 MANIFEST_IGNORES = %w[
     .travis.yml
     .gitignore
+    .gitmodules
     Gemfile
     Gemfile.lock
     Manifest.txt
@@ -24,10 +25,11 @@ namespace :manifest do
 
   desc 'Updates Manifest.txt with a list of files from git'
   task :update do
-    git_files = `git ls-files`.split("\n")
+    git_files       = `git ls-files`.split("\n")
+    submodule_files = `git submodule foreach -q 'for f in $(git ls-files); do echo $path/$f; done'`.split("\n")
 
     File.open('Manifest.txt', 'w') do |f|
-      f.puts((git_files - MANIFEST_IGNORES).join("\n"))
+      f.puts((git_files + submodule_files - MANIFEST_IGNORES).join("\n"))
     end
   end
 end

@@ -1,4 +1,5 @@
 require 'chef/knife'
+require 'fileutils'
 
 class Chef
   class Knife
@@ -24,6 +25,7 @@ class Chef
         @base = @name_args.first
         validate!
         create_kitchen
+        create_config
         create_cupboards %w[nodes roles data_bags site-cookbooks cookbooks]
         librarian_init if config[:librarian]
       end
@@ -50,6 +52,15 @@ class Chef
       def create_kitchen
         ui.msg "Creating kitchen..."
         mkdir @base unless @base == '.'
+      end
+
+      def create_config
+        ui.msg "Creating knife.rb in kitchen..."
+        mkdir_p File.join(@base, '.chef')
+        knife_rb = File.join(@base, '.chef', 'knife.rb')
+        unless File.exist?(knife_rb)
+          cp KnifeSolo.resource('knife.rb'), knife_rb
+        end
       end
 
       def librarian_init
