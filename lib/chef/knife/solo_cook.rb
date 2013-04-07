@@ -176,6 +176,7 @@ class Chef
           ui.msg "Installing Librarian cookbooks..."
           Librarian::Action::Resolve.new(librarian_env).run
           Librarian::Action::Install.new(librarian_env).run
+          add_cookbook_path librarian_env.install_path
         end
       end
 
