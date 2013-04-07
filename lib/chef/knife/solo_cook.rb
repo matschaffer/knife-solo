@@ -107,7 +107,13 @@ class Chef
       end
 
       def cookbook_paths
-        Array(Chef::Config[:cookbook_path]) + [KnifeSolo.resource('patch_cookbooks').to_s]
+        unless @cookbook_paths
+          @cookbook_paths = Array(Chef::Config[:cookbook_path]).map do |path|
+            Pathname.new(path).expand_path
+          end
+          @cookbook_paths << KnifeSolo.resource('patch_cookbooks')
+        end
+        @cookbook_paths
       end
 
       def nodes_path
@@ -205,8 +211,7 @@ class Chef
         elsif !File.exist?(src)
           ui.warn "Local #{key_name} '#{src}' does not exist"
         else
-          src << '/' if File.directory? src
-          upload(src, File.join(provisioning_path, dest))
+          upload("#{src}#{'/' if File.directory?(src)}", File.join(provisioning_path, dest))
         end
       end
 
