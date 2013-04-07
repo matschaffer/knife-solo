@@ -163,10 +163,10 @@ class Chef
           ui.warn "Librarian-Chef could not be loaded"
           ui.warn "Please add the librarian-chef gem to your Gemfile or install it manually with `gem install librarian-chef`"
         else
-        ui.msg "Installing Librarian cookbooks..."
-        Librarian::Action::Resolve.new(librarian_env).run
-        Librarian::Action::Install.new(librarian_env).run
-      end
+          ui.msg "Installing Librarian cookbooks..."
+          Librarian::Action::Resolve.new(librarian_env).run
+          Librarian::Action::Install.new(librarian_env).run
+        end
       end
 
       def load_librarian
