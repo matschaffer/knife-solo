@@ -5,9 +5,11 @@
 ## Changes and new features
 
 * BREAKING: Generate solo.rb based on knife.rb settings ([199])
+    - _solo.rb_ is not used and a warning is issued if it still found
+    - You have to specify the local cookbook etc. paths in _.chef/knife.rb_ 
 * BREAKING: Set root path with `--provisioning-path` or `knife[:provisioning_path]` and use ~/chef-solo by default ([1], [86], [125], [128], [177], [197])
 * BREAKING: Remove hard dependency on Librarian-Chef ([211])
-   - If you use Librarian integration you need to install the librarian-chef
+    - If you use Librarian integration you need to install the librarian-chef gem yourself
 * Add `--solo` option and `knife[:solo]` configuration option to `knife bootstrap` ([207])
 * `--prerelease` option to allow pre-release versions of chef omnibus or rubygem to be installed ([205])
 * Prepare/bootstrap now installs the same version of Chef that the workstation is running ([186])
