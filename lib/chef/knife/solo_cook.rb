@@ -106,18 +106,22 @@ class Chef
         upload_to_provision_path(:encrypted_data_bag_secret, 'data_bag_key')
       end
 
-      def cookbook_paths
-        unless @cookbook_paths
-          @cookbook_paths = Array(Chef::Config[:cookbook_path]).map do |path|
-            Pathname.new(path).expand_path
-          end
-          @cookbook_paths << KnifeSolo.resource('patch_cookbooks')
+      def expanded_config_paths(key)
+        Array(Chef::Config[key]).map do |path|
+          Pathname.new(path).expand_path
         end
-        @cookbook_paths
+      end
+
+      def cookbook_paths
+        @cookbook_paths ||= expanded_config_paths(:cookbook_path) + [patch_cookbooks_path]
       end
 
       def add_cookbook_path(path)
         cookbook_paths.unshift(path) unless cookbook_paths.include?(path)
+      end
+
+      def patch_cookbooks_path
+        KnifeSolo.resource('patch_cookbooks')
       end
 
       def nodes_path
