@@ -106,8 +106,20 @@ class Chef
         upload_to_provision_path(:encrypted_data_bag_secret, 'data_bag_key')
       end
 
+      def expanded_config_paths(key)
+        Array(Chef::Config[key]).map { |path| Pathname.new(path).expand_path }
+      end
+
       def cookbook_paths
-        Array(Chef::Config[:cookbook_path]) + [KnifeSolo.resource('patch_cookbooks').to_s]
+        @cookbook_paths ||= expanded_config_paths(:cookbook_path) + [patch_cookbooks_path]
+      end
+
+      def add_cookbook_path(path)
+        cookbook_paths.unshift(path) unless cookbook_paths.include?(path)
+      end
+
+      def patch_cookbooks_path
+        KnifeSolo.resource('patch_cookbooks')
       end
 
       def nodes_path
@@ -166,6 +178,7 @@ class Chef
           ui.msg "Installing Librarian cookbooks..."
           Librarian::Action::Resolve.new(librarian_env).run
           Librarian::Action::Install.new(librarian_env).run
+          add_cookbook_path librarian_env.install_path
         end
       end
 
@@ -205,8 +218,7 @@ class Chef
         elsif !File.exist?(src)
           ui.warn "Local #{key_name} '#{src}' does not exist"
         else
-          src << '/' if File.directory? src
-          upload(src, File.join(provisioning_path, dest))
+          upload("#{src}#{'/' if File.directory?(src)}", File.join(provisioning_path, dest))
         end
       end
 

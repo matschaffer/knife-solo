@@ -29,6 +29,50 @@ class SoloCookTest < TestCase
     end
   end
 
+  def test_expanded_config_paths_returns_empty_array_for_nil
+    Chef::Config[:foo] = nil
+    assert_equal [], command.expanded_config_paths(:foo)
+  end
+
+  def test_expanded_config_paths_returns_pathnames
+    Chef::Config[:foo] = ["foo"]
+    assert_instance_of Pathname, command.expanded_config_paths(:foo).first
+  end
+
+  def test_expanded_config_paths_expands_paths
+    Chef::Config[:foo] = ["foo", "/absolute/path"]
+    paths = command.expanded_config_paths(:foo)
+    assert_equal File.join(Dir.pwd, "foo"), paths[0].to_s
+    assert_equal "/absolute/path", paths[1].to_s
+  end
+
+  def test_patch_cookbooks_paths_exists
+    path = command.patch_cookbooks_path
+    refute_nil path, "patch_cookbooks_path should not be nil"
+    assert Dir.exist?(path), "patch_cookbooks_path is not a directory"
+  end
+
+  def test_cookbook_paths_includes_patch_cookbooks
+    cmd = command
+    assert_equal cmd.patch_cookbooks_path, cmd.cookbook_paths.last, "patch_cookbooks is not included"
+  end
+
+  def test_cookbook_paths_expands_paths
+    cmd = command
+    Chef::Config.cookbook_path = ["mycookbooks", "/some/other/path"]
+    assert_equal File.join(Dir.pwd, "mycookbooks"), cmd.cookbook_paths[0].to_s
+    assert_equal "/some/other/path", cmd.cookbook_paths[1].to_s
+  end
+
+  def test_add_cookbook_path_prepends_the_path
+    cmd = command
+    Chef::Config.cookbook_path = ["mycookbooks", "/some/other/path"]
+    cmd.add_cookbook_path "/new/path"
+    assert_equal "/new/path", cmd.cookbook_paths[0].to_s
+    assert_equal File.join(Dir.pwd, "mycookbooks"), cmd.cookbook_paths[1].to_s
+    assert_equal "/some/other/path", cmd.cookbook_paths[2].to_s
+  end
+
   def test_does_not_run_librarian_if_no_cheffile
     in_kitchen do
       Librarian::Action::Install.any_instance.expects(:run).never
@@ -70,6 +114,16 @@ class SoloCookTest < TestCase
       cmd.ui.expects(:err).never
       Librarian::Action::Install.any_instance.expects(:run).never
       cmd.run
+    end
+  end
+
+  def test_adds_librarian_path_to_cookbooks
+    ENV['LIBRARIAN_CHEF_PATH'] = "librarian/path"
+    in_kitchen do
+      FileUtils.touch "Cheffile"
+      cmd = command("somehost")
+      cmd.run
+      assert_equal File.join(Dir.pwd, "librarian/path"), cmd.cookbook_paths[0].to_s
     end
   end
 
