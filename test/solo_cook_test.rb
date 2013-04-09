@@ -117,6 +117,16 @@ class SoloCookTest < TestCase
     end
   end
 
+  def test_adds_librarian_path_to_cookbooks
+    ENV['LIBRARIAN_CHEF_PATH'] = "librarian/path"
+    in_kitchen do
+      FileUtils.touch "Cheffile"
+      cmd = command("somehost")
+      cmd.run
+      assert_equal File.join(Dir.pwd, "librarian/path"), cmd.cookbook_paths[0].to_s
+    end
+  end
+
   def test_validates_chef_version
     in_kitchen do
       cmd = command("somehost")
