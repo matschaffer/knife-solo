@@ -107,9 +107,7 @@ class Chef
       end
 
       def expanded_config_paths(key)
-        Array(Chef::Config[key]).map do |path|
-          Pathname.new(path).expand_path
-        end
+        Array(Chef::Config[key]).map { |path| Pathname.new(path).expand_path }
       end
 
       def cookbook_paths
