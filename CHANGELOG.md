@@ -4,19 +4,20 @@
 
 ## Changes and new features
 
-* Automatically add librarian to cookbook paths when syncing ([226])
 * BREAKING: Generate solo.rb based on knife.rb settings ([199])
-    - `solo.rb` is not used and a warning is issued if it still found
+    - `solo.rb` is not used and a warning is issued if it is still found
     - You have to specify the local cookbook etc. paths in `.chef/knife.rb`
 * BREAKING: Set root path with `--provisioning-path` or `knife[:provisioning_path]` and use ~/chef-solo by default ([1], [86], [125], [128], [177], [197])
 * BREAKING: Remove hard dependency on Librarian-Chef ([211])
     - If you use Librarian integration you need to install the librarian-chef gem yourself
+* Automatically add librarian to cookbook paths when syncing ([226])
 * Add `--solo` option and `knife[:solo]` configuration option to `knife bootstrap` ([207])
 * `--prerelease` option to allow pre-release versions of chef omnibus or rubygem to be installed ([205])
 * Prepare/bootstrap now installs the same version of Chef that the workstation is running ([186])
 * Switch `--omnibus-version` flag to `--bootstrap-version` ([185])
 * Support `--override-runlist` option ([204])
 * Drop support for openSUSE 11
+* Upgrade chef-solo-search to v0.4.0
 
 ## Fixes
 
@@ -56,7 +57,7 @@
 [213]: https://github.com/matschaffer/knife-solo/issues/213
 [215]: https://github.com/matschaffer/knife-solo/issues/215
 [221]: https://github.com/matschaffer/knife-solo/issues/221
-[226]: https://github.com/matschaffer/knife-solo/issues/221
+[226]: https://github.com/matschaffer/knife-solo/issues/226
 [d21756]: https://github.com/matschaffer/knife-solo/commit/d21756
 [1d3485]: https://github.com/matschaffer/knife-solo/commit/1d3485
 [f43ba4]: https://github.com/matschaffer/knife-solo/commit/f43ba4
