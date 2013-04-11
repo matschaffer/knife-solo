@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.test_files    = manifest.grep(%r{^(test|spec|features)/})
   s.require_paths = ["lib"]
 
-   s.post_install_message = KnifeSolo.post_install_message
+  s.post_install_message = KnifeSolo.post_install_message
 
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'fog'
@@ -34,5 +34,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'chef',     chef_version
   s.add_dependency 'net-ssh',  '>= 2.2.2', '< 3.0'
-  s.add_dependency 'erubis',    '~> 2.7.0'
+  s.add_dependency 'erubis',   '~> 2.7.0'
 end
