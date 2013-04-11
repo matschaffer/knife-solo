@@ -111,8 +111,12 @@ class Chef
         upload_to_provision_path(:encrypted_data_bag_secret, 'data_bag_key')
       end
 
+      def expand_path(path)
+        Pathname.new(path).expand_path
+      end
+
       def expanded_config_paths(key)
-        Array(Chef::Config[key]).map { |path| Pathname.new(path).expand_path }
+        Array(Chef::Config[key]).map { |path| expand_path path }
       end
 
       def cookbook_paths
@@ -120,6 +124,7 @@ class Chef
       end
 
       def add_cookbook_path(path)
+        path = expand_path path
         cookbook_paths.unshift(path) unless cookbook_paths.include?(path)
       end
 
@@ -181,7 +186,7 @@ class Chef
           ui.warn "Please add the berkshelf gem to your Gemfile or install it manually with `gem install berkshelf`"
         else
           ui.msg "Installing Berkshelf cookbooks..."
-          Berkshelf::Berksfile.from_file(File.expand_path('Berksfile')).install(:path => berkshelf_path)
+          Berkshelf::Berksfile.from_file(expand_path('Berksfile')).install(:path => berkshelf_path)
           add_cookbook_path berkshelf_path
         end
       end
@@ -197,7 +202,7 @@ class Chef
       end
 
       def berkshelf_path
-        Pathname.new('cookbooks').expand_path
+        'cookbooks'
       end
 
       def librarian_install

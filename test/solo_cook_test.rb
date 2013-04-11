@@ -124,7 +124,7 @@ class SoloCookTest < TestCase
     in_kitchen do
       FileUtils.touch "Berksfile"
       cmd = command("somehost")
-      cmd.stubs(:berkshelf_path).returns(Pathname.new("berkshelf/path").expand_path)
+      cmd.stubs(:berkshelf_path).returns("berkshelf/path")
       cmd.run
       assert_equal File.join(Dir.pwd, "berkshelf/path"), cmd.cookbook_paths[0].to_s
     end
