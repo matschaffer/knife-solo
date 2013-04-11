@@ -4,9 +4,10 @@
 
 ## Changes and new features
 
+* Automatically add librarian to cookbook paths when syncing ([226])
 * BREAKING: Generate solo.rb based on knife.rb settings ([199])
-    - _solo.rb_ is not used and a warning is issued if it still found
-    - You have to specify the local cookbook etc. paths in _.chef/knife.rb_ 
+    - `solo.rb` is not used and a warning is issued if it still found
+    - You have to specify the local cookbook etc. paths in `.chef/knife.rb`
 * BREAKING: Set root path with `--provisioning-path` or `knife[:provisioning_path]` and use ~/chef-solo by default ([1], [86], [125], [128], [177], [197])
 * BREAKING: Remove hard dependency on Librarian-Chef ([211])
     - If you use Librarian integration you need to install the librarian-chef gem yourself
@@ -55,6 +56,7 @@
 [213]: https://github.com/matschaffer/knife-solo/issues/213
 [215]: https://github.com/matschaffer/knife-solo/issues/215
 [221]: https://github.com/matschaffer/knife-solo/issues/221
+[226]: https://github.com/matschaffer/knife-solo/issues/221
 [d21756]: https://github.com/matschaffer/knife-solo/commit/d21756
 [1d3485]: https://github.com/matschaffer/knife-solo/commit/1d3485
 [f43ba4]: https://github.com/matschaffer/knife-solo/commit/f43ba4
