@@ -185,9 +185,14 @@ class Chef
           ui.warn "Berkshelf could not be loaded"
           ui.warn "Please add the berkshelf gem to your Gemfile or install it manually with `gem install berkshelf`"
         else
-          ui.msg "Installing Berkshelf cookbooks..."
-          Berkshelf::Berksfile.from_file(expand_path('Berksfile')).install(:path => berkshelf_path)
-          add_cookbook_path berkshelf_path
+          path = berkshelf_path
+          if path == :tmpdir
+            path = Dir.mktmpdir('berks-')
+            # TODO: remove the tmpdir after uploading it to the node
+          end
+          ui.msg "Installing Berkshelf cookbooks to '#{path}'..."
+          Berkshelf::Berksfile.from_file(expand_path('Berksfile')).install(:path => path)
+          add_cookbook_path path
         end
       end
 
@@ -202,7 +207,12 @@ class Chef
       end
 
       def berkshelf_path
-        'cookbooks'
+        path = config_value(:berkshelf_path)
+        if path.nil?
+          ui.warn "`knife[:berkshelf_path]` is not set. Using temporary directory to install Berkshelf cookbooks."
+          path = :tmpdir
+        end
+        path
       end
 
       def librarian_install
