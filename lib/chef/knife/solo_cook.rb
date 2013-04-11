@@ -21,7 +21,6 @@ class Chef
         require 'erubis'
         require 'pathname'
         require 'tempfile'
-        require 'berkshelf'
         KnifeSolo::SshCommand.load_deps
         KnifeSolo::NodeConfigCommand.load_deps
       end
@@ -40,6 +39,10 @@ class Chef
       option :sync_only,
         :long        => '--sync-only',
         :description => 'Only sync the cookbook - do not run Chef'
+
+      option :berkshelf,
+        :long        => '--no-berkshelf',
+        :description => 'Skip berks install'
 
       option :librarian,
         :long        => '--no-librarian',
@@ -73,8 +76,8 @@ class Chef
 
           check_chef_version if config[:chef_check]
           generate_node_config
+          berkshelf_install if config_value(:berkshelf, true)
           librarian_install if config_value(:librarian, true)
-          install_berskfile if has_berksfile?
           sync_kitchen
           generate_solorb
           cook unless config[:sync_only]
@@ -170,6 +173,33 @@ class Chef
         ui.msg "#{msg} finished in #{Time.now - start} seconds"
       end
 
+      def berkshelf_install
+        if !File.exist? 'Berksfile'
+          Chef::Log.debug "Berksfile not found"
+        elsif !load_berkshelf
+          ui.warn "Berkshelf could not be loaded"
+          ui.warn "Please add the berkshelf gem to your Gemfile or install it manually with `gem install berkshelf`"
+        else
+          ui.msg "Installing Berkshelf cookbooks..."
+          Berkshelf::Berksfile.from_file(File.expand_path('Berksfile')).install(:path => berkshelf_path)
+          add_cookbook_path berkshelf_path
+        end
+      end
+
+      def load_berkshelf
+        begin
+          require 'berkshelf'
+        rescue LoadError
+          false
+        else
+          true
+        end
+      end
+
+      def berkshelf_path
+        Pathname.new('cookbooks').expand_path
+      end
+
       def librarian_install
         if !File.exist? 'Cheffile'
           Chef::Log.debug "Cheffile not found"
@@ -263,16 +293,6 @@ class Chef
 
         result = stream_command cmd
         raise "chef-solo failed. See output above." unless result.success?
-      end
-
-      private
-
-      def has_berksfile?
-        File.exist?('Berksfile')
-      end
-
-      def install_berskfile
-        Berkshelf::Berksfile.from_file(File.expand_path('Berksfile')).install(:path => File.expand_path('cookbooks'))
       end
     end
   end
