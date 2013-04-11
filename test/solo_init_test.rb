@@ -43,7 +43,7 @@ class SoloInitTest < TestCase
 
   def test_skips_berksfile_creation_if_given_option
     outside_kitchen do
-      command("new_kitchen", "--skip-berkshelf").run
+      command("new_kitchen", "--no-berkshelf").run
       assert !File.exist?("new_kitchen/Berksfile")
     end
   end

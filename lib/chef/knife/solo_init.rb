@@ -8,23 +8,23 @@ class Chef
 
       deps do
         require 'knife-solo/gitignore'
+        require 'knife-solo/tools'
       end
 
       banner "knife solo init DIRECTORY"
 
       option :git,
-        :long => '--no-git',
+        :long        => '--no-git',
         :description => 'Do not generate .gitignore',
-        :default => true
+        :default     => true
+
+      option :berkshelf,
+        :long        => '--[no-]berkshelf',
+        :description => "Generate files for Berkshelf support, defaults to true"
 
       option :librarian,
-        :long => '--librarian',
-        :description => 'Initialize Librarian'
-
-      option :skip_berkshelf,
-        :long => '--skip-berkshelf',
-        :boolean => false,
-        :description => "Skip generating files for Berkshelf support"
+        :long        => '--[no-]librarian',
+        :description => 'Generate files for Librarian support, defaults to false'
 
       def run
         @base = @name_args.first
@@ -32,8 +32,11 @@ class Chef
         create_kitchen
         create_config
         create_cupboards %w[nodes roles data_bags site-cookbooks cookbooks]
-        librarian_init if config[:librarian]
-        bootstrap_berkshelf unless config[:skip_berkshelf]
+        if config_value(:librarian, false)
+          bootstrap_librarian
+        elsif config_value(:berkshelf, true)
+          bootstrap_berkshelf
+        end
       end
 
       def validate!
@@ -44,10 +47,8 @@ class Chef
         end
       end
 
-      def bootstrap_berkshelf
-        File.open(File.join(@base, 'Berksfile'), 'w') do |f|
-          f.write("site :opscode\n")
-        end
+      def config_value(key, default = nil)
+        KnifeSolo::Tools.config_value(config, key, default)
       end
 
       def create_cupboards(dirs)
@@ -75,7 +76,18 @@ class Chef
         end
       end
 
-      def librarian_init
+      def bootstrap_berkshelf
+        ui.msg "Setting up Berkshelf..."
+        berksfile = File.join(@base, 'Berksfile')
+        unless File.exist?(berksfile)
+          File.open(berksfile, 'w') do |f|
+            f.puts("site :opscode")
+          end
+        end
+        gitignore %w[/cookbooks/]
+      end
+
+      def bootstrap_librarian
         ui.msg "Setting up Librarian..."
         cheffile = File.join(@base, 'Cheffile')
         unless File.exist?(cheffile)
