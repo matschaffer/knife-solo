@@ -82,6 +82,8 @@ module KnifeSolo::Bootstraps
         {:type => "yum_omnibus"}
       when %r{Fedora release.*? 17}
         {:type => "yum_omnibus"}
+      when %r{Fedora release.*? 18}
+        {:type => "yum_omnibus"}
       when %r{Scientific Linux.*? 5}
         {:type => "yum_omnibus"}
       when %r{Scientific Linux.*? 6}
