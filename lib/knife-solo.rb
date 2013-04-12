@@ -1,4 +1,5 @@
 require 'knife-solo/info'
+require 'pathname'
 
 module KnifeSolo
   def self.resource(name)
