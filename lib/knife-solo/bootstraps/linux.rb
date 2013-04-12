@@ -66,27 +66,15 @@ module KnifeSolo::Bootstraps
         {:type => (x86? ? "debianoid_omnibus" : "debianoid_gem")}
       when %r{Linaro}
         {:type => "debianoid_gem"}
-      when %r{CentOS.*? 5}
-        {:type => "yum_omnibus"}
-      when %r{CentOS.*? 6}
+      when %r{CentOS}
         {:type => "yum_omnibus"}
       when %r{Amazon Linux}
         {:type => "yum_omnibus"}
-      when %r{Red Hat Enterprise.*? 5}
+      when %r{Red Hat Enterprise}
         {:type => "yum_omnibus"}
-      when %r{Red Hat Enterprise.*? 6}
+      when %r{Fedora release}
         {:type => "yum_omnibus"}
-      when %r{Fedora release.*? 15}
-        {:type => "yum_omnibus"}
-      when %r{Fedora release.*? 16}
-        {:type => "yum_omnibus"}
-      when %r{Fedora release.*? 17}
-        {:type => "yum_omnibus"}
-      when %r{Fedora release.*? 18}
-        {:type => "yum_omnibus"}
-      when %r{Scientific Linux.*? 5}
-        {:type => "yum_omnibus"}
-      when %r{Scientific Linux.*? 6}
+      when %r{Scientific Linux}
         {:type => "yum_omnibus"}
       when %r{SUSE Linux Enterprise Server 1[12]}
         {:type => "omnibus"}
