@@ -1,5 +1,4 @@
 require 'chef/knife'
-require 'fileutils'
 
 class Chef
   class Knife
@@ -7,7 +6,9 @@ class Chef
       include FileUtils
 
       deps do
+        require 'knife-solo'
         require 'knife-solo/gitignore'
+        require 'fileutils'
       end
 
       banner "knife solo init DIRECTORY"
