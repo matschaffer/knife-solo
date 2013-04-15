@@ -9,3 +9,4 @@
 /test/support/knife-solo.pem
 /test/support/kitchens
 /Gemfile.lock
+/test/gemfiles/*.lock

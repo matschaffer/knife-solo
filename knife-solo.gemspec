@@ -1,10 +1,5 @@
 require File.join(File.dirname(__FILE__), 'lib', 'knife-solo', 'info')
 
-chef_version = ['>= 10.12']
-unless ENV['CHEF_VERSION'].to_s.empty?
-  chef_version = Gem::Requirement.new(ENV['CHEF_VERSION'])
-end
-
 Gem::Specification.new do |s|
   s.name    = 'knife-solo'
   s.version = KnifeSolo.version
@@ -32,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rdoc'
 
-  s.add_dependency 'chef',     chef_version
+  s.add_dependency 'chef',     '>= 10.12'
   s.add_dependency 'net-ssh',  '>= 2.2.2', '< 3.0'
   s.add_dependency 'erubis',   '~> 2.7.0'
 end
