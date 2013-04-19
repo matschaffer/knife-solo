@@ -1,6 +1,5 @@
 require 'chef/knife'
 
-require 'knife-solo'
 require 'knife-solo/ssh_command'
 require 'knife-solo/node_config_command'
 require 'knife-solo/tools'
@@ -18,6 +17,7 @@ class Chef
 
       deps do
         require 'chef/cookbook/chefignore'
+        require 'knife-solo'
         require 'erubis'
         require 'pathname'
         require 'tempfile'

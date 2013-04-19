@@ -1,5 +1,4 @@
 require 'chef/knife'
-require 'fileutils'
 
 class Chef
   class Knife
@@ -7,6 +6,7 @@ class Chef
       include FileUtils
 
       deps do
+        require 'knife-solo'
         require 'knife-solo/gitignore'
         require 'knife-solo/tools'
       end
@@ -14,9 +14,9 @@ class Chef
       banner "knife solo init DIRECTORY"
 
       option :git,
-        :long        => '--no-git',
+        :long => '--no-git',
         :description => 'Do not generate .gitignore',
-        :default     => true
+        :default => true
 
       option :berkshelf,
         :long        => '--[no-]berkshelf',

@@ -16,6 +16,7 @@
 * Prepare/bootstrap now installs the same version of Chef that the workstation is running ([186])
 * Switch `--omnibus-version` flag to `--bootstrap-version` ([185])
 * Support `--override-runlist` option ([204])
+* Support Fedora 18 and other new EL distros ([229], [51a581])
 * Drop support for openSUSE 11
 * Upgrade chef-solo-search to v0.4.0
 
@@ -37,6 +38,7 @@
 * [David Kinzer][dkinzer]
 * [Naoya Ito][naoya]
 * [David Radcliffe][dwradcliffe]
+* [Łukasz Dubiel][bambuchaAdm]
 
 [1]: https://github.com/matschaffer/knife-solo/issues/1
 [86]: https://github.com/matschaffer/knife-solo/issues/86
@@ -58,9 +60,11 @@
 [215]: https://github.com/matschaffer/knife-solo/issues/215
 [221]: https://github.com/matschaffer/knife-solo/issues/221
 [226]: https://github.com/matschaffer/knife-solo/issues/226
+[229]: https://github.com/matschaffer/knife-solo/issues/229
 [d21756]: https://github.com/matschaffer/knife-solo/commit/d21756
 [1d3485]: https://github.com/matschaffer/knife-solo/commit/1d3485
 [f43ba4]: https://github.com/matschaffer/knife-solo/commit/f43ba4
+[51a581]: https://github.com/matschaffer/knife-solo/commit/51a581
 
 # 0.2.0 / 2013-02-12
 
@@ -308,6 +312,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [amoslanka]:     https://github.com/amoslanka
 [ares]:          https://github.com/ares
 [avit]:          https://github.com/avit
+[bambuchaAdm]:   https://github.com/bambuchaAdm
 [brynary]:       https://github.com/brynary
 [btm]:           https://github.com/btm
 [davidsch]:      https://github.com/davidsch
