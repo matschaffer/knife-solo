@@ -81,6 +81,7 @@ class Chef
           sync_kitchen
           generate_solorb
           cook unless config[:sync_only]
+          cleanup
         end
       end
 
@@ -187,8 +188,7 @@ class Chef
         else
           path = berkshelf_path
           if path == :tmpdir
-            path = Dir.mktmpdir('berks-')
-            # TODO: remove the tmpdir after uploading it to the node
+            path = @berks_tmp_dir = Dir.mktmpdir('berks-')
           end
           ui.msg "Installing Berkshelf cookbooks to '#{path}'..."
           Berkshelf::Berksfile.from_file(expand_path('Berksfile')).install(:path => path)
@@ -308,6 +308,10 @@ class Chef
 
         result = stream_command cmd
         raise "chef-solo failed. See output above." unless result.success?
+      end
+
+      def cleanup
+        FileUtils.remove_entry_secure(@berks_tmp_dir) if @berks_tmp_dir
       end
     end
   end
