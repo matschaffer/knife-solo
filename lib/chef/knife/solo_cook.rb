@@ -40,6 +40,10 @@ class Chef
         :long        => '--sync-only',
         :description => 'Only sync the cookbook - do not run Chef'
 
+      option :berkshelf,
+        :long        => '--no-berkshelf',
+        :description => 'Skip berks install'
+
       option :librarian,
         :long        => '--no-librarian',
         :description => 'Skip librarian-chef install'
@@ -72,10 +76,12 @@ class Chef
 
           check_chef_version if config[:chef_check]
           generate_node_config
+          berkshelf_install if config_value(:berkshelf, true)
           librarian_install if config_value(:librarian, true)
           sync_kitchen
           generate_solorb
           cook unless config[:sync_only]
+          cleanup
         end
       end
 
@@ -106,8 +112,12 @@ class Chef
         upload_to_provision_path(:encrypted_data_bag_secret, 'data_bag_key')
       end
 
+      def expand_path(path)
+        Pathname.new(path).expand_path
+      end
+
       def expanded_config_paths(key)
-        Array(Chef::Config[key]).map { |path| Pathname.new(path).expand_path }
+        Array(Chef::Config[key]).map { |path| expand_path path }
       end
 
       def cookbook_paths
@@ -115,6 +125,7 @@ class Chef
       end
 
       def add_cookbook_path(path)
+        path = expand_path path
         cookbook_paths.unshift(path) unless cookbook_paths.include?(path)
       end
 
@@ -166,6 +177,42 @@ class Chef
         start = Time.now
         yield
         ui.msg "#{msg} finished in #{Time.now - start} seconds"
+      end
+
+      def berkshelf_install
+        if !File.exist? 'Berksfile'
+          Chef::Log.debug "Berksfile not found"
+        elsif !load_berkshelf
+          ui.warn "Berkshelf could not be loaded"
+          ui.warn "Please add the berkshelf gem to your Gemfile or install it manually with `gem install berkshelf`"
+        else
+          path = berkshelf_path
+          if path == :tmpdir
+            path = @berks_tmp_dir = Dir.mktmpdir('berks-')
+          end
+          ui.msg "Installing Berkshelf cookbooks to '#{path}'..."
+          Berkshelf::Berksfile.from_file(expand_path('Berksfile')).install(:path => path)
+          add_cookbook_path path
+        end
+      end
+
+      def load_berkshelf
+        begin
+          require 'berkshelf'
+        rescue LoadError
+          false
+        else
+          true
+        end
+      end
+
+      def berkshelf_path
+        path = config_value(:berkshelf_path)
+        if path.nil?
+          ui.warn "`knife[:berkshelf_path]` is not set. Using temporary directory to install Berkshelf cookbooks."
+          path = :tmpdir
+        end
+        path
       end
 
       def librarian_install
@@ -261,6 +308,10 @@ class Chef
 
         result = stream_command cmd
         raise "chef-solo failed. See output above." unless result.success?
+      end
+
+      def cleanup
+        FileUtils.remove_entry_secure(@berks_tmp_dir) if @berks_tmp_dir
       end
     end
   end

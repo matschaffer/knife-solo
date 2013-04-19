@@ -5,6 +5,7 @@ require 'support/validation_helper'
 require 'chef/cookbook/chefignore'
 require 'chef/knife/solo_cook'
 require 'librarian/action/install'
+require 'berkshelf'
 
 class SuccessfulResult
   def success?
@@ -71,6 +72,62 @@ class SoloCookTest < TestCase
     assert_equal "/new/path", cmd.cookbook_paths[0].to_s
     assert_equal File.join(Dir.pwd, "mycookbooks"), cmd.cookbook_paths[1].to_s
     assert_equal "/some/other/path", cmd.cookbook_paths[2].to_s
+  end
+
+  def test_does_not_run_berkshelf_if_no_berkfile
+    in_kitchen do
+      FileUtils.rm "Berksfile"
+      Berkshelf::Berksfile.any_instance.expects(:install).never
+      command("somehost").run
+    end
+  end
+
+  def test_runs_berkshelf_if_berkfile_found
+    in_kitchen do
+      FileUtils.touch "Berksfile"
+      Berkshelf::Berksfile.any_instance.expects(:install)
+      command("somehost").run
+    end
+  end
+
+  def test_does_not_run_berkshelf_if_denied_by_option
+    in_kitchen do
+      FileUtils.touch "Berksfile"
+      Berkshelf::Berksfile.any_instance.expects(:install).never
+      command("somehost", "--no-berkshelf").run
+    end
+  end
+
+  def test_complains_if_berkshe_gem_missing
+    in_kitchen do
+      FileUtils.touch "Berksfile"
+      cmd = command("somehost")
+      cmd.expects(:load_berkshelf).returns(false)
+      cmd.ui.expects(:err).with(regexp_matches(/berkshelf gem/))
+      Berkshelf::Berksfile.any_instance.expects(:install).never
+      cmd.run
+    end
+  end
+
+  def test_wont_complain_if_berkshelf_gem_missing_but_no_berkfile
+    in_kitchen do
+      FileUtils.rm "Berksfile"
+      cmd = command("somehost")
+      cmd.expects(:load_berkshelf).never
+      cmd.ui.expects(:err).never
+      Berkshelf::Berksfile.any_instance.expects(:install).never
+      cmd.run
+    end
+  end
+
+  def test_adds_berkshelf_path_to_cookbooks
+    in_kitchen do
+      FileUtils.touch "Berksfile"
+      cmd = command("somehost")
+      cmd.stubs(:berkshelf_path).returns("berkshelf/path")
+      cmd.run
+      assert_equal File.join(Dir.pwd, "berkshelf/path"), cmd.cookbook_paths[0].to_s
+    end
   end
 
   def test_does_not_run_librarian_if_no_cheffile
