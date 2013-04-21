@@ -32,7 +32,7 @@ class DeprecatedCommandTest < TestCase
     cmd.run
   end
 
-  def test_runs_original_command
+  def test_runs_new_command
     cmd = command
     cmd.ui.stubs(:err)
     cmd.expects(:new_run)
