@@ -47,6 +47,11 @@ class DeprecatedCommandTest < TestCase
     assert DummyDeprecatedCommand.options.include?(:foo)
   end
 
+  def test_loads_dependencies_from_new_command
+    DummyNewCommand.expects(:load_deps)
+    DummyDeprecatedCommand.load_deps
+  end
+
   def command(*args)
     DummyDeprecatedCommand.load_deps
     DummyDeprecatedCommand.new(args)
