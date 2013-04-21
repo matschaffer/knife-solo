@@ -6,6 +6,10 @@ require 'knife-solo/deprecated_command'
 class DummyNewCommand < Chef::Knife
   banner "knife dummy_new_command"
 
+  option :foo,
+    :long        => '--foo',
+    :description => 'Foo option'
+
   def run
     # calls #new_run so we can be sure this gets called
     new_run
@@ -37,6 +41,10 @@ class DeprecatedCommandTest < TestCase
     cmd.ui.stubs(:err)
     cmd.expects(:new_run)
     cmd.run
+  end
+
+  def test_includes_options_from_new_command
+    assert DummyDeprecatedCommand.options.include?(:foo)
   end
 
   def command(*args)

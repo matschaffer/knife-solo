@@ -8,6 +8,7 @@ module KnifeSolo
         end
 
         banner deprecated
+        self.options = superclass.options
       end
     end
 
