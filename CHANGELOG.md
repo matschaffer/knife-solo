@@ -30,8 +30,10 @@
 * Ensure rsync is installed on openSUSE ([f43ba4])
 * Clean up bootstrap classes ([213])
 * Rsync dot files by default, exclude only VCS dirs ([d21756], [1d3485])
-* Standardize messaging across commands [215]
+* Standardize messaging across commands ([215], [d37162])
 * Librarian-Chef was not run by default when knife-solo was invoked from ruby ([221])
+* Fix `solo init` on Ruby 1.8 ([230])
+* Fix deprecated commands to include options and dependencies from the new ones ([233])
 
 ## Thanks to our contributors!
 
@@ -39,6 +41,7 @@
 * [Naoya Ito][naoya]
 * [David Radcliffe][dwradcliffe]
 * [Łukasz Dubiel][bambuchaAdm]
+* [kmdsbng][kmdsbng]
 
 [1]: https://github.com/matschaffer/knife-solo/issues/1
 [86]: https://github.com/matschaffer/knife-solo/issues/86
@@ -61,10 +64,13 @@
 [221]: https://github.com/matschaffer/knife-solo/issues/221
 [226]: https://github.com/matschaffer/knife-solo/issues/226
 [229]: https://github.com/matschaffer/knife-solo/issues/229
+[230]: https://github.com/matschaffer/knife-solo/issues/230
+[233]: https://github.com/matschaffer/knife-solo/issues/233
 [d21756]: https://github.com/matschaffer/knife-solo/commit/d21756
 [1d3485]: https://github.com/matschaffer/knife-solo/commit/1d3485
 [f43ba4]: https://github.com/matschaffer/knife-solo/commit/f43ba4
 [51a581]: https://github.com/matschaffer/knife-solo/commit/51a581
+[d37162]: https://github.com/matschaffer/knife-solo/commit/d37162
 
 # 0.2.0 / 2013-02-12
 
@@ -327,6 +333,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [hrp]:           https://github.com/hrp
 [jgarber]:       https://github.com/jgarber
 [jgrevich]:      https://github.com/jgrevich
+[kmdsbng]:       https://github.com/kmdsbng
 [naoya]:         https://github.com/naoya
 [natlownes]:     https://github.com/natlownes
 [patatepartie]:  https://github.com/patatepartie
