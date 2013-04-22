@@ -21,6 +21,7 @@ class Chef
 
       def run
         validate!
+        ui.msg "Cleaning up #{host}..."
         run_command "rm -rf #{provisioning_path}"
       end
 
