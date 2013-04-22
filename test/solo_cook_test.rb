@@ -4,6 +4,7 @@ require 'support/validation_helper'
 
 require 'chef/cookbook/chefignore'
 require 'chef/knife/solo_cook'
+require 'fileutils'
 require 'librarian/action/install'
 
 class SuccessfulResult
