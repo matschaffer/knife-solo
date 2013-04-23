@@ -98,7 +98,7 @@ class SoloCookTest < TestCase
     end
   end
 
-  def test_complains_if_berkshe_gem_missing
+  def test_complains_if_berkshelf_gem_missing
     in_kitchen do
       FileUtils.touch "Berksfile"
       cmd = command("somehost")
