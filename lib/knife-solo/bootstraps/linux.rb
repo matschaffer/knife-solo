@@ -1,8 +1,9 @@
 module KnifeSolo::Bootstraps
   class Linux < Base
-
     def issue
-      prepare.run_command("cat /etc/issue").stdout.strip || prepare.run_command("lsb_release -d -s").stdout.strip
+      prepare.run_command("cat /etc/redhat-release").stdout.strip || 
+      prepare.run_command("cat /etc/issue").stdout.strip || 
+      prepare.run_command("lsb_release -d -s").stdout.strip
     end
 
     def x86?
