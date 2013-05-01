@@ -10,6 +10,7 @@
 * BREAKING: Set root path with `--provisioning-path` or `knife[:provisioning_path]` and use ~/chef-solo by default ([1], [86], [125], [128], [177], [197])
 * BREAKING: Remove hard dependency on Librarian-Chef ([211])
     - If you use Librarian integration you need to install the librarian-chef gem yourself
+* Add Berkshelf integration ([227])
 * Automatically add librarian to cookbook paths when syncing ([226])
 * Add `--solo` option and `knife[:solo]` configuration option to `knife bootstrap` ([207])
 * `--prerelease` option to allow pre-release versions of chef omnibus or rubygem to be installed ([205])
@@ -63,6 +64,7 @@
 [215]: https://github.com/matschaffer/knife-solo/issues/215
 [221]: https://github.com/matschaffer/knife-solo/issues/221
 [226]: https://github.com/matschaffer/knife-solo/issues/226
+[227]: https://github.com/matschaffer/knife-solo/issues/227
 [229]: https://github.com/matschaffer/knife-solo/issues/229
 [230]: https://github.com/matschaffer/knife-solo/issues/230
 [233]: https://github.com/matschaffer/knife-solo/issues/233
