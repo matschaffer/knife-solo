@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
 
   s.post_install_message = KnifeSolo.post_install_message
 
+  s.add_development_dependency 'berkshelf'
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'fog'
   s.add_development_dependency 'librarian-chef'
