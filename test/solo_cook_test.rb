@@ -221,13 +221,6 @@ class SoloCookTest < TestCase
     end
   end
 
-  def test_parses_chef_version_output
-    version_string = "\r\nChef: 11.2.0\r\n"
-    cmd = command("somehost")
-    cmd.stubs(:run_command).returns(OpenStruct.new(:stdout => version_string))
-    assert_equal '11.2.0', cmd.chef_version
-  end
-
   def test_barks_if_chef_too_old
     in_kitchen do
       cmd = command("somehost")
