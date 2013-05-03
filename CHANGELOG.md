@@ -35,6 +35,8 @@
 * Librarian-Chef was not run by default when knife-solo was invoked from ruby ([221])
 * Fix `solo init` on Ruby 1.8 ([230])
 * Fix deprecated commands to include options and dependencies from the new ones ([233])
+* Parse Chef version even if chef-solo command prints warnings ([235], [238])
+* Upgrade CentOS in integration tests to 5.8 and 6.3 ([237])
 
 ## Thanks to our contributors!
 
@@ -68,6 +70,9 @@
 [229]: https://github.com/matschaffer/knife-solo/issues/229
 [230]: https://github.com/matschaffer/knife-solo/issues/230
 [233]: https://github.com/matschaffer/knife-solo/issues/233
+[235]: https://github.com/matschaffer/knife-solo/issues/235
+[237]: https://github.com/matschaffer/knife-solo/issues/237
+[238]: https://github.com/matschaffer/knife-solo/issues/238
 [d21756]: https://github.com/matschaffer/knife-solo/commit/d21756
 [1d3485]: https://github.com/matschaffer/knife-solo/commit/1d3485
 [f43ba4]: https://github.com/matschaffer/knife-solo/commit/f43ba4
