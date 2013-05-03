@@ -39,7 +39,8 @@ test/integration/cases/cache_path_usage.rb
 test/integration/cases/empty_cook.rb
 test/integration/cases/encrypted_data_bag.rb
 test/integration/cases/knife_bootstrap.rb
-test/integration/centos5_6_test.rb
+test/integration/centos5_8_test.rb
+test/integration/centos6_3_test.rb
 test/integration/debian6_bootstrap_test.rb
 test/integration/debian7_knife_bootstrap_test.rb
 test/integration/gentoo2011_test.rb
