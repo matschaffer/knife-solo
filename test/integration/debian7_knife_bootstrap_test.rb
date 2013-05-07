@@ -6,7 +6,7 @@ class Debian7KnifeBootstrapTest < IntegrationTest
   end
 
   def image_id
-    "ami-51ff9238"
+    "ami-1d620e74"
   end
 
   def prepare_server
