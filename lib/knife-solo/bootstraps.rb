@@ -65,7 +65,7 @@ module KnifeSolo
           if command -v curl >/dev/null 2>&1; then
             curl -L -o #{file} #{url}
           else
-            wget -O #{file} #{url}
+            wget --no-check-certificate -O #{file} #{url}
           fi
         BASH
       end
