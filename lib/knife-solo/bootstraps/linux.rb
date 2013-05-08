@@ -1,8 +1,13 @@
 module KnifeSolo::Bootstraps
   class Linux < Base
-
     def issue
-      prepare.run_command("cat /etc/issue").stdout.strip || prepare.run_command("lsb_release -d -s").stdout.strip
+      commands = [
+        'lsb_release -d -s',
+        'cat /etc/redhat-release',
+        'cat /etc/issue'
+      ]
+      result = prepare.run_with_fallbacks(commands)
+      result.success? ? result.stdout.strip : nil
     end
 
     def x86?
@@ -83,7 +88,7 @@ module KnifeSolo::Bootstraps
       when %r{This is \\n\.\\O \(\\s \\m \\r\) \\t}
         {:type => "emerge_gem"}
       else
-        raise "Distro not recognized from looking at /etc/issue. Please fork https://github.com/matschaffer/knife-solo and add support for your distro."
+        raise "Distribution not recognized. Please run again with `-VV` option and file an issue: https://github.com/matschaffer/knife-solo/issues"
       end
       Chef::Log.debug("Distro detection yielded: #{@distro}")
       @distro
