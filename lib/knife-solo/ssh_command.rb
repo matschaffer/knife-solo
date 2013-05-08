@@ -154,7 +154,8 @@ module KnifeSolo
     class ExecResult
       attr_accessor :stdout, :stderr, :exit_code
 
-      def initialize
+      def initialize(exit_code = nil)
+        @exit_code = exit_code
         @stdout = ""
         @stderr = ""
       end
@@ -208,7 +209,7 @@ module KnifeSolo
       command
     end
 
-    def run_command(command, options={})
+    def run_command(command, options = {})
       defaults = {:process_sudo => true}
       options = defaults.merge(options)
 
@@ -252,6 +253,17 @@ module KnifeSolo
         end
       end
       result
+    end
+
+    # Runs commands from the specified array until successful.
+    # Returns the result of the successful command or an ExecResult with
+    # exit_code 1 if all fail.
+    def run_with_fallbacks(commands, options = {})
+      commands.each do |command|
+        result = run_command(command, options)
+        return result if result.success?
+      end
+      ExecResult.new(1)
     end
 
     # TODO:

@@ -112,6 +112,33 @@ class SshCommandTest < TestCase
     assert_exits { cmd.validate_ssh_options! }
   end
 
+  def test_run_with_fallbacks_returns_first_successful_result
+    cmds = sequence("cmds")
+    cmd = command
+    cmd.expects(:run_command).with("first", {}).returns(result(1, "fail")).in_sequence(cmds)
+    cmd.expects(:run_command).with("second", {}).returns(result(0, "w00t")).in_sequence(cmds)
+    cmd.expects(:run_command).never
+
+    res = cmd.run_with_fallbacks(["first", "second", "third"])
+    assert_equal "w00t", res.stdout
+    assert res.success?
+  end
+
+  def test_run_with_fallbacks_returns_error_if_all_fail
+    cmd = command
+    cmd.expects(:run_command).twice.returns(result(64, "fail"))
+    
+    res = cmd.run_with_fallbacks(["foo", "bar"])
+    assert_equal "", res.stdout
+    assert_equal 1, res.exit_code
+  end
+
+  def result(code, stdout = "")
+    res = KnifeSolo::SshCommand::ExecResult.new(code)
+    res.stdout = stdout
+    res
+  end
+
   def command(*args)
     Net::SSH::Config.stubs(:default_files)
     knife_command(DummySshCommand, *args)
