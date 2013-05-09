@@ -37,6 +37,7 @@
 * Fix deprecated commands to include options and dependencies from the new ones ([233])
 * Parse Chef version even if chef-solo command prints warnings ([235], [238])
 * Upgrade CentOS in integration tests to 5.8 and 6.3 ([237])
+* Default to `lsb_release` for detecting the Linux distro and add support for RHEL based systems where /etc/issue is modified ([234], [242])
 
 ## Thanks to our contributors!
 
@@ -45,6 +46,7 @@
 * [David Radcliffe][dwradcliffe]
 * [Łukasz Dubiel][bambuchaAdm]
 * [kmdsbng][kmdsbng]
+* [Darshan Patil][dapatil]
 
 [1]: https://github.com/matschaffer/knife-solo/issues/1
 [86]: https://github.com/matschaffer/knife-solo/issues/86
@@ -70,9 +72,11 @@
 [229]: https://github.com/matschaffer/knife-solo/issues/229
 [230]: https://github.com/matschaffer/knife-solo/issues/230
 [233]: https://github.com/matschaffer/knife-solo/issues/233
+[234]: https://github.com/matschaffer/knife-solo/issues/234
 [235]: https://github.com/matschaffer/knife-solo/issues/235
 [237]: https://github.com/matschaffer/knife-solo/issues/237
 [238]: https://github.com/matschaffer/knife-solo/issues/238
+[242]: https://github.com/matschaffer/knife-solo/issues/242
 [d21756]: https://github.com/matschaffer/knife-solo/commit/d21756
 [1d3485]: https://github.com/matschaffer/knife-solo/commit/1d3485
 [f43ba4]: https://github.com/matschaffer/knife-solo/commit/f43ba4
@@ -328,6 +332,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [bambuchaAdm]:   https://github.com/bambuchaAdm
 [brynary]:       https://github.com/brynary
 [btm]:           https://github.com/btm
+[dapatil]:       https://github.com/dapatil
 [davidsch]:      https://github.com/davidsch
 [deepak]:        https://github.com/deepak
 [dkinzer]:       https://github.com/dkinzer
