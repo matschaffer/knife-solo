@@ -79,7 +79,6 @@ class SoloCookTest < TestCase
 
   def test_does_not_run_berkshelf_if_no_berkfile
     in_kitchen do
-      FileUtils.rm "Berksfile"
       Berkshelf::Berksfile.any_instance.expects(:install).never
       command("somehost").run
     end
@@ -114,7 +113,6 @@ class SoloCookTest < TestCase
 
   def test_wont_complain_if_berkshelf_gem_missing_but_no_berkfile
     in_kitchen do
-      FileUtils.rm "Berksfile"
       cmd = command("somehost")
       cmd.ui.expects(:err).never
       KnifeSolo::Berkshelf.expects(:load_gem).never

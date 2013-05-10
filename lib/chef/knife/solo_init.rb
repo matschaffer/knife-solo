@@ -8,7 +8,9 @@ class Chef
 
       deps do
         require 'knife-solo'
+        require 'knife-solo/berkshelf'
         require 'knife-solo/gitignore'
+        require 'knife-solo/librarian'
         require 'knife-solo/tools'
       end
 
@@ -21,11 +23,11 @@ class Chef
 
       option :berkshelf,
         :long        => '--[no-]berkshelf',
-        :description => "Generate files for Berkshelf support, defaults to true"
+        :description => "Generate files for Berkshelf support"
 
       option :librarian,
         :long        => '--[no-]librarian',
-        :description => 'Generate files for Librarian support, defaults to false'
+        :description => 'Generate files for Librarian support'
 
       def run
         @base = @name_args.first
@@ -34,10 +36,11 @@ class Chef
         create_config
         create_cupboards %w[nodes roles data_bags site-cookbooks cookbooks]
         gitignore %w[/cookbooks/]
-        if config_value(:librarian, false)
-          bootstrap_librarian
-        elsif config_value(:berkshelf, true)
+        case cookbook_manager
+        when :berkshelf
           bootstrap_berkshelf
+        when :librarian
+          bootstrap_librarian
         end
       end
 
@@ -75,6 +78,36 @@ class Chef
         knife_rb = File.join(@base, '.chef', 'knife.rb')
         unless File.exist?(knife_rb)
           cp KnifeSolo.resource('knife.rb'), knife_rb
+        end
+      end
+
+      def cookbook_manager
+        Chef::Log.debug "Selecting cookbook manager..."
+        if (berkshelf = config_value(:berkshelf))
+          Chef::Log.debug "Berkshelf selected by configuration"
+          :berkshelf
+        elsif (librarian = config_value(:librarian))
+          Chef::Log.debug "Librarian selected by configuration"
+          :librarian
+        elsif berkshelf == false && librarian == false
+          Chef::Log.debug "All denied by configuration"
+          nil
+        elsif berkshelf != false && File.exist?(File.join(@base, 'Berksfile'))
+          Chef::Log.debug "Berkshelf selected because of existing Berksfile"
+          :berkshelf
+        elsif librarian != false && File.exist?(File.join(@base, 'Cheffile'))
+          Chef::Log.debug "Librarian selected because of existing Cheffile"
+          :librarian
+        elsif berkshelf != false && KnifeSolo::Berkshelf.load_gem
+          Chef::Log.debug "Berkshelf selected because of installed gem"
+          :berkshelf
+        elsif librarian != false && KnifeSolo::Librarian.load_gem
+          Chef::Log.debug "Librarian selected because of installed gem"
+          :librarian
+        else
+          Chef::Log.debug "Nothing selected"
+          # TODO: ui.msg "Recommended to use a cookbook manager"
+          nil
         end
       end
 
