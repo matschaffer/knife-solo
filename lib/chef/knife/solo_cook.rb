@@ -19,6 +19,7 @@ class Chef
         require 'chef/cookbook/chefignore'
         require 'knife-solo'
         require 'knife-solo/berkshelf'
+        require 'knife-solo/librarian'
         require 'erubis'
         require 'pathname'
         KnifeSolo::SshCommand.load_deps
@@ -186,32 +187,8 @@ class Chef
       end
 
       def librarian_install
-        if !File.exist? 'Cheffile'
-          Chef::Log.debug "Cheffile not found"
-        elsif !load_librarian
-          ui.warn "Librarian-Chef could not be loaded"
-          ui.warn "Please add the librarian-chef gem to your Gemfile or install it manually with `gem install librarian-chef`"
-        else
-          ui.msg "Installing Librarian cookbooks..."
-          Librarian::Action::Resolve.new(librarian_env).run
-          Librarian::Action::Install.new(librarian_env).run
-          add_cookbook_path librarian_env.install_path
-        end
-      end
-
-      def load_librarian
-        begin
-          require 'librarian/action'
-          require 'librarian/chef'
-        rescue LoadError
-          false
-        else
-          true
-        end
-      end
-
-      def librarian_env
-        @librarian_env ||= Librarian::Chef::Environment.new
+        path = KnifeSolo::Librarian.new(config, ui).install
+        add_cookbook_path(path) if path
       end
 
       def generate_solorb

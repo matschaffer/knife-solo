@@ -7,6 +7,7 @@ require 'chef/cookbook/chefignore'
 require 'chef/knife/solo_cook'
 require 'fileutils'
 require 'knife-solo/berkshelf'
+require 'knife-solo/librarian'
 require 'librarian/action/install'
 
 class SuccessfulResult
@@ -159,8 +160,8 @@ class SoloCookTest < TestCase
     in_kitchen do
       FileUtils.touch "Cheffile"
       cmd = command("somehost")
-      cmd.expects(:load_librarian).returns(false)
       cmd.ui.expects(:err).with(regexp_matches(/librarian-chef gem/))
+      KnifeSolo::Librarian.expects(:load_gem).returns(false)
       Librarian::Action::Install.any_instance.expects(:run).never
       cmd.run
     end
@@ -169,8 +170,8 @@ class SoloCookTest < TestCase
   def test_wont_complain_if_librarian_gem_missing_but_no_cheffile
     in_kitchen do
       cmd = command("somehost")
-      cmd.expects(:load_librarian).never
       cmd.ui.expects(:err).never
+      KnifeSolo::Librarian.expects(:load_gem).never
       Librarian::Action::Install.any_instance.expects(:run).never
       cmd.run
     end
