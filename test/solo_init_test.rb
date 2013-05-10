@@ -71,16 +71,16 @@ class SoloInitTest < TestCase
     end
   end
 
-  def test_creates_gitignore_for_librarian
+  def test_gitignores_cookbooks_directory
     outside_kitchen do
-      command("bar", "--librarian").run
-      assert File.exist?("bar/.gitignore")
+      command("bar").run
+      assert_equal "/cookbooks/", IO.read("bar/.gitignore").chomp
     end
   end
 
-  def test_wont_create_gitignore_for_librarian_if_denied
+  def test_wont_create_gitignore_if_denied
     outside_kitchen do
-      command(".", "--librarian", "--no-git").run
+      command(".", "--no-git").run
       refute File.exist?(".gitignore")
     end
   end

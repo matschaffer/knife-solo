@@ -33,6 +33,7 @@ class Chef
         create_kitchen
         create_config
         create_cupboards %w[nodes roles data_bags site-cookbooks cookbooks]
+        gitignore %w[/cookbooks/]
         if config_value(:librarian, false)
           bootstrap_librarian
         elsif config_value(:berkshelf, true)
@@ -85,7 +86,6 @@ class Chef
             f.puts("site :opscode")
           end
         end
-        gitignore %w[/cookbooks/]
       end
 
       def bootstrap_librarian
@@ -96,7 +96,7 @@ class Chef
             f.puts("site 'http://community.opscode.com/api/v1'")
           end
         end
-        gitignore %w[/cookbooks/ /tmp/librarian/]
+        gitignore %w[/tmp/librarian/]
       end
 
       def gitignore(*entries)
