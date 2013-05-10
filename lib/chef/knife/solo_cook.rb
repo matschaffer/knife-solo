@@ -18,9 +18,9 @@ class Chef
       deps do
         require 'chef/cookbook/chefignore'
         require 'knife-solo'
+        require 'knife-solo/berkshelf'
         require 'erubis'
         require 'pathname'
-        require 'tempfile'
         KnifeSolo::SshCommand.load_deps
         KnifeSolo::NodeConfigCommand.load_deps
       end
@@ -180,39 +180,9 @@ class Chef
       end
 
       def berkshelf_install
-        if !File.exist? 'Berksfile'
-          Chef::Log.debug "Berksfile not found"
-        elsif !load_berkshelf
-          ui.warn "Berkshelf could not be loaded"
-          ui.warn "Please add the berkshelf gem to your Gemfile or install it manually with `gem install berkshelf`"
-        else
-          path = berkshelf_path
-          if path == :tmpdir
-            path = @berks_tmp_dir = Dir.mktmpdir('berks-')
-          end
-          ui.msg "Installing Berkshelf cookbooks to '#{path}'..."
-          Berkshelf::Berksfile.from_file(expand_path('Berksfile')).install(:path => path)
-          add_cookbook_path path
-        end
-      end
-
-      def load_berkshelf
-        begin
-          require 'berkshelf'
-        rescue LoadError
-          false
-        else
-          true
-        end
-      end
-
-      def berkshelf_path
-        path = config_value(:berkshelf_path)
-        if path.nil?
-          ui.warn "`knife[:berkshelf_path]` is not set. Using temporary directory to install Berkshelf cookbooks."
-          path = :tmpdir
-        end
-        path
+        @berkshelf = KnifeSolo::Berkshelf.new(config, ui)
+        path = @berkshelf.install
+        add_cookbook_path(path) if path
       end
 
       def librarian_install
@@ -311,7 +281,7 @@ class Chef
       end
 
       def cleanup
-        FileUtils.remove_entry_secure(@berks_tmp_dir) if @berks_tmp_dir
+        @berkshelf.cleanup if @berkshelf
       end
     end
   end
