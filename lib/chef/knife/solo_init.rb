@@ -98,10 +98,10 @@ class Chef
         elsif librarian != false && File.exist?(File.join(@base, 'Cheffile'))
           Chef::Log.debug "Librarian selected because of existing Cheffile"
           :librarian
-        elsif berkshelf != false && KnifeSolo::Berkshelf.load_gem
+        elsif berkshelf != false && KnifeSolo::Berkshelf.gem_installed?
           Chef::Log.debug "Berkshelf selected because of installed gem"
           :berkshelf
-        elsif librarian != false && KnifeSolo::Librarian.load_gem
+        elsif librarian != false && KnifeSolo::Librarian.gem_installed?
           Chef::Log.debug "Librarian selected because of installed gem"
           :librarian
         else
