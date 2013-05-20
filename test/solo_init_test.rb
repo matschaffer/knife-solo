@@ -40,18 +40,16 @@ class SoloInitTest < TestCase
   def test_bootstraps_berkshelf_if_berksfile_found
     outside_kitchen do
       FileUtils.touch "Berksfile"
-      cmd = command(".")
-      cmd.expects(:bootstrap_berkshelf)
-      cmd.run
+      KnifeSolo::Berkshelf.any_instance.expects(:bootstrap)
+      command(".").run
     end
   end
 
   def test_wont_bootstrap_berkshelf_if_cheffile_found
     outside_kitchen do
       FileUtils.touch "Cheffile"
-      cmd = command(".")
-      cmd.expects(:bootstrap_berkshelf).never
-      cmd.run
+      KnifeSolo::Berkshelf.any_instance.expects(:bootstrap).never
+      command(".").run
       refute File.exist?("Berksfile")
     end
   end
@@ -121,18 +119,16 @@ class SoloInitTest < TestCase
   def test_bootstraps_librarian_if_cheffile_found
     outside_kitchen do
       FileUtils.touch "Cheffile"
-      cmd = command(".")
-      cmd.expects(:bootstrap_librarian)
-      cmd.run
+      KnifeSolo::Librarian.any_instance.expects(:bootstrap)
+      command(".").run
     end
   end
 
   def test_wont_bootstrap_librarian_if_berksfile_found
     outside_kitchen do
       FileUtils.touch "Berksfile"
-      cmd = command(".")
-      cmd.expects(:bootstrap_librarian).never
-      cmd.run
+      KnifeSolo::Librarian.any_instance.expects(:bootstrap).never
+      command(".").run
       refute File.exist?("Cheffile")
     end
   end

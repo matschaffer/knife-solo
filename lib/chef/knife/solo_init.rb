@@ -8,9 +8,8 @@ class Chef
 
       deps do
         require 'knife-solo'
-        require 'knife-solo/berkshelf'
+        require 'knife-solo/cookbook_manager_selector'
         require 'knife-solo/gitignore'
-        require 'knife-solo/librarian'
         require 'knife-solo/tools'
       end
 
@@ -36,11 +35,8 @@ class Chef
         create_config
         create_cupboards %w[nodes roles data_bags site-cookbooks cookbooks]
         gitignore %w[/cookbooks/]
-        case cookbook_manager
-        when :berkshelf
-          bootstrap_berkshelf
-        when :librarian
-          bootstrap_librarian
+        if (cm = cookbook_manager)
+          cm.bootstrap(@base)
         end
       end
 
@@ -82,54 +78,7 @@ class Chef
       end
 
       def cookbook_manager
-        Chef::Log.debug "Selecting cookbook manager..."
-        if (berkshelf = config_value(:berkshelf))
-          Chef::Log.debug "Berkshelf selected by configuration"
-          :berkshelf
-        elsif (librarian = config_value(:librarian))
-          Chef::Log.debug "Librarian selected by configuration"
-          :librarian
-        elsif berkshelf == false && librarian == false
-          Chef::Log.debug "All denied by configuration"
-          nil
-        elsif berkshelf != false && File.exist?(File.join(@base, 'Berksfile'))
-          Chef::Log.debug "Berkshelf selected because of existing Berksfile"
-          :berkshelf
-        elsif librarian != false && File.exist?(File.join(@base, 'Cheffile'))
-          Chef::Log.debug "Librarian selected because of existing Cheffile"
-          :librarian
-        elsif berkshelf != false && KnifeSolo::Berkshelf.gem_installed?
-          Chef::Log.debug "Berkshelf selected because of installed gem"
-          :berkshelf
-        elsif librarian != false && KnifeSolo::Librarian.gem_installed?
-          Chef::Log.debug "Librarian selected because of installed gem"
-          :librarian
-        else
-          Chef::Log.debug "Nothing selected"
-          # TODO: ui.msg "Recommended to use a cookbook manager"
-          nil
-        end
-      end
-
-      def bootstrap_berkshelf
-        ui.msg "Setting up Berkshelf..."
-        berksfile = File.join(@base, 'Berksfile')
-        unless File.exist?(berksfile)
-          File.open(berksfile, 'w') do |f|
-            f.puts("site :opscode")
-          end
-        end
-      end
-
-      def bootstrap_librarian
-        ui.msg "Setting up Librarian..."
-        cheffile = File.join(@base, 'Cheffile')
-        unless File.exist?(cheffile)
-          File.open(cheffile, 'w') do |f|
-            f.puts("site 'http://community.opscode.com/api/v1'")
-          end
-        end
-        gitignore %w[/tmp/librarian/]
+        KnifeSolo::CookbookManagerSelector.new(config, ui).select(@base)
       end
 
       def gitignore(*entries)

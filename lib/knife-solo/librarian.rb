@@ -26,5 +26,14 @@ module KnifeSolo
     def env
       @env ||= ::Librarian::Chef::Environment.new
     end
+
+    def initial_config
+      "site 'http://community.opscode.com/api/v1'"
+    end
+
+    # Returns an array of strings to gitignore when bootstrapping
+    def gitignores
+      %w[/tmp/librarian/]
+    end
   end
 end

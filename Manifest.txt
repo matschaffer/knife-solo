@@ -20,6 +20,7 @@ lib/knife-solo/bootstraps/freebsd.rb
 lib/knife-solo/bootstraps/linux.rb
 lib/knife-solo/bootstraps/sun_os.rb
 lib/knife-solo/cookbook_manager.rb
+lib/knife-solo/cookbook_manager_selector.rb
 lib/knife-solo/deprecated_command.rb
 lib/knife-solo/gitignore.rb
 lib/knife-solo/info.rb

@@ -37,5 +37,9 @@ module KnifeSolo
       end
       path
     end
+
+    def initial_config
+      "site :opscode"
+    end
   end
 end
