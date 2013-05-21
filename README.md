@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/matschaffer/knife-solo.png)](https://travis-ci.org/matschaffer/knife-solo)
 [![Code Climate](https://codeclimate.com/github/matschaffer/knife-solo.png)](https://codeclimate.com/github/matschaffer/knife-solo)
+[![Dependency Status](https://gemnasium.com/matschaffer/knife-solo.png)](https://gemnasium.com/matschaffer/knife-solo)
 
 ## Description
 
