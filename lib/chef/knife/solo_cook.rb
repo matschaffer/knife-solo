@@ -82,7 +82,6 @@ class Chef
           sync_kitchen
           generate_solorb
           cook unless config[:sync_only]
-          cleanup
         end
       end
 
@@ -181,8 +180,7 @@ class Chef
       end
 
       def berkshelf_install
-        @berkshelf = KnifeSolo::Berkshelf.new(config, ui)
-        path = @berkshelf.install
+        path = KnifeSolo::Berkshelf.new(config, ui).install
         add_cookbook_path(path) if path
       end
 
@@ -255,10 +253,6 @@ class Chef
 
         result = stream_command cmd
         raise "chef-solo failed. See output above." unless result.success?
-      end
-
-      def cleanup
-        @berkshelf.cleanup if @berkshelf
       end
     end
   end

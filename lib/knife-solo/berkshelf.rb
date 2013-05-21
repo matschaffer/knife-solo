@@ -1,7 +1,6 @@
-require 'fileutils'
+require 'digest/sha1'
 require 'knife-solo/cookbook_manager'
 require 'knife-solo/tools'
-require 'tempfile'
 
 module KnifeSolo
   class Berkshelf
@@ -17,29 +16,22 @@ module KnifeSolo
 
     def install!
       path = berkshelf_path
-      if path == :tmpdir
-        path = @berks_tmp_dir = Dir.mktmpdir('berks-')
-      end
       ui.msg "Installing Berkshelf cookbooks to '#{path}'..."
       ::Berkshelf::Berksfile.from_file('Berksfile').install(:path => path)
       path
     end
 
-    def cleanup
-      FileUtils.remove_entry_secure(@berks_tmp_dir) if @berks_tmp_dir
+    def berkshelf_path
+      KnifeSolo::Tools.config_value(config, :berkshelf_path) || default_path
     end
 
-    def berkshelf_path
-      path = KnifeSolo::Tools.config_value(config, :berkshelf_path)
-      if path.nil?
-        ui.warn "`knife[:berkshelf_path]` is not set. Using temporary directory to install Berkshelf cookbooks."
-        path = :tmpdir
-      end
-      path
+    def default_path
+      File.join(::Berkshelf.berkshelf_path, 'knife-solo',
+        Digest::SHA1.hexdigest(File.expand_path('.')))
     end
 
     def initial_config
-      "site :opscode"
+      'site :opscode'
     end
   end
 end
