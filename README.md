@@ -1,7 +1,8 @@
 # knife-solo
 
-[<img src="https://secure.travis-ci.org/matschaffer/knife-solo.png" alt="Build Status" />](http://travis-ci.org/matschaffer/knife-solo)
-[<img src="https://codeclimate.com/badge.png" alt="Code Climate" />](https://codeclimate.com/github/matschaffer/knife-solo)
+[![Build Status](https://travis-ci.org/matschaffer/knife-solo.png)](https://travis-ci.org/matschaffer/knife-solo)
+[![Code Climate](https://codeclimate.com/github/matschaffer/knife-solo.png)](https://codeclimate.com/github/matschaffer/knife-solo)
+[![Dependency Status](https://gemnasium.com/matschaffer/knife-solo.png)](https://gemnasium.com/matschaffer/knife-solo)
 
 ## Description
 
