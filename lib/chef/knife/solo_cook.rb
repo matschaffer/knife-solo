@@ -133,10 +133,6 @@ class Chef
         KnifeSolo.resource('patch_cookbooks')
       end
 
-      def nodes_path
-        'nodes'
-      end
-
       def chefignore
         @chefignore ||= ::Chef::Cookbook::Chefignore.new("./")
       end

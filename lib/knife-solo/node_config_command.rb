@@ -32,6 +32,10 @@ module KnifeSolo
       end
     end
 
+    def nodes_path
+      'nodes'
+    end
+
     def node_config
       # host method must be defined by the including class
       Pathname.new(@name_args[1] || "nodes/#{config[:chef_node_name] || host}.json")
