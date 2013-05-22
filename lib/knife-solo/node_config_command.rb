@@ -33,7 +33,8 @@ module KnifeSolo
     end
 
     def nodes_path
-      'nodes'
+      path = Chef::Config[:node_path]
+      path && File.exist?(path) ? path : 'nodes'
     end
 
     def node_config

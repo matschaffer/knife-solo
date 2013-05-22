@@ -106,7 +106,7 @@ class Chef
         cookbook_paths.each_with_index do |path, i|
           upload_to_provision_path(path, "/cookbooks-#{i + 1}", 'cookbook_path')
         end
-        upload_to_provision_path(nodes_path, 'nodes')
+        upload_to_provision_path(node_config, 'dna.json')
         upload_to_provision_path(:role_path, 'roles')
         upload_to_provision_path(:data_bag_path, 'data_bags')
         upload_to_provision_path(:encrypted_data_bag_secret, 'data_bag_key')
@@ -296,7 +296,7 @@ class Chef
 
       def cook
         ui.msg "Running Chef..."
-        cmd = "sudo chef-solo -c #{provisioning_path}/solo.rb -j #{provisioning_path}/#{node_config}"
+        cmd = "sudo chef-solo -c #{provisioning_path}/solo.rb -j #{provisioning_path}/dna.json"
         cmd << " -l debug" if debug?
         cmd << " -N #{config[:chef_node_name]}" if config[:chef_node_name]
         cmd << " -W" if config[:why_run]
