@@ -32,9 +32,18 @@ module KnifeSolo
       end
     end
 
+    def nodes_path
+      path = Chef::Config[:node_path]
+      path && File.exist?(path) ? path : 'nodes'
+    end
+
     def node_config
+      Pathname.new(@name_args[1] || "#{nodes_path}/#{node_name}.json")
+    end
+
+    def node_name
       # host method must be defined by the including class
-      Pathname.new(@name_args[1] || "nodes/#{config[:chef_node_name] || host}.json")
+      config[:chef_node_name] || host
     end
 
     def generate_node_config
