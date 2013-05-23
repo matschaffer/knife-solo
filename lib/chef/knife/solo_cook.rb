@@ -18,9 +18,10 @@ class Chef
       deps do
         require 'chef/cookbook/chefignore'
         require 'knife-solo'
+        require 'knife-solo/berkshelf'
+        require 'knife-solo/librarian'
         require 'erubis'
         require 'pathname'
-        require 'tempfile'
         KnifeSolo::SshCommand.load_deps
         KnifeSolo::NodeConfigCommand.load_deps
       end
@@ -81,7 +82,6 @@ class Chef
           sync_kitchen
           generate_solorb
           cook unless config[:sync_only]
-          cleanup
         end
       end
 
@@ -181,68 +181,13 @@ class Chef
       end
 
       def berkshelf_install
-        if !File.exist? 'Berksfile'
-          Chef::Log.debug "Berksfile not found"
-        elsif !load_berkshelf
-          ui.warn "Berkshelf could not be loaded"
-          ui.warn "Please add the berkshelf gem to your Gemfile or install it manually with `gem install berkshelf`"
-        else
-          path = berkshelf_path
-          if path == :tmpdir
-            path = @berks_tmp_dir = Dir.mktmpdir('berks-')
-          end
-          ui.msg "Installing Berkshelf cookbooks to '#{path}'..."
-          Berkshelf::Berksfile.from_file(expand_path('Berksfile')).install(:path => path)
-          add_cookbook_path path
-        end
-      end
-
-      def load_berkshelf
-        begin
-          require 'berkshelf'
-        rescue LoadError
-          false
-        else
-          true
-        end
-      end
-
-      def berkshelf_path
-        path = config_value(:berkshelf_path)
-        if path.nil?
-          ui.warn "`knife[:berkshelf_path]` is not set. Using temporary directory to install Berkshelf cookbooks."
-          path = :tmpdir
-        end
-        path
+        path = KnifeSolo::Berkshelf.new(config, ui).install
+        add_cookbook_path(path) if path
       end
 
       def librarian_install
-        if !File.exist? 'Cheffile'
-          Chef::Log.debug "Cheffile not found"
-        elsif !load_librarian
-          ui.warn "Librarian-Chef could not be loaded"
-          ui.warn "Please add the librarian-chef gem to your Gemfile or install it manually with `gem install librarian-chef`"
-        else
-          ui.msg "Installing Librarian cookbooks..."
-          Librarian::Action::Resolve.new(librarian_env).run
-          Librarian::Action::Install.new(librarian_env).run
-          add_cookbook_path librarian_env.install_path
-        end
-      end
-
-      def load_librarian
-        begin
-          require 'librarian/action'
-          require 'librarian/chef'
-        rescue LoadError
-          false
-        else
-          true
-        end
-      end
-
-      def librarian_env
-        @librarian_env ||= Librarian::Chef::Environment.new
+        path = KnifeSolo::Librarian.new(config, ui).install
+        add_cookbook_path(path) if path
       end
 
       def generate_solorb
@@ -311,10 +256,6 @@ class Chef
 
         result = stream_command cmd
         raise "chef-solo failed. See output above." unless result.success?
-      end
-
-      def cleanup
-        FileUtils.remove_entry_secure(@berks_tmp_dir) if @berks_tmp_dir
       end
     end
   end

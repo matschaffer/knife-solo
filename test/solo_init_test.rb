@@ -2,6 +2,9 @@ require 'test_helper'
 require 'support/kitchen_helper'
 
 require 'chef/knife/solo_init'
+require 'fileutils'
+require 'knife-solo/berkshelf'
+require 'knife-solo/librarian'
 
 class SoloInitTest < TestCase
   include KitchenHelper
@@ -34,30 +37,115 @@ class SoloInitTest < TestCase
     end
   end
 
-  def test_creates_berksfile
+  def test_bootstraps_berkshelf_if_berksfile_found
+    outside_kitchen do
+      FileUtils.touch "Berksfile"
+      KnifeSolo::Berkshelf.any_instance.expects(:bootstrap)
+      command(".").run
+    end
+  end
+
+  def test_wont_bootstrap_berkshelf_if_cheffile_found
+    outside_kitchen do
+      FileUtils.touch "Cheffile"
+      KnifeSolo::Berkshelf.any_instance.expects(:bootstrap).never
+      command(".").run
+      refute File.exist?("Berksfile")
+    end
+  end
+
+  def test_wont_create_berksfile_by_default
     outside_kitchen do
       command("new_kitchen").run
+      refute File.exist?("new_kitchen/Berksfile")
+    end
+  end
+
+  def test_creates_berksfile_if_requested
+    outside_kitchen do
+      cmd = command("new_kitchen", "--berkshelf")
+      KnifeSolo::Berkshelf.expects(:load_gem).never
+      cmd.run
       assert File.exist?("new_kitchen/Berksfile")
     end
   end
 
-  def test_skips_berksfile_creation_if_given_option
+  def test_wont_overwrite_berksfile
     outside_kitchen do
-      command("new_kitchen", "--no-berkshelf").run
-      assert !File.exist?("new_kitchen/Berksfile")
+      File.open("Berksfile", "w") do |f|
+        f << "testdata"
+      end
+      command(".", "--berkshelf").run
+      assert_equal "testdata", IO.read("Berksfile")
     end
   end
 
-  def test_wont_create_cheffile_by_default
-    in_kitchen do
+  def test_wont_create_berksfile_if_denied
+    outside_kitchen do
+      cmd = command("new_kitchen", "--no-berkshelf")
+      KnifeSolo::Berkshelf.expects(:load_gem).never
+      cmd.run
+      refute File.exist?("new_kitchen/Berksfile")
+    end
+  end
+
+  def test_wont_create_berksfile_if_librarian_requested
+    outside_kitchen do
+      cmd = command("new_kitchen", "--librarian")
+      KnifeSolo::Berkshelf.expects(:load_gem).never
+      cmd.run
+      refute File.exist?("new_kitchen/Berksfile")
+    end
+  end
+
+  def test_creates_berksfile_if_gem_installed
+    outside_kitchen do
+      cmd = command(".")
+      KnifeSolo::Berkshelf.expects(:load_gem).returns(true)
+      cmd.run
+      assert File.exist?("Berksfile")
+    end
+  end
+
+  def test_wont_create_berksfile_if_gem_missing
+    outside_kitchen do
+      cmd = command(".")
+      KnifeSolo::Berkshelf.expects(:load_gem).returns(false)
+      cmd.run
+      refute File.exist?("Berksfile")
+    end
+  end
+
+  def test_bootstraps_librarian_if_cheffile_found
+    outside_kitchen do
+      FileUtils.touch "Cheffile"
+      KnifeSolo::Librarian.any_instance.expects(:bootstrap)
+      command(".").run
+    end
+  end
+
+  def test_wont_bootstrap_librarian_if_berksfile_found
+    outside_kitchen do
+      FileUtils.touch "Berksfile"
+      KnifeSolo::Librarian.any_instance.expects(:bootstrap).never
+      command(".").run
       refute File.exist?("Cheffile")
     end
   end
 
-  def test_creates_cheffile_if_specified
+  def test_wont_create_cheffile_by_default
     outside_kitchen do
-      command("foo", "--librarian").run
-      assert File.exist?("foo/Cheffile")
+      command(".").run
+      refute File.exist?("Cheffile")
+    end
+  end
+
+  def test_creates_cheffile_if_requested
+    outside_kitchen do
+      cmd = command(".", "--librarian")
+      KnifeSolo::Librarian.expects(:load_gem).never
+      cmd.run
+      assert File.exist?("Cheffile")
     end
   end
 
@@ -71,21 +159,59 @@ class SoloInitTest < TestCase
     end
   end
 
-  def test_creates_gitignore_for_librarian
+  def test_wont_create_cheffile_if_denied
     outside_kitchen do
-      command("bar", "--librarian").run
-      assert File.exist?("bar/.gitignore")
+      cmd = command("new_kitchen", "--no-librarian")
+      KnifeSolo::Librarian.expects(:load_gem).never
+      cmd.run
+      refute File.exist?("new_kitchen/Cheffile")
     end
   end
 
-  def test_wont_create_gitignore_for_librarian_if_denied
+  def test_wont_create_cheffile_if_berkshelf_requested
     outside_kitchen do
-      command(".", "--librarian", "--no-git").run
+      cmd = command(".", "--berkshelf")
+      KnifeSolo::Librarian.expects(:load_gem).never
+      cmd.run
+      refute File.exist?("Cheffile")
+    end
+  end
+
+  def test_creates_cheffile_if_gem_installed
+    outside_kitchen do
+      cmd = command(".")
+      KnifeSolo::Librarian.expects(:load_gem).returns(true)
+      cmd.run
+      assert File.exist?("Cheffile")
+    end
+  end
+
+  def test_wont_create_cheffile_if_gem_missing
+    outside_kitchen do
+      cmd = command(".")
+      KnifeSolo::Librarian.expects(:load_gem).returns(false)
+      cmd.run
+      refute File.exist?("Cheffile")
+    end
+  end
+
+  def test_gitignores_cookbooks_directory
+    outside_kitchen do
+      command("bar").run
+      assert_equal "/cookbooks/", IO.read("bar/.gitignore").chomp
+    end
+  end
+
+  def test_wont_create_gitignore_if_denied
+    outside_kitchen do
+      command(".", "--no-git").run
       refute File.exist?(".gitignore")
     end
   end
 
   def command(*args)
+    KnifeSolo::Berkshelf.stubs(:load_gem).returns(false)
+    KnifeSolo::Librarian.stubs(:load_gem).returns(false)
     knife_command(Chef::Knife::SoloInit, *args)
   end
 end
