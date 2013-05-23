@@ -154,6 +154,10 @@ class Chef
         adjust_rsync_path(path)
       end
 
+      def rsync_debug
+        '-v' if debug?
+      end
+
       # see http://stackoverflow.com/questions/5798807/rsync-permission-denied-created-directories-have-no-permissions
       def rsync_permissions
         '--chmod=ugo=rwX' if windows_client?
@@ -277,8 +281,10 @@ class Chef
       end
 
       def rsync(source_path, target_path, extra_opts = '--delete')
-        cmd = %Q{rsync -rl #{rsync_permissions} --rsh="ssh #{ssh_args}" #{extra_opts} #{rsync_excludes.collect{ |ignore| "--exclude #{ignore} " }.join} #{adjust_rsync_path_on_client(source_path)} :#{adjust_rsync_path_on_node(target_path)}}
-        ui.msg cmd if debug?
+        cmd = %Q{rsync -rl #{rsync_debug} #{rsync_permissions} --rsh="ssh #{ssh_args}" #{extra_opts}}
+        cmd << rsync_excludes.map { |ignore| " --exclude '#{ignore}'" }.join
+        cmd << %Q{ #{adjust_rsync_path_on_client(source_path)} :#{adjust_rsync_path_on_node(target_path)}}
+        Chef::Log.debug cmd
         system! cmd
       end
 
