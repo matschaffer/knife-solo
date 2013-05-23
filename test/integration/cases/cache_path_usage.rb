@@ -1,7 +1,7 @@
 module CachePathUsage
   def setup
     super
-    FileUtils.cp_r $base_dir.join('support', 'cache_using_cookbook'), 'cookbooks/cache_using_cookbook'
+    FileUtils.cp_r $base_dir.join('support', 'cache_using_cookbook'), 'site-cookbooks/cache_using_cookbook'
   end
 
   def test_changing_a_cached_directory_between_cooks

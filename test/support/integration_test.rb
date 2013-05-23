@@ -39,7 +39,7 @@ class IntegrationTest < TestCase
     @kitchen = $base_dir.join('support', 'kitchens', self.class.to_s)
     FileUtils.remove_entry_secure(@kitchen, true)
     @kitchen.dirname.mkpath
-    system "knife solo init #{@kitchen} >> #{log_file}"
+    system "knife solo init #{@kitchen} --no-berkshelf --no-librarian >> #{log_file}"
     @start_dir = Dir.pwd
     Dir.chdir(@kitchen)
     prepare_server

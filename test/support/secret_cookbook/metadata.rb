@@ -1,3 +1,4 @@
+name             "secret_cookbook"
 maintainer       "Mat Schaffer"
 maintainer_email "mat@schaffer.me"
 license          "MIT"
