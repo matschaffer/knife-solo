@@ -18,7 +18,6 @@ class Chef
       option :git,
         :long        => '--no-git',
         :description => 'Do not generate .gitignore'
-        :default     => true
 
       option :berkshelf,
         :long        => '--[no-]berkshelf',
@@ -82,7 +81,7 @@ class Chef
       end
 
       def gitignore(*entries)
-        if config[:git]
+        if config_value(:git, true)
           KnifeSolo::Gitignore.new(@base).add(*entries)
         end
       end

@@ -101,7 +101,7 @@ module KnifeSolo
         unless conf_file_exists?(base)
           File.open(conf_file(base), 'w') { |f| f.puts(initial_config) }
         end
-        if KnifeSolo::Tools.config_value(config, :git) && gitignores
+        if KnifeSolo::Tools.config_value(config, :git, true) && gitignores
           KnifeSolo::Gitignore.new(base).add(gitignores)
         end
       end
