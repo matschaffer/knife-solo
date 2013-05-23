@@ -2,11 +2,13 @@ require 'test_helper'
 require 'support/kitchen_helper'
 require 'support/validation_helper'
 
+require 'berkshelf'
 require 'chef/cookbook/chefignore'
 require 'chef/knife/solo_cook'
 require 'fileutils'
+require 'knife-solo/berkshelf'
+require 'knife-solo/librarian'
 require 'librarian/action/install'
-require 'berkshelf'
 
 class SuccessfulResult
   def success?
@@ -77,7 +79,6 @@ class SoloCookTest < TestCase
 
   def test_does_not_run_berkshelf_if_no_berkfile
     in_kitchen do
-      FileUtils.rm "Berksfile"
       Berkshelf::Berksfile.any_instance.expects(:install).never
       command("somehost").run
     end
@@ -103,8 +104,8 @@ class SoloCookTest < TestCase
     in_kitchen do
       FileUtils.touch "Berksfile"
       cmd = command("somehost")
-      cmd.expects(:load_berkshelf).returns(false)
       cmd.ui.expects(:err).with(regexp_matches(/berkshelf gem/))
+      KnifeSolo::Berkshelf.expects(:load_gem).returns(false)
       Berkshelf::Berksfile.any_instance.expects(:install).never
       cmd.run
     end
@@ -112,10 +113,9 @@ class SoloCookTest < TestCase
 
   def test_wont_complain_if_berkshelf_gem_missing_but_no_berkfile
     in_kitchen do
-      FileUtils.rm "Berksfile"
       cmd = command("somehost")
-      cmd.expects(:load_berkshelf).never
       cmd.ui.expects(:err).never
+      KnifeSolo::Berkshelf.expects(:load_gem).never
       Berkshelf::Berksfile.any_instance.expects(:install).never
       cmd.run
     end
@@ -124,8 +124,8 @@ class SoloCookTest < TestCase
   def test_adds_berkshelf_path_to_cookbooks
     in_kitchen do
       FileUtils.touch "Berksfile"
+      KnifeSolo::Berkshelf.any_instance.stubs(:berkshelf_path).returns("berkshelf/path")
       cmd = command("somehost")
-      cmd.stubs(:berkshelf_path).returns("berkshelf/path")
       cmd.run
       assert_equal File.join(Dir.pwd, "berkshelf/path"), cmd.cookbook_paths[0].to_s
     end
@@ -158,8 +158,8 @@ class SoloCookTest < TestCase
     in_kitchen do
       FileUtils.touch "Cheffile"
       cmd = command("somehost")
-      cmd.expects(:load_librarian).returns(false)
       cmd.ui.expects(:err).with(regexp_matches(/librarian-chef gem/))
+      KnifeSolo::Librarian.expects(:load_gem).returns(false)
       Librarian::Action::Install.any_instance.expects(:run).never
       cmd.run
     end
@@ -168,8 +168,8 @@ class SoloCookTest < TestCase
   def test_wont_complain_if_librarian_gem_missing_but_no_cheffile
     in_kitchen do
       cmd = command("somehost")
-      cmd.expects(:load_librarian).never
       cmd.ui.expects(:err).never
+      KnifeSolo::Librarian.expects(:load_gem).never
       Librarian::Action::Install.any_instance.expects(:run).never
       cmd.run
     end

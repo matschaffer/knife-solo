@@ -8,6 +8,7 @@ class Chef
 
       deps do
         require 'knife-solo'
+        require 'knife-solo/cookbook_manager_selector'
         require 'knife-solo/gitignore'
         require 'knife-solo/tools'
       end
@@ -15,17 +16,16 @@ class Chef
       banner "knife solo init DIRECTORY"
 
       option :git,
-        :long => '--no-git',
-        :description => 'Do not generate .gitignore',
-        :default => true
+        :long        => '--no-git',
+        :description => 'Do not generate .gitignore'
 
       option :berkshelf,
         :long        => '--[no-]berkshelf',
-        :description => "Generate files for Berkshelf support, defaults to true"
+        :description => 'Generate files for Berkshelf support'
 
       option :librarian,
         :long        => '--[no-]librarian',
-        :description => 'Generate files for Librarian support, defaults to false'
+        :description => 'Generate files for Librarian support'
 
       def run
         @base = @name_args.first
@@ -33,10 +33,9 @@ class Chef
         create_kitchen
         create_config
         create_cupboards %w[nodes roles data_bags site-cookbooks cookbooks]
-        if config_value(:librarian, false)
-          bootstrap_librarian
-        elsif config_value(:berkshelf, true)
-          bootstrap_berkshelf
+        gitignore %w[/cookbooks/]
+        if (cm = cookbook_manager)
+          cm.bootstrap(@base)
         end
       end
 
@@ -77,30 +76,12 @@ class Chef
         end
       end
 
-      def bootstrap_berkshelf
-        ui.msg "Setting up Berkshelf..."
-        berksfile = File.join(@base, 'Berksfile')
-        unless File.exist?(berksfile)
-          File.open(berksfile, 'w') do |f|
-            f.puts("site :opscode")
-          end
-        end
-        gitignore %w[/cookbooks/]
-      end
-
-      def bootstrap_librarian
-        ui.msg "Setting up Librarian..."
-        cheffile = File.join(@base, 'Cheffile')
-        unless File.exist?(cheffile)
-          File.open(cheffile, 'w') do |f|
-            f.puts("site 'http://community.opscode.com/api/v1'")
-          end
-        end
-        gitignore %w[/cookbooks/ /tmp/librarian/]
+      def cookbook_manager
+        KnifeSolo::CookbookManagerSelector.new(config, ui).select(@base)
       end
 
       def gitignore(*entries)
-        if config[:git]
+        if config_value(:git, true)
           KnifeSolo::Gitignore.new(@base).add(*entries)
         end
       end

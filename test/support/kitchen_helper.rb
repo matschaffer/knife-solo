@@ -6,7 +6,7 @@ module KitchenHelper
 
   def in_kitchen
     outside_kitchen do
-      knife_command(Chef::Knife::SoloInit, ".").run
+      knife_command(Chef::Knife::SoloInit, ".", "--no-berkshelf", "--no-librarian").run
       yield
     end
   end
