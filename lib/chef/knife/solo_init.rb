@@ -16,13 +16,13 @@ class Chef
       banner "knife solo init DIRECTORY"
 
       option :git,
-        :long => '--no-git',
-        :description => 'Do not generate .gitignore',
-        :default => true
+        :long        => '--no-git',
+        :description => 'Do not generate .gitignore'
+        :default     => true
 
       option :berkshelf,
         :long        => '--[no-]berkshelf',
-        :description => "Generate files for Berkshelf support"
+        :description => 'Generate files for Berkshelf support'
 
       option :librarian,
         :long        => '--[no-]librarian',

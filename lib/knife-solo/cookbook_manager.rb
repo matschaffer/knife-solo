@@ -24,10 +24,9 @@ module KnifeSolo
       def load_gem
         begin
           gem_libraries.each { |lib| require lib }
+          true
         rescue LoadError
           false
-        else
-          true
         end
       end
 
@@ -86,23 +85,21 @@ module KnifeSolo
       # Runs installer if the configuration file is found and gem installed
       # Returns the cookbook path or nil
       def install
-        if !File.exists?(conf_file)
+        if !conf_file_exists?
           Chef::Log.debug "#{conf_file} not found"
-          nil
         elsif !self.class.load_gem
           ui.warn "#{name} could not be loaded"
           ui.warn "Please add the #{gem_name} gem to your Gemfile or install it manually with `gem install #{gem_name}`"
-          nil
         else
-          install!
+          return install!
         end
+        nil
       end
 
       def bootstrap(base)
         ui.msg "Setting up #{name}..."
-        conf = conf_file(base)
-        unless File.exists?(conf)
-          File.open(conf, 'w') { |f| f.puts(initial_config) }
+        unless conf_file_exists?(base)
+          File.open(conf_file(base), 'w') { |f| f.puts(initial_config) }
         end
         if KnifeSolo::Tools.config_value(config, :git) && gitignores
           KnifeSolo::Gitignore.new(base).add(gitignores)
