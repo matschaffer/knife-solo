@@ -280,7 +280,7 @@ class Chef
         cmd = %Q{rsync -rl #{rsync_permissions} --rsh="ssh #{ssh_args}" #{extra_opts}}
         cmd << rsync_excludes.map { |ignore| " --exclude '#{ignore}'" }.join
         cmd << %Q{ #{adjust_rsync_path_on_client(source_path)} :#{adjust_rsync_path_on_node(target_path)}}
-        ui.msg cmd if debug?
+        Chef::Log.debug cmd
         system! cmd
       end
 
