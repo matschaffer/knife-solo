@@ -52,7 +52,7 @@ class IntegrationTest < TestCase
 
   # Writes out the given node hash as a json file
   def write_nodefile(node)
-    write_json_file("nodes/#{server.public_ip_address}.json", node)
+    write_json_file("nodes/#{server.dns_name}.json", node)
   end
 
   # Writes out an object to the given file as JSON
@@ -82,7 +82,7 @@ class IntegrationTest < TestCase
 
   # The ssh-style connection string used to connect to the current node
   def connection_string
-    "-i #{key_file} #{user}@#{server.public_ip_address}"
+    "-i #{key_file} #{user}@#{server.dns_name}"
   end
 
   # Asserts that a knife command is successful

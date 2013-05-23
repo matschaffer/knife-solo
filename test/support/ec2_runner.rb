@@ -39,7 +39,7 @@ class EC2Runner < MiniTest::Unit
     server.wait_for { ready? }
     logger.info "#{test.class} server (#{server.dns_name}) reported ready, trying to connect to ssh..."
     server.wait_for do
-      `nc #{public_ip_address} 22 -w 1 -q 0 </dev/null`
+      `nc #{dns_name} 22 -w 1 -q 0 </dev/null`
       $?.success?
     end
     logger.info "Sleeping 10s to avoid Net::SSH locking up by connecting too early..."
@@ -79,7 +79,7 @@ class EC2Runner < MiniTest::Unit
       end
       sleep 20
       servers.each do |server|
-        logger.info "Destroying #{server.public_ip_address}..."
+        logger.info "Destroying #{server.dns_name}..."
         server.destroy
       end
     end
