@@ -11,12 +11,14 @@ knife-solo adds a handful of Knife commands that aim to make working with chef-s
 ## Usage
 
 Simply ensure the gem is installed using:
-
-    gem install knife-solo
+```sh
+gem install knife-solo
+```
 
 Or add this to your Gemfile if you use bundler:
-
-    gem 'knife-solo'
+```ruby
+gem 'knife-solo'
+```
 
 Having the gem installed will add Knife subcommands. Run `knife solo` with no arguments to see a list of available commands.
 
@@ -26,8 +28,19 @@ More complete usage documentation for the current release is available at [matsc
 
 ## Cutting Edge
 
-To install knife-solo from source run:
+To use the version from the git repository add this to your Gemfile:
+```ruby
+gem 'knife-solo',
+  :github => 'matschaffer/knife-solo',
+  :branch => 'master',
+  :submodules => true
+```
+**Note**: For Knife to find solo subcommands, you need to put `bundle exec` in front of all `knife solo` calls. Other options is to use the `knife` executable installed by `bundle install --binstubs`.
 
-    bundle && bundle exec rake install
+To install knife-solo from source run:
+```sh
+git submodule init && git submodule update
+bundle && bundle exec rake install
+```
 
 Documentation for the latest master version of knife-solo is available in [README.rdoc](https://github.com/matschaffer/knife-solo/blob/master/README.rdoc).
