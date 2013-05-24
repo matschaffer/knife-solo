@@ -39,7 +39,7 @@ gem 'knife-solo',
 
 To install knife-solo from source run:
 ```sh
-git submodule init && git submodule update
+git submodule update --init
 bundle && bundle exec rake install
 ```
 
