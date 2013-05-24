@@ -1,6 +1,6 @@
 module KnifeSolo
   def self.version
-    '0.3.0.pre4'
+    '0.3.0.pre5'
   end
 
   def self.post_install_message
