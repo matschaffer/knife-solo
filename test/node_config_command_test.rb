@@ -118,6 +118,14 @@ class NodeConfigCommandTest < TestCase
     end
   end
 
+  def test_creates_the_nodes_directory_if_needed
+    outside_kitchen do
+      cmd = command(@host, "--node-name=mynode")
+      cmd.generate_node_config
+      assert cmd.node_config.exist?
+    end
+  end
+
   def command(*args)
     knife_command(DummyNodeConfigCommand, *args)
   end
