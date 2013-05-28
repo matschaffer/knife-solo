@@ -2,6 +2,7 @@ module KnifeSolo
   module NodeConfigCommand
 
     def self.load_deps
+      require 'fileutils'
       require 'pathname'
     end
 
@@ -51,6 +52,7 @@ module KnifeSolo
         Chef::Log.debug "Node config '#{node_config}' already exists"
       else
         ui.msg "Generating node config '#{node_config}'..."
+        FileUtils.mkdir_p(node_config.dirname)
         File.open(node_config, 'w') do |f|
           attributes = config[:json_attributes] || config[:first_boot_attributes] || {}
           run_list = { :run_list => config[:run_list] || [] }
