@@ -54,6 +54,12 @@ module KnifeSolo
           :short       => '-s FILE',
           :long        => '--startup-script FILE',
           :description => 'The startup script on the remote server containing variable definitions'
+
+        option :sudo_command,
+          :short       => '-S SUDO_COMMAND',
+          :long        => '--sudo-command SUDO_COMMAND',
+          :description => 'The command to use instead of sudo for admin privileges'
+
       end
     end
 
@@ -147,6 +153,10 @@ module KnifeSolo
       [host_arg, config_arg, ident_arg, port_arg].compact.join(' ')
     end
 
+    def sudo_command
+      config[:sudo_command]
+    end
+
     def startup_script
       config[:startup_script]
     end
@@ -187,7 +197,10 @@ module KnifeSolo
     end
 
     def process_sudo(command)
-      if sudo_available?
+      if sudo_command
+        Chef::Log.debug("Using replacement sudo command: #{sudo_command}")
+        replacement = sudo_command
+      elsif sudo_available?
         replacement = 'sudo -p \'knife sudo password: \''
       else
         replacement = ''
