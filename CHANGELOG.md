@@ -17,6 +17,7 @@
 * Prepare/bootstrap now installs the same version of Chef that the workstation is running ([186])
 * Switch `--omnibus-version` flag to `--bootstrap-version` ([185])
 * Support `--override-runlist` option ([204])
+* Add proxy settings to the generated solo.rb ([254])
 * Support Fedora 18 and other new EL distros ([229], [51a581])
 * Drop support for openSUSE 11
 * Upgrade chef-solo-search to v0.4.0
@@ -47,6 +48,7 @@
 * [Łukasz Dubiel][bambuchaAdm]
 * [kmdsbng][kmdsbng]
 * [Darshan Patil][dapatil]
+* [Shin Tokiwa][tocky]
 
 [1]: https://github.com/matschaffer/knife-solo/issues/1
 [86]: https://github.com/matschaffer/knife-solo/issues/86
@@ -77,6 +79,7 @@
 [237]: https://github.com/matschaffer/knife-solo/issues/237
 [238]: https://github.com/matschaffer/knife-solo/issues/238
 [242]: https://github.com/matschaffer/knife-solo/issues/242
+[254]: https://github.com/matschaffer/knife-solo/issues/254
 [d21756]: https://github.com/matschaffer/knife-solo/commit/d21756
 [1d3485]: https://github.com/matschaffer/knife-solo/commit/1d3485
 [f43ba4]: https://github.com/matschaffer/knife-solo/commit/f43ba4
@@ -362,5 +365,6 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [smdern]:        https://github.com/smdern
 [tknerr]:        https://github.com/tknerr
 [tmatilai]:      https://github.com/tmatilai
+[tocky]:          https://github.com/tocky
 [vjpr]:          https://github.com/vjpr
 [zeph]:          https://github.com/zeph
