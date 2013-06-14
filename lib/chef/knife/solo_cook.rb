@@ -125,6 +125,17 @@ class Chef
         @cookbook_paths ||= expanded_config_paths(:cookbook_path) + [patch_cookbooks_path]
       end
 
+      def proxy_setting_keys
+        [:http_proxy, :https_proxy, :http_proxy_user, :http_proxy_pass, :no_proxy]
+      end
+
+      def proxy_settings
+        proxy_setting_keys.inject(Hash.new) do |ret, key|
+          ret[key] = Chef::Config[key] if Chef::Config[key]
+          ret
+        end
+      end
+
       def add_cookbook_path(path)
         path = expand_path path
         cookbook_paths.unshift(path) unless cookbook_paths.include?(path)

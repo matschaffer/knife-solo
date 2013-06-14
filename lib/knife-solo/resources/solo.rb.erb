@@ -9,3 +9,7 @@ cookbook_path []
 <% cookbook_paths.each_with_index do |path, i| -%>
 cookbook_path << File.join(base, 'cookbooks-<%= i+1 %>') # <%= path %>
 <% end -%>
+
+<% proxy_settings.each_pair do |k, v| -%>
+<%= k %>     "<%= v %>"
+<% end -%>
