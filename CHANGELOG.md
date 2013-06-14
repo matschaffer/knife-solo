@@ -39,6 +39,7 @@
 * Parse Chef version even if chef-solo command prints warnings ([235], [238])
 * Upgrade CentOS in integration tests to 5.8 and 6.3 ([237])
 * Default to `lsb_release` for detecting the Linux distro and add support for RHEL based systems where /etc/issue is modified ([234], [242])
+* Create the directory for node_config if it does not exist ([253])
 
 ## Thanks to our contributors!
 
@@ -79,6 +80,7 @@
 [237]: https://github.com/matschaffer/knife-solo/issues/237
 [238]: https://github.com/matschaffer/knife-solo/issues/238
 [242]: https://github.com/matschaffer/knife-solo/issues/242
+[253]: https://github.com/matschaffer/knife-solo/issues/253
 [254]: https://github.com/matschaffer/knife-solo/issues/254
 [d21756]: https://github.com/matschaffer/knife-solo/commit/d21756
 [1d3485]: https://github.com/matschaffer/knife-solo/commit/1d3485
