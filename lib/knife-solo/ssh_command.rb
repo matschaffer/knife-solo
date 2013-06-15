@@ -56,7 +56,6 @@ module KnifeSolo
           :description => 'The startup script on the remote server containing variable definitions'
 
         option :sudo_command,
-          :short       => '-S SUDO_COMMAND',
           :long        => '--sudo-command SUDO_COMMAND',
           :description => 'The command to use instead of sudo for admin privileges'
 
