@@ -21,6 +21,7 @@
 * Support Fedora 18 and other new EL distros ([229], [51a581])
 * Drop support for openSUSE 11
 * Upgrade chef-solo-search to v0.4.0
+* Add `--sudo-command` option to use custom remote 'sudo' command ([256])
 
 ## Fixes
 
@@ -50,6 +51,7 @@
 * [kmdsbng][kmdsbng]
 * [Darshan Patil][dapatil]
 * [Shin Tokiwa][tocky]
+* [Sam Martin][searlm]
 
 [1]: https://github.com/matschaffer/knife-solo/issues/1
 [86]: https://github.com/matschaffer/knife-solo/issues/86
@@ -82,6 +84,7 @@
 [242]: https://github.com/matschaffer/knife-solo/issues/242
 [253]: https://github.com/matschaffer/knife-solo/issues/253
 [254]: https://github.com/matschaffer/knife-solo/issues/254
+[256]: https://github.com/matschaffer/knife-solo/issues/256
 [d21756]: https://github.com/matschaffer/knife-solo/commit/d21756
 [1d3485]: https://github.com/matschaffer/knife-solo/commit/1d3485
 [f43ba4]: https://github.com/matschaffer/knife-solo/commit/f43ba4
@@ -363,6 +366,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [rubiojr]:       https://github.com/rubiojr
 [russellcardullo]: https://github.com/russellcardullo
 [ryandub]:       https://github.com/ryandub
+[searlm]:        https://github.com/searlm
 [skyeagle]:      https://github.com/skyeagle
 [smdern]:        https://github.com/smdern
 [tknerr]:        https://github.com/tknerr
