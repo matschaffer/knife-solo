@@ -81,6 +81,8 @@ module KnifeSolo::Bootstraps
         {:type => "yum_omnibus"}
       when %r{Scientific Linux}
         {:type => "yum_omnibus"}
+      when %r{CloudLinux}
+        {:type => "yum_omnibus"}
       when %r{SUSE Linux Enterprise Server 1[12]}
         {:type => "omnibus"}
       when %r{openSUSE 12}

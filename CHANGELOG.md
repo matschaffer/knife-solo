@@ -19,6 +19,7 @@
 * Support `--override-runlist` option ([204])
 * Add proxy settings to the generated solo.rb ([254])
 * Support Fedora 18 and other new EL distros ([229], [51a581])
+* Support CloudLinux ([262])
 * Drop support for openSUSE 11
 * Upgrade chef-solo-search to v0.4.0
 * Add `--sudo-command` option to use custom remote 'sudo' command ([256])
@@ -85,6 +86,7 @@
 [253]: https://github.com/matschaffer/knife-solo/issues/253
 [254]: https://github.com/matschaffer/knife-solo/issues/254
 [256]: https://github.com/matschaffer/knife-solo/issues/256
+[262]: https://github.com/matschaffer/knife-solo/issues/262
 [d21756]: https://github.com/matschaffer/knife-solo/commit/d21756
 [1d3485]: https://github.com/matschaffer/knife-solo/commit/1d3485
 [f43ba4]: https://github.com/matschaffer/knife-solo/commit/f43ba4
