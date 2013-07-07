@@ -215,7 +215,8 @@ module KnifeSolo
 
       output = ui.stdout if options[:streaming]
 
-      SshConnection.new(host, user, connection_options).run_command(command, output)
+      @connection ||= SshConnection.new(host, user, connection_options)
+      @connection.run_command(command, output)
     end
 
     # Runs commands from the specified array until successful.
