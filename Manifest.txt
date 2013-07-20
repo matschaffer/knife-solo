@@ -59,6 +59,7 @@ test/integration_helper.rb
 test/knife_bootstrap_test.rb
 test/minitest/parallel.rb
 test/node_config_command_test.rb
+test/performance/ssh_performance_test.rb
 test/solo_bootstrap_test.rb
 test/solo_clean_test.rb
 test/solo_cook_test.rb
