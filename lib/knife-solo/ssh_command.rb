@@ -101,6 +101,7 @@ module KnifeSolo
     def ask_password
       ui.ask("Enter the password for #{user}@#{host}: ") do |q|
         q.echo = false
+        q.whitespace = :chomp
       end
     end
 
