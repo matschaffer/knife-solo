@@ -127,14 +127,14 @@ class SshCommandTest < TestCase
   def test_run_with_fallbacks_returns_error_if_all_fail
     cmd = command
     cmd.expects(:run_command).twice.returns(result(64, "fail"))
-    
+
     res = cmd.run_with_fallbacks(["foo", "bar"])
     assert_equal "", res.stdout
     assert_equal 1, res.exit_code
   end
 
   def result(code, stdout = "")
-    res = KnifeSolo::SshCommand::ExecResult.new(code)
+    res = KnifeSolo::SshConnection::ExecResult.new(code)
     res.stdout = stdout
     res
   end
