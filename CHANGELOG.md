@@ -42,6 +42,7 @@
 * Upgrade CentOS in integration tests to 5.8 and 6.3 ([237])
 * Default to `lsb_release` for detecting the Linux distro and add support for RHEL based systems where /etc/issue is modified ([234], [242])
 * Create the directory for node_config if it does not exist ([253])
+* Accept trailing whitespace in passwords ([264])
 
 ## Thanks to our contributors!
 
@@ -87,6 +88,7 @@
 [254]: https://github.com/matschaffer/knife-solo/issues/254
 [256]: https://github.com/matschaffer/knife-solo/issues/256
 [262]: https://github.com/matschaffer/knife-solo/issues/262
+[264]: https://github.com/matschaffer/knife-solo/issues/264
 [d21756]: https://github.com/matschaffer/knife-solo/commit/d21756
 [1d3485]: https://github.com/matschaffer/knife-solo/commit/1d3485
 [f43ba4]: https://github.com/matschaffer/knife-solo/commit/f43ba4
