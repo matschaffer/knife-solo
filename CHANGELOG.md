@@ -1,3 +1,5 @@
+# 0.4.0 / _In progress_
+
 # 0.3.0 / 2013-08-01
 
 **NOTE**: This release includes breaking changes. See [upgrade instructions](https://github.com/matschaffer/knife-solo/wiki/Upgrading-to-0.3.0) for more information.
