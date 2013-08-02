@@ -11,10 +11,10 @@ chef-solo as powerful as chef-server. It currently adds 5 subcommands to
 knife:</p>
 <ul><li>
 <p><code>knife solo init</code> is used to create a new directory structure
-(i.e. "kitchen") that fits with Chef's standard structure and can be used
-to build and store recipes.</p>
+(i.e. “kitchen”) that fits with Chef&#39;s standard structure and can be
+used to build and store recipes.</p>
 </li><li>
-<p><code>knife solo prepare</code> installs Chef on a given host. It's
+<p><code>knife solo prepare</code> installs Chef on a given host. It&#39;s
 structured to auto-detect the target OS and change the installation process
 accordingly.</p>
 </li><li>
@@ -22,7 +22,10 @@ accordingly.</p>
 target host and runs chef-solo on that host.</p>
 </li><li>
 <p><code>knife solo bootstrap</code> combines the two previous ones (prepare
-and cook).</p>
+and cook). knife-solo also adds <code>--solo</code> command line option and
++<a href="http://:solo">knife</a>+ configuration parameter to <code>knife
+bootstrap</code> that can be used for triggering “knife solo bootstrap”
+instead of the normal template based chef-client bootstrap.</p>
 </li><li>
 <p><code>knife solo clean</code> removes the uploaded kitchen from the target
 host.</p>
@@ -51,12 +54,13 @@ structure. Use “.” to initialize the current directory.</p>
 development continues.</p>
 
 <pre>mychefrepo/
+├── .chef
+│   └── knife.rb
 ├── cookbooks
 ├── data_bags
 ├── nodes
 ├── roles
-├── site-cookbooks
-└── solo.rb</pre>
+└── site-cookbooks</pre>
 
 <h3 id="label-Prepare+command">Prepare command</h3>
 
@@ -68,7 +72,7 @@ development continues.</p>
 file specified by <code>-F</code>. You can also pass port information
 (<code>-p</code>), identity information (<code>-i</code>), or a password
 (<code>-P</code>). It will use sudo to run some of these commands and will
-prompt you for the password if it’s not supplied on the command line.</p>
+prompt you for the password if it&#39;s not supplied on the command line.</p>
 
 <p>This command will make a best-effort to detect and install Chef Solo on
 your target operating system. We use the <a
@@ -79,7 +83,7 @@ possible.</p>
 with an empty runlist using the following:</p>
 
 <pre>knife bootstrap --template-file bootstrap.centos.erb -u root 172.16.144.132
-echo '{&quot;run_list&quot;:[]}' &gt; nodes/172.16.144.132.json</pre>
+echo &#39;{&quot;run_list&quot;:[]}&#39; &gt; nodes/172.16.144.132.json</pre>
 
 <p>Bootstrap templates are quite simple, as shown in <a
 href="https://gist.github.com/2402433">this gist for
@@ -106,11 +110,10 @@ argument.</p>
 to use data_bags in a read-only fashion from the <code>data_bags</code>
 folder.</p>
 
-<p>This also supports encrypted data bags. To use them, place your key in
-<code>data_bag_key</code> in the root of your kitchen (or if you move it
-make sure to update <code>solo.rb</code> to reflect the new path).</p>
+<p>This also supports encrypted data bags. To use them, set the path to your
+key with <code>encrypted_data_bag_secret</code> in .chef/knife.rb.</p>
 
-<p>The knife command for creating encrypted data bags doesn’t work well
+<p>The knife command for creating encrypted data bags doesn&#39;t work well
 without a Chef server, so use <a
 href="https://gist.github.com/2896172">this gist</a> as an example on how
 to create encrypted data bag items on your local file system.</p>
@@ -124,6 +127,18 @@ prepare and cook:</p>
 
 <p>Under the hood it first calls +knife solo prepare+ and then +knife solo
 cook+ with the specified arguments and options.</p>
+
+<h4 id="label-Integration+with+knife+bootstrap">Integration with knife bootstrap</h4>
+
+<p>knife-solo also integrates with <code>knife bootstrap</code> by adding
+<code>--solo</code> command line option and +<a
+href="http://:solo">knife</a>+ configuration parameter to it. When
+requested, “knife solo bootrap” is used instead of the normal template
+based chef-client bootstrap. This is especially useful with other knife
+plugins like <a href="https://github.com/opscode/knife-ec2">knife-ec2</a>
+that invoke “knife bootstrap” after creating an server instance. Even if
+these plugins do not have the “–solo” option, you can put
+<code>knife[:solo] = true</code> in knife.rb.</p>
 
 <h3 id="label-Clean+command">Clean command</h3>
 
@@ -139,11 +154,9 @@ that host.</p>
 
 <p>The cook command will work on Windows node if you meet the following howto:</p>
 
-<h4 id="label-Init+then+tweak">Init then tweak</h4>
+<h4 id="label-Init+as+normally">Init as normally</h4>
 <ul><li>
-<p>run <code>knife solo init</code> then edit solo.rb to use Windows
-path-naming (see <a
-href="https://gist.github.com/1773854">gist.github.com/1773854</a>)</p>
+<p>run <code>knife solo init</code></p>
 </li></ul>
 
 <h4 id="label-Prepare+the+node+manually">Prepare the node manually</h4>
@@ -170,8 +183,8 @@ in it</p>
 <h2 id="label-DEVELOPMENT">DEVELOPMENT</h2>
 
 <p>Get set up by running <code>./script/newb</code> this will do some of the
-steps and guide you through the rest. If it doesn’t run for you, feel free
-to <a href="https://github.com/matschaffer/knife-solo/issues">file an
+steps and guide you through the rest. If it doesn&#39;t run for you, feel
+free to <a href="https://github.com/matschaffer/knife-solo/issues">file an
 issue</a>.</p>
 
 <p>When running integration tests all output is sent to the log directory into
@@ -179,9 +192,9 @@ a file that matches matches the test case name. The EC2Runner log is the
 main runner log that contains information about instance provisioning.</p>
 
 <p>Note that instances will remain running until your tests pass. This aids in
-speeding up the test cycle. Upon succesfful test completion you’ll be given
-10 seconds to cancel the process before the instances are cleaned up. Note
-that any instance tagged with <code>knife_solo_integration_user ==
+speeding up the test cycle. Upon succesfful test completion you&#39;ll be
+given 10 seconds to cancel the process before the instances are cleaned up.
+Note that any instance tagged with <code>knife_solo_integration_user ==
 $USER</code> will be cleaned up. Or if you want to leave your instances
 running regardless, specify <code>SKIP_DESTROY=true</code> as an
 environment variable.</p>
@@ -193,6 +206,7 @@ environment variable.</p>
 but generally you only need to override <code>user</code> and
 <code>image_id</code> to specify the user name and AMI ID.</p>
 
-<p>If you’re interested in contributing, contact me via GitHub or have a look
-at the <a href="https://github.com/matschaffer/knife-solo/issues">GitHub
-issues page</a>.</p>
+<p>If you&#39;re interested in contributing, contact me via GitHub or have a
+look at the <a
+href="https://github.com/matschaffer/knife-solo/issues">GitHub issues
+page</a>.</p>
