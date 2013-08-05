@@ -111,6 +111,7 @@ class Chef
         upload_to_provision_path(:role_path, 'roles')
         upload_to_provision_path(:data_bag_path, 'data_bags')
         upload_to_provision_path(:encrypted_data_bag_secret, 'data_bag_key')
+        upload_to_provision_path(:environments, 'environments')
       end
 
       def expand_path(path)
