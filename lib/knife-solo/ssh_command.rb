@@ -158,9 +158,12 @@ module KnifeSolo
       host_arg = [user, host].compact.join('@')
       config_arg = "-F #{config[:ssh_config]}" if config[:ssh_config]
       ident_arg = "-i #{config[:identity_file]}" if config[:identity_file]
-      port_arg = "-p #{config[:ssh_port]}" if config[:ssh_port]
+      port_arg = "-p #{config[:ssh_port]}" if config[:ssh_port]      
+      knownhosts_arg  =  "-o UserKnownHostsFile=#{connection_options[:user_known_hosts_file]}" unless config[:host_key_verify]
+      stricthosts_arg = "-o StrictHostKeyChecking=no" unless config[:host_key_verify]
 
-      [host_arg, config_arg, ident_arg, port_arg].compact.join(' ')
+
+      [host_arg, config_arg, ident_arg, port_arg, knownhosts_arg, stricthosts_arg].compact.join(' ')
     end
 
     def sudo_command
