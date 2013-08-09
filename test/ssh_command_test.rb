@@ -115,6 +115,10 @@ class SshCommandTest < TestCase
     cmd = command("usertest@10.0.0.1", "--ssh-port=222")
     cmd.validate_ssh_options!
     assert_equal "usertest@10.0.0.1 -p 222", cmd.ssh_args
+
+    cmd = command("usertest@10.0.0.1", "--no-host-key-verify")
+    cmd.validate_ssh_options!
+    assert_equal "usertest@10.0.0.1 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no", cmd.ssh_args
   end
 
   def test_barks_without_atleast_a_hostname
