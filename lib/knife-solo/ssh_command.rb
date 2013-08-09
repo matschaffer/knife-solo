@@ -59,6 +59,12 @@ module KnifeSolo
           :long        => '--sudo-command SUDO_COMMAND',
           :description => 'The command to use instead of sudo for admin privileges'
 
+        option :host_key_verify,
+          :long => "--[no-]host-key-verify",
+          :description => "Verify host key, enabled by default.",
+          :boolean => true,
+          :default => true
+
       end
     end
 
@@ -124,6 +130,10 @@ module KnifeSolo
       options[:port] = config[:ssh_port] if config[:ssh_port]
       options[:password] = config[:ssh_password] if config[:ssh_password]
       options[:keys] = [config[:identity_file]] if config[:identity_file]
+      if !config[:host_key_verify]
+        options[:paranoid] = false
+        options[:user_known_hosts_file] = "/dev/null"
+      end
       options
     end
 
