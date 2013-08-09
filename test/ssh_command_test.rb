@@ -82,6 +82,18 @@ class SshCommandTest < TestCase
     assert_equal "source ~/.bashrc && echo $TEST_PROP",  cmd.processed_command("echo $TEST_PROP")
   end
 
+  def test_handle_no_host_key_verify
+    cmd = command("10.0.0.1", "--no-host-key-verify")
+    assert_equal false,  cmd.connection_options[:paranoid]
+    assert_equal "/dev/null",  cmd.connection_options[:user_known_hosts_file]
+  end
+
+  def test_handle_default_host_key_verify_is_paranoid
+    cmd = command("10.0.0.1")
+    assert_nil(cmd.connection_options[:paranoid]) # Net:SSH default is :paranoid => true
+    assert_nil(cmd.connection_options[:user_known_hosts_file])
+  end
+
   def test_builds_cli_ssh_args
     DummySshCommand.any_instance.stubs(:try_connection)
 
@@ -103,6 +115,10 @@ class SshCommandTest < TestCase
     cmd = command("usertest@10.0.0.1", "--ssh-port=222")
     cmd.validate_ssh_options!
     assert_equal "usertest@10.0.0.1 -p 222", cmd.ssh_args
+
+    cmd = command("usertest@10.0.0.1", "--no-host-key-verify")
+    cmd.validate_ssh_options!
+    assert_equal "usertest@10.0.0.1 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no", cmd.ssh_args
   end
 
   def test_barks_without_atleast_a_hostname
