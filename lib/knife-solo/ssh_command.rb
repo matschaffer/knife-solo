@@ -159,8 +159,8 @@ module KnifeSolo
       config_arg = "-F #{config[:ssh_config]}" if config[:ssh_config]
       ident_arg = "-i #{config[:identity_file]}" if config[:identity_file]
       port_arg = "-p #{config[:ssh_port]}" if config[:ssh_port]      
-      knownhosts_arg  =  "-o UserKnownHostsFile=#{connection_options[:user_known_hosts_file]}" unless config[:host_key_verify]
-      stricthosts_arg = "-o StrictHostKeyChecking=no" unless config[:host_key_verify]
+      knownhosts_arg  =  "-o UserKnownHostsFile=#{connection_options[:user_known_hosts_file]}" if config[:host_key_verify] == false
+      stricthosts_arg = "-o StrictHostKeyChecking=no" if config[:host_key_verify] == false
 
 
       [host_arg, config_arg, ident_arg, port_arg, knownhosts_arg, stricthosts_arg].compact.join(' ')
