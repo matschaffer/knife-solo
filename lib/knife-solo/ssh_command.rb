@@ -59,6 +59,12 @@ module KnifeSolo
           :long        => '--sudo-command SUDO_COMMAND',
           :description => 'The command to use instead of sudo for admin privileges'
 
+        option :host_key_verify,
+          :long => "--[no-]host-key-verify",
+          :description => "Verify host key, enabled by default.",
+          :boolean => true,
+          :default => true
+
       end
     end
 
@@ -124,6 +130,10 @@ module KnifeSolo
       options[:port] = config[:ssh_port] if config[:ssh_port]
       options[:password] = config[:ssh_password] if config[:ssh_password]
       options[:keys] = [config[:identity_file]] if config[:identity_file]
+      if !config[:host_key_verify]
+        options[:paranoid] = false
+        options[:user_known_hosts_file] = "/dev/null"
+      end
       options
     end
 
@@ -148,9 +158,12 @@ module KnifeSolo
       host_arg = [user, host].compact.join('@')
       config_arg = "-F #{config[:ssh_config]}" if config[:ssh_config]
       ident_arg = "-i #{config[:identity_file]}" if config[:identity_file]
-      port_arg = "-p #{config[:ssh_port]}" if config[:ssh_port]
+      port_arg = "-p #{config[:ssh_port]}" if config[:ssh_port]      
+      knownhosts_arg  =  "-o UserKnownHostsFile=#{connection_options[:user_known_hosts_file]}" if config[:host_key_verify] == false
+      stricthosts_arg = "-o StrictHostKeyChecking=no" if config[:host_key_verify] == false
 
-      [host_arg, config_arg, ident_arg, port_arg].compact.join(' ')
+
+      [host_arg, config_arg, ident_arg, port_arg, knownhosts_arg, stricthosts_arg].compact.join(' ')
     end
 
     def sudo_command
