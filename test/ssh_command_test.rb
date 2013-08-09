@@ -90,7 +90,7 @@ class SshCommandTest < TestCase
 
   def test_handle_default_host_key_verify_is_paranoid
     cmd = command("10.0.0.1")
-    assert_nil(cmd.connection_options[:paranoid])
+    assert_nil(cmd.connection_options[:paranoid]) # Net:SSH default is :paranoid => true
     assert_nil(cmd.connection_options[:user_known_hosts_file])
   end
 
