@@ -50,6 +50,12 @@ module KnifeSolo
           :long        => '--ssh-port PORT',
           :description => 'The ssh port'
 
+        option :ssh_keepalive,
+          :long        => '--ssh-keepalive SEC',
+          :description => 'The ssh keepalive interval',
+          :default     => nil,
+          :proc        => Proc.new { |v| v.to_i }
+
         option :startup_script,
           :short       => '-s FILE',
           :long        => '--startup-script FILE',
@@ -84,6 +90,10 @@ module KnifeSolo
       end
       if config[:ssh_user]
         host_descriptor[:user] ||= config[:ssh_user]
+      end
+      if config[:ssh_keepalive] && config[:ssh_keepalive] < 60
+        ui.fatal '`--ssh-keepalive` must be more than 60 seconds to avoid a performance issue'
+        exit 1
       end
     end
 
@@ -172,6 +182,10 @@ module KnifeSolo
 
     def startup_script
       config[:startup_script]
+    end
+
+    def keepalive_interval
+      config[:ssh_keepalive]
     end
 
     class ExecResult
@@ -274,8 +288,21 @@ module KnifeSolo
               result.exit_code = data.read_long
             end
 
+            if keepalive_interval
+              jitter_seconds = 3  # TODO: Fix this magic number
+              expiration = Time.now + keepalive_interval - jitter_seconds
+
+              channel.on_process do |ch|
+                current_time = Time.now
+                if expiration <= current_time
+                  ch.connection.send_message(Net::SSH::Buffer.from(:byte, Net::SSH::Packet::IGNORE, :string, "keepalive"))
+                  expiration = current_time + keepalive_interval - jitter_seconds
+                end
+              end
+            end
+
           end
-          ssh.loop
+          ssh.loop(keepalive_interval)
         end
       end
       result
