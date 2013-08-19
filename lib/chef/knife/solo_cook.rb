@@ -136,6 +136,10 @@ class Chef
         end
       end
 
+      def knife_config_settings
+        Chef::Config[:knife]
+      end
+
       def add_cookbook_path(path)
         path = expand_path path
         cookbook_paths.unshift(path) unless cookbook_paths.include?(path)
