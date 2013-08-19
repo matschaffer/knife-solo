@@ -84,6 +84,12 @@ class SoloCookTest < TestCase
     assert_equal({ :http_proxy => "http://proxy:3128" }, conf)
   end
 
+  def test_sets_knife_settings
+    Chef::Config[:knife] = {:a_hash => {:foo => "bar"}}
+    conf = command.knife_config_settings
+    assert_equal({:foo => "bar"}, conf[:a_hash])
+  end
+
   def test_does_not_run_berkshelf_if_no_berkfile
     in_kitchen do
       Berkshelf::Berksfile.any_instance.expects(:install).never
