@@ -247,6 +247,14 @@ class SoloCookTest < TestCase
     end
   end
 
+  def test_does_not_sync_if_no_sync_specified
+    in_kitchen do
+      cmd = command("somehost", "--no-sync")
+      cmd.expects(:sync_kitchen).never
+      cmd.run
+    end
+  end
+
   def test_passes_node_name_to_chef_solo
     assert_chef_solo_option "--node-name=mynode", "-N mynode"
   end
