@@ -43,8 +43,7 @@ class Chef
 
       option :sync,
         :long        => '--no-sync',
-        :description => 'Do not sync kitchen - only run Chef',
-        :default     => true
+        :description => 'Do not sync kitchen - only run Chef'
 
       option :berkshelf,
         :long        => '--no-berkshelf',
@@ -81,7 +80,7 @@ class Chef
           ui.msg "Running Chef on #{host}..."
 
           check_chef_version if config[:chef_check]
-          if config[:sync]
+          if config_value(:sync, true)
             generate_node_config
             berkshelf_install if config_value(:berkshelf, true)
             librarian_install if config_value(:librarian, true)
