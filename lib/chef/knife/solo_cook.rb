@@ -111,6 +111,7 @@ class Chef
         upload_to_provision_path(:role_path, 'roles')
         upload_to_provision_path(:data_bag_path, 'data_bags')
         upload_to_provision_path(:encrypted_data_bag_secret, 'data_bag_key')
+        upload_to_provision_path(:environment_path, 'environments')
       end
 
       def expand_path(path)
@@ -248,6 +249,9 @@ class Chef
         ui.msg "Checking Chef version..."
         unless Gem::Requirement.new(CHEF_VERSION_CONSTRAINT).satisfied_by? Gem::Version.new(chef_version)
           raise "Couldn't find Chef #{CHEF_VERSION_CONSTRAINT} on #{host}. Please run `knife solo prepare #{ssh_args}` to ensure Chef is installed and up to date."
+        end
+        if node_environment != '_default' and not Gem::Requirement.new(">=11.6.0").satisfied_by? Gem::Version.new(chef_version)
+          ui.warn "Chef version #{chef_version} does not support environments. Environment '#{node_environment}' will be ignored."
         end
       end
 

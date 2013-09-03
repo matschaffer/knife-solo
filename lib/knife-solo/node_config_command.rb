@@ -30,6 +30,12 @@ module KnifeSolo
           :description => 'A JSON string to be added to node config (if it does not exist)',
           :proc        => lambda { |o| JSON.parse(o) },
           :default     => nil
+
+        option :environment,
+          :short       => '-E ENVIRONMENT',
+          :long        => '--environment ENVIRONMENT',
+          :description => 'The Chef environment for your node'
+
       end
     end
 
@@ -47,6 +53,11 @@ module KnifeSolo
       config[:chef_node_name] || host
     end
 
+    def node_environment
+      node = JSON.parse(IO.read(node_config))
+      config[:environment] || node['environment'] || '_default'
+    end
+
     def generate_node_config
       if node_config.exist?
         Chef::Log.debug "Node config '#{node_config}' already exists"
@@ -56,7 +67,8 @@ module KnifeSolo
         File.open(node_config, 'w') do |f|
           attributes = config[:json_attributes] || config[:first_boot_attributes] || {}
           run_list = { :run_list => config[:run_list] || [] }
-          f.print attributes.merge(run_list).to_json
+          environment = { :environment => config[:environment] || [] }
+          f.print attributes.merge(run_list).merge(environment).to_json
         end
       end
     end
