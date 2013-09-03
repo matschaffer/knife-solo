@@ -67,7 +67,7 @@ module KnifeSolo
         File.open(node_config, 'w') do |f|
           attributes = config[:json_attributes] || config[:first_boot_attributes] || {}
           run_list = { :run_list => config[:run_list] || [] }
-          environment = { :environment => config[:environment] || [] }
+          environment = config[:environment] ? { :environment => config[:environment] } : {}
           f.print attributes.merge(run_list).merge(environment).to_json
         end
       end
