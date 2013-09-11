@@ -86,7 +86,7 @@ class SoloCookTest < TestCase
 
   def test_does_not_run_berkshelf_if_no_berkfile
     in_kitchen do
-      Berkshelf::Berksfile.any_instance.expects(:install).never
+      Berkshelf::Berksfile.any_instance.expects(:vendor).never
       command("somehost").run
     end
   end
@@ -94,7 +94,7 @@ class SoloCookTest < TestCase
   def test_runs_berkshelf_if_berkfile_found
     in_kitchen do
       FileUtils.touch "Berksfile"
-      Berkshelf::Berksfile.any_instance.expects(:install)
+      Berkshelf::Berksfile.any_instance.expects(:vendor)
       command("somehost").run
     end
   end
@@ -102,7 +102,7 @@ class SoloCookTest < TestCase
   def test_does_not_run_berkshelf_if_denied_by_option
     in_kitchen do
       FileUtils.touch "Berksfile"
-      Berkshelf::Berksfile.any_instance.expects(:install).never
+      Berkshelf::Berksfile.any_instance.expects(:vendor).never
       command("somehost", "--no-berkshelf").run
     end
   end
@@ -113,7 +113,7 @@ class SoloCookTest < TestCase
       cmd = command("somehost")
       cmd.ui.expects(:err).with(regexp_matches(/berkshelf gem/))
       KnifeSolo::Berkshelf.expects(:load_gem).returns(false)
-      Berkshelf::Berksfile.any_instance.expects(:install).never
+      Berkshelf::Berksfile.any_instance.expects(:vendor).never
       cmd.run
     end
   end
@@ -123,7 +123,7 @@ class SoloCookTest < TestCase
       cmd = command("somehost")
       cmd.ui.expects(:err).never
       KnifeSolo::Berkshelf.expects(:load_gem).never
-      Berkshelf::Berksfile.any_instance.expects(:install).never
+      Berkshelf::Berksfile.any_instance.expects(:vendor).never
       cmd.run
     end
   end
@@ -132,7 +132,7 @@ class SoloCookTest < TestCase
     in_kitchen do
       FileUtils.touch "Berksfile"
       KnifeSolo::Berkshelf.any_instance.stubs(:berkshelf_path).returns("berkshelf/path")
-      Berkshelf::Berksfile.any_instance.stubs(:install)
+      Berkshelf::Berksfile.any_instance.stubs(:vendor)
       cmd = command("somehost")
       cmd.run
       assert_equal File.join(Dir.pwd, "berkshelf/path"), cmd.cookbook_paths[0].to_s
