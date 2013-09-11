@@ -132,6 +132,7 @@ class SoloCookTest < TestCase
     in_kitchen do
       FileUtils.touch "Berksfile"
       KnifeSolo::Berkshelf.any_instance.stubs(:berkshelf_path).returns("berkshelf/path")
+      Berkshelf::Berksfile.any_instance.stubs(:install)
       cmd = command("somehost")
       cmd.run
       assert_equal File.join(Dir.pwd, "berkshelf/path"), cmd.cookbook_paths[0].to_s
@@ -186,6 +187,7 @@ class SoloCookTest < TestCase
     ENV['LIBRARIAN_CHEF_PATH'] = "librarian/path"
     in_kitchen do
       FileUtils.touch "Cheffile"
+      Librarian::Action::Install.any_instance.stubs(:run)
       cmd = command("somehost")
       cmd.run
       assert_equal File.join(Dir.pwd, "librarian/path"), cmd.cookbook_paths[0].to_s
