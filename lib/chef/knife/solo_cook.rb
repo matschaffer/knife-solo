@@ -245,7 +245,7 @@ class Chef
       def rsync(source_path, target_path, extra_opts = '--delete')
         cmd = %Q{rsync -rL #{rsync_debug} #{rsync_permissions} --rsh="ssh #{ssh_args}" #{extra_opts}}
         cmd << rsync_excludes.map { |ignore| " --exclude '#{ignore}'" }.join
-        cmd << %Q{ #{adjust_rsync_path_on_client(source_path)} :#{adjust_rsync_path_on_node(target_path)}}
+        cmd << %Q{ '#{adjust_rsync_path_on_client(source_path)}' ':#{adjust_rsync_path_on_node(target_path)}'}
         Chef::Log.debug cmd
         system! cmd
       end
