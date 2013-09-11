@@ -30,6 +30,7 @@ lib/knife-solo/resources/knife.rb
 lib/knife-solo/resources/patch_cookbooks/chef-solo-search
 lib/knife-solo/resources/solo.rb.erb
 lib/knife-solo/ssh_command.rb
+lib/knife-solo/ssh_connection.rb
 lib/knife-solo/tools.rb
 test/bootstraps_test.rb
 test/deprecated_command_test.rb
@@ -58,6 +59,7 @@ test/integration_helper.rb
 test/knife_bootstrap_test.rb
 test/minitest/parallel.rb
 test/node_config_command_test.rb
+test/performance/ssh_performance_test.rb
 test/solo_bootstrap_test.rb
 test/solo_clean_test.rb
 test/solo_cook_test.rb

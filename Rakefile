@@ -15,7 +15,6 @@ MANIFEST_IGNORES = %w[
     script/test
   ]
 
-
 namespace :manifest do
   desc 'Checks for outstanding changes to the manifest'
   task :verify => :update do
@@ -72,6 +71,11 @@ task 'gh-pages' do
 end
 
 namespace :test do
+  Rake::TestTask.new(:performance) do |t|
+    t.libs << "test"
+    t.test_files = FileList['test/performance/*_test.rb']
+  end
+
   Rake::TestTask.new(:integration) do |t|
     t.libs << "test"
     t.test_files = FileList['test/integration/*_test.rb']
