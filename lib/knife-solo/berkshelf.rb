@@ -1,4 +1,5 @@
 require 'digest/sha1'
+require 'fileutils'
 require 'knife-solo/cookbook_manager'
 require 'knife-solo/tools'
 
@@ -17,7 +18,15 @@ module KnifeSolo
     def install!
       path = berkshelf_path
       ui.msg "Installing Berkshelf cookbooks to '#{path}'..."
-      ::Berkshelf::Berksfile.from_file('Berksfile').install(:path => path)
+
+      berksfile = ::Berkshelf::Berksfile.from_file('Berksfile')
+      if berksfile.respond_to?(:vendor)
+        FileUtils.rm_rf(path)
+        berksfile.vendor(path)
+      else
+        berksfile.install(:path => path)
+      end
+
       path
     end
 
