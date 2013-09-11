@@ -1,7 +1,9 @@
+
 module KnifeSolo
   module SshCommand
 
     def self.load_deps
+      require 'knife-solo/ssh_connection'
       require 'net/ssh'
     end
 
@@ -174,27 +176,6 @@ module KnifeSolo
       config[:startup_script]
     end
 
-    class ExecResult
-      attr_accessor :stdout, :stderr, :exit_code
-
-      def initialize(exit_code = nil)
-        @exit_code = exit_code
-        @stdout = ""
-        @stderr = ""
-      end
-
-      def success?
-        exit_code == 0
-      end
-
-      # Helper to use when raising exceptions since some operations
-      # (e.g., command not found) error on stdout
-      def stderr_or_stdout
-        return stderr unless stderr.empty?
-        stdout
-      end
-    end
-
     def windows_node?
       return @windows_node unless @windows_node.nil?
       @windows_node = run_command('ver', :process_sudo => false).stdout =~ /Windows/i
@@ -242,43 +223,14 @@ module KnifeSolo
       detect_authentication_method
 
       Chef::Log.debug("Initial command #{command}")
-      result = ExecResult.new
 
       command = processed_command(command, options)
       Chef::Log.debug("Running processed command #{command}")
 
-      Net::SSH.start(host, user, connection_options) do |ssh|
-        ssh.open_channel do |channel|
-          channel.request_pty
-          channel.exec(command) do |ch, success|
-            raise "ssh.channel.exec failure" unless success
+      output = ui.stdout if options[:streaming]
 
-            channel.on_data do |ch, data|  # stdout
-              if data =~ /^knife sudo password: /
-                ch.send_data("#{password}\n")
-              else
-                Chef::Log.debug("#{command} stdout: #{data}")
-                ui.stdout << data if options[:streaming]
-                result.stdout << data
-              end
-            end
-
-            channel.on_extended_data do |ch, type, data|
-              next unless type == 1
-              Chef::Log.debug("#{command} stderr: #{data}")
-              ui.stderr << data if options[:streaming]
-              result.stderr << data
-            end
-
-            channel.on_request("exit-status") do |ch, data|
-              result.exit_code = data.read_long
-            end
-
-          end
-          ssh.loop
-        end
-      end
-      result
+      @connection ||= SshConnection.new(host, user, connection_options)
+      @connection.run_command(command, output)
     end
 
     # Runs commands from the specified array until successful.
@@ -289,7 +241,7 @@ module KnifeSolo
         result = run_command(command, options)
         return result if result.success?
       end
-      ExecResult.new(1)
+      SshConnection::ExecResult.new(1)
     end
 
     # TODO:
