@@ -52,6 +52,12 @@ module KnifeSolo
           :long        => '--ssh-port PORT',
           :description => 'The ssh port'
 
+        option :ssh_keepalive,
+          :long        => '--ssh-keepalive SECONDS',
+          :description => 'The ssh keepalive interval',
+          :default     => nil,
+          :proc        => Proc.new { |v| v.to_i }
+
         option :startup_script,
           :short       => '-s FILE',
           :long        => '--startup-script FILE',
@@ -74,6 +80,10 @@ module KnifeSolo
       @name_args.first =~ /\A([^@]+(?>@)[^@]+|[^@]+?(?!@))\z/
     end
 
+    def net_ssh_supports_keepalive?
+      Gem.loaded_specs['net-ssh'].version >= Gem::Version.create('2.7.0')
+    end
+
     def validate_ssh_options!
       if config[:ssh_identity]
         ui.warn '`--ssh-identity` is deprecated, please use `--identity-file`.'
@@ -86,6 +96,16 @@ module KnifeSolo
       end
       if config[:ssh_user]
         host_descriptor[:user] ||= config[:ssh_user]
+      end
+      if config[:ssh_keepalive]
+        unless net_ssh_supports_keepalive?
+          ui.fatal '`--ssh-keepalive` requires the net-ssh 2.7.0 or later'
+          exit 1
+        end
+        if config[:ssh_keepalive] <= 0
+          ui.fatal '`--ssh-keepalive` must be a positive number'
+          exit 1
+        end
       end
     end
 
@@ -135,6 +155,10 @@ module KnifeSolo
       if !config[:host_key_verify]
         options[:paranoid] = false
         options[:user_known_hosts_file] = "/dev/null"
+      end
+      if config[:ssh_keepalive]
+        options[:keepalive] = true
+        options[:keepalive_interval] = config[:ssh_keepalive]
       end
       options
     end
