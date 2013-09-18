@@ -63,7 +63,7 @@ module KnifeSolo::Bootstraps
     def distro
       return @distro if @distro
       @distro = case issue
-      when %r{Debian GNU/Linux 6}
+      when %r{Debian GNU/Linux [67]}
         {:type => (x86? ? "debianoid_omnibus" : "debianoid_gem")}
       when %r{Debian}
         {:type => "debianoid_gem"}
