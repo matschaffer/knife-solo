@@ -1,5 +1,33 @@
 # 0.4.0 / _In progress_
 
+## Changes and new features
+
+* Add SSH option --[no-]host-key-verify ([274])
+* Add --no-sync option to skip syncing and only run Chef ([284])
+* Use Omnibus installer for Debian 7 ([287])
+
+## Fixes
+
+* Cache SSH connections ([265])
+* Support Berkshelf 3.0 ([268])
+* Follow symlinks when uploading kitchen ([279], [289])
+* Quote rsync paths to avoid problems with spaces in directory names ([281], [286])
+
+## Thanks to our contributors!
+
+* [Andreas Josephson][teyrow]
+* [Markus Kern][makern]
+
+[265]: https://github.com/matschaffer/knife-solo/issues/265
+[268]: https://github.com/matschaffer/knife-solo/issues/268
+[274]: https://github.com/matschaffer/knife-solo/issues/274
+[279]: https://github.com/matschaffer/knife-solo/issues/279
+[281]: https://github.com/matschaffer/knife-solo/issues/281
+[284]: https://github.com/matschaffer/knife-solo/issues/284
+[286]: https://github.com/matschaffer/knife-solo/issues/286
+[287]: https://github.com/matschaffer/knife-solo/issues/287
+[289]: https://github.com/matschaffer/knife-solo/issues/289
+
 # 0.3.0 / 2013-08-01
 
 **NOTE**: This release includes breaking changes. See [upgrade instructions](https://github.com/matschaffer/knife-solo/wiki/Upgrading-to-0.3.0) for more information.
@@ -360,6 +388,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [jgarber]:       https://github.com/jgarber
 [jgrevich]:      https://github.com/jgrevich
 [kmdsbng]:       https://github.com/kmdsbng
+[makern]:        https://github.com/makern
 [naoya]:         https://github.com/naoya
 [natlownes]:     https://github.com/natlownes
 [patatepartie]:  https://github.com/patatepartie
@@ -375,8 +404,9 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [searlm]:        https://github.com/searlm
 [skyeagle]:      https://github.com/skyeagle
 [smdern]:        https://github.com/smdern
+[teyrow]:        https://github.com/teyrow
 [tknerr]:        https://github.com/tknerr
 [tmatilai]:      https://github.com/tmatilai
-[tocky]:          https://github.com/tocky
+[tocky]:         https://github.com/tocky
 [vjpr]:          https://github.com/vjpr
 [zeph]:          https://github.com/zeph
