@@ -1,0 +1,6 @@
+name             "environment"
+maintainer       "Mat Schaffer"
+maintainer_email "mat@schaffer.me"
+license          "MIT"
+description      "Spits out a file containing the current chef environment and a test attribute"
+version          "0.0.1"
