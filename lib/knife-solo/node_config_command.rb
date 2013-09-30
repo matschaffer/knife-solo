@@ -54,7 +54,7 @@ module KnifeSolo
     end
 
     def node_environment
-      node = JSON.parse(IO.read(node_config))
+      node = node_config.exist? ? JSON.parse(IO.read(node_config)) : {}
       config[:environment] || node['environment'] || '_default'
     end
 
