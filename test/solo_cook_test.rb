@@ -56,11 +56,6 @@ class SoloCookTest < TestCase
     assert Dir.exist?(path), "patch_cookbooks_path is not a directory"
   end
 
-  def test_cookbook_paths_includes_patch_cookbooks
-    cmd = command
-    assert_equal cmd.patch_cookbooks_path, cmd.cookbook_paths.last, "patch_cookbooks is not included"
-  end
-
   def test_cookbook_paths_expands_paths
     cmd = command
     Chef::Config.cookbook_path = ["mycookbooks", "/some/other/path"]
@@ -82,6 +77,15 @@ class SoloCookTest < TestCase
     Chef::Config[:no_proxy] = nil
     conf = command.proxy_settings
     assert_equal({ :http_proxy => "http://proxy:3128" }, conf)
+  end
+
+  def test_adds_patch_cookboks_with_lowest_precedence
+   in_kitchen do
+      cmd = command("somehost")
+      cmd.run
+      #note: cookbook_paths are in order of precedence (low->high)
+      assert_equal cmd.patch_cookbooks_path, cmd.cookbook_paths[0]
+    end 
   end
 
   def test_does_not_run_berkshelf_if_no_berkfile
@@ -135,7 +139,7 @@ class SoloCookTest < TestCase
       Berkshelf::Berksfile.any_instance.stubs(:vendor)
       cmd = command("somehost")
       cmd.run
-      assert_equal File.join(Dir.pwd, "berkshelf/path"), cmd.cookbook_paths[0].to_s
+      assert_equal File.join(Dir.pwd, "berkshelf/path"), cmd.cookbook_paths[1].to_s
     end
   end
 
@@ -190,7 +194,7 @@ class SoloCookTest < TestCase
       Librarian::Action::Install.any_instance.stubs(:run)
       cmd = command("somehost")
       cmd.run
-      assert_equal File.join(Dir.pwd, "librarian/path"), cmd.cookbook_paths[0].to_s
+      assert_equal File.join(Dir.pwd, "librarian/path"), cmd.cookbook_paths[1].to_s
     end
   end
 
