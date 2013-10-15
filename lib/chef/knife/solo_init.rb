@@ -32,7 +32,7 @@ class Chef
         validate!
         create_kitchen
         create_config
-        create_cupboards %w[nodes roles data_bags site-cookbooks cookbooks]
+        create_cupboards %w[nodes roles data_bags environments site-cookbooks cookbooks]
         gitignore %w[/cookbooks/]
         if (cm = cookbook_manager)
           cm.bootstrap(@base)
