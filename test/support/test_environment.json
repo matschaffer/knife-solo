@@ -1,0 +1,11 @@
+{
+  "name": "test_environment",
+  "description": "An environment for integration tests",
+  "override_attributes": {
+    "environment": {
+      "test_attribute": "test_env_was_here"
+    }
+  },
+  "json_class": "Chef::Environment",
+  "chef_type": "environment"
+}
