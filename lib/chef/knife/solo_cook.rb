@@ -84,6 +84,7 @@ class Chef
             generate_node_config
             berkshelf_install if config_value(:berkshelf, true)
             librarian_install if config_value(:librarian, true)
+            patch_cookbooks_install
             sync_kitchen
             generate_solorb
           end
@@ -128,7 +129,7 @@ class Chef
       end
 
       def cookbook_paths
-        @cookbook_paths ||= expanded_config_paths(:cookbook_path) + [patch_cookbooks_path]
+        @cookbook_paths ||= expanded_config_paths(:cookbook_path)
       end
 
       def proxy_setting_keys
@@ -275,6 +276,12 @@ class Chef
 
         result = stream_command cmd
         raise "chef-solo failed. See output above." unless result.success?
+      end
+
+      protected
+
+      def patch_cookbooks_install
+        add_cookbook_path(patch_cookbooks_path) 
       end
     end
   end
