@@ -43,6 +43,7 @@ test/integration/cases/apache2_cook.rb
 test/integration/cases/cache_path_usage.rb
 test/integration/cases/empty_cook.rb
 test/integration/cases/encrypted_data_bag.rb
+test/integration/cases/environment.rb
 test/integration/cases/knife_bootstrap.rb
 test/integration/centos5_8_test.rb
 test/integration/centos6_3_test.rb
@@ -71,6 +72,9 @@ test/support/cache_using_cookbook/recipes/default.rb
 test/support/config.yml.example
 test/support/data_bag_key
 test/support/ec2_runner.rb
+test/support/environment_cookbook/attributes/default.rb
+test/support/environment_cookbook/metadata.rb
+test/support/environment_cookbook/recipes/default.rb
 test/support/integration_test.rb
 test/support/issue_files/gentoo2011
 test/support/issue_files/sles11-sp1
@@ -81,6 +85,7 @@ test/support/secret_cookbook/metadata.rb
 test/support/secret_cookbook/recipes/default.rb
 test/support/ssh_config
 test/support/test_case.rb
+test/support/test_environment.json
 test/support/validation_helper.rb
 test/test_helper.rb
 test/tools_test.rb
