@@ -58,6 +58,11 @@ class Chef
         :long        => '--why-run',
         :description => 'Enable whyrun mode'
 
+      option :override_attributes,
+        :short       => '-a \'{"attr": "value"}\'',
+        :long        => '--override-attributes',
+        :description => 'Override or add json attributes'
+
       option :override_runlist,
         :short       => '-o RunlistItem,RunlistItem...,',
         :long        => '--override-runlist',
@@ -113,12 +118,26 @@ class Chef
         cookbook_paths.each_with_index do |path, i|
           upload_to_provision_path(path, "/cookbooks-#{i + 1}", 'cookbook_path')
         end
-        upload_to_provision_path(node_config, 'dna.json')
+        upload_attribute_json
         upload_to_provision_path(nodes_path, 'nodes')
         upload_to_provision_path(:role_path, 'roles')
         upload_to_provision_path(:data_bag_path, 'data_bags')
         upload_to_provision_path(:encrypted_data_bag_secret, 'data_bag_key')
         upload_to_provision_path(:environment_path, 'environments')
+      end
+
+      # Merges override attributes with node.json and uploads it to provision_path
+      def upload_attribute_json
+        attributes = JSON.parse(File.read(node_config))
+        if config[:override_attributes]
+          override_attributes = JSON.parse(config[:override_attributes])
+          attributes.merge!(override_attributes)
+        end
+        Tempfile.open(['dna', '.json']) do |tmpfile|
+          tmpfile.write(attributes.to_json)
+          tmpfile.close
+          upload_to_provision_path(tmpfile.path, 'dna.json')
+        end
       end
 
       def expand_path(path)
