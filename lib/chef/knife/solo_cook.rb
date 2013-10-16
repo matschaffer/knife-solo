@@ -259,21 +259,22 @@ class Chef
         unless chef_version_satisfies? CHEF_VERSION_CONSTRAINT
           raise "Couldn't find Chef #{CHEF_VERSION_CONSTRAINT} on #{host}. Please run `knife solo prepare #{ssh_args}` to ensure Chef is installed and up to date."
         end
-        if node_environment != '_default' and not chef_version_satisfies? ">=11.6.0"
+        if node_environment != '_default' && chef_version_satisfies?('<11.6.0')
           ui.warn "Chef version #{chef_version} does not support environments. Environment '#{node_environment}' will be ignored."
         end
       end
 
       def chef_version_satisfies?(requirement)
-        # Memoize chef version to avoid multiple SSH calls
-        @actual_chef_version ||= Gem::Version.new(chef_version)
-        Gem::Requirement.new(requirement).satisfied_by? @actual_chef_version
+        Gem::Requirement.new(requirement).satisfied_by? Gem::Version.new(chef_version)
       end
 
       # Parses "Chef: x.y.z" from the chef-solo version output
       def chef_version
-        cmd = %q{sudo chef-solo --version 2>/dev/null | awk '$1 == "Chef:" {print $2}'}
-        run_command(cmd).stdout.strip
+        # Memoize the version to avoid multiple SSH calls
+        @chef_version ||= lambda do
+          cmd = %q{sudo chef-solo --version 2>/dev/null | awk '$1 == "Chef:" {print $2}'}
+          run_command(cmd).stdout.strip
+        end.call
       end
 
       def cook
