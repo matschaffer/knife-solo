@@ -23,16 +23,21 @@ module KnifeSolo
       end
     end
 
-    def initialize(host, user, connection_options)
+    def initialize(host, user, connection_options, sudo_password_hook)
       @host = host
       @user = user
       @connection_options = connection_options
+      @password_hook = sudo_password_hook
     end
 
     attr_reader :host, :user, :connection_options
 
     def session
       @session ||= Net::SSH.start(host, user, connection_options)
+    end
+
+    def password
+      @password ||= @password_hook.call
     end
 
     def run_command(command, output = nil)

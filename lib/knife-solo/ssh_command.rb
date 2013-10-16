@@ -229,7 +229,7 @@ module KnifeSolo
 
       output = ui.stdout if options[:streaming]
 
-      @connection ||= SshConnection.new(host, user, connection_options)
+      @connection ||= SshConnection.new(host, user, connection_options, method(:password))
       @connection.run_command(command, output)
     end
 
