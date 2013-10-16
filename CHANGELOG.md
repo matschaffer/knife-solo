@@ -6,6 +6,7 @@
 * Add --no-sync option to skip syncing and only run Chef ([284])
 * Use Omnibus installer for Debian 7 ([287])
 * Support Raspbian ([295])
+* Support environments (from Chef 11.6.0 on) ([285])
 
 ## Fixes
 
@@ -13,11 +14,13 @@
 * Support Berkshelf 3.0 ([268])
 * Follow symlinks when uploading kitchen ([279], [289])
 * Quote rsync paths to avoid problems with spaces in directory names ([281], [286])
+* Fix precedence of automatic cookbook_path components ([296], [298])
 
 ## Thanks to our contributors!
 
 * [Andreas Josephson][teyrow]
 * [Markus Kern][makern]
+* [Michael Glass][michaelglass]
 
 [265]: https://github.com/matschaffer/knife-solo/issues/265
 [268]: https://github.com/matschaffer/knife-solo/issues/268
@@ -25,10 +28,13 @@
 [279]: https://github.com/matschaffer/knife-solo/issues/279
 [281]: https://github.com/matschaffer/knife-solo/issues/281
 [284]: https://github.com/matschaffer/knife-solo/issues/284
+[285]: https://github.com/matschaffer/knife-solo/issues/285
 [286]: https://github.com/matschaffer/knife-solo/issues/286
 [287]: https://github.com/matschaffer/knife-solo/issues/287
 [289]: https://github.com/matschaffer/knife-solo/issues/289
 [295]: https://github.com/matschaffer/knife-solo/issues/295
+[296]: https://github.com/matschaffer/knife-solo/issues/296
+[298]: https://github.com/matschaffer/knife-solo/issues/298
 
 # 0.3.0 / 2013-08-01
 
@@ -391,6 +397,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [jgrevich]:      https://github.com/jgrevich
 [kmdsbng]:       https://github.com/kmdsbng
 [makern]:        https://github.com/makern
+[michaelglass]:  https://github.com/michaelglass
 [naoya]:         https://github.com/naoya
 [natlownes]:     https://github.com/natlownes
 [patatepartie]:  https://github.com/patatepartie
