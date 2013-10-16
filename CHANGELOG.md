@@ -5,6 +5,7 @@
 * Add SSH option --[no-]host-key-verify ([274])
 * Add --no-sync option to skip syncing and only run Chef ([284])
 * Use Omnibus installer for Debian 7 ([287])
+* Support Raspbian ([295])
 
 ## Fixes
 
@@ -27,6 +28,7 @@
 [286]: https://github.com/matschaffer/knife-solo/issues/286
 [287]: https://github.com/matschaffer/knife-solo/issues/287
 [289]: https://github.com/matschaffer/knife-solo/issues/289
+[295]: https://github.com/matschaffer/knife-solo/issues/295
 
 # 0.3.0 / 2013-08-01
 
