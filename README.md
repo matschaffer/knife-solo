@@ -1,8 +1,10 @@
 # knife-solo
 
-[![Build Status](https://travis-ci.org/matschaffer/knife-solo.png)](https://travis-ci.org/matschaffer/knife-solo)
-[![Code Climate](https://codeclimate.com/github/matschaffer/knife-solo.png)](https://codeclimate.com/github/matschaffer/knife-solo)
-[![Dependency Status](https://gemnasium.com/matschaffer/knife-solo.png)](https://gemnasium.com/matschaffer/knife-solo)
+[![Version](http://allthebadges.io/matschaffer/knife-solo/badge_fury.png)](http://allthebadges.io/matschaffer/knife-solo/badge_fury)
+[![Dependencies](http://allthebadges.io/matschaffer/knife-solo/gemnasium.png)](http://allthebadges.io/matschaffer/knife-solo/gemnasium)
+[![Build Status](http://allthebadges.io/matschaffer/knife-solo/travis.png)](http://allthebadges.io/matschaffer/knife-solo/travis)
+[![Coverage](http://allthebadges.io/matschaffer/knife-solo/coveralls.png)](http://allthebadges.io/matschaffer/knife-solo/coveralls)
+[![Code Climate](http://allthebadges.io/matschaffer/knife-solo/code_climate.png)](http://allthebadges.io/matschaffer/knife-solo/code_climate)
 
 ## Description
 
