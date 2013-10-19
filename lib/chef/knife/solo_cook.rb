@@ -111,9 +111,9 @@ class Chef
         run_portable_mkdir_p(provisioning_path, '0700')
 
         cookbook_paths.each_with_index do |path, i|
-          upload_to_provision_path(path, "/cookbooks-#{i + 1}", 'cookbook_path')
+          upload_to_provision_path(path.to_s, "/cookbooks-#{i + 1}", 'cookbook_path')
         end
-        upload_to_provision_path(node_config, 'dna.json')
+        upload_to_provision_path(node_config.to_s, 'dna.json')
         upload_to_provision_path(nodes_path, 'nodes')
         upload_to_provision_path(:role_path, 'roles')
         upload_to_provision_path(:data_bag_path, 'data_bags')
@@ -227,6 +227,8 @@ class Chef
 
         if src.nil?
           Chef::Log.debug "'#{key_name}' not set"
+        elsif !src.is_a?(String)
+          ui.error "#{key_name} is not a String: #{src.inspect}"
         elsif !File.exist?(src)
           ui.warn "Local #{key_name} '#{src}' does not exist"
         else

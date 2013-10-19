@@ -15,6 +15,7 @@
 * Follow symlinks when uploading kitchen ([279], [289])
 * Quote rsync paths to avoid problems with spaces in directory names ([281], [286])
 * Fix precedence of automatic cookbook_path components ([296], [298])
+* Print an error message if a `*_path` configuration value is not a String ([278], [300])
 
 ## Thanks to our contributors!
 
@@ -25,6 +26,7 @@
 [265]: https://github.com/matschaffer/knife-solo/issues/265
 [268]: https://github.com/matschaffer/knife-solo/issues/268
 [274]: https://github.com/matschaffer/knife-solo/issues/274
+[278]: https://github.com/matschaffer/knife-solo/issues/278
 [279]: https://github.com/matschaffer/knife-solo/issues/279
 [281]: https://github.com/matschaffer/knife-solo/issues/281
 [284]: https://github.com/matschaffer/knife-solo/issues/284
@@ -35,6 +37,7 @@
 [295]: https://github.com/matschaffer/knife-solo/issues/295
 [296]: https://github.com/matschaffer/knife-solo/issues/296
 [298]: https://github.com/matschaffer/knife-solo/issues/298
+[300]: https://github.com/matschaffer/knife-solo/issues/300
 
 # 0.3.0 / 2013-08-01
 
