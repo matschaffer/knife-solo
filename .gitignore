@@ -10,3 +10,4 @@
 /test/support/kitchens
 /Gemfile.lock
 /test/gemfiles/*.lock
+/coverage
