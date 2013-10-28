@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'berkshelf', '>= 3.0.0.beta.2'
   s.add_development_dependency 'bundler'
+  s.add_development_dependency 'ffi', '< 1.9.1' # transitional dependency of berkshelf
   s.add_development_dependency 'fog'
   s.add_development_dependency 'librarian-chef'
   s.add_development_dependency 'minitest', '~> 4.7'
