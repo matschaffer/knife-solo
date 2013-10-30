@@ -42,6 +42,8 @@ More detailed logic for this integration is available in the {Berkshelf & Librar
 
 One common "gotcha" is that you may have Berkshelf or Librarian-Chef installed without knowing it. This will generate a kitchen that is configured to use them which might not have been your intention. Once the configuration file is available, the <tt>cookbooks</tt> directory will be reserved for cookbooks that are resolved via one of those tools. Any cookbooks that you create there will be removed when you run <tt>knife solo cook</tt>.
 
+Please use <tt>site-cookbooks</tt> for custom cookbooks or (better yet) give them their own git repositories which are then included using Berkshelf or Librarian-Chef.
+
 == knife-solo commands
 
 === Init command
