@@ -26,6 +26,24 @@ If you need to install from git run:
 
     bundle && bundle exec rake install
 
+== Integration with Berkshelf & Librarian
+
+knife-solo also integrates with {Berkshelf}[http://berkshelf.com/] and {Librarian-Chef}[https://github.com/applicationsonline/librarian-chef] for managing your cookbooks out of the box.
+
+We try to do this somewhat automatically by first checking if you have either of the two gems installed. If you have both, we will default to Berkshelf.
+
+During <tt>knife solo init</tt> we'll generate the appropriate configuration file for either gem. Then during <tt>knife solo cook</tt> we'll run the installation step for whichever configuration file is in your kitchen.
+
+Both commands accept option flags to disable this feature if needed (<tt>--no-berkshelf</tt> or <tt>--no-librarian</tt>). The init command also offers enable flags to generate configuration files regardless of whether or not you have the supporting gem installed.
+
+More detailed logic for this integration is available in the {Berkshelf & Librarian-Chef integration}[https://github.com/matschaffer/knife-solo/wiki/Berkshelf-&-Librarian-Chef-integration] wiki page.
+
+=== A note about the "cookbooks" directory
+
+One common "gotcha" is that you may have Berkshelf or Librarian-Chef installed without knowing it. This will generate a kitchen that is configured to use them which might not have been your intention. Once the configuration file is available, the <tt>cookbooks</tt> directory will be reserved for cookbooks that are resolved via one of those tools. Any cookbooks that you create there will be removed when you run <tt>knife solo cook</tt>.
+
+== knife-solo commands
+
 === Init command
 
 The init command simply takes a name of the directory to store the kitchen structure. Use "." to initialize the current directory.
