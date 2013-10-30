@@ -16,6 +16,7 @@
 * Quote rsync paths to avoid problems with spaces in directory names ([281], [286])
 * Fix precedence of automatic cookbook_path components ([296], [298])
 * Print an error message if a `*_path` configuration value is not a String ([278], [300])
+* Mention knife-solo_data_bag gem in the docs ([83])
 
 ## Thanks to our contributors!
 
@@ -23,6 +24,7 @@
 * [Markus Kern][makern]
 * [Michael Glass][michaelglass]
 
+[83]:  https://github.com/matschaffer/knife-solo/issues/83
 [265]: https://github.com/matschaffer/knife-solo/issues/265
 [268]: https://github.com/matschaffer/knife-solo/issues/268
 [274]: https://github.com/matschaffer/knife-solo/issues/274
