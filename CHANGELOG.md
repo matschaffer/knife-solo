@@ -17,12 +17,15 @@
 * Fix precedence of automatic cookbook_path components ([296], [298])
 * Print an error message if a `*_path` configuration value is not a String ([278], [300])
 * Mention knife-solo_data_bag gem in the docs ([83])
+* Pin to ffi 1.9.1 due to issues with newer versions
+* Docs around berkshelf and librarian-chef integrations
 
 ## Thanks to our contributors!
 
 * [Andreas Josephson][teyrow]
 * [Markus Kern][makern]
 * [Michael Glass][michaelglass]
+* [Mathieu Allaire][allaire]
 
 [83]:  https://github.com/matschaffer/knife-solo/issues/83
 [265]: https://github.com/matschaffer/knife-solo/issues/265
@@ -424,3 +427,4 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [tocky]:         https://github.com/tocky
 [vjpr]:          https://github.com/vjpr
 [zeph]:          https://github.com/zeph
+[allaire]:       https://github.com/allaire
