@@ -43,6 +43,10 @@ module KnifeSolo
 
     def nodes_path
       path = Chef::Config[:node_path]
+      if path && !path.is_a?(String)
+        ui.error %Q{node_path is not a String: #{path.inspect}, defaulting to "nodes"}
+        path = nil
+      end
       path && File.exist?(path) ? path : 'nodes'
     end
 
