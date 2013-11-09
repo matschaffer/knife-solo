@@ -37,6 +37,7 @@ test/bootstraps_test.rb
 test/deprecated_command_test.rb
 test/gemfiles/Gemfile.chef-10
 test/gemfiles/Gemfile.chef-11
+test/gemfiles/Gemfile.chef-master
 test/gitignore_test.rb
 test/integration/amazon_linux_2012_09_bootstrap_test.rb
 test/integration/cases/apache2_bootstrap.rb

@@ -5,3 +5,7 @@ rvm:
 gemfile:
   - test/gemfiles/Gemfile.chef-11
   - test/gemfiles/Gemfile.chef-10
+  - test/gemfiles/Gemfile.chef-master
+matrix:
+  allow_failures:
+    - gemfile: test/gemfiles/Gemfile.chef-master
