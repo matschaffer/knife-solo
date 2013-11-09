@@ -36,11 +36,17 @@ module KnifeSolo
           :long        => '--environment ENVIRONMENT',
           :description => 'The Chef environment for your node'
 
+        # Set default chef_repo_path for Chef >= 11.8.0
+        Chef::Config.chef_repo_path = '.'
       end
     end
 
     def nodes_path
       path = Chef::Config[:node_path]
+      if path && !path.is_a?(String)
+        ui.error %Q{node_path is not a String: #{path.inspect}, defaulting to "nodes"}
+        path = nil
+      end
       path && File.exist?(path) ? path : 'nodes'
     end
 
