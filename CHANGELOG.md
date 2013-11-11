@@ -4,7 +4,13 @@
 
 ## Fixes
 
+* Explicitly set root path for default `*_path` options in Chef 11.8.0 ([308][])
+* Verify that `node_path` is a String ([308][])
+
 ## Thanks to our contributors!
+
+
+[308]: https://github.com/matschaffer/knife-solo/issues/308
 
 # 0.4.0 / 2013-10-30
 
