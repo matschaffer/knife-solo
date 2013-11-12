@@ -2,6 +2,8 @@
 
 ## Changes and new features
 
+* Support Oracle Enterprise Linux ([311][])
+
 ## Fixes
 
 * Explicitly set root path for default `*_path` options in Chef 11.8.0 ([308][])
@@ -9,8 +11,10 @@
 
 ## Thanks to our contributors!
 
+* [aromarom64][aromarom64]
 
 [308]: https://github.com/matschaffer/knife-solo/issues/308
+[311]: https://github.com/matschaffer/knife-solo/issues/311
 
 # 0.4.0 / 2013-10-30
 
@@ -400,6 +404,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [aaronjensen]:   https://github.com/aaronjensen
 [amoslanka]:     https://github.com/amoslanka
 [ares]:          https://github.com/ares
+[aromarom64]:    https://github.com/aromarom64
 [avit]:          https://github.com/avit
 [bambuchaAdm]:   https://github.com/bambuchaAdm
 [brynary]:       https://github.com/brynary
