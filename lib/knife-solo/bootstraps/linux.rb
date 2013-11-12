@@ -79,6 +79,8 @@ module KnifeSolo::Bootstraps
         {:type => "yum_omnibus"}
       when %r{Red Hat Enterprise}
         {:type => "yum_omnibus"}
+      when %r{Enterprise Linux Enterprise Linux Server}
+        {:type => "yum_omnibus"}
       when %r{Fedora release}
         {:type => "yum_omnibus"}
       when %r{Scientific Linux}
