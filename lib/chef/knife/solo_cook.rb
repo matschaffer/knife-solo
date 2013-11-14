@@ -45,6 +45,10 @@ class Chef
         :long        => '--no-sync',
         :description => 'Do not sync kitchen - only run Chef'
 
+      option :local_sync,
+        :long        => '--local-sync',
+        :description => 'Sync kitchen to local filesystem only. Implies --skip-chef-check'
+
       option :berkshelf,
         :long        => '--no-berkshelf',
         :description => 'Skip berks install'
@@ -77,9 +81,13 @@ class Chef
 
           validate!
 
-          ui.msg "Running Chef on #{host}..."
+          unless config[:local_sync]
+            ui.msg "Running Chef on #{host}..."
+          else
+            ui.msg "Copying kitchen for #{host} to local directory: #{provisioning_path}..."
+          end
 
-          check_chef_version if config[:chef_check]
+          check_chef_version if (config[:chef_check] && !config[:local_sync])
           if config_value(:sync, true)
             generate_node_config
             berkshelf_install if config_value(:berkshelf, true)
@@ -88,12 +96,12 @@ class Chef
             sync_kitchen
             generate_solorb
           end
-          cook unless config[:sync_only]
+          cook unless (config[:sync_only] || config[:local_sync])
         end
       end
 
       def validate!
-        validate_ssh_options!
+        validate_ssh_options! unless config[:local_sync]
 
         if File.exist? 'solo.rb'
           ui.warn "solo.rb found, but since knife-solo v0.3.0 it is not used any more"
@@ -108,7 +116,12 @@ class Chef
 
       def sync_kitchen
         ui.msg "Uploading the kitchen..."
-        run_portable_mkdir_p(provisioning_path, '0700')
+        ## TODO: Make this less terrible
+        if config[:local_sync]
+          system!("mkdir -p -m 0700 #{provisioning_path}")
+        else
+          run_portable_mkdir_p(provisioning_path, '0700')
+        end
 
         cookbook_paths.each_with_index do |path, i|
           upload_to_provision_path(path.to_s, "/cookbooks-#{i + 1}", 'cookbook_path')
@@ -216,7 +229,12 @@ class Chef
       end
 
       def upload(src, dest)
-        rsync(src, dest)
+        if config[:local_sync]
+          ## TODO: Factor local functionality into rsync method
+          local_rsync(src, dest)
+        else
+          rsync(src, dest)
+        end
       end
 
       def upload_to_provision_path(src, dest, key_name = 'path')
@@ -245,6 +263,18 @@ class Chef
       ensure
         file.unlink
       end
+
+      def local_rsync(source_path, target_path, extra_opts = '--delete')
+        cmd = ['rsync', '-rL', rsync_debug, rsync_permissions, extra_opts]
+        cmd += rsync_excludes.map { |ignore| "--exclude=#{ignore}" }
+        ## TODO: Make this portable again
+        cmd << source_path
+        cmd << target_path
+        cmd = cmd.flatten.compact
+        Chef::Log.debug cmd.inspect
+        system!(*cmd)
+      end
+
 
       def rsync(source_path, target_path, extra_opts = '--delete')
         cmd = ['rsync', '-rL', rsync_debug, rsync_permissions, %Q{--rsh=ssh #{ssh_args}}, extra_opts]
@@ -294,7 +324,7 @@ class Chef
       protected
 
       def patch_cookbooks_install
-        add_cookbook_path(patch_cookbooks_path) 
+        add_cookbook_path(patch_cookbooks_path)
       end
     end
   end
