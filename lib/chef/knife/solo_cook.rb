@@ -159,8 +159,10 @@ class Chef
 
       # cygwin rsync path must be adjusted to work
       def adjust_rsync_path(path)
-        path_s = path.to_s
-        path_s.gsub(/^(\w):/) { "/cygdrive/#{$1}" }
+        if !`uname`.include?("MINGW") then
+          path_s = path.to_s
+          path_s.gsub(/^(\w):/) { "/cygdrive/#{$1}" }
+        end
       end
 
       def adjust_rsync_path_on_node(path)
