@@ -29,6 +29,22 @@ module KnifeSolo::Bootstraps
       gem_install
     end
 
+    def yaourt_install
+      ui.msg("Installing required packages...")
+      stream_command <<-BASH
+        if ! sudo grep -Fxq "[archlinuxfrx]" /etc/pacman.conf ; then
+          sudo bash -c 'echo "[archlinuxfr]" >> /etc/pacman.conf'
+          sudo bash -c 'echo "SigLevel = Never" >> /etc/pacman.conf'
+          sudo bash -c 'echo "Server = http://repo.archlinux.fr/\\\$arch" >> /etc/pacman.conf'
+        fi
+        if ! command -v yaourt >/dev/null 2>&1 ; then
+          sudo pacman -Sy --noconfirm yaourt
+        fi
+        yaourt -S --noconfirm ruby-chef rsync
+      BASH
+      run_command("sudo gem install --no-rdoc --no-ri pry") # patch for ruby-chef
+    end
+
     def debianoid_gem_install
       ui.msg "Updating apt caches..."
       run_command("sudo apt-get update")
@@ -93,6 +109,8 @@ module KnifeSolo::Bootstraps
         {:type => "zypper_omnibus"}
       when %r{This is \\n\.\\O \(\\s \\m \\r\) \\t}
         {:type => "emerge_gem"}
+      when %r{Arch Linux \\r \(\\l\)}
+        {:type => "yaourt"}
       else
         raise "Distribution not recognized. Please run again with `-VV` option and file an issue: https://github.com/matschaffer/knife-solo/issues"
       end
