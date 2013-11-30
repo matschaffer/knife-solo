@@ -176,18 +176,31 @@ module KnifeSolo
       config[:startup_script]
     end
 
+    # A memoized helper for checking if the given node has a certain capability.
+    def node_check(flag, message)
+      @node_flags ||= {}
+      return @node_flags[flag] unless @node_flags[flag].nil?
+      @node_flags[flag] = yield
+      Chef::Log.debug(message) if @node_flags[flag]
+      @node_flags[flag]
+    end
+
     def windows_node?
-      return @windows_node unless @windows_node.nil?
-      @windows_node = run_command('ver', :process_sudo => false).stdout =~ /Windows/i
-      Chef::Log.debug("Windows node detected") if @windows_node
-      @windows_node
+      node_check(:windows_node, "Windows node detected") do
+        run_command('ver', :process_sudo => false).stdout =~ /Windows/i
+      end
+    end
+
+    def mingw_node?
+      node_check(:mingw_node, "MINGW node detected") do
+        run_command('uname', :process_sudo => false).stdout =~ /MINGW/i
+      end
     end
 
     def sudo_available?
-      return @sudo_available unless @sudo_available.nil?
-      @sudo_available = run_command('sudo -V', :process_sudo => false).success?
-      Chef::Log.debug("`sudo` not available on #{host}") unless @sudo_available
-      @sudo_available
+      node_check(:sudo_available, "Sudo available on #{host}") do
+        run_command('sudo -V', :process_sudo => false).success?
+      end
     end
 
     def process_sudo(command)
