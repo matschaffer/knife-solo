@@ -31,6 +31,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'coveralls'
 
   s.add_dependency 'chef',     '>= 10.12'
-  s.add_dependency 'net-ssh',  '>= 2.2.2', '< 3.0'
+  s.add_dependency 'net-ssh',  '>= 2.7.0', '< 3.0'
   s.add_dependency 'erubis',   '~> 2.7.0'
 end
