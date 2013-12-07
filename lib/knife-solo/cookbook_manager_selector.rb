@@ -38,7 +38,7 @@ module KnifeSolo
     end
 
     def select_or_disable_by_chef_config!
-      managers.select! do |manager|
+      @managers = managers.select do |manager|
         if (conf = manager.enabled_by_chef_config?)
           Chef::Log.debug "#{manager} selected by configuration"
           return manager
