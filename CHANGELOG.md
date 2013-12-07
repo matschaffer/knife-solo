@@ -3,18 +3,26 @@
 ## Changes and new features
 
 * Support Oracle Enterprise Linux ([311][])
+* Support Arch Linux ([327][])
+* Make sure wget is installed on Debianoids ([320][])
 
 ## Fixes
 
 * Explicitly set root path for default `*_path` options in Chef 11.8.0 ([308][])
 * Verify that `node_path` is a String ([308][])
+* Fix compatibility with Ruby 1.8 ([0bcae4a][])
 
 ## Thanks to our contributors!
 
 * [aromarom64][aromarom64]
+* [Łukasz Dubiel][bambuchaAdm]
+* [Takamura Soichi][piglovesyou]
 
 [308]: https://github.com/matschaffer/knife-solo/issues/308
 [311]: https://github.com/matschaffer/knife-solo/issues/311
+[320]: https://github.com/matschaffer/knife-solo/issues/320
+[327]: https://github.com/matschaffer/knife-solo/issues/327
+[0bcae4a]: https://github.com/matschaffer/knife-solo/commit/0bcae4a
 
 # 0.4.0 / 2013-10-30
 
@@ -430,6 +438,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [patatepartie]:  https://github.com/patatepartie
 [patcon]:        https://github.com/patcon
 [pferdefleisch]: https://github.com/pferdefleisch
+[piglovesyou]:   https://github.com/piglovesyou
 [portertech]:    https://github.com/portertech
 [retr0h]:        https://github.com/retr0h
 [rmoriz]:        https://github.com/rmoriz
