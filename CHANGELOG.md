@@ -1,4 +1,4 @@
-# 0.4.1 / _In progress_
+# 0.4.1 / 2013-12-07
 
 ## Changes and new features
 
