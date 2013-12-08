@@ -9,6 +9,9 @@ class ArchLinux20131128Test < IntegrationTest
     "ami-d1cbebb8"
   end
 
-  include EmptyCook
-  include EncryptedDataBag
+  # this install method takes over 15m on an m1.small
+  # Uncomment this if you need to verify Arch operation
+
+  # include EmptyCook
+  # include EncryptedDataBag
 end
