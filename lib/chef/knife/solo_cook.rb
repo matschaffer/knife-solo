@@ -246,7 +246,7 @@ class Chef
         file.unlink
       end
 
-      def rsync(source_path, target_path, extra_opts = '--delete')
+      def rsync(source_path, target_path, extra_opts = '--delete-after')
         cmd = ['rsync', '-rL', rsync_debug, rsync_permissions, %Q{--rsh=ssh #{ssh_args}}, extra_opts]
         cmd += rsync_excludes.map { |ignore| "--exclude=#{ignore}" }
         cmd << adjust_rsync_path_on_client(source_path)
