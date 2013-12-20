@@ -85,6 +85,8 @@ module KnifeSolo::Bootstraps
         {:type => "debianoid_gem"}
       when %r{Raspbian}
         {:type => "debianoid_gem"}
+      when %r{Linux Mint}
+        {:type => "debianoid_gem"}
       when %r{Ubuntu}i
         {:type => (x86? ? "debianoid_omnibus" : "debianoid_gem")}
       when %r{Linaro}
