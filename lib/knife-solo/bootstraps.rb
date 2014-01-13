@@ -116,6 +116,7 @@ module KnifeSolo
         unless hints.nil? || hints.empty?
           ui.msg "Setting Ohai hints..."
           run_command("sudo mkdir -p /etc/chef/ohai/hints")
+          run_command("sudo rm -f /etc/chef/ohai/hints/*")
           hints.each do |name, hash|
             run_command("sudo tee -a /etc/chef/ohai/hints/#{name}.json > /dev/null <<EOF\n#{hash.to_json}\nEOF\n")
           end
