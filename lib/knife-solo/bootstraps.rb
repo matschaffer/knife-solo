@@ -48,8 +48,8 @@ module KnifeSolo
 
       def bootstrap!
         run_pre_bootstrap_checks
-        install_ohai_hints
         send("#{distro[:type]}_install")
+        install_ohai_hints
       end
 
       def distro
@@ -112,7 +112,7 @@ module KnifeSolo
       end
 
       def install_ohai_hints
-        hints = KnifeSolo::Tools.config_value(prepare.config, :hints)
+        hints = Chef::Config[:knife][:hints]
         unless hints.nil? || hints.empty?
           ui.msg "Setting Ohai hints..."
           run_command("sudo mkdir -p /etc/chef/ohai/hints")
