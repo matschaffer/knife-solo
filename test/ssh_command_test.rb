@@ -60,7 +60,7 @@ class SshCommandTest < TestCase
 
   def test_uses_default_keys_if_conncetion_succeeds
     cmd = command("10.0.0.1")
-    assert_equal({}, cmd.connection_options)
+    assert_equal({:config => false}, cmd.connection_options)
   end
 
   def test_uses_ssh_config_if_matched
@@ -70,28 +70,33 @@ class SshCommandTest < TestCase
     assert_equal "bob", cmd.connection_options[:user]
     assert_equal "id_rsa_bob", cmd.connection_options[:keys].first
     assert_equal "bob", cmd.user
+    assert_equal false, cmd.connection_options[:config]
   end
 
   def test_handles_port_specification
     cmd = command("10.0.0.1", "-p", "2222")
     assert_equal "2222", cmd.connection_options[:port]
+    assert_equal false, cmd.connection_options[:config]
   end
 
   def test_handle_startup_script
     cmd = command("10.0.0.1", "--startup-script=~/.bashrc")
     assert_equal "source ~/.bashrc && echo $TEST_PROP",  cmd.processed_command("echo $TEST_PROP")
+    assert_equal false, cmd.connection_options[:config]
   end
 
   def test_handle_no_host_key_verify
     cmd = command("10.0.0.1", "--no-host-key-verify")
     assert_equal false,  cmd.connection_options[:paranoid]
     assert_equal "/dev/null",  cmd.connection_options[:user_known_hosts_file]
+    assert_equal false, cmd.connection_options[:config]
   end
 
   def test_handle_default_host_key_verify_is_paranoid
     cmd = command("10.0.0.1")
     assert_nil(cmd.connection_options[:paranoid]) # Net:SSH default is :paranoid => true
     assert_nil(cmd.connection_options[:user_known_hosts_file])
+    assert_equal false, cmd.connection_options[:config]
   end
 
   def test_builds_cli_ssh_args
