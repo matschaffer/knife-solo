@@ -136,6 +136,9 @@ module KnifeSolo
         options[:paranoid] = false
         options[:user_known_hosts_file] = "/dev/null"
       end
+      # Respect users' specification of config[:ssh_config]
+      # Prevents Net::SSH itself from applying the default ssh_config files.
+      options[:config] = false
       options
     end
 
