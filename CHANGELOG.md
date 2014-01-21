@@ -5,7 +5,13 @@
 
 ## Fixes
 
+* Avoid Net::SSH auto-reading default openssh configs when an ssh config file is used ([341][])
+
 ## Thanks to our contributors!
+
+* [Yuki Sonoda][yugui]
+
+[308]: https://github.com/matschaffer/knife-solo/issues/308
 
 # 0.4.1 / 2013-12-07
 
@@ -465,3 +471,4 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [vjpr]:          https://github.com/vjpr
 [zeph]:          https://github.com/zeph
 [allaire]:       https://github.com/allaire
+[yugui]:         https://github.com/yugui
