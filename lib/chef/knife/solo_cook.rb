@@ -67,6 +67,10 @@ class Chef
         :long        => '--provisioning-path path',
         :description => 'Where to store kitchen data on the node'
 
+      option :clean_up,
+        :long        => '--clean-up',
+        :description => 'Run the clean command after cooking'
+
       def run
         time('Run') do
 
@@ -89,6 +93,14 @@ class Chef
             generate_solorb
           end
           cook unless config[:sync_only]
+
+          if config[:clean_up]
+            clean = SoloClean.new
+            clean.ui = ui
+            clean.name_args = @name_args
+            clean.config.merge! config
+            clean.run
+          end
         end
       end
 
@@ -294,7 +306,7 @@ class Chef
       protected
 
       def patch_cookbooks_install
-        add_cookbook_path(patch_cookbooks_path) 
+        add_cookbook_path(patch_cookbooks_path)
       end
     end
   end
