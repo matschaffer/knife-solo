@@ -17,6 +17,10 @@ class SoloBootstrapTest < TestCase
     end
   end
 
+  def test_includes_clean_up_cook_option
+    assert Chef::Knife::SoloBootstrap.options.include?(:clean_up), "Should support option :clean_up"
+  end
+
   def test_runs_prepare_and_cook
     Chef::Knife::SoloPrepare.any_instance.expects(:run)
     Chef::Knife::SoloCook.any_instance.expects(:run)
