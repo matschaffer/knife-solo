@@ -94,13 +94,7 @@ class Chef
           end
           cook unless config[:sync_only]
 
-          if config[:clean_up]
-            clean = SoloClean.new
-            clean.ui = ui
-            clean.name_args = @name_args
-            clean.config.merge! config
-            clean.run
-          end
+          clean_up if config[:clean_up]
         end
       end
 
@@ -301,6 +295,14 @@ class Chef
 
         result = stream_command cmd
         raise "chef-solo failed. See output above." unless result.success?
+      end
+
+      def clean_up
+        clean = SoloClean.new
+        clean.ui = ui
+        clean.name_args = @name_args
+        clean.config.merge! config
+        clean.run
       end
 
       protected
