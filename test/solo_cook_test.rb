@@ -4,6 +4,7 @@ require 'support/validation_helper'
 
 require 'berkshelf'
 require 'chef/cookbook/chefignore'
+require 'chef/knife/solo_clean'
 require 'chef/knife/solo_cook'
 require 'fileutils'
 require 'knife-solo/berkshelf'
@@ -85,7 +86,7 @@ class SoloCookTest < TestCase
       cmd.run
       #note: cookbook_paths are in order of precedence (low->high)
       assert_equal cmd.patch_cookbooks_path, cmd.cookbook_paths[0]
-    end 
+    end
   end
 
   def test_does_not_run_berkshelf_if_no_berkfile
@@ -195,6 +196,22 @@ class SoloCookTest < TestCase
       cmd = command("somehost")
       cmd.run
       assert_equal File.join(Dir.pwd, "librarian/path"), cmd.cookbook_paths[1].to_s
+    end
+  end
+
+  def test_runs_clean_after_cook_if_enabled_by_option
+    Chef::Knife::SoloClean.any_instance.expects(:run)
+
+    in_kitchen do
+      command("somehost", "--clean-up").run
+    end
+  end
+
+  def test_does_not_run_clean_after_cook_if_not_enabled_by_option
+    Chef::Knife::SoloClean.any_instance.expects(:run).never
+
+    in_kitchen do
+      command("somehost").run
     end
   end
 
