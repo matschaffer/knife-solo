@@ -47,6 +47,12 @@ module KnifeSolo
           :long        => '--identity-file FILE',
           :description => 'The ssh identity file'
 
+        option :forward_agent,
+          :long        => '--forward-agent',
+          :description => 'Forward SSH authentication',
+          :boolean     => true,
+          :default     => false
+
         option :ssh_port,
           :short       => '-p PORT',
           :long        => '--ssh-port PORT',
@@ -132,6 +138,7 @@ module KnifeSolo
       options[:port] = config[:ssh_port] if config[:ssh_port]
       options[:password] = config[:ssh_password] if config[:ssh_password]
       options[:keys] = [config[:identity_file]] if config[:identity_file]
+      options[:forward_agent] = true if config[:forward_agent]
       if !config[:host_key_verify]
         options[:paranoid] = false
         options[:user_known_hosts_file] = "/dev/null"
@@ -163,12 +170,13 @@ module KnifeSolo
       host_arg = [user, host].compact.join('@')
       config_arg = "-F #{config[:ssh_config]}" if config[:ssh_config]
       ident_arg = "-i #{config[:identity_file]}" if config[:identity_file]
+      forward_arg = "-o ForwardAgent=yes" if config[:forward_agent]
       port_arg = "-p #{config[:ssh_port]}" if config[:ssh_port]      
       knownhosts_arg  =  "-o UserKnownHostsFile=#{connection_options[:user_known_hosts_file]}" if config[:host_key_verify] == false
       stricthosts_arg = "-o StrictHostKeyChecking=no" if config[:host_key_verify] == false
 
 
-      [host_arg, config_arg, ident_arg, port_arg, knownhosts_arg, stricthosts_arg].compact.join(' ')
+      [host_arg, config_arg, ident_arg, forward_arg, port_arg, knownhosts_arg, stricthosts_arg].compact.join(' ')
     end
 
     def sudo_command
