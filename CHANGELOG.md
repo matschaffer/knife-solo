@@ -2,6 +2,7 @@
 
 ## Changes and new features
 
+* SSH agent forwarding support ([328][], [347][])
 
 ## Fixes
 
@@ -10,8 +11,11 @@
 ## Thanks to our contributors!
 
 * [Yuki Sonoda][yugui]
+* [Todd Willey][xtoddx]
 
 [308]: https://github.com/matschaffer/knife-solo/issues/308
+[328]: https://github.com/matschaffer/knife-solo/issues/328
+[347]: https://github.com/matschaffer/knife-solo/issues/347
 
 # 0.4.1 / 2013-12-07
 
@@ -472,3 +476,4 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [zeph]:          https://github.com/zeph
 [allaire]:       https://github.com/allaire
 [yugui]:         https://github.com/yugui
+[xtoddx]:        https://github.com/xtoddx
