@@ -89,6 +89,11 @@ class SshCommandTest < TestCase
     assert_equal "/dev/null",  cmd.connection_options[:user_known_hosts_file]
   end
 
+  def test_handle_forward_agent
+    cmd = command("10.0.0.1", "--forward-agent")
+    assert_equal true,  cmd.connection_options[:forward_agent]
+  end
+
   def test_handle_default_host_key_verify_is_paranoid
     cmd = command("10.0.0.1")
     assert_nil(cmd.connection_options[:paranoid]) # Net:SSH default is :paranoid => true
@@ -120,6 +125,10 @@ class SshCommandTest < TestCase
     cmd = command("usertest@10.0.0.1", "--no-host-key-verify")
     cmd.validate_ssh_options!
     assert_equal "usertest@10.0.0.1 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no", cmd.ssh_args
+
+    cmd = command("usertest@10.0.0.1", "--forward-agent")
+    cmd.validate_ssh_options!
+    assert_equal "usertest@10.0.0.1 -o ForwardAgent=yes", cmd.ssh_args
   end
 
   def test_barks_without_atleast_a_hostname
