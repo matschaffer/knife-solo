@@ -62,11 +62,13 @@ module KnifeSolo
 
       def http_client_get_url(url, file)
         stream_command <<-BASH
-          if command -v curl >/dev/null 2>&1; then
-            curl -L -o #{file} #{url}
-          else
-            wget -O #{file} #{url}
-          fi
+          /bin/sh -c " \
+            if command -v curl >/dev/null 2>&1; then \
+              curl -L -o '#{file}' '#{url}'; \
+            else \
+              wget -O '#{file}' '#{url}'; \
+            fi; \
+          "
         BASH
       end
 
