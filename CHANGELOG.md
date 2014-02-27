@@ -3,6 +3,8 @@
 ## Changes and new features
 
 * SSH agent forwarding support ([328][], [347][])
+* Support non-bash shells (csh, sh, dash, bash, and fish) ([351][])
+* openSUSE 13 support ([352][])
 
 ## Fixes
 
@@ -12,10 +14,14 @@
 
 * [Yuki Sonoda][yugui]
 * [Todd Willey][xtoddx]
+* [Andy Leonard][anl]
+* [Robert L. Carpenter][robacarp]
 
 [308]: https://github.com/matschaffer/knife-solo/issues/308
 [328]: https://github.com/matschaffer/knife-solo/issues/328
 [347]: https://github.com/matschaffer/knife-solo/issues/347
+[351]: https://github.com/matschaffer/knife-solo/issues/351
+[352]: https://github.com/matschaffer/knife-solo/issues/352
 
 # 0.4.1 / 2013-12-07
 
@@ -421,59 +427,61 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 * Generate node config on prepare
 * Cook via rsync
 
-[ChrisLundquist]:https://github.com/ChrisLundquist
-[DrGonzo65]:     https://github.com/DrGonzo65
-[Frozenproduce]: https://github.com/Frozenproduce
-[Motiejus]:      https://github.com/Motiejus
-[Nix-wie-weg]:   https://github.com/Nix-wie-weg
-[TheAlphaTester]:https://github.com/TheAlphaTester
-[TylerRick]:     https://github.com/TylerRick
-[aaronjensen]:   https://github.com/aaronjensen
-[amoslanka]:     https://github.com/amoslanka
-[ares]:          https://github.com/ares
-[aromarom64]:    https://github.com/aromarom64
-[avit]:          https://github.com/avit
-[bambuchaAdm]:   https://github.com/bambuchaAdm
-[brynary]:       https://github.com/brynary
-[btm]:           https://github.com/btm
-[dapatil]:       https://github.com/dapatil
-[davidsch]:      https://github.com/davidsch
-[deepak]:        https://github.com/deepak
-[dkinzer]:       https://github.com/dkinzer
-[dwradcliffe]:   https://github.com/dwradcliffe
-[fnichol]:       https://github.com/fnichol
-[funglaub]:      https://github.com/funglaub
-[gregf]:         https://github.com/gregf
-[gsterndale]:    https://github.com/gsterndale
-[hectcastro]:    https://github.com/hectcastro
-[hrp]:           https://github.com/hrp
-[jgarber]:       https://github.com/jgarber
-[jgrevich]:      https://github.com/jgrevich
-[kmdsbng]:       https://github.com/kmdsbng
-[makern]:        https://github.com/makern
-[michaelglass]:  https://github.com/michaelglass
-[naoya]:         https://github.com/naoya
-[natlownes]:     https://github.com/natlownes
-[patatepartie]:  https://github.com/patatepartie
-[patcon]:        https://github.com/patcon
-[pferdefleisch]: https://github.com/pferdefleisch
-[piglovesyou]:   https://github.com/piglovesyou
-[portertech]:    https://github.com/portertech
-[retr0h]:        https://github.com/retr0h
-[rmoriz]:        https://github.com/rmoriz
-[rosstimson]:    https://github.com/rosstimson
-[rubiojr]:       https://github.com/rubiojr
+[ChrisLundquist]:  https://github.com/ChrisLundquist
+[DrGonzo65]:       https://github.com/DrGonzo65
+[Frozenproduce]:   https://github.com/Frozenproduce
+[Motiejus]:        https://github.com/Motiejus
+[Nix-wie-weg]:     https://github.com/Nix-wie-weg
+[TheAlphaTester]:  https://github.com/TheAlphaTester
+[TylerRick]:       https://github.com/TylerRick
+[aaronjensen]:     https://github.com/aaronjensen
+[amoslanka]:       https://github.com/amoslanka
+[ares]:            https://github.com/ares
+[aromarom64]:      https://github.com/aromarom64
+[avit]:            https://github.com/avit
+[bambuchaAdm]:     https://github.com/bambuchaAdm
+[brynary]:         https://github.com/brynary
+[btm]:             https://github.com/btm
+[dapatil]:         https://github.com/dapatil
+[davidsch]:        https://github.com/davidsch
+[deepak]:          https://github.com/deepak
+[dkinzer]:         https://github.com/dkinzer
+[dwradcliffe]:     https://github.com/dwradcliffe
+[fnichol]:         https://github.com/fnichol
+[funglaub]:        https://github.com/funglaub
+[gregf]:           https://github.com/gregf
+[gsterndale]:      https://github.com/gsterndale
+[hectcastro]:      https://github.com/hectcastro
+[hrp]:             https://github.com/hrp
+[jgarber]:         https://github.com/jgarber
+[jgrevich]:        https://github.com/jgrevich
+[kmdsbng]:         https://github.com/kmdsbng
+[makern]:          https://github.com/makern
+[michaelglass]:    https://github.com/michaelglass
+[naoya]:           https://github.com/naoya
+[natlownes]:       https://github.com/natlownes
+[patatepartie]:    https://github.com/patatepartie
+[patcon]:          https://github.com/patcon
+[pferdefleisch]:   https://github.com/pferdefleisch
+[piglovesyou]:     https://github.com/piglovesyou
+[portertech]:      https://github.com/portertech
+[retr0h]:          https://github.com/retr0h
+[rmoriz]:          https://github.com/rmoriz
+[rosstimson]:      https://github.com/rosstimson
+[rubiojr]:         https://github.com/rubiojr
 [russellcardullo]: https://github.com/russellcardullo
-[ryandub]:       https://github.com/ryandub
-[searlm]:        https://github.com/searlm
-[skyeagle]:      https://github.com/skyeagle
-[smdern]:        https://github.com/smdern
-[teyrow]:        https://github.com/teyrow
-[tknerr]:        https://github.com/tknerr
-[tmatilai]:      https://github.com/tmatilai
-[tocky]:         https://github.com/tocky
-[vjpr]:          https://github.com/vjpr
-[zeph]:          https://github.com/zeph
-[allaire]:       https://github.com/allaire
-[yugui]:         https://github.com/yugui
-[xtoddx]:        https://github.com/xtoddx
+[ryandub]:         https://github.com/ryandub
+[searlm]:          https://github.com/searlm
+[skyeagle]:        https://github.com/skyeagle
+[smdern]:          https://github.com/smdern
+[teyrow]:          https://github.com/teyrow
+[tknerr]:          https://github.com/tknerr
+[tmatilai]:        https://github.com/tmatilai
+[tocky]:           https://github.com/tocky
+[vjpr]:            https://github.com/vjpr
+[zeph]:            https://github.com/zeph
+[allaire]:         https://github.com/allaire
+[yugui]:           https://github.com/yugui
+[xtoddx]:          https://github.com/xtoddx
+[anl]:             https://github.com/anl
+[robacarp]:        https://github.com/robacarp
