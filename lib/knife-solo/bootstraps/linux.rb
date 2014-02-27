@@ -109,7 +109,7 @@ module KnifeSolo::Bootstraps
         {:type => "yum_omnibus"}
       when %r{SUSE Linux Enterprise Server 1[12]}
         {:type => "omnibus"}
-      when %r{openSUSE 12}
+      when %r{openSUSE 1[23]}
         {:type => "zypper_omnibus"}
       when %r{This is \\n\.\\O \(\\s \\m \\r\) \\t}
         {:type => "emerge_gem"}
