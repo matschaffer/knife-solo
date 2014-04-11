@@ -5,6 +5,7 @@ module KnifeSolo
     def self.load_deps
       require 'knife-solo/ssh_connection'
       require 'net/ssh'
+      require 'net/ssh/gateway'
     end
 
     def self.included(other)
@@ -37,6 +38,10 @@ module KnifeSolo
           :short       => '-P PASSWORD',
           :long        => '--ssh-password PASSWORD',
           :description => 'The ssh password'
+
+        option :ssh_gateway,
+          :long        => '--ssh-gateway GATEWAY',
+          :description => 'The ssh gateway'
 
         option :ssh_identity,
           :long        => '--ssh-identity FILE',
@@ -124,8 +129,16 @@ module KnifeSolo
     end
 
     def try_connection
-      Net::SSH.start(host, user, connection_options) do |ssh|
-        ssh.exec!("true")
+      if connection_options[:gateway]
+        co = connection_options
+        gw_user,gw =  co.delete(:gateway).split '@'
+        Net::SSH::Gateway.new(gw, gw_user).ssh(host, user, co)  do |ssh|
+          ssh.exec!("true")
+        end
+      else
+        Net::SSH.start(host, user, connection_options) do |ssh|
+          ssh.exec!("true")
+        end
       end
     end
 
@@ -138,6 +151,7 @@ module KnifeSolo
       options[:port] = config[:ssh_port] if config[:ssh_port]
       options[:password] = config[:ssh_password] if config[:ssh_password]
       options[:keys] = [config[:identity_file]] if config[:identity_file]
+      options[:gateway] = config[:ssh_gateway] if config[:ssh_gateway]
       options[:forward_agent] = true if config[:forward_agent]
       if !config[:host_key_verify]
         options[:paranoid] = false
@@ -171,7 +185,7 @@ module KnifeSolo
       config_arg = "-F #{config[:ssh_config]}" if config[:ssh_config]
       ident_arg = "-i #{config[:identity_file]}" if config[:identity_file]
       forward_arg = "-o ForwardAgent=yes" if config[:forward_agent]
-      port_arg = "-p #{config[:ssh_port]}" if config[:ssh_port]      
+      port_arg = "-p #{config[:ssh_port]}" if config[:ssh_port]
       knownhosts_arg  =  "-o UserKnownHostsFile=#{connection_options[:user_known_hosts_file]}" if config[:host_key_verify] == false
       stricthosts_arg = "-o StrictHostKeyChecking=no" if config[:host_key_verify] == false
 
