@@ -32,14 +32,14 @@ module KnifeSolo
 
     attr_reader :host, :user, :connection_options
 
-    def session
+    def session(&block)
       @session ||= begin
         if connection_options[:gateway]
           co = connection_options
           gw_user,gw =  co.delete(:gateway).split '@'
-          Net::SSH::Gateway.new(gw, gw_user).ssh(host, user, co)
+          Net::SSH::Gateway.new(gw, gw_user).ssh(host, user, co, &block)
         else
-          Net::SSH.start(host, user, connection_options)
+          Net::SSH.start(host, user, connection_options, &block)
         end
       end
     end

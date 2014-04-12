@@ -129,16 +129,8 @@ module KnifeSolo
     end
 
     def try_connection
-      if connection_options[:gateway]
-        co = connection_options
-        gw_user,gw =  co.delete(:gateway).split '@'
-        Net::SSH::Gateway.new(gw, gw_user).ssh(host, user, co)  do |ssh|
-          ssh.exec!("true")
-        end
-      else
-        Net::SSH.start(host, user, connection_options) do |ssh|
-          ssh.exec!("true")
-        end
+      ssh_connection.session do |ssh|
+        ssh.exec!("true")
       end
     end
 
@@ -254,8 +246,13 @@ module KnifeSolo
 
       output = ui.stdout if options[:streaming]
 
-      @connection ||= SshConnection.new(host, user, connection_options, method(:password))
+
+      @connection ||= ssh_connection
       @connection.run_command(command, output)
+    end
+
+    def ssh_connection
+       SshConnection.new(host, user, connection_options, method(:password))
     end
 
     # Runs commands from the specified array until successful.
