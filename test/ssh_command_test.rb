@@ -58,6 +58,24 @@ class SshCommandTest < TestCase
     assert_equal "test", cmd.connection_options[:password]
   end
 
+  def test_try_connection_without_gateway_connects_using_ssh
+    cmd = command("10.0.0.1")
+    Net::SSH.expects(:start).with(cmd.host, cmd.user, cmd.connection_options)
+
+    cmd.try_connection
+  end
+
+  def test_try_connection_with_gateway_connects_using_ssh_gateway
+    cmd = command("10.0.0.1", "--ssh-gateway=user@gateway")
+    ssh_mock = mock 'ssh_mock'
+    Net::SSH::Gateway.expects(:new).with('gateway', 'user').returns(ssh_mock)
+    ssh_mock.expects(:ssh).with(cmd.host, cmd.user, cmd.connection_options.except(:gateway))
+
+    Net::SSH.expects(:start).never
+
+    cmd.try_connection
+  end
+
   def test_uses_default_keys_if_conncetion_succeeds
     cmd = command("10.0.0.1")
     assert_equal({:config => false}, cmd.connection_options)
@@ -92,6 +110,13 @@ class SshCommandTest < TestCase
   def test_handle_forward_agent
     cmd = command("10.0.0.1", "--forward-agent")
     assert_equal true,  cmd.connection_options[:forward_agent]
+  end
+
+
+  def test_handle_ssh_gateway
+    gateway = 'test@host.com'
+    cmd = command("10.0.0.1", "--ssh-gateway", gateway)
+    assert_equal gateway,  cmd.connection_options[:gateway]
   end
 
   def test_handle_default_host_key_verify_is_paranoid
@@ -129,6 +154,10 @@ class SshCommandTest < TestCase
     cmd = command("usertest@10.0.0.1", "--forward-agent")
     cmd.validate_ssh_options!
     assert_equal "usertest@10.0.0.1 -o ForwardAgent=yes", cmd.ssh_args
+
+    cmd = command("usertest@10.0.0.1", "--ssh-gateway=test@host.com")
+    cmd.validate_ssh_options!
+    assert_equal "usertest@10.0.0.1", cmd.ssh_args
   end
 
   def test_barks_without_atleast_a_hostname
