@@ -34,6 +34,16 @@ class SoloCookTest < TestCase
     end
   end
 
+  def test_sets_ssl_verify_mode_returns_verify_peer_for_nil
+    Chef::Config[:ssl_verify_mode] = nil
+    assert_equal :verify_peer, command.ssl_verify_mode
+  end
+
+  def test_sets_ssl_verify_mode
+    Chef::Config[:ssl_verify_mode] = :verify_none
+    assert_equal :verify_none, command.ssl_verify_mode
+  end
+
   def test_expanded_config_paths_returns_empty_array_for_nil
     Chef::Config[:foo] = nil
     assert_equal [], command.expanded_config_paths(:foo)

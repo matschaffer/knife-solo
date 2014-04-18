@@ -127,6 +127,10 @@ class Chef
         upload_to_provision_path(:environment_path, 'environments')
       end
 
+      def ssl_verify_mode
+        Chef::Config[:ssl_verify_mode] || :verify_peer
+      end
+
       def expand_path(path)
         Pathname.new(path).expand_path
       end
