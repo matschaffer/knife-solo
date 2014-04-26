@@ -74,7 +74,8 @@ module KnifeSolo
           attributes = config[:json_attributes] || config[:first_boot_attributes] || {}
           run_list = { :run_list => config[:run_list] || [] }
           environment = config[:environment] ? { :environment => config[:environment] } : {}
-          f.print attributes.merge(run_list).merge(environment).to_json
+          automatic = host ? { :automatic => { :ipaddress => host } } : {}
+          f.print JSON.pretty_generate(attributes.merge(run_list).merge(environment).merge(automatic))
         end
       end
     end

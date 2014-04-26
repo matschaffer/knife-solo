@@ -45,7 +45,8 @@ class NodeConfigCommandTest < TestCase
       cmd = command(@host)
       cmd.generate_node_config
       assert cmd.node_config.exist?
-      assert_match '{"run_list":[]}', cmd.node_config.read
+
+      assert_config_contains({"run_list" => []}, cmd)
     end
   end
 
@@ -72,7 +73,8 @@ class NodeConfigCommandTest < TestCase
     in_kitchen do
       cmd = command(@host, "--run-list=role[base],recipe[foo]")
       cmd.generate_node_config
-      assert_match '{"run_list":["role[base]","recipe[foo]"]}', cmd.node_config.read
+
+      assert_config_contains({"run_list" => ["role[base]","recipe[foo]"]}, cmd)
     end
   end
 
@@ -81,7 +83,13 @@ class NodeConfigCommandTest < TestCase
       foo_json = '"foo":{"bar":[1,2],"baz":"x"}'
       cmd = command(@host, "--json-attributes={#{foo_json}}")
       cmd.generate_node_config
-      assert_match "{#{foo_json},\"run_list\":[]}", cmd.node_config.read
+
+      expected_hash = {
+        "foo" => {"bar" => [1,2], "baz" => "x"},
+        "run_list" => []
+      }
+
+      assert_config_contains expected_hash, cmd
     end
   end
 
@@ -94,17 +102,28 @@ class NodeConfigCommandTest < TestCase
       cmd.config[:json_attributes]       = JSON.parse("{#{foo_json}}")
       cmd.config[:first_boot_attributes] = JSON.parse("{#{ignored_json}}")
       cmd.generate_node_config
-      assert_match "{#{foo_json},\"run_list\":[]}", cmd.node_config.read
+
+      expected_hash = {
+        "foo" => 99,
+        "run_list" => []
+      }
+
+      assert_config_contains expected_hash, cmd
     end
   end
 
   def test_generates_a_node_config_with_specified_first_boot_attributes
     in_kitchen do
-      foo_json = '"foo":null'
       cmd = command(@host)
-      cmd.config[:first_boot_attributes] = JSON.parse("{#{foo_json}}")
+      cmd.config[:first_boot_attributes] = {"foo"=>nil}
       cmd.generate_node_config
-      assert_match "{#{foo_json},\"run_list\":[]}", cmd.node_config.read
+
+      expected_hash = {
+        "foo" => nil,
+        "run_list" => []
+      }
+
+      assert_config_contains expected_hash, cmd
     end
   end
 
@@ -114,9 +133,32 @@ class NodeConfigCommandTest < TestCase
       run_list = 'recipe[baz]'
       cmd = command(@host, "--run-list=#{run_list}", "--json-attributes={#{foo_json}}")
       cmd.generate_node_config
-      assert_match "{#{foo_json},\"run_list\":[\"#{run_list}\"]}", cmd.node_config.read
+
+      expected_hash = {
+        "foo" => "bar",
+        "run_list" => [run_list]
+      }
+
+      assert_config_contains expected_hash, cmd
+
     end
   end
+
+  def test_generates_a_node_config_with_the_ip_address
+    in_kitchen do
+      cmd = command(@host)
+      cmd.generate_node_config
+
+      expected_hash = {
+        "automatic" => { "ipaddress" => @host }
+      }
+
+      assert_config_contains expected_hash, cmd
+
+    end
+  end
+
+
 
   def test_creates_the_nodes_directory_if_needed
     outside_kitchen do
@@ -126,7 +168,17 @@ class NodeConfigCommandTest < TestCase
     end
   end
 
+  private
+
   def command(*args)
     knife_command(DummyNodeConfigCommand, *args)
   end
+
+  def assert_config_contains expected_hash, cmd
+    config = JSON.parse(cmd.node_config.read)
+    expected_hash.each do |k, v|
+      assert_equal v, config[k]
+    end
+  end
+
 end
