@@ -44,6 +44,55 @@ class SoloCookTest < TestCase
     assert_equal :verify_none, command.ssl_verify_mode
   end
 
+  def test_rsync_without_gateway_connection_options
+    in_kitchen do
+
+      cmd = knife_command(Chef::Knife::SoloCook)
+      cmd.expects(:system!).with('rsync',
+                                  '-rL',
+                                  '--rsh=ssh ssh_arguments',
+                                  '--delete-after',
+                                  '--exclude=revision-deploys',
+                                  '--exclude=tmp',
+                                  '--exclude=.git',
+                                  '--exclude=.hg',
+                                  '--exclude=.svn',
+                                  '--exclude=.bzr',
+                                  'source',
+                                  ':dest')
+
+      cmd.stubs(:ssh_args => 'ssh_arguments')
+      cmd.stubs(:windows_node? => false)
+
+      cmd.rsync 'source', 'dest'
+    end
+  end
+
+  def test_rsync_with_gateway_connection_options
+    in_kitchen do
+
+      cmd = knife_command(Chef::Knife::SoloCook)
+      cmd.config[:ssh_gateway] = 'user@gateway'
+      cmd.expects(:system!).with('rsync',
+                                  '-rL',
+                                  '--rsh=ssh -TA user@gateway ssh -T -o StrictHostKeyChecking=no ssh_arguments',
+                                  '--delete-after',
+                                  '--exclude=revision-deploys',
+                                  '--exclude=tmp',
+                                  '--exclude=.git',
+                                  '--exclude=.hg',
+                                  '--exclude=.svn',
+                                  '--exclude=.bzr',
+                                  'source',
+                                  ':dest')
+
+      cmd.stubs(:ssh_args => 'ssh_arguments')
+      cmd.stubs(:windows_node? => false)
+
+      cmd.rsync 'source', 'dest'
+    end
+  end
+
   def test_expanded_config_paths_returns_empty_array_for_nil
     Chef::Config[:foo] = nil
     assert_equal [], command.expanded_config_paths(:foo)
