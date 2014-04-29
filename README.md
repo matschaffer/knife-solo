@@ -46,3 +46,11 @@ bundle && bundle exec rake install
 ```
 
 Documentation for the latest master version of knife-solo is available in [README.rdoc](https://github.com/matschaffer/knife-solo/blob/master/README.rdoc).
+
+## Issues
+
+Traffic on this project is still fairly low, so a mailing list seems like "too much". Since we don't have one feel free to file an issue for any problems or questions you have while using it.
+
+If you'd like to help work on issues, I recommend using [huboard](https://huboard.com/matschaffer/knife-solo) to keep track of work in progress. A number of the labels on the project's issues are actually for huboard's purposes.
+
+
