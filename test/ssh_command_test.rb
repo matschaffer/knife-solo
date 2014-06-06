@@ -78,7 +78,7 @@ class SshCommandTest < TestCase
 
   def test_uses_default_keys_if_conncetion_succeeds
     cmd = command("10.0.0.1")
-    assert_equal({:config => false}, cmd.connection_options)
+    assert_equal false, cmd.connection_options[:config]
   end
 
   def test_uses_ssh_config_if_matched
