@@ -1,4 +1,3 @@
-.coveralls.yml
 CHANGELOG.md
 LICENSE
 README.rdoc
