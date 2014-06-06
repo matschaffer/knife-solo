@@ -1,3 +1,11 @@
+# 0.5.0 / _In progress_
+
+## Changes and new features
+
+## Fixes
+
+## Thanks to our contributors!
+
 # 0.4.2 / 2014-06-05
 
 ## Changes and new features
