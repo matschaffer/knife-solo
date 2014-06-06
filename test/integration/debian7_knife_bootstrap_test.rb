@@ -6,7 +6,9 @@ class Debian7KnifeBootstrapTest < IntegrationTest
   end
 
   def image_id
-    "ami-9e95e8f7"
+    # PVM instance store
+    # From https://wiki.debian.org/Cloud/AmazonEC2Image/Wheezy
+    "ami-848a6eec"
   end
 
   def prepare_server

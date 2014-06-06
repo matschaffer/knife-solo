@@ -1,12 +1,15 @@
 require 'integration_helper'
 
+
 class Debian6BootstrapTest < IntegrationTest
   def user
     "admin"
   end
 
   def image_id
-    "ami-7ce17315"
+    # PVM 64-bit
+    # From https://wiki.debian.org/Cloud/AmazonEC2Image/Squeeze
+    "ami-0740476e"
   end
 
   def prepare_server
