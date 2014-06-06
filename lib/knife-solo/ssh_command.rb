@@ -212,7 +212,7 @@ module KnifeSolo
         Chef::Log.debug("Using replacement sudo command: #{sudo_command}")
         replacement = sudo_command
       elsif sudo_available?
-        replacement = 'sudo -p \'knife sudo password: \''
+        replacement = 'sudo -E -p \'knife sudo password: \''
       else
         replacement = ''
       end
