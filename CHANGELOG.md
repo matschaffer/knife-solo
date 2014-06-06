@@ -1,10 +1,14 @@
-# 0.4.2 / _In progress_
+# 0.4.2 / 2014-06-05
 
 ## Changes and new features
 
-* SSH agent forwarding support ([328][], [347][])
+* SSH agent forwarding support ([328][], [347][], [358][])
+* SSH gateway support ([8d1f4f8][])
 * Support non-bash shells (csh, sh, dash, bash, and fish) ([351][])
+* Add `node_name` & `ssl_verify_mode` to `solo.rb` ([359][], [363][])
+* Store IP address in generated node file ([360][])
 * openSUSE 13 support ([352][])
+* Mavericks support ([356][])
 
 ## Fixes
 
@@ -16,12 +20,22 @@
 * [Todd Willey][xtoddx]
 * [Andy Leonard][anl]
 * [Robert L. Carpenter][robacarp]
+* [alexsiri7][alexsiri7]
+* [Ravil Bayramgalin][brainopia]
+* [Chun-wei Kuo][Domon]
+* [Angel Abad][angelabad]
 
 [308]: https://github.com/matschaffer/knife-solo/issues/308
 [328]: https://github.com/matschaffer/knife-solo/issues/328
 [347]: https://github.com/matschaffer/knife-solo/issues/347
 [351]: https://github.com/matschaffer/knife-solo/issues/351
 [352]: https://github.com/matschaffer/knife-solo/issues/352
+[358]: https://github.com/matschaffer/knife-solo/issues/358
+[359]: https://github.com/matschaffer/knife-solo/issues/359
+[360]: https://github.com/matschaffer/knife-solo/issues/360
+[363]: https://github.com/matschaffer/knife-solo/issues/363
+[356]: https://github.com/matschaffer/knife-solo/issues/356
+[8d1f4f8]: https://github.com/matschaffer/knife-solo/commit/8d1f4f8
 
 # 0.4.1 / 2013-12-07
 
@@ -485,3 +499,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [xtoddx]:          https://github.com/xtoddx
 [anl]:             https://github.com/anl
 [robacarp]:        https://github.com/robacarp
+[alexsiri7]:       https://github.com/alexsiri7
+[brainopia]:       https://github.com/brainopia
+[Domon]:           https://github.com/Domon
+[angelabad]:       https://github.com/angelabad
