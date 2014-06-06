@@ -1,10 +1,10 @@
 # knife-solo
 
-[![Version](http://allthebadges.io/matschaffer/knife-solo/badge_fury.png)](http://allthebadges.io/matschaffer/knife-solo/badge_fury)
-[![Dependencies](http://allthebadges.io/matschaffer/knife-solo/gemnasium.png)](http://allthebadges.io/matschaffer/knife-solo/gemnasium)
-[![Build Status](http://allthebadges.io/matschaffer/knife-solo/travis.png)](http://allthebadges.io/matschaffer/knife-solo/travis)
-[![Coverage](http://allthebadges.io/matschaffer/knife-solo/coveralls.png)](http://allthebadges.io/matschaffer/knife-solo/coveralls)
-[![Code Climate](http://allthebadges.io/matschaffer/knife-solo/code_climate.png)](http://allthebadges.io/matschaffer/knife-solo/code_climate)
+[![Version](http://img.shields.io/gem/v/knife-solo.svg)](http://allthebadges.io/matschaffer/knife-solo/badge_fury)
+[![Dependencies](http://img.shields.io/gemnasium/matschaffer/knife-solo.svg)](http://allthebadges.io/matschaffer/knife-solo/gemnasium)
+[![Build Status](http://img.shields.io/travis/matschaffer/knife-solo.svg)](http://allthebadges.io/matschaffer/knife-solo/travis)
+[![Coverage](http://img.shields.io/coveralls/matschaffer/knife-solo.svg)](http://allthebadges.io/matschaffer/knife-solo/coveralls)
+[![Code Climate](http://img.shields.io/codeclimate/github/matschaffer/knife-solo.svg)](http://allthebadges.io/matschaffer/knife-solo/code_climate)
 
 ## Description
 
