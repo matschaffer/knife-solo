@@ -40,7 +40,7 @@ module KnifeSolo
     end
 
     def initial_config
-      'site :opscode'
+      "source 'https://api.berkshelf.com'"
     end
   end
 end
