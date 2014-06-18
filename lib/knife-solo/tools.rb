@@ -8,6 +8,10 @@ module KnifeSolo
       RbConfig::CONFIG['host_os'] =~ /mswin|mingw/
     end
 
+    def mingw_client?
+      RbConfig::CONFIG['host_os'] =~ /mingw/
+    end
+
     def config_value(key, default = nil)
       Tools.config_value(config, key, default)
     end

@@ -168,19 +168,21 @@ class Chef
       end
 
       # cygwin rsync path must be adjusted to work
+      # TODO: The check for cygwin is conflated with windows, should probably refactor to just check
+      #       for cygwin when adjusting paths.
       def adjust_rsync_path(path)
         path_s = path.to_s
         path_s.gsub(/^(\w):/) { "/cygdrive/#{$1}" }
       end
 
       def adjust_rsync_path_on_node(path)
-        return path unless windows_node?
-        adjust_rsync_path(path)
+        return adjust_rsync_path(path) if windows_node? && !mingw_node?
+        path
       end
 
       def adjust_rsync_path_on_client(path)
-        return path unless windows_client?
-        adjust_rsync_path(path)
+        return adjust_rsync_path(path) if windows_client? && !mingw_client?
+        path
       end
 
       def rsync_debug
