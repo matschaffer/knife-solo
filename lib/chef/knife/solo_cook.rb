@@ -121,7 +121,6 @@ class Chef
         end
         upload_to_provision_path(node_config.to_s, 'dna.json')
         upload_to_provision_path(nodes_path, 'nodes')
-        upload_to_provision_path(:role_path, 'roles')
         upload_to_provision_path(:data_bag_path, 'data_bags')
         upload_to_provision_path(:encrypted_data_bag_secret, 'data_bag_key')
         upload_to_provision_path(:environment_path, 'environments')
