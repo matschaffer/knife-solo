@@ -167,20 +167,20 @@ class Chef
         @chefignore ||= ::Chef::Cookbook::Chefignore.new("./")
       end
 
-      # cygwin rsync path must be adjusted to work
-      def adjust_rsync_path(path)
+      # path must be adjusted to work on windows
+      def adjust_rsync_path(path, path_prefix)
         path_s = path.to_s
-        path_s.gsub(/^(\w):/) { "/cygdrive/#{$1}" }
+        path_s.gsub(/^(\w):/) { path_prefix + "/#{$1}" }
       end
 
       def adjust_rsync_path_on_node(path)
         return path unless windows_node?
-        adjust_rsync_path(path)
+        adjust_rsync_path(path, config_value(:cygdrive_prefix_remote, '/cygdrive'))
       end
 
       def adjust_rsync_path_on_client(path)
         return path unless windows_client?
-        adjust_rsync_path(path)
+        adjust_rsync_path(path, config_value(:cygdrive_prefix_local, '/cygdrive'))
       end
 
       def rsync_debug

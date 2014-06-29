@@ -134,7 +134,10 @@ The cook command will work on Windows node if you meet the following howto:
 
 ==== Cook
 
-- cook should work as expected automatically, if you use cygwin rsync
+- cook should work as expected automatically, if you use cygwin rsync. If you're using MinGW / Git Bash, or you have a non-standard <tt>cygdrive</tt> setting, you can set that in <tt>.chef/knife.rb</tt>:
+
+    knife[:cygdrive_prefix_local] = '/cygdrive'  # prefix for your local machine, set to empty string for MinGW
+    knife[:cygdrive_prefix_remote] = '/cygdrive' # prefix on the remote windows node
 
 == DEVELOPMENT
 
