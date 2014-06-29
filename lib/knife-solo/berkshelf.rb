@@ -40,8 +40,7 @@ module KnifeSolo
     end
 
     def initial_config
-      berkshelf_version = ::Berkshelf::VERSION rescue nil
-      if berkshelf_version && Gem::Version.new(berkshelf_version) >= Gem::Version.new("3.0.0")
+      if defined?(::Berkshelf) && Gem::Version.new(::Berkshelf::VERSION) >= Gem::Version.new("3.0.0")
         'source "https://api.berkshelf.com"'
       else
         'site :opscode'
