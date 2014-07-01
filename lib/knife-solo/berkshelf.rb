@@ -40,7 +40,11 @@ module KnifeSolo
     end
 
     def initial_config
-      'site :opscode'
+      if defined?(::Berkshelf) && Gem::Version.new(::Berkshelf::VERSION) >= Gem::Version.new("3.0.0")
+        'source "https://api.berkshelf.com"'
+      else
+        'site :opscode'
+      end
     end
   end
 end
