@@ -110,7 +110,7 @@ class SoloInitTest < TestCase
   def test_wont_create_berksfile_if_gem_missing
     outside_kitchen do
       cmd = command(".")
-      KnifeSolo::Berkshelf.expects(:load_gem).returns(false)
+      KnifeSolo::Berkshelf.expects(:load_gem).raises(LoadError)
       cmd.run
       refute File.exist?("Berksfile")
     end
@@ -189,7 +189,7 @@ class SoloInitTest < TestCase
   def test_wont_create_cheffile_if_gem_missing
     outside_kitchen do
       cmd = command(".")
-      KnifeSolo::Librarian.expects(:load_gem).returns(false)
+      KnifeSolo::Librarian.expects(:load_gem).raises(LoadError)
       cmd.run
       refute File.exist?("Cheffile")
     end
@@ -210,8 +210,8 @@ class SoloInitTest < TestCase
   end
 
   def command(*args)
-    KnifeSolo::Berkshelf.stubs(:load_gem).returns(false)
-    KnifeSolo::Librarian.stubs(:load_gem).returns(false)
+    KnifeSolo::Berkshelf.stubs(:load_gem).raises(LoadError)
+    KnifeSolo::Librarian.stubs(:load_gem).raises(LoadError)
     knife_command(Chef::Knife::SoloInit, *args)
   end
 end

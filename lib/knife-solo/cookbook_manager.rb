@@ -22,12 +22,7 @@ module KnifeSolo
       end
 
       def load_gem
-        begin
-          gem_libraries.each { |lib| require lib }
-          true
-        rescue LoadError
-          false
-        end
+        gem_libraries.each { |lib| require lib }
       end
 
       # Key in Chef::Config and CLI options
@@ -63,6 +58,9 @@ module KnifeSolo
 
       def gem_installed?
         self.class.load_gem
+        true
+      rescue LoadError
+        false
       end
 
       def conf_file(base = nil)
@@ -87,11 +85,15 @@ module KnifeSolo
       def install
         if !conf_file_exists?
           Chef::Log.debug "#{conf_file} not found"
-        elsif !self.class.load_gem
-          ui.warn "#{name} could not be loaded"
-          ui.warn "Please add the #{gem_name} gem to your Gemfile or install it manually with `gem install #{gem_name}`"
         else
-          return install!
+          begin
+            self.class.load_gem
+            return install!
+          rescue LoadError => e
+            ui.warn e.inspect
+            ui.warn "#{name} could not be loaded"
+            ui.warn "Please add the #{gem_name} gem to your Gemfile or install it manually with `gem install #{gem_name}`"
+          end
         end
         nil
       end
