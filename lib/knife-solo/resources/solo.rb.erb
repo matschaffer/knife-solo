@@ -18,3 +18,5 @@ cookbook_path << File.join(base, 'cookbooks-<%= i+1 %>') # <%= path %>
 <% proxy_settings.each_pair do |k, v| -%>
 <%= k %>     "<%= v %>"
 <% end -%>
+
+local_mode true
