@@ -113,7 +113,7 @@ module KnifeSolo::Bootstraps
         {:type => "zypper_omnibus"}
       when %r{This is \\n\.\\O \(\\s \\m \\r\) \\t}
         {:type => "emerge_gem"}
-      when %r{Arch Linux \\r \(\\l\)}
+      when %r{Arch Linux}
         {:type => "yaourt"}
       else
         raise "Distribution not recognized. Please run again with `-VV` option and file an issue: https://github.com/matschaffer/knife-solo/issues"
