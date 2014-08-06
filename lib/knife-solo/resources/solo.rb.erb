@@ -1,3 +1,5 @@
+<%= File.read 'solo.rb' rescue nil %>
+
 node_name <%= host.inspect %>
 
 base = File.expand_path('..', __FILE__)
