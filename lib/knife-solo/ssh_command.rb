@@ -185,8 +185,24 @@ module KnifeSolo
       [host_arg, config_arg, ident_arg, forward_arg, port_arg, knownhosts_arg, stricthosts_arg].compact.join(' ')
     end
 
+    def custom_sudo_command
+      if sudo_command=config[:sudo_command]
+        Chef::Log.debug("Using replacement sudo command: #{sudo_command}")
+        return sudo_command
+      end
+    end
+
+    def standard_sudo_command
+      return unless sudo_available?
+      if config[:forward_agent]
+        return 'sudo -E -p \'knife sudo password: \''
+      else
+        return 'sudo -p \'knife sudo password: \''
+      end
+    end
+
     def sudo_command
-      config[:sudo_command]
+      custom_sudo_command || standard_sudo_command || ''
     end
 
     def startup_script
@@ -208,15 +224,7 @@ module KnifeSolo
     end
 
     def process_sudo(command)
-      if sudo_command
-        Chef::Log.debug("Using replacement sudo command: #{sudo_command}")
-        replacement = sudo_command
-      elsif sudo_available?
-        replacement = 'sudo -E -p \'knife sudo password: \''
-      else
-        replacement = ''
-      end
-      command.gsub(/sudo/, replacement)
+      command.gsub(/sudo/, sudo_command)
     end
 
     def process_startup_file(command)
