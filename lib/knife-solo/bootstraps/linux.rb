@@ -32,7 +32,7 @@ module KnifeSolo::Bootstraps
     def pacman_install
       ui.msg("Installing required packages...")
       run_command("sudo pacman -Sy ruby rsync make gcc --noconfirm")
-      run_command("sudo gem install chef knife-solo --no-user-install --no-rdoc --no-ri")
+      run_command("sudo gem install chef --no-user-install --no-rdoc --no-ri")
     end
 
     def debianoid_gem_install
