@@ -54,7 +54,7 @@ module KnifeSolo
 
         option :forward_agent,
           :long        => '--forward-agent',
-          :description => 'Forward SSH authentication',
+          :description => 'Forward SSH authentication. Adds -E to sudo, override with --sudo-command.',
           :boolean     => true,
           :default     => false
 
