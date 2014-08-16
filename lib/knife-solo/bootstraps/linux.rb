@@ -4,6 +4,7 @@ module KnifeSolo::Bootstraps
       commands = [
         'lsb_release -d -s',
         'cat /etc/redhat-release',
+        'cat /etc/os-release',
         'cat /etc/issue'
       ]
       result = prepare.run_with_fallbacks(commands)
