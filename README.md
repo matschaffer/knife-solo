@@ -1,5 +1,6 @@
 # knife-solo
 
+[![Stories in Ready](https://badge.waffle.io/matschaffer/knife-solo.png?label=ready&title=Ready)](https://waffle.io/matschaffer/knife-solo)
 [![Version](http://img.shields.io/gem/v/knife-solo.svg)](http://allthebadges.io/matschaffer/knife-solo/badge_fury)
 [![Dependencies](http://img.shields.io/gemnasium/matschaffer/knife-solo.svg)](http://allthebadges.io/matschaffer/knife-solo/gemnasium)
 [![Build Status](http://img.shields.io/travis/matschaffer/knife-solo.svg)](http://allthebadges.io/matschaffer/knife-solo/travis)
@@ -51,6 +52,6 @@ Documentation for the latest master version of knife-solo is available in [READM
 
 Traffic on this project is still fairly low, so a mailing list seems like "too much". Since we don't have one feel free to file an issue for any problems or questions you have while using knife-solo.
 
-If you'd like to help work on issues, I recommend using [huboard](https://huboard.com/matschaffer/knife-solo) to keep track of work in progress. A number of the labels on the project's issues are actually for huboard's purposes.
+If you'd like to help work on issues, I recommend using [waffle.io](https://waffle.io/matschaffer/knife-solo) to keep track of work in progress. The gray issue labels on this project are for use with the waffle.io board.
 
 
