@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/matschaffer/knife-solo.png?label=ready&title=Ready)](https://waffle.io/matschaffer/knife-solo)
 # knife-solo
 
 [![Version](http://img.shields.io/gem/v/knife-solo.svg)](http://allthebadges.io/matschaffer/knife-solo/badge_fury)
