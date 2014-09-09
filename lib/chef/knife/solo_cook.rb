@@ -303,6 +303,8 @@ class Chef
         cmd << " -W" if config[:why_run]
         cmd << " -o #{config[:override_runlist]}" if config[:override_runlist]
 
+        ui.msg cmd
+
         result = stream_command cmd
         raise "chef-solo failed. See output above." unless result.success?
       end
