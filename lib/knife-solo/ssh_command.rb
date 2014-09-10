@@ -63,6 +63,17 @@ module KnifeSolo
           :long        => '--ssh-port PORT',
           :description => 'The ssh port'
 
+        option :ssh_keepalive,
+          :long        => '--[no-]ssh-keepalive',
+          :description => 'Use ssh keepalive',
+          :default     => true
+
+        option :ssh_keepalive_interval,
+          :long        => '--ssh-keepalive-interval SECONDS',
+          :description => 'The ssh keepalive interval',
+          :default     => 300,
+          :proc        => Proc.new { |v| v.to_i }
+
         option :startup_script,
           :short       => '-s FILE',
           :long        => '--startup-script FILE',
@@ -97,6 +108,10 @@ module KnifeSolo
       end
       if config[:ssh_user]
         host_descriptor[:user] ||= config[:ssh_user]
+      end
+      if config[:ssh_keepalive_interval] <= 0
+        ui.fatal '`--ssh-keepalive-interval` must be a positive number'
+        exit 1
       end
     end
 
@@ -149,6 +164,10 @@ module KnifeSolo
         options[:paranoid] = false
         options[:user_known_hosts_file] = "/dev/null"
       end
+      if config[:ssh_keepalive]
+        options[:keepalive] = config[:ssh_keepalive]
+        options[:keepalive_interval] = config[:ssh_keepalive_interval]
+      end      
       # Respect users' specification of config[:ssh_config]
       # Prevents Net::SSH itself from applying the default ssh_config files.
       options[:config] = false
