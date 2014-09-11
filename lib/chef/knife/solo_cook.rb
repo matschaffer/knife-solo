@@ -296,12 +296,13 @@ class Chef
       end
 
       def cook
-        ui.msg "Running Chef..."
         cmd = "sudo chef-solo -c #{provisioning_path}/solo.rb -j #{provisioning_path}/dna.json"
         cmd << " -l debug" if debug?
         cmd << " -N #{config[:chef_node_name]}" if config[:chef_node_name]
         cmd << " -W" if config[:why_run]
         cmd << " -o #{config[:override_runlist]}" if config[:override_runlist]
+
+        ui.msg "Running Chef: #{cmd}"
 
         result = stream_command cmd
         raise "chef-solo failed. See output above." unless result.success?
