@@ -188,6 +188,32 @@ class SshCommandTest < TestCase
     assert_equal 1, res.exit_code
   end
 
+  def test_handle_ssh_keepalive
+    cmd = command("usertest@10.0.0.1", "--ssh-keepalive", '--ssh-keepalive-interval=100')
+    cmd.validate_ssh_options!
+    assert_equal true, cmd.connection_options[:keepalive]
+    assert_equal 100, cmd.connection_options[:keepalive_interval]
+  end
+
+  def test_handle_no_ssh_keepalive
+    cmd = command("usertest@10.0.0.1", "--no-ssh-keepalive")
+    assert_equal nil, cmd.connection_options[:keepalive]
+  end
+
+  def test_handle_default_ssh_keepalive_is_true
+    cmd = command("usertest@10.0.0.1")
+    cmd.validate_ssh_options!
+    assert_equal true, cmd.connection_options[:keepalive]
+    assert_equal 300, cmd.connection_options[:keepalive_interval]
+  end
+
+  def test_barks_if_ssh_keepalive_is_zero
+    cmd = command("usertest@10.0.0.1", "--ssh-keepalive-interval=0")
+    cmd.ui.expects(:err).with(regexp_matches(/--ssh-keepalive-interval.*positive number/))
+    $stdout.stubs(:puts)
+    assert_exits { cmd.validate_ssh_options! }
+  end
+
   def result(code, stdout = "")
     res = KnifeSolo::SshConnection::ExecResult.new(code)
     res.stdout = stdout
