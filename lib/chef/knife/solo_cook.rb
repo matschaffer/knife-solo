@@ -53,6 +53,10 @@ class Chef
         :long        => '--no-librarian',
         :description => 'Skip librarian-chef install'
 
+      option :secret_file,
+        :long        => '--secret-file SECRET_FILE',
+        :description => 'A file containing the secret key used to encrypt data bag item values'
+
       option :why_run,
         :short       => '-W',
         :long        => '--why-run',
@@ -123,7 +127,7 @@ class Chef
         upload_to_provision_path(nodes_path, 'nodes')
         upload_to_provision_path(:role_path, 'roles')
         upload_to_provision_path(:data_bag_path, 'data_bags')
-        upload_to_provision_path(:encrypted_data_bag_secret, 'data_bag_key')
+        upload_to_provision_path(config[:secret_file] || :encrypted_data_bag_secret, 'data_bag_key')
         upload_to_provision_path(:environment_path, 'environments')
       end
 
