@@ -106,7 +106,7 @@ Under the hood it first calls +knife solo prepare+ and then +knife solo cook+ wi
 
 ==== Integration with knife bootstrap
 
-knife-solo also integrates with <tt>knife bootstrap</tt> by adding +--solo+ command line option and +knife[:solo]+ configuration parameter to it. When requested, "knife solo bootrap" is used instead of the normal template based chef-client bootstrap. This is especially useful with other knife plugins like {knife-ec2}[https://github.com/opscode/knife-ec2] that invoke "knife bootstrap" after creating an server instance. Even if these plugins do not have the "--solo" option, you can put <tt>knife[:solo] = true</tt> in knife.rb.
+knife-solo also integrates with <tt>knife bootstrap</tt> by adding +--solo+ command line option and +knife[:solo]+ configuration parameter to it. When requested, "knife solo bootstrap" is used instead of the normal template based chef-client bootstrap. This is especially useful with other knife plugins like {knife-ec2}[https://github.com/opscode/knife-ec2] that invoke "knife bootstrap" after creating an server instance. Even if these plugins do not have the "--solo" option, you can put <tt>knife[:solo] = true</tt> in knife.rb.
 
 === Clean command
 
