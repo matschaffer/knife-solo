@@ -1,5 +1,7 @@
 # knife-solo
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/matschaffer/knife-solo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Stories in Ready](https://badge.waffle.io/matschaffer/knife-solo.png?label=ready&title=Ready)](https://waffle.io/matschaffer/knife-solo)
 [![Version](http://img.shields.io/gem/v/knife-solo.svg)](http://allthebadges.io/matschaffer/knife-solo/badge_fury)
 [![Dependencies](http://img.shields.io/gemnasium/matschaffer/knife-solo.svg)](http://allthebadges.io/matschaffer/knife-solo/gemnasium)
