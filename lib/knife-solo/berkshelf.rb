@@ -19,8 +19,12 @@ module KnifeSolo
       path = berkshelf_path
       ui.msg "Installing Berkshelf cookbooks to '#{path}'..."
 
-      berkshelf_options = KnifeSolo::Tools.config_value(config, :berkshelf_options) || {}
-      berksfile = ::Berkshelf::Berksfile.from_file('Berksfile',berkshelf_options)
+      if defined?(::Berkshelf) && Gem::Version.new(::Berkshelf::VERSION) >= Gem::Version.new("3.0.0")
+        berkshelf_options = KnifeSolo::Tools.config_value(config, :berkshelf_options) || {}
+        berksfile = ::Berkshelf::Berksfile.from_file('Berksfile',berkshelf_options)
+      else
+        berksfile = ::Berkshelf::Berksfile.from_file('Berksfile')
+      end
       if berksfile.respond_to?(:vendor)
         FileUtils.rm_rf(path)
         berksfile.vendor(path)
