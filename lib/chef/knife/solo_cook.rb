@@ -148,7 +148,7 @@ class Chef
       end
 
       def proxy_setting_keys
-        [:http_proxy, :https_proxy, :http_proxy_user, :http_proxy_pass, :no_proxy]
+        [:http_proxy, :https_proxy, :http_proxy_user, :http_proxy_pass, :https_proxy_user, :https_proxy_pass, :no_proxy]
       end
 
       def proxy_settings
