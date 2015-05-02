@@ -32,13 +32,13 @@ class DeprecatedCommandTest < TestCase
 
   def test_warns_about_deprecation
     cmd = command
-    cmd.ui.expects(:err).with(regexp_matches(/deprecated!/))
+    cmd.ui.expects(:warn).with(regexp_matches(/deprecated!/))
     cmd.run
   end
 
   def test_runs_new_command
     cmd = command
-    cmd.ui.stubs(:err)
+    cmd.ui.stubs(:warn)
     cmd.expects(:new_run)
     cmd.run
   end

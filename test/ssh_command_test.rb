@@ -162,7 +162,7 @@ class SshCommandTest < TestCase
 
   def test_barks_without_atleast_a_hostname
     cmd = command
-    cmd.ui.expects(:err).with(regexp_matches(/hostname.*argument/))
+    cmd.ui.expects(:fatal).with(regexp_matches(/hostname.*argument/))
     $stdout.stubs(:puts)
     assert_exits { cmd.validate_ssh_options! }
   end
@@ -209,7 +209,7 @@ class SshCommandTest < TestCase
 
   def test_barks_if_ssh_keepalive_is_zero
     cmd = command("usertest@10.0.0.1", "--ssh-keepalive-interval=0")
-    cmd.ui.expects(:err).with(regexp_matches(/--ssh-keepalive-interval.*positive number/))
+    cmd.ui.expects(:fatal).with(regexp_matches(/--ssh-keepalive-interval.*positive number/))
     $stdout.stubs(:puts)
     assert_exits { cmd.validate_ssh_options! }
   end

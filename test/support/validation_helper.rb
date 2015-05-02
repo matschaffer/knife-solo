@@ -7,7 +7,7 @@ module ValidationHelper
 
     def test_barks_without_atleast_a_hostname
       cmd = command
-      cmd.ui.expects(:err).with(regexp_matches(/hostname.*argument/))
+      cmd.ui.expects(:fatal).with(regexp_matches(/hostname.*argument/))
       $stdout.stubs(:puts)
       in_kitchen do
         assert_exits cmd

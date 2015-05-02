@@ -175,8 +175,8 @@ class SoloCookTest < TestCase
     in_kitchen do
       FileUtils.touch "Berksfile"
       cmd = command("somehost")
-      cmd.ui.expects(:err).with(regexp_matches(/LoadError/))
-      cmd.ui.expects(:err).with(regexp_matches(/berkshelf gem/))
+      cmd.ui.expects(:warn).with(regexp_matches(/LoadError/))
+      cmd.ui.expects(:warn).with(regexp_matches(/berkshelf gem/))
       KnifeSolo::Berkshelf.expects(:load_gem).raises(LoadError)
       Berkshelf::Berksfile.any_instance.expects(:vendor).never
       cmd.run
@@ -186,7 +186,7 @@ class SoloCookTest < TestCase
   def test_wont_complain_if_berkshelf_gem_missing_but_no_berkfile
     in_kitchen do
       cmd = command("somehost")
-      cmd.ui.expects(:err).never
+      cmd.ui.expects(:fatal).never
       KnifeSolo::Berkshelf.expects(:load_gem).never
       Berkshelf::Berksfile.any_instance.expects(:vendor).never
       cmd.run
@@ -231,8 +231,8 @@ class SoloCookTest < TestCase
     in_kitchen do
       FileUtils.touch "Cheffile"
       cmd = command("somehost")
-      cmd.ui.expects(:err).with(regexp_matches(/LoadError/))
-      cmd.ui.expects(:err).with(regexp_matches(/librarian-chef gem/))
+      cmd.ui.expects(:warn).with(regexp_matches(/LoadError/))
+      cmd.ui.expects(:warn).with(regexp_matches(/librarian-chef gem/))
       KnifeSolo::Librarian.expects(:load_gem).raises(LoadError)
       Librarian::Action::Install.any_instance.expects(:run).never
       cmd.run

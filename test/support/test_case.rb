@@ -12,7 +12,7 @@ class TestCase < MiniTest::Unit::TestCase
     cmd_class.load_deps
     command = cmd_class.new(args)
     command.ui.stubs(:msg)
-    command.ui.stubs(:err)
+    command.ui.stubs(:warn)
     Chef::Config[:verbosity] = 0
     command.configure_chef
     command
