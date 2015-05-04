@@ -11,8 +11,8 @@ matrix:
   allow_failures:
     - gemfile: test/gemfiles/Gemfile.chef-master
   exclude:
-    - rvm: 2.2.2
+    - rvm: 1.9.3
       gemfile: test/gemfiles/Gemfile.chef-12
-    - rvm: 2.2.2
+    - rvm: 1.9.3
       gemfile: test/gemfiles/Gemfile.chef-master
 
