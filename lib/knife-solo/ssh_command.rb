@@ -70,7 +70,8 @@ module KnifeSolo
 
         option :sudo_command,
           :long        => '--sudo-command SUDO_COMMAND',
-          :description => 'The command to use instead of sudo for admin privileges'
+          :description => 'The command to use instead of sudo for admin privileges',
+          default: 'sudo -i'
 
         option :host_key_verify,
           :long => "--[no-]host-key-verify",
