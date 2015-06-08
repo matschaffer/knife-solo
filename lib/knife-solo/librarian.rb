@@ -28,7 +28,7 @@ module KnifeSolo
     end
 
     def initial_config
-      "site 'http://community.opscode.com/api/v1'"
+      "site 'http://supermarket.getchef.com/api/v1'"
     end
 
     # Returns an array of strings to gitignore when bootstrapping

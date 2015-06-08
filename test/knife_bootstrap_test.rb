@@ -49,7 +49,7 @@ class KnifeBootstrapTest < TestCase
 
   def test_barks_without_atleast_a_hostname
     cmd = command("--solo")
-    cmd.ui.expects(:err)
+    cmd.ui.expects(:error)
     in_kitchen do
       assert_exits cmd
     end

@@ -23,7 +23,7 @@ class SoloInitTest < TestCase
 
   def test_barks_without_directory_arg
     cmd = command
-    cmd.ui.expects(:err).with(regexp_matches(/You must specify a directory/))
+    cmd.ui.expects(:fatal).with(regexp_matches(/You must specify a directory/))
     $stdout.stubs(:puts)
     outside_kitchen do
       assert_exits cmd

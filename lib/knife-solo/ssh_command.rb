@@ -54,7 +54,7 @@ module KnifeSolo
 
         option :forward_agent,
           :long        => '--forward-agent',
-          :description => 'Forward SSH authentication',
+          :description => 'Forward SSH authentication. Adds -E to sudo, override with --sudo-command.',
           :boolean     => true,
           :default     => false
 
@@ -62,6 +62,17 @@ module KnifeSolo
           :short       => '-p PORT',
           :long        => '--ssh-port PORT',
           :description => 'The ssh port'
+
+        option :ssh_keepalive,
+          :long        => '--[no-]ssh-keepalive',
+          :description => 'Use ssh keepalive',
+          :default     => true
+
+        option :ssh_keepalive_interval,
+          :long        => '--ssh-keepalive-interval SECONDS',
+          :description => 'The ssh keepalive interval',
+          :default     => 300,
+          :proc        => Proc.new { |v| v.to_i }
 
         option :startup_script,
           :short       => '-s FILE',
@@ -98,6 +109,10 @@ module KnifeSolo
       end
       if config[:ssh_user]
         host_descriptor[:user] ||= config[:ssh_user]
+      end
+      if config[:ssh_keepalive_interval] <= 0
+        ui.fatal '`--ssh-keepalive-interval` must be a positive number'
+        exit 1
       end
     end
 
@@ -150,6 +165,10 @@ module KnifeSolo
         options[:paranoid] = false
         options[:user_known_hosts_file] = "/dev/null"
       end
+      if config[:ssh_keepalive]
+        options[:keepalive] = config[:ssh_keepalive]
+        options[:keepalive_interval] = config[:ssh_keepalive_interval]
+      end      
       # Respect users' specification of config[:ssh_config]
       # Prevents Net::SSH itself from applying the default ssh_config files.
       options[:config] = false
@@ -186,8 +205,24 @@ module KnifeSolo
       [host_arg, config_arg, ident_arg, forward_arg, port_arg, knownhosts_arg, stricthosts_arg].compact.join(' ')
     end
 
+    def custom_sudo_command
+      if sudo_command=config[:sudo_command]
+        Chef::Log.debug("Using replacement sudo command: #{sudo_command}")
+        return sudo_command
+      end
+    end
+
+    def standard_sudo_command
+      return unless sudo_available?
+      if config[:forward_agent]
+        return 'sudo -E -p \'knife sudo password: \''
+      else
+        return 'sudo -p \'knife sudo password: \''
+      end
+    end
+
     def sudo_command
-      config[:sudo_command]
+      custom_sudo_command || standard_sudo_command || ''
     end
 
     def startup_script
@@ -209,15 +244,7 @@ module KnifeSolo
     end
 
     def process_sudo(command)
-      if sudo_command
-        Chef::Log.debug("Using replacement sudo command: #{sudo_command}")
-        replacement = sudo_command
-      elsif sudo_available?
-        replacement = 'sudo -E -p \'knife sudo password: \''
-      else
-        replacement = ''
-      end
-      command.gsub(/sudo/, replacement)
+      command.gsub(/sudo/, sudo_command)
     end
 
     def process_startup_file(command)
