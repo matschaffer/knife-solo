@@ -81,8 +81,8 @@ module KnifeSolo
 
         option :sudo_command,
           :long        => '--sudo-command SUDO_COMMAND',
-          :description => 'The command to use instead of sudo for admin privileges',
-          default: 'sudo -i'
+          :description => 'The command to use instead of sudo for admin privileges'
+          #default: 'sudo -i'
 
         option :host_key_verify,
           :long => "--[no-]host-key-verify",
@@ -168,7 +168,7 @@ module KnifeSolo
       if config[:ssh_keepalive]
         options[:keepalive] = config[:ssh_keepalive]
         options[:keepalive_interval] = config[:ssh_keepalive_interval]
-      end      
+      end
       # Respect users' specification of config[:ssh_config]
       # Prevents Net::SSH itself from applying the default ssh_config files.
       options[:config] = false
