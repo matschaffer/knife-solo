@@ -8,7 +8,7 @@ module Apache2Bootstrap
 
   def write_berksfile
     File.open('Berksfile', 'w') do |f|
-      f.puts "site :opscode"
+      f.puts 'source "https://supermarket.chef.io"'
       f.puts "cookbook 'apache2'"
     end
   end
