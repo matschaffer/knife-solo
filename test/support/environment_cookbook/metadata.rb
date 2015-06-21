@@ -1,4 +1,4 @@
-name             "environment"
+name             "environment_cookbook"
 maintainer       "Mat Schaffer"
 maintainer_email "mat@schaffer.me"
 license          "MIT"
