@@ -67,6 +67,11 @@ class Chef
         :long        => '--override-runlist',
         :description => 'Replace current run list with specified items'
 
+      option :format,
+        :short       => '-f FORMATTER',
+        :long        => '--format FORMATTER',
+        :description => 'output format to use'
+
       option :provisioning_path,
         :long        => '--provisioning-path path',
         :description => 'Where to store kitchen data on the node'
@@ -305,6 +310,7 @@ class Chef
         cmd << " -N #{config[:chef_node_name]}" if config[:chef_node_name]
         cmd << " -W" if config[:why_run]
         cmd << " -o #{config[:override_runlist]}" if config[:override_runlist]
+        cmd << " -F #{config[:format]}" if config[:format]
 
         ui.msg "Running Chef: #{cmd}"
 
