@@ -10,6 +10,6 @@ class ScientificLinux63Test < IntegrationTest
   end
 
   include EmptyCook
-  #include Apache2Cook
+  include Apache2Cook
   include EncryptedDataBag
 end
