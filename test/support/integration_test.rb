@@ -66,6 +66,9 @@ class IntegrationTest < TestCase
   # Prepares the server unless it has already been marked as such
   def prepare_server
     return if server.tags["knife_solo_prepared"]
+    if self.class.firewall_disabled
+      system "ssh #{connection_string} service iptables stop >> #{log_file}"
+    end
     assert_subcommand prepare_command
     runner.tag_as(:prepared, server)
   end
@@ -94,6 +97,14 @@ class IntegrationTest < TestCase
   # Asserts that a knife solo subcommand is successful
   def assert_subcommand(subcommand)
     assert_knife_command "solo #{subcommand}"
+  end
+
+  class << self
+    attr_reader :firewall_disabled
+
+    def disable_firewall
+      @firewall_disabled = true
+    end
   end
 end
 

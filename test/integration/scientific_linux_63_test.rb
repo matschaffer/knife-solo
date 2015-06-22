@@ -1,6 +1,8 @@
 require 'integration_helper'
 
 class ScientificLinux63Test < IntegrationTest
+  disable_firewall
+
   def user
     "root"
   end
