@@ -209,8 +209,6 @@ module KnifeSolo
       args << "-p #{config[:ssh_port]}" if config[:ssh_port]
       args << "-o UserKnownHostsFile=#{connection_options[:user_known_hosts_file]}" if config[:host_key_verify] == false
       args << "-o StrictHostKeyChecking=no" if config[:host_key_verify] == false
-
-
       args << "-o ControlMaster=auto -o ControlPath=#{ssh_control_path} -o ControlPersist=3600" unless config[:ssh_control_master] == "no"
 
       args.join(' ')
