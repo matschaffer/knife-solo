@@ -51,7 +51,6 @@ class SoloCookTest < TestCase
       cmd.expects(:system!).with('rsync',
                                   '-rL',
                                   '--rsh=ssh ssh_arguments',
-                                  '--delete-after',
                                   '--exclude=revision-deploys',
                                   '--exclude=tmp',
                                   '--exclude=.git',
@@ -64,7 +63,7 @@ class SoloCookTest < TestCase
       cmd.stubs(:ssh_args => 'ssh_arguments')
       cmd.stubs(:windows_node? => false)
 
-      cmd.rsync 'source', 'dest'
+      cmd.rsync 'source', 'dest', []
     end
   end
 
@@ -76,7 +75,6 @@ class SoloCookTest < TestCase
       cmd.expects(:system!).with('rsync',
                                   '-rL',
                                   '--rsh=ssh -TA user@gateway ssh -T -o StrictHostKeyChecking=no ssh_arguments',
-                                  '--delete-after',
                                   '--exclude=revision-deploys',
                                   '--exclude=tmp',
                                   '--exclude=.git',
@@ -89,7 +87,7 @@ class SoloCookTest < TestCase
       cmd.stubs(:ssh_args => 'ssh_arguments')
       cmd.stubs(:windows_node? => false)
 
-      cmd.rsync 'source', 'dest'
+      cmd.rsync 'source', 'dest', []
     end
   end
 
