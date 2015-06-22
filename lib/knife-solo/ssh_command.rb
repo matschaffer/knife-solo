@@ -204,7 +204,7 @@ module KnifeSolo
 
       socket_path = File.join(ENV['HOME'], '.knife', 'knife-solo-sockets', '%h')
       FileUtils.mkpath(File.dirname(socket_path))
-      controlmaster_args = "-o ControlMaster=yes -o ControlPath=#{socket_path} -o ControlPersist=3600"
+      controlmaster_args = "-o ControlMaster=auto -o ControlPath=#{socket_path} -o ControlPersist=3600"
 
       [host_arg,
        config_arg,
