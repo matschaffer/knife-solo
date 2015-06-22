@@ -109,7 +109,9 @@ module KnifeSolo
       if config[:ssh_user]
         host_descriptor[:user] ||= config[:ssh_user]
       end
-      if config[:ssh_keepalive_interval] <= 0
+
+      # NOTE: can't rely on default since it won't get called when invoked via knife bootstrap --solo
+      if config[:ssh_keepalive_interval] && config[:ssh_keepalive_interval] <= 0
         ui.fatal '`--ssh-keepalive-interval` must be a positive number'
         exit 1
       end
