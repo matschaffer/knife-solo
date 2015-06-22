@@ -67,7 +67,7 @@ class IntegrationTest < TestCase
   def prepare_server
     return if server.tags["knife_solo_prepared"]
     assert_subcommand prepare_command
-    runner.tag_as_prepared(server)
+    runner.tag_as(:prepared, server)
   end
 
   # The prepare command to use on this server

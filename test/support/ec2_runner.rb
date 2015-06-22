@@ -42,19 +42,24 @@ class EC2Runner < MiniTest::Unit
       `nc #{dns_name} 22 -w 1 -q 0 </dev/null`
       $?.success?
     end
-    logger.info "Sleeping 10s to avoid Net::SSH locking up by connecting too early..."
-    logger.info "  (if you know a better way, please send me a note at https://github.com/matschaffer/knife-solo)"
-    # These may have better ways:
-    # http://rubydoc.info/gems/fog/Fog/Compute/AWS/Server:setup
-    # http://rubydoc.info/gems/knife-ec2/Chef/Knife/Ec2ServerCreate:tcp_test_ssh
-    sleep 10
+
+    unless server.tags["knife_solo_ssh_sleep_passed"]
+      logger.info "Sleeping 10s to avoid Net::SSH locking up by connecting too early..."
+      logger.info "  (if you know a better way, please send me a note at https://github.com/matschaffer/knife-solo)"
+      # These may have better ways:
+      # http://rubydoc.info/gems/fog/Fog/Compute/AWS/Server:setup
+      # http://rubydoc.info/gems/knife-ec2/Chef/Knife/Ec2ServerCreate:tcp_test_ssh
+      sleep 10
+      tag_as(:ssh_sleep_passed, server)
+    end
+
     server
   end
 
   # Adds a knife_solo_prepared tag to the server so we can know not to re-prepare it
-  def tag_as_prepared(server)
+  def tag_as(state, server)
     compute.tags.create(resource_id: server.identity,
-                        key:         :knife_solo_prepared,
+                        key:         "knife_solo_#{state}",
                         value:       true)
   end
 
