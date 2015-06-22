@@ -169,7 +169,7 @@ module KnifeSolo
       if config[:ssh_keepalive]
         options[:keepalive] = config[:ssh_keepalive]
         options[:keepalive_interval] = config[:ssh_keepalive_interval]
-      end      
+      end
       # Respect users' specification of config[:ssh_config]
       # Prevents Net::SSH itself from applying the default ssh_config files.
       options[:config] = false
@@ -202,8 +202,18 @@ module KnifeSolo
       knownhosts_arg  =  "-o UserKnownHostsFile=#{connection_options[:user_known_hosts_file]}" if config[:host_key_verify] == false
       stricthosts_arg = "-o StrictHostKeyChecking=no" if config[:host_key_verify] == false
 
+      socket_path = File.join(ENV['HOME'], '.knife', 'knife-solo-sockets', '%h')
+      FileUtils.mkpath(File.dirname(socket_path))
+      controlmaster_args = "-o ControlMaster=yes -o ControlPath=#{socket_path} -o ControlPersist=3600"
 
-      [host_arg, config_arg, ident_arg, forward_arg, port_arg, knownhosts_arg, stricthosts_arg].compact.join(' ')
+      [host_arg,
+       config_arg,
+       ident_arg,
+       forward_arg,
+       port_arg,
+       knownhosts_arg,
+       stricthosts_arg,
+       controlmaster_args].compact.join(' ')
     end
 
     def custom_sudo_command
