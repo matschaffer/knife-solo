@@ -11,5 +11,5 @@ require 'support/loggable'
 require 'support/ec2_runner'
 require 'support/integration_test'
 
-MiniTest::Parallel.processor_count = 5
+MiniTest::Parallel.processor_count = Dir[$base_dir.join('integration', '*.rb')].size
 MiniTest::Unit.runner = EC2Runner.new
