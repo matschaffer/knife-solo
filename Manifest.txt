@@ -56,7 +56,6 @@ test/integration/gentoo2011_test.rb
 test/integration/omnios_r151004_test.rb
 test/integration/scientific_linux_63_test.rb
 test/integration/sles_11_test.rb
-test/integration/ubuntu10_04_test.rb
 test/integration/ubuntu12_04_bootstrap_test.rb
 test/integration/ubuntu12_04_test.rb
 test/integration_helper.rb
