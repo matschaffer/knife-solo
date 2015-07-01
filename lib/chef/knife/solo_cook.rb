@@ -270,9 +270,11 @@ class Chef
         cmd = ['rsync', '-rL', rsync_debug, rsync_permissions, %Q{--rsh=#{ssh_command}}]
         cmd += extra_opts
         cmd += rsync_excludes.map { |ignore| "--exclude=#{ignore}" }
-        cmd << adjust_rsync_path_on_client(source_path)
-        cmd << %Q{:#{adjust_rsync_path_on_node(target_path)}}
-        cmd = cmd.flatten.compact
+        cmd += [ adjust_rsync_path_on_client(source_path),
+                 ':' + adjust_rsync_path_on_node(target_path) ]
+
+        cmd = cmd.compact
+
         Chef::Log.debug cmd.inspect
         system!(*cmd)
       end
