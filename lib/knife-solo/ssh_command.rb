@@ -216,7 +216,7 @@ module KnifeSolo
 
     def ssh_control_path
       dir = File.join(ENV['HOME'], '.chef', 'knife-solo-sockets')
-      FileUtils.mkpath(dir) unless File.exist?(dir)
+      FileUtils.mkdir_p(dir)
       File.join(dir, '%h')
     end
 
