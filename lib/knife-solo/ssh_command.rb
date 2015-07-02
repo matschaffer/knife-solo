@@ -47,6 +47,11 @@ module KnifeSolo
           :long        => '--ssh-identity FILE',
           :description => 'Deprecated. Replaced with --identity-file.'
 
+        option :ssh_control_master,
+          :long => '--ssh-control-master SETTING',
+          :description => 'Control master setting to use when running rsync (use "no" to disable)',
+          :default => 'auto'
+
         option :identity_file,
           :short       => '-i IDENTITY_FILE',
           :long        => '--identity-file FILE',
@@ -169,7 +174,7 @@ module KnifeSolo
       if config[:ssh_keepalive]
         options[:keepalive] = config[:ssh_keepalive]
         options[:keepalive_interval] = config[:ssh_keepalive_interval]
-      end      
+      end
       # Respect users' specification of config[:ssh_config]
       # Prevents Net::SSH itself from applying the default ssh_config files.
       options[:config] = false
@@ -194,16 +199,25 @@ module KnifeSolo
     end
 
     def ssh_args
-      host_arg = [user, host].compact.join('@')
-      config_arg = "-F #{config[:ssh_config]}" if config[:ssh_config]
-      ident_arg = "-i #{config[:identity_file]}" if config[:identity_file]
-      forward_arg = "-o ForwardAgent=yes" if config[:forward_agent]
-      port_arg = "-p #{config[:ssh_port]}" if config[:ssh_port]
-      knownhosts_arg  =  "-o UserKnownHostsFile=#{connection_options[:user_known_hosts_file]}" if config[:host_key_verify] == false
-      stricthosts_arg = "-o StrictHostKeyChecking=no" if config[:host_key_verify] == false
+      args = []
 
+      args << [user, host].compact.join('@')
 
-      [host_arg, config_arg, ident_arg, forward_arg, port_arg, knownhosts_arg, stricthosts_arg].compact.join(' ')
+      args << "-F #{config[:ssh_config]}" if config[:ssh_config]
+      args << "-i #{config[:identity_file]}" if config[:identity_file]
+      args << "-o ForwardAgent=yes" if config[:forward_agent]
+      args << "-p #{config[:ssh_port]}" if config[:ssh_port]
+      args << "-o UserKnownHostsFile=#{connection_options[:user_known_hosts_file]}" if config[:host_key_verify] == false
+      args << "-o StrictHostKeyChecking=no" if config[:host_key_verify] == false
+      args << "-o ControlMaster=auto -o ControlPath=#{ssh_control_path} -o ControlPersist=3600" unless config[:ssh_control_master] == "no"
+
+      args.join(' ')
+    end
+
+    def ssh_control_path
+      dir = File.join(ENV['HOME'], '.chef', 'knife-solo-sockets')
+      FileUtils.mkdir_p(dir)
+      File.join(dir, '%h')
     end
 
     def custom_sudo_command
@@ -233,7 +247,11 @@ module KnifeSolo
     def windows_node?
       return @windows_node unless @windows_node.nil?
       @windows_node = run_command('ver', :process_sudo => false).stdout =~ /Windows/i
-      Chef::Log.debug("Windows node detected") if @windows_node
+      if @windows_node
+        Chef::Log.debug("Windows node detected")
+      else
+        @windows_node = false
+      end
       @windows_node
     end
 
