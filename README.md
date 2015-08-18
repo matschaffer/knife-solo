@@ -18,6 +18,9 @@ knife-solo adds a handful of Knife commands that aim to make working with chef-s
 Simply ensure the gem is installed using:
 ```sh
 gem install knife-solo
+
+# or if using ChefDK
+chef gem install knife-solo
 ```
 
 Or add this to your Gemfile if you use bundler:
