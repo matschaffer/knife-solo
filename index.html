@@ -37,7 +37,10 @@ host.</p>
 
 <p>Installation is a normal gem installation.</p>
 
-<pre>gem install knife-solo</pre>
+<pre>gem install knife-solo
+
+# or if using ChefDK
+chef gem install knife-solo</pre>
 
 <p>If you need to install from git run:</p>
 
@@ -177,7 +180,7 @@ cook+ with the specified arguments and options.</p>
 <p>knife-solo also integrates with <code>knife bootstrap</code> by adding
 <code>--solo</code> command line option and +<a
 href="http://:solo">knife</a>+ configuration parameter to it. When
-requested, “knife solo bootrap” is used instead of the normal template
+requested, “knife solo bootstrap” is used instead of the normal template
 based chef-client bootstrap. This is especially useful with other knife
 plugins like <a href="https://github.com/opscode/knife-ec2">knife-ec2</a>
 that invoke “knife bootstrap” after creating an server instance. Even if
@@ -221,7 +224,13 @@ in it</p>
 
 <h4 id="label-Cook">Cook</h4>
 <ul><li>
-<p>cook should work as expected automatically, if you use cygwin rsync</p>
+<p>cook should work as expected automatically, if you use cygwin rsync. If
+you&#39;re using MinGW / Git Bash, or you have a non-standard
+<code>cygdrive</code> setting, you can set that in
+<code>.chef/knife.rb</code>:</p>
+
+<pre>knife[:cygdrive_prefix_local] = &#39;/cygdrive&#39;  # prefix for your local machine, set to empty string for MinGW
+knife[:cygdrive_prefix_remote] = &#39;/cygdrive&#39; # prefix on the remote windows node</pre>
 </li></ul>
 
 <h2 id="label-DEVELOPMENT">DEVELOPMENT</h2>
