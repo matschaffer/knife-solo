@@ -22,6 +22,9 @@ Installation is a normal gem installation.
 
     gem install knife-solo
 
+    # or if using ChefDK
+    chef gem install knife-solo
+
 If you need to install from git run:
 
     bundle && bundle exec rake install
