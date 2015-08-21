@@ -49,6 +49,7 @@ module KnifeSolo
       def bootstrap!
         run_pre_bootstrap_checks
         send("#{distro[:type]}_install")
+        install_ohai_hints
       end
 
       def distro
@@ -109,6 +110,18 @@ module KnifeSolo
           "--prerelease"
         elsif chef_version
           "--version #{chef_version}"
+        end
+      end
+
+      def install_ohai_hints
+        hints = Chef::Config[:knife][:hints]
+        unless hints.nil? || hints.empty?
+          ui.msg "Setting Ohai hints..."
+          run_command("sudo mkdir -p /etc/chef/ohai/hints")
+          run_command("sudo rm -f /etc/chef/ohai/hints/*")
+          hints.each do |name, hash|
+            run_command("sudo tee -a /etc/chef/ohai/hints/#{name}.json > /dev/null <<EOF\n#{hash.to_json}\nEOF\n")
+          end
         end
       end
     end #InstallCommands
