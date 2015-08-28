@@ -14,6 +14,7 @@ class TestCase < MiniTest::Unit::TestCase
     command.ui.stubs(:msg)
     command.ui.stubs(:warn)
     Chef::Config[:verbosity] = 0
+    command.config[:config_file] = "#{__dir__}/knife.rb"
     command.configure_chef
     command
   end
