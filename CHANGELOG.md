@@ -1,14 +1,65 @@
-# 0.5.0 / _In progress_
-
-## TODO:
-
-Run archlinux integrations
+# 0.5.0 / 2015-08-28
 
 ## Changes and new features
 
+* Configurable cygwin prefixes ([378][])
+* Configurable sudo command ([394][])
+* SSH keepalive support, required bump to Chef >=10.20 ([288][], [404][])
+* Configurable secret file location ([412][])
+* Allow passing options to Berkshelf (>=3 only) ([369][])
+* Arch Linux support ([389][], [393][], [396][])
+* Manjaro Linux support ([414][])
+* Debian 8 support ([436][])
+* Use control sockets to speed up rsync transfers ([440][])
+* Support for ohai hints ([339][])
+
 ## Fixes
 
+* Updates for Berkshelf 3 ([376][], [405][])
+* Better warnings for berkshelf/librarian ([383][])
+* Show chef command during run output ([401][])
+* Make `ssl_verify_mode` `:verify_peer` by default ([413][])
+* Avoid copying local http proxy info to node's knife.rb ([421][])
+
 ## Thanks to our contributors!
+
+* [Ivan Tanev][VanTanev]
+* [Masato Ikeda][a2ikm]
+* [Graham Lyus][grahamlyus]
+* [Oleg Selin][OlegPS]
+* [Todd Willey][xtoddx]
+* [DQNEO][DQNEO]
+* [Kevin McAllister][mclazarus]
+* [Yoz (Jeremy) Grahame][yozlet]
+* [Nori Yoshioka][noric]
+* [Josh Yotty][jyotty]
+* [Markus Kern][makern]
+* [esio][es1o]
+* [Evgeny Vereshchagin][evverx]
+* [Tomo Masakura][masakura]
+* [Iavael][iavael]
+* [Patrick Connolly][patcon]
+* [Markus Kern][makern]
+
+[378]: https://github.com/matschaffer/knife-solo/issues/378
+[376]: https://github.com/matschaffer/knife-solo/issues/376
+[383]: https://github.com/matschaffer/knife-solo/issues/383
+[389]: https://github.com/matschaffer/knife-solo/issues/389
+[393]: https://github.com/matschaffer/knife-solo/issues/393
+[396]: https://github.com/matschaffer/knife-solo/issues/396
+[394]: https://github.com/matschaffer/knife-solo/issues/394
+[401]: https://github.com/matschaffer/knife-solo/issues/401
+[405]: https://github.com/matschaffer/knife-solo/issues/405
+[288]: https://github.com/matschaffer/knife-solo/issues/288
+[404]: https://github.com/matschaffer/knife-solo/issues/404
+[413]: https://github.com/matschaffer/knife-solo/issues/413
+[412]: https://github.com/matschaffer/knife-solo/issues/412
+[414]: https://github.com/matschaffer/knife-solo/issues/414
+[421]: https://github.com/matschaffer/knife-solo/issues/421
+[369]: https://github.com/matschaffer/knife-solo/issues/369
+[436]: https://github.com/matschaffer/knife-solo/issues/436
+[440]: https://github.com/matschaffer/knife-solo/issues/440
+[339]: https://github.com/matschaffer/knife-solo/issues/339
 
 # 0.4.2 / 2014-06-05
 
@@ -454,18 +505,28 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 * Cook via rsync
 
 [ChrisLundquist]:  https://github.com/ChrisLundquist
+[DQNEO]:           https://github.com/DQNEO
+[Domon]:           https://github.com/Domon
 [DrGonzo65]:       https://github.com/DrGonzo65
 [Frozenproduce]:   https://github.com/Frozenproduce
 [Motiejus]:        https://github.com/Motiejus
 [Nix-wie-weg]:     https://github.com/Nix-wie-weg
+[OlegPS]:          https://github.com/OlegPS
 [TheAlphaTester]:  https://github.com/TheAlphaTester
 [TylerRick]:       https://github.com/TylerRick
+[VanTanev]:        https://github.com/VanTanev
+[a2ikm]:           https://github.com/a2ikm
 [aaronjensen]:     https://github.com/aaronjensen
+[alexsiri7]:       https://github.com/alexsiri7
+[allaire]:         https://github.com/allaire
 [amoslanka]:       https://github.com/amoslanka
+[angelabad]:       https://github.com/angelabad
+[anl]:             https://github.com/anl
 [ares]:            https://github.com/ares
 [aromarom64]:      https://github.com/aromarom64
 [avit]:            https://github.com/avit
 [bambuchaAdm]:     https://github.com/bambuchaAdm
+[brainopia]:       https://github.com/brainopia
 [brynary]:         https://github.com/brynary
 [btm]:             https://github.com/btm
 [dapatil]:         https://github.com/dapatil
@@ -473,19 +534,27 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [deepak]:          https://github.com/deepak
 [dkinzer]:         https://github.com/dkinzer
 [dwradcliffe]:     https://github.com/dwradcliffe
+[es1o]:            https://github.com/es1o
+[evverx]:          https://github.com/evverx
 [fnichol]:         https://github.com/fnichol
 [funglaub]:        https://github.com/funglaub
+[grahamlyus]:      https://github.com/grahamlyus
 [gregf]:           https://github.com/gregf
 [gsterndale]:      https://github.com/gsterndale
 [hectcastro]:      https://github.com/hectcastro
 [hrp]:             https://github.com/hrp
+[iavael]:          https://github.com/iavael
 [jgarber]:         https://github.com/jgarber
 [jgrevich]:        https://github.com/jgrevich
+[jyotty]:          https://github.com/jyotty
 [kmdsbng]:         https://github.com/kmdsbng
 [makern]:          https://github.com/makern
+[masakura]:        https://github.com/masakura
+[mclazarus]:       https://github.com/mclazarus
 [michaelglass]:    https://github.com/michaelglass
 [naoya]:           https://github.com/naoya
 [natlownes]:       https://github.com/natlownes
+[noric]:           https://github.com/noric
 [patatepartie]:    https://github.com/patatepartie
 [patcon]:          https://github.com/patcon
 [pferdefleisch]:   https://github.com/pferdefleisch
@@ -493,6 +562,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [portertech]:      https://github.com/portertech
 [retr0h]:          https://github.com/retr0h
 [rmoriz]:          https://github.com/rmoriz
+[robacarp]:        https://github.com/robacarp
 [rosstimson]:      https://github.com/rosstimson
 [rubiojr]:         https://github.com/rubiojr
 [russellcardullo]: https://github.com/russellcardullo
@@ -505,13 +575,7 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [tmatilai]:        https://github.com/tmatilai
 [tocky]:           https://github.com/tocky
 [vjpr]:            https://github.com/vjpr
-[zeph]:            https://github.com/zeph
-[allaire]:         https://github.com/allaire
-[yugui]:           https://github.com/yugui
 [xtoddx]:          https://github.com/xtoddx
-[anl]:             https://github.com/anl
-[robacarp]:        https://github.com/robacarp
-[alexsiri7]:       https://github.com/alexsiri7
-[brainopia]:       https://github.com/brainopia
-[Domon]:           https://github.com/Domon
-[angelabad]:       https://github.com/angelabad
+[yozlet]:          https://github.com/yozlet
+[yugui]:           https://github.com/yugui
+[zeph]:            https://github.com/zeph
