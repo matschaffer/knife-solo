@@ -90,7 +90,11 @@ class IntegrationTest < TestCase
 
   # Asserts that a knife command is successful
   def assert_knife_command(subcommand)
-    system "knife #{subcommand} #{connection_string} -VV >> #{log_file}"
+    pid = Process.spawn("knife #{subcommand} #{connection_string} -VV",
+                        :out => log_file.to_s,
+                        :err => log_file.to_s)
+    Process.wait(pid)
+
     assert $?.success?
   end
 
