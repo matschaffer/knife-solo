@@ -84,6 +84,7 @@ test/support/issue_files/gentoo2011
 test/support/issue_files/sles11-sp1
 test/support/issue_files/ubuntu
 test/support/kitchen_helper.rb
+test/support/knife.rb
 test/support/loggable.rb
 test/support/secret_cookbook/metadata.rb
 test/support/secret_cookbook/recipes/default.rb
