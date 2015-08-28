@@ -1,3 +1,7 @@
+# 0.5.1 / 2015-08-28
+
+Re-release of 0.5.0 for test & doc fixes.
+
 # 0.5.0 / 2015-08-28
 
 ## Changes and new features
