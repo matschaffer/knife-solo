@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'mocha'
   s.add_development_dependency 'parallel'
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'rdoc', '~> 3.12'
+  s.add_development_dependency 'rdoc'
   s.add_development_dependency 'coveralls'
 
   s.add_dependency 'chef',     '>= 10.20'

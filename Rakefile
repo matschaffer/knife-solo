@@ -43,8 +43,9 @@ def parsed_rdoc file
   options.template_dir = options.template_dir_for 'darkfish'
 
   rdoc = RDoc::RDoc.current = RDoc::RDoc.new
+  rdoc.store = RDoc::Store.new
   rdoc.options = options
-  rdoc.generator = RDoc::Generator::Darkfish.new(options)
+  rdoc.generator = RDoc::Generator::Darkfish.new(rdoc.store, options)
   parsed = rdoc.parse_files([file])
   parsed.first.description
 end
