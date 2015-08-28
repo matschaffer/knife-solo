@@ -2,9 +2,9 @@
 layout: default
 ---
 
-<h1 id="label-knife-solo">knife-solo</h1>
+<h1 id="label-knife-solo">knife-solo<span><a href="#label-knife-solo">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
-<h2 id="label-DESCRIPTION%3A">DESCRIPTION:</h2>
+<h2 id="label-DESCRIPTION-3A">DESCRIPTION:<span><a href="#label-DESCRIPTION-3A">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>knife-solo adds a handful of commands that aim to make working with
 chef-solo as powerful as chef-server. It currently adds 5 subcommands to
@@ -23,7 +23,7 @@ target host and runs chef-solo on that host.</p>
 </li><li>
 <p><code>knife solo bootstrap</code> combines the two previous ones (prepare
 and cook). knife-solo also adds <code>--solo</code> command line option and
-+<a href="http://:solo">knife</a>+ configuration parameter to <code>knife
++<a href=":solo">knife</a>+ configuration parameter to <code>knife
 bootstrap</code> that can be used for triggering “knife solo bootstrap”
 instead of the normal template based chef-client bootstrap.</p>
 </li><li>
@@ -33,20 +33,21 @@ host.</p>
 
 <p>Preliminary Windows support for “knife solo cook” is available (see below).</p>
 
-<h2 id="label-USAGE%3A">USAGE:</h2>
+<h2 id="label-USAGE-3A">USAGE:<span><a href="#label-USAGE-3A">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>Installation is a normal gem installation.</p>
 
-<pre>gem install knife-solo
+<pre class="ruby"><span class="ruby-identifier">gem</span> <span class="ruby-identifier">install</span> <span class="ruby-identifier">knife</span><span class="ruby-operator">-</span><span class="ruby-identifier">solo</span>
 
-# or if using ChefDK
-chef gem install knife-solo</pre>
+<span class="ruby-comment"># or if using ChefDK</span>
+<span class="ruby-identifier">chef</span> <span class="ruby-identifier">gem</span> <span class="ruby-identifier">install</span> <span class="ruby-identifier">knife</span><span class="ruby-operator">-</span><span class="ruby-identifier">solo</span>
+</pre>
 
 <p>If you need to install from git run:</p>
 
 <pre>bundle &amp;&amp; bundle exec rake install</pre>
 
-<h2 id="label-Integration+with+Berkshelf+%26+Librarian">Integration with Berkshelf &amp; Librarian</h2>
+<h2 id="label-Integration+with+Berkshelf+-26+Librarian">Integration with Berkshelf &amp; Librarian<span><a href="#label-Integration+with+Berkshelf+-26+Librarian">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>knife-solo also integrates with <a
 href="http://berkshelf.com/">Berkshelf</a> and <a
@@ -71,7 +72,7 @@ of whether or not you have the supporting gem installed.</p>
 href="https://github.com/matschaffer/knife-solo/wiki/Berkshelf-&-Librarian-Chef-integration">Berkshelf
 & Librarian-Chef integration</a> wiki page.</p>
 
-<h3 id="label-A+note+about+the+%22cookbooks%22+directory">A note about the “cookbooks” directory</h3>
+<h3 id="label-A+note+about+the+-22cookbooks-22+directory">A note about the “cookbooks” directory<span><a href="#label-A+note+about+the+-22cookbooks-22+directory">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p>One common “gotcha” is that you may have Berkshelf or Librarian-Chef
 installed without knowing it. This will generate a kitchen that is
@@ -85,28 +86,30 @@ solo cook</code>.</p>
 give them their own git repositories which are then included using
 Berkshelf or Librarian-Chef.</p>
 
-<h2 id="label-knife-solo+commands">knife-solo commands</h2>
+<h2 id="label-knife-solo+commands">knife-solo commands<span><a href="#label-knife-solo+commands">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<h3 id="label-Init+command">Init command</h3>
+<h3 id="label-Init+command">Init command<span><a href="#label-Init+command">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p>The init command simply takes a name of the directory to store the kitchen
 structure. Use “.” to initialize the current directory.</p>
 
-<pre>knife solo init mychefrepo</pre>
+<pre class="ruby"><span class="ruby-identifier">knife</span> <span class="ruby-identifier">solo</span> <span class="ruby-identifier">init</span> <span class="ruby-identifier">mychefrepo</span>
+</pre>
 
 <p>Currently the directory structure looks like this, but could change as
 development continues.</p>
 
-<pre>mychefrepo/
-├── .chef
-│   └── knife.rb
-├── cookbooks
-├── data_bags
-├── nodes
-├── roles
-└── site-cookbooks</pre>
+<pre class="ruby"><span class="ruby-identifier">mychefrepo</span><span class="ruby-operator">/</span>
+<span class="ruby-identifier">├──</span> .<span class="ruby-identifier">chef</span>
+<span class="ruby-identifier">│</span>   <span class="ruby-identifier">└──</span> <span class="ruby-identifier">knife</span>.<span class="ruby-identifier">rb</span>
+<span class="ruby-identifier">├──</span> <span class="ruby-identifier">cookbooks</span>
+<span class="ruby-identifier">├──</span> <span class="ruby-identifier">data_bags</span>
+<span class="ruby-identifier">├──</span> <span class="ruby-identifier">nodes</span>
+<span class="ruby-identifier">├──</span> <span class="ruby-identifier">roles</span>
+<span class="ruby-identifier">└──</span> <span class="ruby-identifier">site</span><span class="ruby-operator">-</span><span class="ruby-identifier">cookbooks</span>
+</pre>
 
-<h3 id="label-Prepare+command">Prepare command</h3>
+<h3 id="label-Prepare+command">Prepare command<span><a href="#label-Prepare+command">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p>The prepare command takes an ssh-style host argument as follows:</p>
 
@@ -138,7 +141,7 @@ pull request to <a href="https://github.com/matschaffer/knife-solo">this
 project</a> or <a href="https://github.com/opscode/omnibus">the omnibus
 installer</a>.</p>
 
-<h3 id="label-Cook+command">Cook command</h3>
+<h3 id="label-Cook+command">Cook command<span><a href="#label-Cook+command">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p>The cook command also takes an ssh-style host argument:</p>
 
@@ -165,7 +168,7 @@ commands. The default kitchen structure generated by <code>knife solo
 init</code> should be compatible with all the operations listed in the
 documentation for that gem.</p>
 
-<h3 id="label-Bootstrap+command">Bootstrap command</h3>
+<h3 id="label-Bootstrap+command">Bootstrap command<span><a href="#label-Bootstrap+command">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p>The bootstrap command takes the same arguments and most of the options as
 prepare and cook:</p>
@@ -175,19 +178,19 @@ prepare and cook:</p>
 <p>Under the hood it first calls +knife solo prepare+ and then +knife solo
 cook+ with the specified arguments and options.</p>
 
-<h4 id="label-Integration+with+knife+bootstrap">Integration with knife bootstrap</h4>
+<h4 id="label-Integration+with+knife+bootstrap">Integration with knife bootstrap<span><a href="#label-Integration+with+knife+bootstrap">&para;</a> <a href="#top">&uarr;</a></span></h4>
 
 <p>knife-solo also integrates with <code>knife bootstrap</code> by adding
-<code>--solo</code> command line option and +<a
-href="http://:solo">knife</a>+ configuration parameter to it. When
-requested, “knife solo bootstrap” is used instead of the normal template
-based chef-client bootstrap. This is especially useful with other knife
-plugins like <a href="https://github.com/opscode/knife-ec2">knife-ec2</a>
-that invoke “knife bootstrap” after creating an server instance. Even if
-these plugins do not have the “–solo” option, you can put
-<code>knife[:solo] = true</code> in knife.rb.</p>
+<code>--solo</code> command line option and +<a href=":solo">knife</a>+
+configuration parameter to it. When requested, “knife solo bootstrap” is
+used instead of the normal template based chef-client bootstrap. This is
+especially useful with other knife plugins like <a
+href="https://github.com/opscode/knife-ec2">knife-ec2</a> that invoke
+“knife bootstrap” after creating an server instance. Even if these plugins
+do not have the “–solo” option, you can put <code>knife[:solo] =
+true</code> in knife.rb.</p>
 
-<h3 id="label-Clean+command">Clean command</h3>
+<h3 id="label-Clean+command">Clean command<span><a href="#label-Clean+command">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p>The clean command takes the same arguments like prepare and cook:</p>
 
@@ -197,16 +200,16 @@ these plugins do not have the “–solo” option, you can put
 host. This improves security because passwords etc. are not left behind on
 that host.</p>
 
-<h3 id="label-Windows+support">Windows support</h3>
+<h3 id="label-Windows+support">Windows support<span><a href="#label-Windows+support">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p>The cook command will work on Windows node if you meet the following howto:</p>
 
-<h4 id="label-Init+as+normally">Init as normally</h4>
+<h4 id="label-Init+as+normally">Init as normally<span><a href="#label-Init+as+normally">&para;</a> <a href="#top">&uarr;</a></span></h4>
 <ul><li>
 <p>run <code>knife solo init</code></p>
 </li></ul>
 
-<h4 id="label-Prepare+the+node+manually">Prepare the node manually</h4>
+<h4 id="label-Prepare+the+node+manually">Prepare the node manually<span><a href="#label-Prepare+the+node+manually">&para;</a> <a href="#top">&uarr;</a></span></h4>
 <ul><li>
 <p>install a SSH server (eg: WinSSHd)</p>
 </li><li>
@@ -222,18 +225,19 @@ href="http://www.opscode.com/chef/install.msi">www.opscode.com/chef/install.msi<
 in it</p>
 </li></ul>
 
-<h4 id="label-Cook">Cook</h4>
+<h4 id="label-Cook">Cook<span><a href="#label-Cook">&para;</a> <a href="#top">&uarr;</a></span></h4>
 <ul><li>
 <p>cook should work as expected automatically, if you use cygwin rsync. If
 you&#39;re using MinGW / Git Bash, or you have a non-standard
 <code>cygdrive</code> setting, you can set that in
 <code>.chef/knife.rb</code>:</p>
 
-<pre>knife[:cygdrive_prefix_local] = &#39;/cygdrive&#39;  # prefix for your local machine, set to empty string for MinGW
-knife[:cygdrive_prefix_remote] = &#39;/cygdrive&#39; # prefix on the remote windows node</pre>
+<pre class="ruby"><span class="ruby-identifier">knife</span>[:<span class="ruby-identifier">cygdrive_prefix_local</span>] = <span class="ruby-string">&#39;/cygdrive&#39;</span>  <span class="ruby-comment"># prefix for your local machine, set to empty string for MinGW</span>
+<span class="ruby-identifier">knife</span>[:<span class="ruby-identifier">cygdrive_prefix_remote</span>] = <span class="ruby-string">&#39;/cygdrive&#39;</span> <span class="ruby-comment"># prefix on the remote windows node</span>
+</pre>
 </li></ul>
 
-<h2 id="label-DEVELOPMENT">DEVELOPMENT</h2>
+<h2 id="label-DEVELOPMENT">DEVELOPMENT<span><a href="#label-DEVELOPMENT">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>Get set up by running <code>./script/newb</code> this will do some of the
 steps and guide you through the rest. If it doesn&#39;t run for you, feel
