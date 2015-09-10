@@ -65,6 +65,16 @@ Re-release of 0.5.0 for test & doc fixes.
 [440]: https://github.com/matschaffer/knife-solo/issues/440
 [339]: https://github.com/matschaffer/knife-solo/issues/339
 
+# 0.4.3 / 2015-09-10
+
+## Fixes
+
+* Pass node name down to solo.rb ([452][])
+
+## Thanks to our contributors!
+
+* [aaadschutz][aaadschutz]
+
 # 0.4.2 / 2014-06-05
 
 ## Changes and new features
@@ -583,3 +593,4 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [yozlet]:          https://github.com/yozlet
 [yugui]:           https://github.com/yugui
 [zeph]:            https://github.com/zeph
+[aaadschutz]:      https://github.com/aaadschutz
