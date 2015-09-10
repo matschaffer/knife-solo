@@ -1,3 +1,13 @@
+# 0.4.3 / 2015-09-10
+
+## Fixes
+
+* Pass node name down to solo.rb ([452][])
+
+## Thanks to our contributors!
+
+* [aaadschutz][aaadschutz]
+
 # 0.4.2 / 2014-06-05
 
 ## Changes and new features
@@ -503,3 +513,4 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [brainopia]:       https://github.com/brainopia
 [Domon]:           https://github.com/Domon
 [angelabad]:       https://github.com/angelabad
+[aaadschutz]:      https://github.com/aaadschutz
