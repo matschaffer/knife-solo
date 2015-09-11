@@ -1,9 +1,9 @@
-
 module KnifeSolo
   module SshCommand
 
     def self.load_deps
       require 'knife-solo/ssh_connection'
+      require 'knife-solo/tools'
       require 'net/ssh'
       require 'net/ssh/gateway'
     end
@@ -49,8 +49,7 @@ module KnifeSolo
 
         option :ssh_control_master,
           :long => '--ssh-control-master SETTING',
-          :description => 'Control master setting to use when running rsync (use "no" to disable)',
-          :default => 'auto'
+          :description => 'Control master setting to use when running rsync (use "no" to disable)'
 
         option :identity_file,
           :short       => '-i IDENTITY_FILE',
@@ -113,6 +112,10 @@ module KnifeSolo
       end
       if config[:ssh_user]
         host_descriptor[:user] ||= config[:ssh_user]
+      end
+
+      if !config[:ssh_control_master]
+         config[:ssh_control_master] = KnifeSolo::Tools.cygwin_client? ? 'no' : 'auto'
       end
 
       # NOTE: can't rely on default since it won't get called when invoked via knife bootstrap --solo

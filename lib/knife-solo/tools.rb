@@ -8,6 +8,10 @@ module KnifeSolo
       RbConfig::CONFIG['host_os'] =~ /mswin|mingw/
     end
 
+    def self.cygwin_client?
+      RbConfig::CONFIG['host_os'] =~ /cygwin/
+    end
+
     def config_value(key, default = nil)
       Tools.config_value(config, key, default)
     end
