@@ -1,6 +1,7 @@
 require 'test_helper'
 
 require 'knife-solo/ssh_command'
+require 'knife-solo/tools'
 require 'chef/knife'
 require 'net/ssh'
 
@@ -9,6 +10,11 @@ class DummySshCommand < Chef::Knife
 end
 
 class SshCommandTest < TestCase
+
+  def setup
+    KnifeSolo::Tools.stubs(:cygwin_client?).returns(false)
+  end
+
   def test_separates_user_and_host
     assert_equal "ubuntu", command("ubuntu@10.0.0.1").user
     assert_equal "10.0.0.1", command("ubuntu@10.0.0.1").host
@@ -69,7 +75,7 @@ class SshCommandTest < TestCase
     cmd = command("10.0.0.1", "--ssh-gateway=user@gateway")
     ssh_mock = mock 'ssh_mock'
     Net::SSH::Gateway.expects(:new).with('gateway', 'user').returns(ssh_mock)
-    ssh_mock.expects(:ssh).with(cmd.host, cmd.user, cmd.connection_options.except(:gateway))
+    ssh_mock.expects(:ssh).with(cmd.host, cmd.user, cmd.connection_options.select{|o| o != :gateway})
 
     Net::SSH.expects(:start).never
 
@@ -162,6 +168,26 @@ class SshCommandTest < TestCase
     cmd = command_internal("usertest@10.0.0.1", "--ssh-gateway=test@host.com")
     cmd.validate_ssh_options!
     assert_equal "usertest@10.0.0.1 -o ControlMaster=auto -o ControlPath=#{cmd.ssh_control_path} -o ControlPersist=3600", cmd.ssh_args
+  end
+
+  def test_no_control_master_by_default_in_cygwin
+    DummySshCommand.any_instance.stubs(:try_connection)
+    DummySshCommand.any_instance.stubs(:ssh_control_path).returns('/path')
+    KnifeSolo::Tools.stubs(:cygwin_client?).returns(false)
+    cmd = command_internal('usertest@10.0.0.1')
+    cmd.validate_ssh_options!
+    assert_equal 'usertest@10.0.0.1 -o ControlMaster=auto -o ControlPath=/path -o ControlPersist=3600', cmd.ssh_args
+
+    # if knife-solo runs in cygwin, disable ssh ControlMaster by default
+    KnifeSolo::Tools.stubs(:cygwin_client?).returns(true)
+    cmd = command_internal('usertest@10.0.0.1')
+    cmd.validate_ssh_options!
+    assert_equal 'usertest@10.0.0.1', cmd.ssh_args
+
+    KnifeSolo::Tools.stubs(:cygwin_client?).returns(true)
+    cmd = command_internal('usertest@10.0.0.1', '--ssh-control-master=auto')
+    cmd.validate_ssh_options!
+    assert_equal 'usertest@10.0.0.1 -o ControlMaster=auto -o ControlPath=/path -o ControlPersist=3600', cmd.ssh_args
   end
 
   def test_barks_without_atleast_a_hostname
