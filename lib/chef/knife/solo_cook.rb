@@ -57,6 +57,10 @@ class Chef
         :long        => '--secret-file SECRET_FILE',
         :description => 'A file containing the secret key used to encrypt data bag item values'
 
+      option :lock_file,
+        :long        => '--lock-file LOCK_FILE',
+        :description => 'Lockfile path for safe parallel syncing'
+
       option :why_run,
         :short       => '-W',
         :long        => '--why-run',
@@ -87,6 +91,14 @@ class Chef
 
           ui.msg "Running Chef on #{host}..."
 
+          lock_file = nil
+          if config[:lock_file]
+            ui.msg "Locking lock file '#{config[:lock_file]}'"
+            lock_file = File.open(config[:lock_file])
+          end
+
+          lock_file.flock(File::LOCK_EX) if lock_file
+
           check_chef_version if config[:chef_check]
           if config_value(:sync, true)
             generate_node_config
@@ -96,6 +108,9 @@ class Chef
             sync_kitchen
             generate_solorb
           end
+
+          lock_file.close() if lockfile
+
           cook unless config[:sync_only]
 
           clean_up if config[:clean_up]
