@@ -47,6 +47,10 @@ class Chef
           name, path = h.split("=")
           Chef::Config[:knife][:hints][name] = path ? JSON.parse(::File.read(path)) : Hash.new  }
 
+     option :lock_file,
+        :long        => '--lock-file LOCK_FILE',
+        :description => 'Lockfile path for safe parallel syncing'
+
       def run
         if config[:omnibus_version]
           ui.warn '`--omnibus-version` is deprecated, please use `--bootstrap-version`.'

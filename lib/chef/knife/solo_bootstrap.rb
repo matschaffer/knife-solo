@@ -19,7 +19,7 @@ class Chef
 
       # Use (some) options from prepare and cook commands
       self.options = SoloPrepare.options
-      [:berkshelf, :librarian, :sync_only, :why_run, :clean_up].each { |opt| option opt, SoloCook.options[opt] }
+      [:lock_file, :berkshelf, :librarian, :sync_only, :why_run, :clean_up].each { |opt| option opt, SoloCook.options[opt] }
 
       def run
         validate!
