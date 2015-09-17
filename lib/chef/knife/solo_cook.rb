@@ -109,7 +109,7 @@ class Chef
             generate_solorb
           end
 
-          lock_file.close() if lockfile
+          lock_file.close() if lock_file
 
           cook unless config[:sync_only]
 
