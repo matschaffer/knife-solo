@@ -93,8 +93,9 @@ class Chef
 
           lock_file = nil
           if config[:lock_file]
-            ui.msg "Locking lock file '#{config[:lock_file]}'"
+            ui.msg "Locking lock file '#{config[:lock_file]}'..."
             lock_file = File.open(config[:lock_file], 'a')
+            ui.msg "Lock acquired."
           end
 
           lock_file.flock(File::LOCK_EX) if lock_file
