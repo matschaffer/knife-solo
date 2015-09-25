@@ -7,7 +7,7 @@ module KnifeSolo::Bootstraps
 
     def distro
       case issue
-      when %r{10.[6-9]}
+      when %r{10.(?:[6-9]|10)}
         {:type => 'omnibus'}
       else
         raise "OS X version #{issue} not supported"
