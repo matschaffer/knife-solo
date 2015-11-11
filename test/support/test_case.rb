@@ -1,3 +1,8 @@
+# Normally this gets loaded by the knife application
+# but we'll require it here so we can test commands directly without getting constant missing errors.
+# See https://github.com/chef/chef/pull/4153 for updates
+require 'chef/mixin/shell_out'
+
 class TestCase < MiniTest::Unit::TestCase
   def default_test
     super unless self.class == TestCase
