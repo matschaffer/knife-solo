@@ -1,4 +1,6 @@
+sudo: false
 language: ruby
+cache: bundler
 rvm:
   - 2.2.2
   - 1.9.3
@@ -11,6 +13,7 @@ matrix:
   allow_failures:
     - gemfile: test/gemfiles/Gemfile.chef-master
   exclude:
+    # Chef ~> 12 depends on ohai ~> 8.0 which requires Ruby version >= 2.0.0
     - rvm: 1.9.3
       gemfile: test/gemfiles/Gemfile.chef-12
     - rvm: 1.9.3
