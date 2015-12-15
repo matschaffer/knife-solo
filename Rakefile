@@ -55,19 +55,19 @@ task 'gh-pages' do
   require 'tmpdir'
   gem 'rdoc'; require 'rdoc/rdoc'
 
-  Dir.mktmpdir do |clone|
-    sh "git clone -b gh-pages git@github.com:matschaffer/knife-solo.git #{clone}"
-    File.open(clone + "/index.html", 'w') do |f|
-      f.puts '---'
-      f.puts 'layout: default'
-      f.puts '---'
-      f.puts parsed_rdoc("README.rdoc")
-    end
-    rev = `git rev-parse HEAD`[0..7]
-    Dir.chdir(clone) do
-      sh "git commit --allow-empty -m 'Update index for v#{KnifeSolo.version} from README.rdoc rev #{rev}' index.html"
-      sh "git push origin gh-pages"
-    end
+  FileUtils.rm_rf('gh-pages')
+  sh "git clone -b gh-pages git@github.com:matschaffer/knife-solo.git gh-pages"
+  File.open('gh-pages/index.html', 'w') do |f|
+    f.puts '---'
+    f.puts 'layout: default'
+    f.puts '---'
+    f.puts parsed_rdoc("README.rdoc")
+  end
+
+  rev = `git rev-parse HEAD`[0..7]
+  Dir.chdir('gh-pages') do
+    sh "git commit --allow-empty -m 'Update index for v#{KnifeSolo.version} from README.rdoc rev #{rev}' index.html"
+    sh "git push origin gh-pages"
   end
 end
 

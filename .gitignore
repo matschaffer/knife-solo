@@ -11,3 +11,4 @@
 /Gemfile.lock
 /test/gemfiles/*.lock
 /coverage
+/gh-pages
