@@ -1,4 +1,4 @@
-class TestCase < MiniTest::Unit::TestCase
+class TestCase < Minitest::Test
   def default_test
     super unless self.class == TestCase
   end

@@ -18,12 +18,11 @@ Gem::Specification.new do |s|
 
   s.post_install_message = KnifeSolo.post_install_message
 
-  s.add_development_dependency 'berkshelf', '>= 3.0.0.beta.2'
+  s.add_development_dependency 'berkshelf'
   s.add_development_dependency 'bundler'
-  s.add_development_dependency 'ffi', '< 1.9.1' # transitional dependency of berkshelf
   s.add_development_dependency 'fog'
   s.add_development_dependency 'librarian-chef'
-  s.add_development_dependency 'minitest', '~> 4.7'
+  s.add_development_dependency 'minitest'
   s.add_development_dependency 'mocha'
   s.add_development_dependency 'parallel'
   s.add_development_dependency 'rake'
@@ -31,6 +30,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'coveralls'
 
   s.add_dependency 'chef',     '>= 10.20'
-  s.add_dependency 'net-ssh',  '~> 2.7', '< 3.0'
-  s.add_dependency 'erubis',   '~> 2.7.0'
+  s.add_dependency 'net-ssh',  '~> 2.6'
+  s.add_dependency 'erubis',   '~> 2.7'
 end
