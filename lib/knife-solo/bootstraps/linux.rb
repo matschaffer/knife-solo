@@ -52,7 +52,7 @@ module KnifeSolo::Bootstraps
 
     def debianoid_omnibus_install
       run_command("sudo apt-get update")
-      run_command("sudo apt-get -y install rsync ca-certificates wget")
+      run_command("sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' --force-yes -f install rsync ca-certificates wget")
       omnibus_install
     end
 
