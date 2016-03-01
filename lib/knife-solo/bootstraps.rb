@@ -16,9 +16,9 @@ module KnifeSolo
     def self.class_for_operating_system(os_name)
       begin
         os_class_name = os_name.gsub(/\s/,'')
-        eval("KnifeSolo::Bootstraps::#{os_class_name}")
+        KnifeSolo::Bootstraps.const_get(os_class_name)
       rescue
-        raise OperatingSystemNotImplementedError.new("#{os_name} not implemented.  Feel free to add a bootstrap implementation in KnifeSolo::Bootstraps::#{os_class_name}")
+        raise OperatingSystemNotImplementedError.new("#{os_name.inspect} not implemented.  Feel free to add a bootstrap implementation in KnifeSolo::Bootstraps::#{os_class_name}")
       end
     end
 
