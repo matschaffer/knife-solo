@@ -368,6 +368,7 @@ class SoloCookTest < TestCase
     cmd.stubs(:run_portable_mkdir_p)
     cmd.stubs(:rsync)
     cmd.stubs(:stream_command).returns(SuccessfulResult.new)
+    cmd.stubs(:windows_node? => false)
     cmd
   end
 end
