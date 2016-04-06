@@ -1,3 +1,28 @@
+# 0.6.0 / Pending
+
+## Changes and new features
+
+* Added support for Mac OS 10.10 ([456][])
+
+## Fixes
+
+* Loosen net-ssh requirement to gain compatibility with newer ChefDK releases ([481][])
+* Ensure non-interactive mode on Debian x86 boostrap ([471][])
+* Include user and port in control path ([468][])
+* Default control master to "no" when running from cygwin ([453][])
+* Pass node name down to solo.rb (forward port from 0.4.3) ([452][])
+* Use `const_get` to help spot bootstrap detection errors more easily ([467][])
+
+## Thanks to our contributors!
+
+* [Austin Schutz][aaadschutz]
+* [Shawn Xu][xunnanxu]
+* [Derek Tamsen][derektamsen]
+* [Przemysław Dąbek][szemek]
+* [Mark Woods][thickpaddy]
+* [Tomohiko IIDA][iidatomohiko]
+* [Jeroen Jacobs][jeroenj]
+
 # 0.5.1 / 2015-08-28
 
 Re-release of 0.5.0 for test & doc fixes.
