@@ -23,6 +23,14 @@
 * [Tomohiko IIDA][iidatomohiko]
 * [Jeroen Jacobs][jeroenj]
 
+[456]: https://github.com/matschaffer/knife-solo/issues/456
+[481]: https://github.com/matschaffer/knife-solo/issues/481
+[471]: https://github.com/matschaffer/knife-solo/issues/471
+[468]: https://github.com/matschaffer/knife-solo/issues/468
+[453]: https://github.com/matschaffer/knife-solo/issues/453
+[452]: https://github.com/matschaffer/knife-solo/issues/452
+[467]: https://github.com/matschaffer/knife-solo/issues/467
+
 # 0.5.1 / 2015-08-28
 
 Re-release of 0.5.0 for test & doc fixes.
@@ -619,3 +627,9 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [yugui]:           https://github.com/yugui
 [zeph]:            https://github.com/zeph
 [aaadschutz]:      https://github.com/aaadschutz
+[xunnanxu]:        https://github.com/xunnanxu
+[derektamsen]:     https://github.com/derektamsen
+[szemek]:          https://github.com/szemek
+[thickpaddy]:      https://github.com/thickpaddy
+[iidatomohiko]:    https://github.com/iidatomohiko
+[jeroenj]:         https://github.com/jeroenj
