@@ -54,7 +54,7 @@ module KnifeSolo
 
     def select_by_existing_conf_file(base)
       managers.each do |manager|
-        if manager.conf_file_exists?(@base)
+        if defined?(@base) && manager.conf_file_exists?(@base)
           Chef::Log.debug "#{manager} selected because of existing #{manager.conf_file}"
           return manager
         end

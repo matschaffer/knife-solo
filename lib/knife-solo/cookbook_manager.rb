@@ -72,7 +72,7 @@ module KnifeSolo
       end
 
       def conf_file_exists?(base = nil)
-        File.exists?(conf_file(base))
+        File.exist?(conf_file(base))
       end
 
       # Runs the manager and returns the path to the cookbook directory

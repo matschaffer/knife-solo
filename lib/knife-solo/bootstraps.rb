@@ -8,7 +8,7 @@ module KnifeSolo
     def self.class_exists_for?(os_name)
       begin
         true if self.class_for_operating_system(os_name).class == Class
-      rescue => exception
+      rescue
         false
       end
     end

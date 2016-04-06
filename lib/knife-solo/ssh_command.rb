@@ -22,7 +22,7 @@ module KnifeSolo
         #     KnifeSolo::SshCommand.load_deps
         #   end
         #
-        deps { KnifeSolo::SshCommand.load_deps } unless @dependency_loader
+        deps { KnifeSolo::SshCommand.load_deps } unless defined?(@dependency_loader)
 
         option :ssh_config,
           :short       => '-F CONFIG_FILE',
@@ -126,7 +126,7 @@ module KnifeSolo
     end
 
     def host_descriptor
-      return @host_descriptor if @host_descriptor
+      return @host_descriptor if defined?(@host_descriptor)
       parts = @name_args.first.split('@')
       @host_descriptor = {
         :host => parts.pop,
@@ -189,7 +189,7 @@ module KnifeSolo
     end
 
     def detect_authentication_method
-      return @detected if @detected
+      return @detected if defined?(@detected)
       begin
         try_connection
       rescue Errno::ETIMEDOUT
