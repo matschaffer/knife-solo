@@ -71,21 +71,18 @@ task 'gh-pages' do
   end
 end
 
+def test_task(name, glob)
+  Rake::TestTask.new(name) do |t|
+    t.libs << 'test'
+    t.warning = false
+    t.test_files = FileList[glob]
+  end
+end
+
 namespace :test do
-  Rake::TestTask.new(:performance) do |t|
-    t.libs << "test"
-    t.test_files = FileList['test/performance/*_test.rb']
-  end
-
-  Rake::TestTask.new(:integration) do |t|
-    t.libs << "test"
-    t.test_files = FileList['test/integration/*_test.rb']
-  end
-
-  Rake::TestTask.new(:units) do |t|
-    t.libs << "test"
-    t.test_files = FileList['test/*_test.rb']
-  end
+  test_task(:performance, 'test/performance/*_test.rb')
+  test_task(:integration, 'test/integration/*_test.rb')
+  test_task(:units,       'test/*_test.rb')
 
   desc 'Run both unit and integration tests'
   task :all => [:units, :integration]
