@@ -220,7 +220,7 @@ module KnifeSolo
     def ssh_control_path
       dir = File.join(ENV['HOME'], '.chef', 'knife-solo-sockets')
       FileUtils.mkdir_p(dir)
-      File.join(dir, '%r@%h:%p')
+      File.join(dir, '%C')
     end
 
     def custom_sudo_command
