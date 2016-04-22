@@ -39,7 +39,7 @@ class EC2Runner < MiniTest::Unit
     server.wait_for { ready? }
     logger.info "#{test.class} server (#{server.dns_name}) reported ready, trying to connect to ssh..."
     server.wait_for do
-      `nc #{dns_name} 22 -w 1 -q 0 </dev/null`
+      `echo | nc -w 1 #{dns_name} 22`
       $?.success?
     end
 
