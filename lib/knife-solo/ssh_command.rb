@@ -164,7 +164,9 @@ module KnifeSolo
       options = config_file_options
       options[:port] = config[:ssh_port] if config[:ssh_port]
       options[:password] = config[:ssh_password] if config[:ssh_password]
-      options[:keys] = [config[:identity_file]] if config[:identity_file]
+      options[:keys] = []
+      options[:keys] << config[:identity_file] if config[:identity_file]
+      options[:keys] << config[:ssh_identity_file] if config[:ssh_identity_file]
       options[:gateway] = config[:ssh_gateway] if config[:ssh_gateway]
       options[:forward_agent] = true if config[:forward_agent]
       if !config[:host_key_verify]
