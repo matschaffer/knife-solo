@@ -1,4 +1,4 @@
-# 0.6.0 / Pending
+# 0.6.0 / 2016-05-23
 
 ## Changes and new features
 
