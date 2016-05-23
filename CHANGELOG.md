@@ -11,6 +11,7 @@
 * Ensure non-interactive mode on Debian x86 boostrap ([471][])
 * Include user and port in control path ([468][])
 * Default control master to "no" when running from cygwin ([453][])
+* Use hashed control path (requires recent openssh) ([470][])
 * Pass node name down to solo.rb (forward port from 0.4.3) ([452][])
 * Use `const_get` to help spot bootstrap detection errors more easily ([467][])
 
@@ -24,6 +25,7 @@
 * [Tomohiko IIDA][iidatomohiko]
 * [Jeroen Jacobs][jeroenj]
 
+[470]: https://github.com/matschaffer/knife-solo/issues/470
 [456]: https://github.com/matschaffer/knife-solo/issues/456
 [481]: https://github.com/matschaffer/knife-solo/issues/481
 [471]: https://github.com/matschaffer/knife-solo/issues/471
