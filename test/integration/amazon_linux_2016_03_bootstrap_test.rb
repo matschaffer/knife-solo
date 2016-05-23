@@ -1,12 +1,12 @@
 require 'integration_helper'
 
-class AmazonLinux2012_09BootstrapTest < IntegrationTest
+class AmazonLinux2016_03BootstrapTest < IntegrationTest
   def user
     "ec2-user"
   end
 
   def image_id
-    "ami-1624987f"
+    "ami-4f111125"
   end
 
   def prepare_server

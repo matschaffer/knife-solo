@@ -1,3 +1,39 @@
+# 0.6.0 / 2016-05-23
+
+## Changes and new features
+
+* Added support for Mac OS 10.10 ([456][])
+* **BREAKING** Updated ssh key argument to `--ssh-identity-file` to match new knife conventions
+
+## Fixes
+
+* Loosen net-ssh requirement to gain compatibility with newer ChefDK releases ([481][])
+* Ensure non-interactive mode on Debian x86 boostrap ([471][])
+* Include user and port in control path ([468][])
+* Default control master to "no" when running from cygwin ([453][])
+* Use hashed control path (requires recent openssh) ([470][])
+* Pass node name down to solo.rb (forward port from 0.4.3) ([452][])
+* Use `const_get` to help spot bootstrap detection errors more easily ([467][])
+
+## Thanks to our contributors!
+
+* [Austin Schutz][aaadschutz]
+* [Shawn Xu][xunnanxu]
+* [Derek Tamsen][derektamsen]
+* [Przemysław Dąbek][szemek]
+* [Mark Woods][thickpaddy]
+* [Tomohiko IIDA][iidatomohiko]
+* [Jeroen Jacobs][jeroenj]
+
+[470]: https://github.com/matschaffer/knife-solo/issues/470
+[456]: https://github.com/matschaffer/knife-solo/issues/456
+[481]: https://github.com/matschaffer/knife-solo/issues/481
+[471]: https://github.com/matschaffer/knife-solo/issues/471
+[468]: https://github.com/matschaffer/knife-solo/issues/468
+[453]: https://github.com/matschaffer/knife-solo/issues/453
+[452]: https://github.com/matschaffer/knife-solo/issues/452
+[467]: https://github.com/matschaffer/knife-solo/issues/467
+
 # 0.5.1 / 2015-08-28
 
 Re-release of 0.5.0 for test & doc fixes.
@@ -594,3 +630,9 @@ And a special thanks to [Teemu Matilainen][tmatilai] who is now on the list of d
 [yugui]:           https://github.com/yugui
 [zeph]:            https://github.com/zeph
 [aaadschutz]:      https://github.com/aaadschutz
+[xunnanxu]:        https://github.com/xunnanxu
+[derektamsen]:     https://github.com/derektamsen
+[szemek]:          https://github.com/szemek
+[thickpaddy]:      https://github.com/thickpaddy
+[iidatomohiko]:    https://github.com/iidatomohiko
+[jeroenj]:         https://github.com/jeroenj

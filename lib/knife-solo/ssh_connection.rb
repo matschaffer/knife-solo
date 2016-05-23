@@ -53,7 +53,7 @@ module KnifeSolo
 
       session.open_channel do |channel|
         channel.request_pty
-        channel.exec(command) do |ch, success|
+        channel.exec(command) do |_, success|
           raise "ssh.channel.exec failure" unless success
 
           channel.on_data do |ch, data|  # stdout

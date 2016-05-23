@@ -13,10 +13,6 @@
 
 knife-solo adds a handful of Knife commands that aim to make working with chef-solo as powerful as chef-server.
 
-## WARNINGS
-
-knife-solo's Berkshelf integration is known to be incompatible with ChefDK >= 0.10.0, see [#478](https://github.com/matschaffer/knife-solo/issues/478) for details.
-
 ## Usage
 
 Simply ensure the gem is installed using:
