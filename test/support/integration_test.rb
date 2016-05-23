@@ -41,7 +41,7 @@ class IntegrationTest < TestCase
     @kitchen.dirname.mkpath
     system "knife solo init #{@kitchen} --no-berkshelf --no-librarian >> #{log_file}"
     @start_dir = Dir.pwd
-    # NOTE (matschaffer): On ruby 2.3 this won't set ENV['PWD'] which chef-config-12.8.1 uses for `working_directory`
+    # NOTE (matschaffer): On ruby 2.3 Dir.chdir won't set ENV['PWD'] which chef-config-12.8.1 uses for `working_directory`
     Dir.chdir(@kitchen)
     ENV['PWD'] = @kitchen.to_s
     prepare_server
