@@ -43,19 +43,19 @@ module KnifeSolo
           :long        => '--ssh-gateway GATEWAY',
           :description => 'The ssh gateway'
 
-        option :ssh_identity,
-          :long        => '--ssh-identity FILE',
-          :description => 'Deprecated. Replaced with --identity-file.'
-
         option :ssh_control_master,
           :long => '--ssh-control-master SETTING',
           :description => 'Control master setting to use when running rsync (use "auto" to enable)',
           :default => 'no'
 
         option :identity_file,
-          :short       => '-i IDENTITY_FILE',
-          :long        => '--identity-file FILE',
-          :description => 'The ssh identity file'
+          :long => "--identity-file IDENTITY_FILE",
+          :description => "The SSH identity file used for authentication. [DEPRECATED] Use --ssh-identity-file instead."
+
+        option :ssh_identity_file,
+          :short => "-i IDENTITY_FILE",
+          :long => "--ssh-identity-file IDENTITY_FILE",
+          :description => "The SSH identity file used for authentication"
 
         option :forward_agent,
           :long        => '--forward-agent',
@@ -102,9 +102,8 @@ module KnifeSolo
     end
 
     def validate_ssh_options!
-      if config[:ssh_identity]
-        ui.warn '`--ssh-identity` is deprecated, please use `--identity-file`.'
-        config[:identity_file] ||= config[:ssh_identity]
+      if config[:identity_file]
+        ui.warn '`--identity-file` is deprecated, please use `--ssh-identity-file`.'
       end
       unless first_cli_arg_is_a_hostname?
         show_usage
@@ -160,13 +159,15 @@ module KnifeSolo
       Net::SSH::Config.for(host, config_files)
     end
 
+    def identity_file
+      config[:ssh_identity] || config[:identity_file] || config[:ssh_identity_file]
+    end
+
     def connection_options
       options = config_file_options
       options[:port] = config[:ssh_port] if config[:ssh_port]
       options[:password] = config[:ssh_password] if config[:ssh_password]
-      options[:keys] = []
-      options[:keys] << config[:identity_file] if config[:identity_file]
-      options[:keys] << config[:ssh_identity_file] if config[:ssh_identity_file]
+      options[:keys] = [identity_file] if identity_file
       options[:gateway] = config[:ssh_gateway] if config[:ssh_gateway]
       options[:forward_agent] = true if config[:forward_agent]
       if !config[:host_key_verify]
@@ -206,7 +207,7 @@ module KnifeSolo
       args << [user, host].compact.join('@')
 
       args << "-F #{config[:ssh_config]}" if config[:ssh_config]
-      args << "-i #{config[:identity_file]}" if config[:identity_file]
+      args << "-i #{identity_file}" if identity_file
       args << "-o ForwardAgent=yes" if config[:forward_agent]
       args << "-p #{config[:ssh_port]}" if config[:ssh_port]
       args << "-o UserKnownHostsFile=#{connection_options[:user_known_hosts_file]}" if config[:host_key_verify] == false

@@ -3,6 +3,7 @@
 ## Changes and new features
 
 * Added support for Mac OS 10.10 ([456][])
+* **BREAKING** Updated ssh key argument to `--ssh-identity-file` to match new knife conventions
 
 ## Fixes
 
