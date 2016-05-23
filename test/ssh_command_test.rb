@@ -159,10 +159,6 @@ class SshCommandTest < TestCase
     cmd = command("usertest@10.0.0.1", "--ssh-gateway=test@host.com")
     cmd.validate_ssh_options!
     assert_equal "usertest@10.0.0.1", cmd.ssh_args
-
-    cmd = command_internal("usertest@10.0.0.1", "--ssh-gateway=test@host.com")
-    cmd.validate_ssh_options!
-    assert_equal "usertest@10.0.0.1 -o ControlMaster=auto -o ControlPath=#{cmd.ssh_control_path} -o ControlPersist=3600", cmd.ssh_args
   end
 
   def test_barks_without_atleast_a_hostname
@@ -226,11 +222,6 @@ class SshCommandTest < TestCase
   end
 
   def command(*args)
-    args << '--ssh-control-master=no'
-    command_internal(*args)
-  end
-
-  def command_internal(*args)
     Net::SSH::Config.stubs(:default_files)
     knife_command(DummySshCommand, *args)
   end
