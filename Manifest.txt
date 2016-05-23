@@ -39,8 +39,7 @@ test/gemfiles/Gemfile.chef-11
 test/gemfiles/Gemfile.chef-12
 test/gemfiles/Gemfile.chef-master
 test/gitignore_test.rb
-test/integration/amazon_linux_2012_09_bootstrap_test.rb
-test/integration/archlinux_20131128_test.rb
+test/integration/amazon_linux_2016_03_bootstrap_test.rb
 test/integration/cases/apache2_bootstrap.rb
 test/integration/cases/apache2_cook.rb
 test/integration/cases/cache_path_usage.rb
@@ -49,12 +48,10 @@ test/integration/cases/encrypted_data_bag.rb
 test/integration/cases/environment.rb
 test/integration/cases/knife_bootstrap.rb
 test/integration/cases/ohai_hints.rb
-test/integration/centos5_8_test.rb
 test/integration/centos6_3_test.rb
-test/integration/debian6_bootstrap_test.rb
+test/integration/centos7_test.rb
 test/integration/debian7_knife_bootstrap_test.rb
-test/integration/gentoo2011_test.rb
-test/integration/omnios_r151004_test.rb
+test/integration/omnios_r151014_test.rb
 test/integration/scientific_linux_63_test.rb
 test/integration/sles_11_test.rb
 test/integration/ubuntu12_04_bootstrap_test.rb
