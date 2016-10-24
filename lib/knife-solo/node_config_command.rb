@@ -10,7 +10,7 @@ module KnifeSolo
       other.class_eval do
         # Lazy load our dependencies if the including class did not call
         # Knife#deps yet. See KnifeSolo::SshCommand for more information.
-        deps { KnifeSolo::NodeConfigCommand.load_deps } unless @dependency_loader
+        deps { KnifeSolo::NodeConfigCommand.load_deps } unless defined?(@dependency_loader)
 
         option :chef_node_name,
           :short       => '-N NAME',
