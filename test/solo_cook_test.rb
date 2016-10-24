@@ -347,6 +347,15 @@ class SoloCookTest < TestCase
     assert_chef_solo_option "--override-runlist=sandbox::default", "-o sandbox::default"
   end
 
+  def test_removes_tilde_on_windows_node
+    in_kitchen do
+      cmd = command("somehost")
+      cmd.unstub(:windows_node?)
+      cmd.stubs(:windows_node? => true)
+      assert_equal 'chef-solo', cmd.provisioning_path
+    end
+  end
+
   # Asserts that the chef_solo_option is passed to chef-solo iff cook_option
   # is specified for the cook command
   def assert_chef_solo_option(cook_option, chef_solo_option)
@@ -368,6 +377,7 @@ class SoloCookTest < TestCase
     cmd.stubs(:run_portable_mkdir_p)
     cmd.stubs(:rsync)
     cmd.stubs(:stream_command).returns(SuccessfulResult.new)
+    cmd.stubs(:windows_node? => false)
     cmd
   end
 end

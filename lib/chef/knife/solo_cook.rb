@@ -112,8 +112,11 @@ class Chef
       end
 
       def provisioning_path
-        # TODO ~ will likely break on cmd.exe based windows sessions
-        config_value(:provisioning_path, '~/chef-solo')
+        if windows_node?
+          config_value(:provisioning_path, 'chef-solo')
+        else
+          config_value(:provisioning_path, '~/chef-solo')
+        end
       end
 
       def sync_kitchen
