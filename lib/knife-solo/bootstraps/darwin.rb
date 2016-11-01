@@ -6,8 +6,7 @@ module KnifeSolo::Bootstraps
     end
 
     def distro
-      case issue
-      when %r{10.(?:[6-9]|10)}
+      if Gem::Requirement.new('>=10.6').satisfied_by? Gem::Version.new(issue)
         {:type => 'omnibus'}
       else
         raise "OS X version #{issue} not supported"
