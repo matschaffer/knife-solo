@@ -9,6 +9,7 @@ encrypted_data_bag_secret File.join(base, 'data_bag_key')
 environment_path          File.join(base, 'environments')
 environment               <%= node_environment.inspect %>
 ssl_verify_mode           <%= ssl_verify_mode.inspect %>
+solo_legacy_mode          <%= solo_legacy_mode.inspect %>
 
 cookbook_path []
 <% cookbook_paths.each_with_index do |path, i| -%>

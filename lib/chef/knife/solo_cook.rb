@@ -135,6 +135,10 @@ class Chef
         Chef::Config[:ssl_verify_mode] || :verify_peer
       end
 
+      def solo_legacy_mode
+        Chef::Config[:solo_legacy_mode] || false
+      end
+
       def expand_path(path)
         Pathname.new(path).expand_path
       end
