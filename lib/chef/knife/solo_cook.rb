@@ -75,6 +75,10 @@ class Chef
         :long        => '--clean-up',
         :description => 'Run the clean command after cooking'
 
+      option :legacy_mode,
+        :long        => '--legacy-mode',
+        :description => 'Run chef-solo in legacy mode'
+
       def run
         time('Run') do
 
@@ -312,6 +316,9 @@ class Chef
         cmd << " -N #{config[:chef_node_name]}" if config[:chef_node_name]
         cmd << " -W" if config[:why_run]
         cmd << " -o #{config[:override_runlist]}" if config[:override_runlist]
+        if Gem::Version.new(::Chef::VERSION) >= Gem::Version.new("12.10.54")
+          cmd << " --legacy-mode" if config[:legacy_mode]
+        end
 
         ui.msg "Running Chef: #{cmd}"
 
