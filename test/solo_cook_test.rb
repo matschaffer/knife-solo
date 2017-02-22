@@ -353,7 +353,20 @@ class SoloCookTest < TestCase
   end
 
   def test_passes_legacy_mode_to_chef_solo
-    assert_chef_solo_option "--legacy-mode", "--legacy-mode"
+    if Gem::Version.new(::Chef::VERSION) >= Gem::Version.new("12.10.54")
+      assert_chef_solo_option "--legacy-mode", "--legacy-mode"
+    else
+      matcher = regexp_matches(/\s#{Regexp.quote("--legacy-mode")}(\s|$)/)
+      in_kitchen do
+        cmd = command("somehost", "--legacy-mode")
+        cmd.expects(:stream_command).with(Not(matcher)).returns(SuccessfulResult.new)
+        cmd.run
+
+        cmd = command("somehost")
+        cmd.expects(:stream_command).with(Not(matcher)).returns(SuccessfulResult.new)
+        cmd.run
+      end
+    end
   end
 
   # Asserts that the chef_solo_option is passed to chef-solo iff cook_option
