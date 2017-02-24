@@ -44,6 +44,11 @@ class SoloCookTest < TestCase
     assert_equal :verify_none, command.ssl_verify_mode
   end
 
+  def test_sets_solo_legacy_mode
+    Chef::Config[:solo_legacy_mode] = true
+    assert_equal true, command.solo_legacy_mode
+  end
+
   def test_rsync_without_gateway_connection_options
     in_kitchen do
 
@@ -345,6 +350,23 @@ class SoloCookTest < TestCase
 
   def test_passes_override_runlist_to_chef_solo
     assert_chef_solo_option "--override-runlist=sandbox::default", "-o sandbox::default"
+  end
+
+  def test_passes_legacy_mode_to_chef_solo
+    if Gem::Version.new(::Chef::VERSION) >= Gem::Version.new("12.10.54")
+      assert_chef_solo_option "--legacy-mode", "--legacy-mode"
+    else
+      matcher = regexp_matches(/\s#{Regexp.quote("--legacy-mode")}(\s|$)/)
+      in_kitchen do
+        cmd = command("somehost", "--legacy-mode")
+        cmd.expects(:stream_command).with(Not(matcher)).returns(SuccessfulResult.new)
+        cmd.run
+
+        cmd = command("somehost")
+        cmd.expects(:stream_command).with(Not(matcher)).returns(SuccessfulResult.new)
+        cmd.run
+      end
+    end
   end
 
   # Asserts that the chef_solo_option is passed to chef-solo iff cook_option
