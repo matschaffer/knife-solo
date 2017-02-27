@@ -13,4 +13,5 @@ platform :ruby_19 do
   gem 'nio4r', '~> 1.2.1'
   gem 'buff-ignore', '~> 1.1.1'
   gem 'rack', '~> 1.6.5'
+  gem 'net-http-persistent', '~> 2.9.4'
 end
