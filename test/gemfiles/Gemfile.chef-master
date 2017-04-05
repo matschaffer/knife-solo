@@ -3,3 +3,5 @@ source 'https://rubygems.org'
 gemspec :path => '../..'
 
 gem 'chef', github: 'opscode/chef'
+
+gem "ohai", github: 'chef/ohai'
