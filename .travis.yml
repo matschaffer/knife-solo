@@ -22,3 +22,7 @@ matrix:
     # Chef ~> 13 requires Ruby version >= 2.3.0
     - rvm: 2.2.2
       gemfile: test/gemfiles/Gemfile.chef-master
+    # Chef ~> 10 depends on json <= 1.8.1 which failed to build with
+    # Ruby 2.3.4. https://github.com/flori/json/issues/229
+    - rvm: 2.3.4
+      gemfile: test/gemfiles/Gemfile.chef-10
