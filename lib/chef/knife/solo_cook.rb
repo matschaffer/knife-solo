@@ -128,7 +128,6 @@ class Chef
           upload_to_provision_path(path.to_s, "/cookbooks-#{i + 1}", 'cookbook_path')
         end
         upload_to_provision_path(node_config.to_s, 'dna.json')
-        upload_to_provision_path(nodes_path, 'nodes')
         upload_to_provision_path(:role_path, 'roles')
         upload_to_provision_path(:data_bag_path, 'data_bags')
         upload_to_provision_path(config[:secret_file] || :encrypted_data_bag_secret, 'data_bag_key')
