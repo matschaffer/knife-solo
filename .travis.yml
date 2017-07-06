@@ -2,8 +2,9 @@ sudo: false
 language: ruby
 cache: bundler
 rvm:
+  - 2.4.1
   - 2.3.4
-  - 2.2.2
+  - 2.2.7
   - 1.9.3
 gemfile:
   - test/gemfiles/Gemfile.chef-11
@@ -26,3 +27,7 @@ matrix:
     # Ruby 2.3.4. https://github.com/flori/json/issues/229
     - rvm: 2.3.4
       gemfile: test/gemfiles/Gemfile.chef-10
+    - rvm: 2.4.1
+      gemfile: test/gemfiles/Gemfile.chef-10
+    - rvm: 2.4.1
+      gemfile: test/gemfiles/Gemfile.chef-11
