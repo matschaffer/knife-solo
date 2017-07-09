@@ -5,29 +5,16 @@ rvm:
   - 2.4.1
   - 2.3.4
   - 2.2.7
-  - 1.9.3
 gemfile:
-  - test/gemfiles/Gemfile.chef-11
-  - test/gemfiles/Gemfile.chef-10
   - test/gemfiles/Gemfile.chef-12
+  - test/gemfiles/Gemfile.chef-13
   - test/gemfiles/Gemfile.chef-master
 matrix:
   allow_failures:
     - gemfile: test/gemfiles/Gemfile.chef-master
   exclude:
-    # Chef ~> 12 depends on ohai ~> 8.0 which requires Ruby version >= 2.0.0
-    - rvm: 1.9.3
-      gemfile: test/gemfiles/Gemfile.chef-12
-    - rvm: 1.9.3
-      gemfile: test/gemfiles/Gemfile.chef-master
     # Chef ~> 13 requires Ruby version >= 2.3.0
     - rvm: 2.2.2
+      gemfile: test/gemfiles/Gemfile.chef-13
+    - rvm: 2.2.2
       gemfile: test/gemfiles/Gemfile.chef-master
-    # Chef ~> 10 depends on json <= 1.8.1 which failed to build with
-    # Ruby 2.3.4. https://github.com/flori/json/issues/229
-    - rvm: 2.3.4
-      gemfile: test/gemfiles/Gemfile.chef-10
-    - rvm: 2.4.1
-      gemfile: test/gemfiles/Gemfile.chef-10
-    - rvm: 2.4.1
-      gemfile: test/gemfiles/Gemfile.chef-11
