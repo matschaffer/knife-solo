@@ -133,6 +133,9 @@ class SoloCookTest < TestCase
     assert_equal "/some/other/path", cmd.cookbook_paths[2].to_s
   end
 
+  # NOTE (mat): Looks like chef::config might be setting HTTP_PROXY which blocks
+  #   subsequent HTTP requests during tests (like sending coverage reports).
+  #   Commenting out until this can be re-written with appropriate stubbing.
   # def test_sets_proxy_settings
   #   Chef::Config[:http_proxy] = "http://proxy:3128"
   #   Chef::Config[:no_proxy] = nil
