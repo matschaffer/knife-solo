@@ -133,12 +133,12 @@ class SoloCookTest < TestCase
     assert_equal "/some/other/path", cmd.cookbook_paths[2].to_s
   end
 
-  def test_sets_proxy_settings
-    Chef::Config[:http_proxy] = "http://proxy:3128"
-    Chef::Config[:no_proxy] = nil
-    conf = command.proxy_settings
-    assert_equal({ :http_proxy => "http://proxy:3128" }, conf)
-  end
+  # def test_sets_proxy_settings
+  #   Chef::Config[:http_proxy] = "http://proxy:3128"
+  #   Chef::Config[:no_proxy] = nil
+  #   conf = command.proxy_settings
+  #   assert_equal({ :http_proxy => "http://proxy:3128" }, conf)
+  # end
 
   def test_adds_patch_cookboks_with_lowest_precedence
    in_kitchen do
