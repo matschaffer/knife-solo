@@ -34,9 +34,8 @@ lib/knife-solo/ssh_connection.rb
 lib/knife-solo/tools.rb
 test/bootstraps_test.rb
 test/deprecated_command_test.rb
-test/gemfiles/Gemfile.chef-10
-test/gemfiles/Gemfile.chef-11
 test/gemfiles/Gemfile.chef-12
+test/gemfiles/Gemfile.chef-13
 test/gemfiles/Gemfile.chef-master
 test/gitignore_test.rb
 test/integration/amazon_linux_2016_03_bootstrap_test.rb
