@@ -19,10 +19,14 @@ class Chef
         :description => 'Where to store kitchen data on the node'
         # TODO de-duplicate this option with solo cook
 
+      option :clean_up_command,
+        :long        => '--clean-up-command "custom command"',
+        :description => 'What command to run to remove provisioning path'
+
       def run
         validate!
         ui.msg "Cleaning up #{host}..."
-        run_command "rm -rf #{provisioning_path}"
+        run_command "#{clean_up_command} #{provisioning_path}"
       end
 
       def validate!
@@ -32,6 +36,11 @@ class Chef
       def provisioning_path
         # TODO de-duplicate this method with solo cook
         KnifeSolo::Tools.config_value(config, :provisioning_path, '~/chef-solo')
+      end
+
+      def clean_up_command
+        # TODO de-duplicate this method with solo cook
+        KnifeSolo::Tools.config_value(config, :clean_up_command, 'rm -rf')
       end
     end
   end
