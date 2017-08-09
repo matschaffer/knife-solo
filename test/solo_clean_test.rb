@@ -12,6 +12,12 @@ class SoloCleanTest < TestCase
     cmd.run
   end
 
+  def test_removes_provision_path_with_custom_command
+    cmd = command('somehost', '--cleanup-command="sudo rm -rf"')
+    cmd.expects(:run_command).with('sudo rm -rf ~/chef-solo').returns(SuccessfulResult.new)
+    cmd.run
+  end
+
   def command(*args)
     knife_command(Chef::Knife::SoloClean, *args)
   end

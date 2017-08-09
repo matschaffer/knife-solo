@@ -75,6 +75,10 @@ class Chef
         :long        => '--clean-up',
         :description => 'Run the clean command after cooking'
 
+      option :clean_up_command,
+        :long        => '--clean-up-command',
+        :description => 'What command to use for clean up'
+
       option :legacy_mode,
         :long        => '--legacy-mode',
         :description => 'Run chef-solo in legacy mode'
@@ -118,6 +122,11 @@ class Chef
       def provisioning_path
         # TODO ~ will likely break on cmd.exe based windows sessions
         config_value(:provisioning_path, '~/chef-solo')
+      end
+
+      def clean_up_command
+        # TODO ~ will likely break on cmd.exe based windows sessions
+        config_value(:clean_up_command, 'rm -rf')
       end
 
       def sync_kitchen
