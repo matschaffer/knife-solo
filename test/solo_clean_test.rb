@@ -13,8 +13,8 @@ class SoloCleanTest < TestCase
   end
 
   def test_removes_provision_path_with_custom_command
-    cmd = command('somehost', '--clean-up-command "sudo rm -rf"')
-    cmd.expects(:run_command).with('sudo rm -rf ~/chef-solo').returns(SuccessfulResult.new)
+    cmd = command('somehost', '--clean-up-command=echo')
+    cmd.expects(:run_command).with('echo ~/chef-solo').returns(SuccessfulResult.new)
     cmd.run
   end
 
