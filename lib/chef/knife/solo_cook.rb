@@ -143,6 +143,10 @@ class Chef
         Chef::Config[:solo_legacy_mode] || false
       end
 
+      def log_level
+        Chef::Config[:log_level] || :warn
+      end
+
       def expand_path(path)
         Pathname.new(path).expand_path
       end
