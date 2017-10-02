@@ -79,6 +79,11 @@ class Chef
         :long        => '--legacy-mode',
         :description => 'Run chef-solo in legacy mode'
 
+      option :log_level,
+        :short       => '-l LEVEL',
+        :long        => '--log-level',
+        :description => 'Set the log level for Chef'
+
       def run
         time('Run') do
 
@@ -144,7 +149,11 @@ class Chef
       end
 
       def log_level
-        Chef::Config[:log_level] || :warn
+        config_value(:log_level, Chef::Config[:log_level] || :warn).to_sym
+      end
+
+      def enable_reporting
+        config_value(:enable_reporting, true)
       end
 
       def expand_path(path)
