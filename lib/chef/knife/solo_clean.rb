@@ -22,7 +22,7 @@ class Chef
       def run
         validate!
         ui.msg "Cleaning up #{host}..."
-        run_command "#{sudo_command} rm -rf #{provisioning_path}"
+        run_command "sudo rm -rf #{provisioning_path}"
       end
 
       def validate!
@@ -32,10 +32,6 @@ class Chef
       def provisioning_path
         # TODO de-duplicate this method with solo cook
         KnifeSolo::Tools.config_value(config, :provisioning_path, '~/chef-solo')
-      end
-
-      def sudo_command
-        KnifeSolo::Tools.config_value(config, :sudo_command, 'sudo')
       end
     end
   end
