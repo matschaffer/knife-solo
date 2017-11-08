@@ -296,7 +296,6 @@ module KnifeSolo
 
       output = ui.stdout if options[:streaming]
 
-
       @connection ||= ssh_connection
       @connection.run_command(command, output)
     end
