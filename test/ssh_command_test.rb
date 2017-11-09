@@ -208,6 +208,27 @@ class SshCommandTest < TestCase
     assert_equal 300, cmd.connection_options[:keepalive_interval]
   end
 
+  def test_handle_custom_sudo_command
+    cmd = sudo_command("usertest@10.0.0.1", "--sudo-command=/usr/some/sudo")
+    assert_equal "/usr/some/sudo", cmd.sudo_command
+  end
+
+  def test_replace_sudo_with_default_sudo_command
+    cmd = sudo_command("usertest@10.0.0.1")
+    KnifeSolo::SshConnection.any_instance.expects(:run_command).once
+      .with("sudo -p 'knife sudo password: ' foo", nil)
+
+    cmd.run_command("sudo foo")
+  end
+
+  def test_replace_sudo_with_custom_sudo_command
+    cmd = sudo_command("usertest@10.0.0.1", "--sudo-command=/usr/some/sudo")
+    KnifeSolo::SshConnection.any_instance.expects(:run_command).once
+      .with("/usr/some/sudo foo", nil)
+
+    cmd.run_command("sudo foo")
+  end
+
   def test_barks_if_ssh_keepalive_is_zero
     cmd = command("usertest@10.0.0.1", "--ssh-keepalive-interval=0")
     cmd.ui.expects(:fatal).with(regexp_matches(/--ssh-keepalive-interval.*positive number/))
@@ -224,5 +245,12 @@ class SshCommandTest < TestCase
   def command(*args)
     Net::SSH::Config.stubs(:default_files)
     knife_command(DummySshCommand, *args)
+  end
+
+  def sudo_command(*args)
+    cmd = command(*args)
+    cmd.stubs(:detect_authentication_method).returns(true)
+    cmd.stubs(:sudo_available?).returns(true)
+    cmd
   end
 end
