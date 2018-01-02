@@ -134,15 +134,15 @@ class SshCommandTest < TestCase
 
     cmd = command("usertest@10.0.0.1", "--ssh-config-file=myconfig")
     cmd.validate_ssh_options!
-    assert_equal "usertest@10.0.0.1 -F myconfig", cmd.ssh_args
+    assert_equal "usertest@10.0.0.1 -F \"myconfig\"", cmd.ssh_args
 
     cmd = command("usertest@10.0.0.1", "--ssh-identity=my_rsa")
     cmd.validate_ssh_options!
-    assert_equal "usertest@10.0.0.1 -i my_rsa", cmd.ssh_args
+    assert_equal "usertest@10.0.0.1 -i \"my_rsa\"", cmd.ssh_args
 
     cmd = command("usertest@10.0.0.1", "--identity-file=my_rsa")
     cmd.validate_ssh_options!
-    assert_equal "usertest@10.0.0.1 -i my_rsa", cmd.ssh_args
+    assert_equal "usertest@10.0.0.1 -i \"my_rsa\"", cmd.ssh_args
 
     cmd = command("usertest@10.0.0.1", "--ssh-port=222")
     cmd.validate_ssh_options!
@@ -150,7 +150,7 @@ class SshCommandTest < TestCase
 
     cmd = command("usertest@10.0.0.1", "--no-host-key-verify")
     cmd.validate_ssh_options!
-    assert_equal "usertest@10.0.0.1 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no", cmd.ssh_args
+    assert_equal "usertest@10.0.0.1 -o UserKnownHostsFile=\"/dev/null\" -o StrictHostKeyChecking=no", cmd.ssh_args
 
     cmd = command("usertest@10.0.0.1", "--forward-agent")
     cmd.validate_ssh_options!
