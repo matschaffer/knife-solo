@@ -206,11 +206,11 @@ module KnifeSolo
 
       args << [user, host].compact.join('@')
 
-      args << "-F #{config[:ssh_config]}" if config[:ssh_config]
-      args << "-i #{identity_file}" if identity_file
+      args << "-F \"#{config[:ssh_config]}\"" if config[:ssh_config]
+      args << "-i \"#{identity_file}\"" if identity_file
       args << "-o ForwardAgent=yes" if config[:forward_agent]
       args << "-p #{config[:ssh_port]}" if config[:ssh_port]
-      args << "-o UserKnownHostsFile=#{connection_options[:user_known_hosts_file]}" if config[:host_key_verify] == false
+      args << "-o UserKnownHostsFile=\"#{connection_options[:user_known_hosts_file]}\"" if config[:host_key_verify] == false
       args << "-o StrictHostKeyChecking=no" if config[:host_key_verify] == false
       args << "-o ControlMaster=auto -o ControlPath=#{ssh_control_path} -o ControlPersist=3600" unless config[:ssh_control_master] == "no"
 
