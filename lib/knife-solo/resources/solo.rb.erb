@@ -7,6 +7,11 @@ role_path                 File.join(base, 'roles')
 data_bag_path             File.join(base, 'data_bags')
 encrypted_data_bag_secret File.join(base, 'data_bag_key')
 environment_path          File.join(base, 'environments')
+
+<% if file_cache_path %>
+file_cache_path           <%= file_cache_path.inspect %>
+<% end %>
+
 environment               <%= node_environment.inspect %>
 ssl_verify_mode           <%= ssl_verify_mode.inspect %>
 solo_legacy_mode          <%= solo_legacy_mode.inspect %>
