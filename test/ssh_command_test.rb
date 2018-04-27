@@ -104,7 +104,7 @@ class SshCommandTest < TestCase
 
   def test_handle_no_host_key_verify
     cmd = command("10.0.0.1", "--no-host-key-verify")
-    assert_equal false,  cmd.connection_options[:paranoid]
+    assert_equal false,  cmd.connection_options[KnifeSolo::SshCommand.verify_option_key]
     assert_equal "/dev/null",  cmd.connection_options[:user_known_hosts_file]
   end
 
@@ -122,7 +122,7 @@ class SshCommandTest < TestCase
 
   def test_handle_default_host_key_verify_is_paranoid
     cmd = command("10.0.0.1")
-    assert_nil(cmd.connection_options[:paranoid]) # Net:SSH default is :paranoid => true
+    assert_nil(cmd.connection_options[KnifeSolo::SshCommand.verify_option_key]) # Net:SSH default is (:paranoid or :verify_host_key) => true
     assert_nil(cmd.connection_options[:user_known_hosts_file])
   end
 

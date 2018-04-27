@@ -1,11 +1,18 @@
 module KnifeSolo
   module SshCommand
-
     def self.load_deps
       require 'knife-solo/ssh_connection'
       require 'knife-solo/tools'
       require 'net/ssh'
       require 'net/ssh/gateway'
+    end
+
+    def self.verify_option_key
+      @verify_option_key ||= if Net::SSH::VALID_OPTIONS.include? :verify_host_key
+        :verify_host_key
+      else
+        :paranoid
+      end
     end
 
     def self.included(other)
@@ -171,7 +178,7 @@ module KnifeSolo
       options[:gateway] = config[:ssh_gateway] if config[:ssh_gateway]
       options[:forward_agent] = true if config[:forward_agent]
       if !config[:host_key_verify]
-        options[:paranoid] = false
+        options[KnifeSolo::SshCommand.verify_option_key] = false
         options[:user_known_hosts_file] = "/dev/null"
       end
       if config[:ssh_keepalive]
