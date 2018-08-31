@@ -302,8 +302,9 @@ class Chef
 
       def check_chef_version
         ui.msg "Checking Chef version..."
-        unless chef_version_satisfies? CHEF_VERSION_CONSTRAINT
-          raise "Couldn't find Chef #{CHEF_VERSION_CONSTRAINT} on #{host}. Please run `knife solo prepare #{ssh_args}` to ensure Chef is installed and up to date."
+        version = Chef::Config[:knife][:solo_chef_version] || CHEF_VERSION_CONSTRAINT
+        unless chef_version_satisfies?(version)
+          raise "Couldn't find Chef #{version} on #{host}. Please run `knife solo prepare #{ssh_args}` to ensure Chef is installed and up to date."
         end
         if node_environment != '_default' && chef_version_satisfies?('<11.6.0')
           ui.warn "Chef version #{chef_version} does not support environments. Environment '#{node_environment}' will be ignored."
