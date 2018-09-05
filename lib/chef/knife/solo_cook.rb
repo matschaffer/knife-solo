@@ -9,7 +9,6 @@ class Chef
     # Approach ported from spatula (https://github.com/trotter/spatula)
     # Copyright 2009, Trotter Cashion
     class SoloCook < Knife
-      CHEF_VERSION_CONSTRAINT    = ">=0.10.4" unless defined? CHEF_VERSION_CONSTRAINT
 
       include KnifeSolo::SshCommand
       include KnifeSolo::NodeConfigCommand
@@ -146,6 +145,10 @@ class Chef
 
       def solo_legacy_mode
         Chef::Config[:solo_legacy_mode] || false
+      end
+
+      def chef_version_constraint
+        Chef::Config[:solo_chef_version] || ">=0.10.4"
       end
 
       def log_level
@@ -302,9 +305,8 @@ class Chef
 
       def check_chef_version
         ui.msg "Checking Chef version..."
-        version = Chef::Config[:knife][:solo_chef_version] || CHEF_VERSION_CONSTRAINT
-        unless chef_version_satisfies?(version)
-          raise "Couldn't find Chef #{version} on #{host}. Please run `knife solo prepare #{ssh_args}` to ensure Chef is installed and up to date."
+        unless chef_version_satisfies?(chef_version_constraint)
+          raise "Couldn't find Chef #{chef_version_constraint} on #{host}. Please run `knife solo prepare #{ssh_args}` to ensure Chef is installed and up to date."
         end
         if node_environment != '_default' && chef_version_satisfies?('<11.6.0')
           ui.warn "Chef version #{chef_version} does not support environments. Environment '#{node_environment}' will be ignored."
