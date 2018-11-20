@@ -1,3 +1,16 @@
+# 0.7.0 / 2018-11-14
+
+## Updates
+
+* OpenSUSE Leap support (#492)
+* Legacy mode option (#504)
+* Allow net-ssh 4.x (#506)
+* Use sudo when running clean (#519)
+* Configurable log level (#522)
+* Debian 9 support (#524)
+* Removed testing for EOL chefs and rubies, ad support for new rubies (#516, #528)
+* Make chef version check configurable (#535)
+
 # 0.6.0 / 2016-05-23
 
 ## Changes and new features
