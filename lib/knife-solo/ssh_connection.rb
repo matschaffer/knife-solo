@@ -51,34 +51,40 @@ module KnifeSolo
     def run_command(command, output = nil)
       result = ExecResult.new
 
-      session.open_channel do |channel|
-        channel.request_pty
-        channel.exec(command) do |_, success|
-          raise "ssh.channel.exec failure" unless success
+      begin
+        session.open_channel do |channel|
+          channel.request_pty
+          channel.exec(command) do |_, success|
+            raise "ssh.channel.exec failure" unless success
 
-          channel.on_data do |ch, data|  # stdout
-            if data =~ /^knife sudo password: /
-              ch.send_data("#{password}\n")
-            else
-              Chef::Log.debug("#{command} stdout: #{data}")
-              output << data if output
-              result.stdout << data
+            channel.on_data do |ch, data|  # stdout
+              if data =~ /^knife sudo password: /
+                ch.send_data("#{password}\n")
+              else
+                Chef::Log.debug("#{command} stdout: #{data}")
+                output << data if output
+                result.stdout << data
+              end
             end
-          end
 
-          channel.on_extended_data do |ch, type, data|
-            next unless type == 1
-            Chef::Log.debug("#{command} stderr: #{data}")
-            output << data if output
-            result.stderr << data
-          end
+            channel.on_extended_data do |ch, type, data|
+              next unless type == 1
+              Chef::Log.debug("#{command} stderr: #{data}")
+              output << data if output
+              result.stderr << data
+            end
 
-          channel.on_request("exit-status") do |ch, data|
-            result.exit_code = data.read_long
-          end
+            channel.on_request("exit-status") do |ch, data|
+              result.exit_code = data.read_long
+            end
 
-        end
-      end.wait
+          end
+        end.wait
+      rescue Net::SSH::Disconnect
+        @session = nil
+        Chef::Log.warn("SSH connection is disconnected. Retry #{command} with new SSH session.")
+        retry
+      end
 
       result
     end
