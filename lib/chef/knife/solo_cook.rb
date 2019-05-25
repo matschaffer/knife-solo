@@ -70,6 +70,10 @@ class Chef
         :long        => '--provisioning-path path',
         :description => 'Where to store kitchen data on the node'
 
+      option :file_cache_path,
+        :long        => '--file_cache_path path',
+        :description => 'Where to store cache data on the node'
+
       option :clean_up,
         :long        => '--clean-up',
         :description => 'Run the clean command after cooking'
@@ -157,6 +161,10 @@ class Chef
 
       def enable_reporting
         config_value(:enable_reporting, true)
+      end
+
+      def file_cache_path
+        config_value(:file_cache_path, nil)
       end
 
       def expand_path(path)
