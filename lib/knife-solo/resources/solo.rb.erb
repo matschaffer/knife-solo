@@ -21,3 +21,7 @@ cookbook_path << File.join(base, 'cookbooks-<%= i+1 %>') # <%= path %>
 <% proxy_settings.each_pair do |k, v| -%>
 <%= k %>     "<%= v %>"
 <% end -%>
+
+# If the TMPDIR is not world-readable, set it to a location that is. This is
+# necessary so that `script` resources can complete as non-root users on macOS.
+ENV['TMPDIR'] = "/tmp"
