@@ -41,11 +41,16 @@ module KnifeSolo::Bootstraps
       run_command("sudo apt-get update")
 
       ui.msg "Installing required packages..."
-      @packages = %w(ruby ruby-dev libopenssl-ruby irb
+      @packages = %w(ruby ruby-dev libruby irb
                      build-essential wget ssl-cert rsync)
-      run_command <<-BASH
+      result = run_command <<-BASH
         sudo DEBIAN_FRONTEND=noninteractive apt-get --yes install #{package_list}
       BASH
+
+      if result.exit_code != 0
+        ui.fatal "Failed to install packages. Try installing them manually: #{@packages.join(' ')}"
+        exit 1
+      end
 
       gem_install
     end
