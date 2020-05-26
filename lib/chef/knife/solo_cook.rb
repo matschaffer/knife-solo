@@ -317,11 +317,11 @@ class Chef
         Gem::Requirement.new(requirement).satisfied_by? Gem::Version.new(chef_version)
       end
 
-      # Parses "Chef: x.y.z" from the chef-solo version output
+      # Parses "Chef: x.y.z" and "Chef Infra Client: x.y.z" from the chef-solo version output
       def chef_version
         # Memoize the version to avoid multiple SSH calls
         @chef_version ||= lambda do
-          cmd = %q{sudo chef-solo --version 2>/dev/null | awk '$1 == "Chef:" {print $2}'}
+          cmd = %q{sudo chef-solo --version 2>/dev/null | awk -F ": " '/Chef/{print $2}'}
           run_command(cmd).stdout.strip
         end.call
       end
